@@ -12,9 +12,9 @@ The original code is for [TheIronThrone.net](https://theironthrone.net) and was 
 
 ### Project Milestones and Current Progress
 
-1) Import data from dtdb - Blocked by dtdb.co JSON export returning HTML. Best solved by fixing website instead of refactoring. Access expected 2017-07-24
-2) Remove/refactor GoT-specific game components
-3) Implement rules for DTR (Just a single line item, right?)
+1. Import data from dtdb - Blocked by dtdb.co JSON export returning HTML. Best solved by fixing website instead of refactoring. Access expected 2017-07-24
+2. Remove/refactor GoT-specific game components
+3. Implement rules for DTR (Just a single line item, right?)
 
 
 The code is written in node.js(server) and react.js(client).
