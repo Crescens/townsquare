@@ -1,7 +1,7 @@
 /*eslint no-console:0 */
 const request = require('request');
 const mongoskin = require('mongoskin');
-const db = mongoskin.db('mongodb://127.0.0.1:27017/doomteki');
+const db = mongoskin.db('mongodb://127.0.0.1:27017/townsquare');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
@@ -16,10 +16,8 @@ function fetchImage(urlPath, code, imagePath, timeout) {
     }, timeout);
 }
 
-request.json
-
-request.json.get(apiUrl + 'cards', function(error, res, body) {
-    if(error) {
+request.get(apiUrl + 'cards', function(error, res, body) {
+    if (error) {
         console.error('Unable to fetch cards');
         return;
     }
@@ -34,14 +32,14 @@ request.json.get(apiUrl + 'cards', function(error, res, body) {
     cards.forEach(function(card) {
         var imagePath = path.join(imageDir, card.code + '.png');
 
-        if(card.imagesrc && !fs.existsSync(imagePath)) {
+        if (card.imagesrc && !fs.existsSync(imagePath)) {
             fetchImage(card.imagesrc, card.code, imagePath, i++ * 200);
         }
     });
 
     db.collection('cards').remove({}, function() {
         db.collection('cards').insert(cards, function() {
-            fs.writeFile('got-cards.json', JSON.stringify(cards), function() {
+            fs.writeFile('dtr-cards.json', JSON.stringify(cards), function() {
                 console.info(cards.length + ' cards fetched');
 
                 db.close();
@@ -50,8 +48,8 @@ request.json.get(apiUrl + 'cards', function(error, res, body) {
     });
 });
 
-request.json.get(apiUrl + 'packs', function(error, res, body) {
-    if(error) {
+request.get(apiUrl + 'sets', function(error, res, body) {
+    if (error) {
         console.error('Unable to fetch packs');
         return;
     }
@@ -60,7 +58,7 @@ request.json.get(apiUrl + 'packs', function(error, res, body) {
 
     db.collection('packs').remove({}, function() {
         db.collection('packs').insert(packs, function() {
-            fs.writeFile('got-packs.json', JSON.stringify(packs), function() {
+            fs.writeFile('dtr-packs.json', JSON.stringify(packs), function() {
                 console.info(packs.length + ' packs fetched');
             });
         });

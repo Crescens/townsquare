@@ -107,7 +107,7 @@ class InnerLobby extends React.Component {
                     <News news={ this.props.news } />
                 </AlertPanel>
                 <div className='row'>
-                    <span className='col-sm-9 text-center'><h1>Play A Game Of Thrones 2nd Edition</h1></span>
+                    <span className='col-sm-9 text-center'><h1>Play Doomtown: Reloaded</h1></span>
                     <span className='col-sm-3 hidden-xs'><h3>{'Online Users (' + users.length + ')'}</h3></span>
                 </div>
                 <div className='row'>
