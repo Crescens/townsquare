@@ -30,7 +30,7 @@ request.get(apiUrl + 'cards', function(error, res, body) {
     var i = 0;
 
     cards.forEach(function(card) {
-        var imagePath = path.join(imageDir, card.code + '.png');
+        var imagePath = path.join(imageDir, card.code + '.jpg');
 
         if (card.imagesrc && !fs.existsSync(imagePath)) {
             fetchImage(card.imagesrc, card.code, imagePath, i++ * 200);
