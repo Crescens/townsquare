@@ -62,7 +62,7 @@ class GameServer {
         this.io.use(this.handshake.bind(this));
 
         if(process.env.NODE_ENV === 'production') {
-            this.io.set('origins', 'http://www.throneteki.net:* https://www.throneteki.net:* http://www.theironthrone.net:* https://www.theironthrone.net:*');
+            this.io.set('origins', 'http://www.throneteki.net:* https://www.throneteki.net:* http://www.theironthrone.net:* https://www.theironthrone.net:* http://dtdb.co:* https://dtdb.co:*');
         }
 
         this.io.on('connection', this.onConnection.bind(this));

@@ -47,7 +47,7 @@ For the lobby server, you'll need a file called server/config.js that should loo
 ```javascript
 var config = {
   secret: 'somethingverysecret',
-  dbPath: 'mongodb://127.0.0.1:27017/throneteki',
+  dbPath: 'mongodb://127.0.0.1:27017/townsquare',
   mqUrl: 'tcp://127.0.0.1:6000' // This is the host/port of the Zero MQ server which does the node load balancing
 };
 

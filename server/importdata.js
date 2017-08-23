@@ -1,6 +1,6 @@
 /*eslint no-console:0 */
 const mongoskin = require('mongoskin');
-const db = mongoskin.db('mongodb://127.0.0.1:27017/throneteki');
+const db = mongoskin.db('mongodb://127.0.0.1:27017/townsquare');
 const fs = require('fs');
 const _ = require('underscore');
 
@@ -65,4 +65,3 @@ db.collection('cards').remove({}, function() {
         });
     });
 });
-
