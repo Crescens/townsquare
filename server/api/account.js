@@ -51,9 +51,9 @@ function sendEmail(address, email) {
         var emailTransport = nodemailer.createTransport(config.emailPath);
 
         emailTransport.sendMail({
-            from: 'The Iron Throne <noreply@theironthrone.net>',
+            from: 'Town Square <admin@dtdb.co>',
             to: address,
-            subject: 'Your account at The Iron Throne',
+            subject: 'Your account at Town Square',
             text: email
         }, function(error) {
             if(error) {
