@@ -18,7 +18,7 @@ class InnerDeckEditor extends React.Component {
             cardList: '',
             deck: this.copyDeck(props.deck),
             numberToAdd: 1,
-            showBanners: props.deck.agenda && props.deck.agenda.code === '06018',
+            showLegends: props.deck.legends,
             selectedBanner: {},
             validation: {
                 deckname: '',
@@ -28,10 +28,10 @@ class InnerDeckEditor extends React.Component {
     }
 
     componentWillMount() {
-        if(!this.props.deck.faction && this.props.factions) {
+        if(!this.props.deck.outfit && this.props.outfits) {
             let deck = this.copyDeck(this.state.deck);
 
-            deck.faction = this.props.factions['baratheon'];
+            deck.outfit = this.props.outfits['baratheon'];
 
             this.setState({ deck: deck });
             this.props.updateDeck(deck);
@@ -63,9 +63,8 @@ class InnerDeckEditor extends React.Component {
             name: deck.name,
             plotCards: deck.plotCards,
             drawCards: deck.drawCards,
-            bannerCards: deck.bannerCards,
-            faction: deck.faction,
-            agenda: deck.agenda,
+            outfit: deck.outfit,
+            legend: deck.legend,
             validation: deck.validation
         };
     }
@@ -83,60 +82,21 @@ class InnerDeckEditor extends React.Component {
         this.setState({ numberToAdd: event.target.value });
     }
 
-    onFactionChange(selectedFaction) {
+    onOutfitChange(selectedOutfit) {
         let deck = this.copyDeck(this.state.deck);
 
-        deck.faction = selectedFaction;
+        deck.outfit = selectedOutfit;
 
         this.setState({ deck: deck });
         this.props.updateDeck(deck);
     }
 
-    onAgendaChange(selectedAgenda) {
+    onLegendChange(selectedLegend) {
         let deck = this.copyDeck(this.state.deck);
 
-        deck.agenda = selectedAgenda;
+        deck.legend = selectedLegend;
 
-        this.setState({ deck: deck, showBanners: deck.agenda && deck.agenda.code === '06018' }); // Alliance
-        this.props.updateDeck(deck);
-    }
-
-    onBannerChange(selectedBanner) {
-        this.setState({ selectedBanner: selectedBanner });
-    }
-
-    onAddBanner(event) {
-        event.preventDefault();
-
-        if(!this.state.selectedBanner) {
-            return;
-        }
-
-        if(!this.state.deck.bannerCards) {
-            this.state.deck.bannerCards = [];
-        }
-
-        if(_.any(this.state.deck.bannerCards, banner => {
-            return banner.code === this.state.selectedBanner.code;
-        })) {
-            return;
-        }
-
-        let deck = this.copyDeck(this.state.deck);
-        deck.bannerCards.push(this.state.selectedBanner);
-
-        this.setState({ deck: deck });
-        this.props.updateDeck(deck);
-    }
-
-    onRemoveBanner(banner) {
-        let deck = this.copyDeck(this.state.deck);
-
-        deck.bannerCards = _.reject(deck.bannerCards, card => {
-            return card.code === banner.code;
-        });
-
-        this.setState({ deck: deck });
+        this.setState({ deck: deck, showLegends: deck.legend }); // Alliance
         this.props.updateDeck(deck);
     }
 
@@ -159,7 +119,7 @@ class InnerDeckEditor extends React.Component {
         let deck = this.state.deck;
 
         deck = this.copyDeck(deck);
-        
+
         this.props.updateDeck(deck);
     }
 
@@ -170,46 +130,30 @@ class InnerDeckEditor extends React.Component {
 
         let headerMark = _.findIndex(split, line => line.match(/^Packs:/));
         if(headerMark >= 0) { // ThronesDB-style deck header found
-                              // extract deck title, faction, agenda, and banners
+                              // extract deck title, outfit, legend
             let header = _.filter(_.first(split, headerMark), line => line !== '');
             split = _.rest(split, headerMark);
 
             if(header.length >= 2) {
                 deck.name = header[0];
 
-                let faction = _.find(this.props.factions, faction => faction.name === header[1].trim());
-                if(faction) {
-                    deck.faction = faction;
+                let outfit = _.find(this.props.outfits, outfit => outfit.name === header[1].trim());
+                if(outfit) {
+                    deck.outfit = outfit;
                 }
 
                 header = _.rest(header, 2);
 
                 if(header.length >= 1) {
-                    let rawAgenda, rawBanners;
+                    let rawLegend;
 
-                    if(_.any(header, line => {
-                        return line.trim() === 'Alliance';
-                    })) {
-                        rawAgenda = 'Alliance';
-                        rawBanners = _.filter(header, line => line.trim() !== 'Alliance');
-                    } else {
-                        rawAgenda = header[0].trim();
+                    rawLegend = header[0].trim();
+
+                    let legend = _.find(this.props.legends, legend => legend.name === rawLegend);
+                    if(legend) {
+                        deck.legend = legend;
                     }
 
-                    let agenda = _.find(this.props.agendas, agenda => agenda.name === rawAgenda);
-                    if(agenda) {
-                        deck.agenda = agenda;
-                    }
-
-                    if(rawBanners) {
-                        let banners = _.map(rawBanners, rawBanner => {
-                            return _.find(this.props.banners, banner => {
-                                return rawBanner.trim() === banner.label;
-                            });
-                        });
-
-                        deck.bannerCards = banners;
-                    }
                 }
             }
         }
@@ -253,7 +197,7 @@ class InnerDeckEditor extends React.Component {
 
         deck = this.copyDeck(deck);
 
-        this.setState({ cardList: event.target.value, deck: deck, showBanners: deck.agenda && deck.agenda.code === '06018' }); // Alliance
+        this.setState({ cardList: event.target.value, deck: deck, showLegends: deck.legend }); // Alliance
         this.props.updateDeck(deck);
     }
 
@@ -285,25 +229,10 @@ class InnerDeckEditor extends React.Component {
         }
     }
 
-    getBannerList() {
-        if(_.size(this.props.deck.bannerCards) === 0) {
-            return null;
-        }
-
-        return _.map(this.props.deck.bannerCards, card => {
-            return (<div>
-                <span key={ card.code } className='card-link col-sm-10'>{ card.label }</span>
-                <span className='glyphicon glyphicon-remove icon-danger btn col-sm-1' aria-hidden='true' onClick={ this.onRemoveBanner.bind(this, card) } />
-            </div>);
-        });
-    }
-
     render() {
         if(!this.props.deck || this.props.loading) {
             return <div>Waiting for deck...</div>;
         }
-
-        let banners = this.getBannerList();
 
         return (
             <div className='col-sm-6'>
@@ -312,23 +241,14 @@ class InnerDeckEditor extends React.Component {
                 <form className='form form-horizontal'>
                     <Input name='deckName' label='Deck Name' labelClass='col-sm-3' fieldClass='col-sm-9' placeholder='Deck Name'
                         type='text' onChange={this.onChange.bind(this, 'name')} value={ this.state.deck.name } />
-                    <Select name='faction' label='Faction' labelClass='col-sm-3' fieldClass='col-sm-9' options={ _.toArray(this.props.factions) }
-                        onChange={ this.onFactionChange.bind(this) } value={ this.state.deck.faction ? this.state.deck.faction.value : undefined } />
-                    <Select name='agenda' label='Agenda' labelClass='col-sm-3' fieldClass='col-sm-9' options={ _.toArray(this.props.agendas) }
-                        onChange={ this.onAgendaChange.bind(this) } value={ this.state.deck.agenda ? this.state.deck.agenda.code : undefined }
+                    <Select name='outfit' label='Outfit' labelClass='col-sm-3' fieldClass='col-sm-9' options={ _.toArray(this.props.outfits) }
+                        onChange={ this.onOutfitChange.bind(this) } value={ this.state.deck.outfit ? this.state.deck.outfit.value : undefined } />
+                    <Select name='legend' label='Legend' labelClass='col-sm-3' fieldClass='col-sm-9' options={ _.toArray(this.props.legends) }
+                        onChange={ this.onLegendChange.bind(this) } value={ this.state.deck.legend ? this.state.deck.legend.code : undefined }
                         valueKey='code' nameKey='label' blankOption={ { label: '- Select -', code: '' } } />
 
-                    { this.state.showBanners &&
-                    <div>
-                        <Select name='banners' label ='Banners' labelClass='col-sm-3' fieldClass='col-sm-9' options={ this.props.banners }
-                            onChange={ this.onBannerChange.bind(this) } value={ this.state.selectedBanner ? this.state.selectedBanner.code : undefined }
-                            valueKey='code' nameKey='label'
-                            blankOption={ { label: '- Select -', code: '' } } button={ { text:'Add', onClick: this.onAddBanner.bind(this) } } />
-                        <div className='col-sm-9 col-sm-offset-3 banner-list'>
-                            { banners }
-                        </div>
-                    </div>
-                    }
+                    { this.state.showLegends }
+
                     <Typeahead label='Card' labelClass={'col-sm-3'} fieldClass='col-sm-4' labelKey={'label'} options={ _.toArray(this.props.cards) }
                         onChange={ this.addCardChange.bind(this) }>
                         <Input name='numcards' type='text' label='Num' labelClass='col-sm-1' fieldClass='col-sm-2'
@@ -353,11 +273,10 @@ class InnerDeckEditor extends React.Component {
 
 InnerDeckEditor.displayName = 'DeckEditor';
 InnerDeckEditor.propTypes = {
-    agendas: React.PropTypes.object,
-    banners: React.PropTypes.array,
+    legends: React.PropTypes.object,
     cards: React.PropTypes.object,
     deck: React.PropTypes.object,
-    factions: React.PropTypes.object,
+    outfits: React.PropTypes.object,
     loading: React.PropTypes.bool,
     mode: React.PropTypes.string,
     onDeckSave: React.PropTypes.func,
@@ -368,12 +287,11 @@ InnerDeckEditor.propTypes = {
 function mapStateToProps(state) {
     return {
         apiError: state.api.message,
-        agendas: state.cards.agendas,
-        banners: state.cards.banners,
+        legends: state.cards.legends,
         cards: state.cards.cards,
         deck: state.cards.selectedDeck,
         decks: state.cards.decks,
-        factions: state.cards.factions,
+        outfits: state.cards.outfits,
         loading: state.api.loading,
         packs: state.cards.packs
     };

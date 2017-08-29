@@ -13,7 +13,7 @@ export class InnerAddDeck extends React.Component {
 
         this.state = {
             error: '',
-            faction: {}
+            outfit: {}
         };
 
         this.onAddDeck = this.onAddDeck.bind(this);
@@ -56,12 +56,12 @@ export class InnerAddDeck extends React.Component {
 InnerAddDeck.displayName = 'InnerAddDeck';
 InnerAddDeck.propTypes = {
     addDeck: React.PropTypes.func,
-    agendas: React.PropTypes.object,
+    legends: React.PropTypes.object,
     apiError: React.PropTypes.string,
     cards: React.PropTypes.object,
     deck: React.PropTypes.object,
     deckSaved: React.PropTypes.bool,
-    factions: React.PropTypes.object,
+    outfits: React.PropTypes.object,
     loading: React.PropTypes.bool,
     navigate: React.PropTypes.func,
     saveDeck: React.PropTypes.func
@@ -69,12 +69,12 @@ InnerAddDeck.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        agendas: state.cards.agendas,
+        legends: state.cards.legends,
         apiError: state.api.message,
         cards: state.cards.cards,
         deck: state.cards.selectedDeck,
         deckSaved: state.cards.deckSaved,
-        factions: state.cards.factions,
+        outfits: state.cards.outfits,
         loading: state.api.loading,
         socket: state.socket.socket
     };

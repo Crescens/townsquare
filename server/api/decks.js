@@ -77,11 +77,9 @@ module.exports.init = function(server) {
                 {
                     '$set': {
                         name: data.deckName,
-                        plotCards: data.plotCards,
                         drawCards: data.drawCards,
-                        bannerCards: data.bannerCards,
-                        faction: data.faction,
-                        agenda: data.agenda,
+                        outfit: data.outfit,
+                        legend: data.legend,
                         lastUpdated: new Date()
                     }
                 });
@@ -100,11 +98,9 @@ module.exports.init = function(server) {
         db.collection('decks').insert({
             username: req.user.username,
             name: data.deckName,
-            plotCards: data.plotCards,
-            bannerCards: data.bannerCards,
             drawCards: data.drawCards,
-            faction: data.faction,
-            agenda: data.agenda,
+            outfit: data.outfit,
+            legend: data.legend,
             lastUpdated: new Date()
         }, function(err) {
             if(err) {
