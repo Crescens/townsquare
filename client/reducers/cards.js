@@ -13,23 +13,16 @@ function selectDeck(state, deck) {
 
 function processDecks(decks, state) {
     _.each(decks, deck => {
-        if(!state.cards || !deck.faction) {
+        if(!state.cards || !deck.outfit) {
             deck.validation = {};
             return;
         }
 
-        deck.faction = state.factions[deck.faction.value];
-        if(deck.agenda) {
-            deck.agenda = state.agendas[deck.agenda.code];
+        deck.outfit = state.outfits[deck.outfit.value];
+        
+        if(deck.legend) {
+            deck.legend = state.legends[deck.legend.code];
         }
-
-        if(deck.bannerCards) {
-            deck.bannerCards = _.map(deck.bannerCards, card => state.cards[card.code]);
-        }
-
-        deck.plotCards = _.map(deck.plotCards, card => {
-            return { count: card.count, card: state.cards[card.card.code] };
-        });
 
         deck.drawCards = _.map(deck.drawCards, card => {
             return { count: card.count, card: state.cards[card.card.code] };
@@ -43,36 +36,31 @@ export default function(state = {}, action) {
     let newState;
     switch(action.type) {
         case 'RECEIVE_CARDS':
-            var agendas = {};
+            var legends = {};
 
             _.each(action.response.cards, card => {
-                if(card.type_code === 'agenda' && card.pack_code !== 'VDS') {
-                    agendas[card.code] = card;
+                if(card.type_code === 'legend') {
+                    legends[card.code] = card;
                 }
-            });
-
-            var banners = _.filter(agendas, card => {
-                return card.label.startsWith('Banner of the');
             });
 
             return Object.assign({}, state, {
                 cards: action.response.cards,
-                agendas: agendas,
-                banners: banners
+                legends: legends
             });
         case 'RECEIVE_PACKS':
             return Object.assign({}, state, {
                 packs: action.response.packs
             });
-        case 'RECEIVE_FACTIONS':
-            var factions = {};
+        case 'RECEIVE_OUTFITS':
+            var outfits = {};
 
-            _.each(action.response.factions, faction => {
-                factions[faction.value] = faction;
+            _.each(action.response.outfits, outfit => {
+                outfits[outfit.value] = outfit;
             });
 
             return Object.assign({}, state, {
-                factions: factions
+                outfits: outfits
             });
         case 'ZOOM_CARD':
             return Object.assign({}, state, {
@@ -108,7 +96,7 @@ export default function(state = {}, action) {
                     newState.selectedDeck = newState.decks[0];
                 }
             }
-            
+
             return newState;
         case 'RECEIVE_DECK':
             newState = Object.assign({}, state, {
@@ -152,7 +140,7 @@ export default function(state = {}, action) {
             return newState;
         case 'ADD_DECK':
             var newDeck = { name: 'New Deck' };
-            
+
             newState = Object.assign({}, state, {
                 selectedDeck: newDeck,
                 deckSaved: false
@@ -185,7 +173,7 @@ export default function(state = {}, action) {
             });
 
             return newState;
-        case 'DECK_DELETED':            
+        case 'DECK_DELETED':
             newState = Object.assign({}, state, {
                 deckDeleted: true
             });

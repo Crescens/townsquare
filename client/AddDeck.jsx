@@ -43,7 +43,8 @@ export class InnerAddDeck extends React.Component {
         } else if(this.props.apiError) {
             content = <AlertPanel type='error' message={ this.props.apiError } />;
         } else {
-            content = (<div>
+            content = (
+            <div>
                 <DeckEditor mode='Add' onDeckSave={ this.onAddDeck } />
                 <DeckSummary className='col-sm-6 right-pane' cards={ this.props.cards } deck={ this.props.deck } />
             </div>);
