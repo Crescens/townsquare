@@ -184,11 +184,11 @@ class DeckValidator {
             cardCountByName[cardQuantity.card.name].count += cardQuantity.count;
 
             if(!rules.mayInclude(cardQuantity.card) || rules.cannotInclude(cardQuantity.card)) {
-                errors.push(cardQuantity.card.label + ' is not allowed by faction or agenda');
+                errors.push(cardQuantity.card.title + ' is not allowed by faction or agenda');
             }
 
             if(!isCardInReleasedPack(this.packs, cardQuantity.card)) {
-                unreleasedCards.push(cardQuantity.card.label + ' is not yet released');
+                unreleasedCards.push(cardQuantity.card.title + ' is not yet released');
             }
         });
 

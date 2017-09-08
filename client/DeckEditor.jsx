@@ -41,11 +41,11 @@ class InnerDeckEditor extends React.Component {
 
         if(this.props.deck && (this.props.deck.drawCards || this.props.deck.plotCards)) {
             _.each(this.props.deck.drawCards, card => {
-                cardList += card.count + ' ' + card.card.label + '\n';
+                cardList += card.count + ' ' + card.card.title + '\n';
             });
 
             _.each(this.props.deck.plotCards, card => {
-                cardList += card.count + ' ' + card.card.label + '\n';
+                cardList += card.count + ' ' + card.card.title + '\n';
             });
 
             this.setState({ cardList: cardList });
@@ -55,7 +55,7 @@ class InnerDeckEditor extends React.Component {
     // XXX One could argue this is a bit hacky, because we're updating the innards of the deck object, react doesn't update components that use it unless we change the reference itself
     copyDeck(deck) {
         if(!deck) {
-            return { name: 'New Deck'};
+            return { name: 'New Deck' };
         }
 
         return {
@@ -107,12 +107,12 @@ class InnerDeckEditor extends React.Component {
     onAddCard(event) {
         event.preventDefault();
 
-        if(!this.state.cardToAdd || !this.state.cardToAdd.label) {
+        if(!this.state.cardToAdd || !this.state.cardToAdd.title) {
             return;
         }
 
         let cardList = this.state.cardList;
-        cardList += this.state.numberToAdd + ' ' + this.state.cardToAdd.label + '\n';
+        cardList += this.state.numberToAdd + ' ' + this.state.cardToAdd.title + '\n';
 
         this.addCard(this.state.cardToAdd, parseInt(this.state.numberToAdd));
         this.setState({ cardList: cardList });
@@ -184,10 +184,10 @@ class InnerDeckEditor extends React.Component {
 
             let card = _.find(this.props.cards, function(card) {
                 if(pack) {
-                    return card.label.toLowerCase() === cardName.toLowerCase() || card.label.toLowerCase() === (cardName + ' (' + pack.code + ')').toLowerCase();
+                    return card.title.toLowerCase() === cardName.toLowerCase() || card.title.toLowerCase() === (cardName + ' (' + pack.code + ')').toLowerCase();
                 }
 
-                return card.label.toLowerCase() === cardName.toLowerCase();
+                return card.title.toLowerCase() === cardName.toLowerCase();
             });
 
             if(card) {
@@ -208,11 +208,7 @@ class InnerDeckEditor extends React.Component {
 
         let list;
 
-        if(card.type_code === 'plot') {
-            list = plots;
-        } else {
-            list = draw;
-        }
+        list = draw;
 
         if(list[card.code]) {
             list[card.code].count += number;
@@ -249,7 +245,7 @@ class InnerDeckEditor extends React.Component {
 
                     { this.state.showLegends }
 
-                    <Typeahead label='Card' labelClass={'col-sm-3'} fieldClass='col-sm-4' labelKey={'label'} options={ _.toArray(this.props.cards) }
+                    <Typeahead label='Card' labelClass={'col-sm-3'} fieldClass='col-sm-4' labelKey={'title'} options={ _.toArray(this.props.cards) }
                         onChange={ this.addCardChange.bind(this) }>
                         <Input name='numcards' type='text' label='Num' labelClass='col-sm-1' fieldClass='col-sm-2'
                             value={ this.state.numberToAdd.toString() } onChange={ this.onNumberToAddChange.bind(this) }>
@@ -258,7 +254,7 @@ class InnerDeckEditor extends React.Component {
                             </div>
                         </Input>
                     </Typeahead>
-                    <TextArea label='Cards' labelClass='col-sm-3' fieldClass='col-sm-9' rows='25' value={ this.state.cardList }
+                    <TextArea label='Cards' titleClass='col-sm-3' fieldClass='col-sm-9' rows='25' value={ this.state.cardList }
                         onChange={ this.onCardListChange.bind(this) } />
                     <div className='form-group'>
                         <div className='col-sm-offset-3 col-sm-8'>
