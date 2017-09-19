@@ -25,6 +25,20 @@ class CardService {
                 });
 
                 return cards;
+
+            }).then(result => {
+                let matches = {};
+
+                if(options && options.type_code) {
+                    matches = _.pick(result, card => {
+                        return (card.type_code === options.type_code);
+                    });
+                } else {
+                    matches = result;
+                }
+
+                return matches;
+
             }).catch(err => {
                 logger.info(err);
             });

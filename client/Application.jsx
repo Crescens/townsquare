@@ -55,7 +55,7 @@ class App extends React.Component {
     componentWillMount() {
         this.props.loadCards();
         this.props.loadPacks();
-        this.props.loadFactions();
+        this.props.loadOutfits();
 
         $(document).ajaxError((event, xhr) => {
             if(xhr.status === 401) {
@@ -355,7 +355,7 @@ App.propTypes = {
     gameSocketReconnecting: React.PropTypes.func,
     games: React.PropTypes.array,
     loadCards: React.PropTypes.func,
-    loadFactions: React.PropTypes.func,
+    loadOutfits: React.PropTypes.func,
     loadPacks: React.PropTypes.func,
     loggedIn: React.PropTypes.bool,
     navigate: React.PropTypes.func,

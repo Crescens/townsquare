@@ -19,7 +19,7 @@ function processDecks(decks, state) {
         }
 
         deck.outfit = state.outfits[deck.outfit.value];
-        
+
         if(deck.legend) {
             deck.legend = state.legends[deck.legend.code];
         }
@@ -55,8 +55,10 @@ export default function(state = {}, action) {
         case 'RECEIVE_OUTFITS':
             var outfits = {};
 
-            _.each(action.response.outfits, outfit => {
-                outfits[outfit.value] = outfit;
+            _.each(action.response.cards, card => {
+                if(card.type_code === 'outfit') {
+                    outfits[card.code] = card;
+                }
             });
 
             return Object.assign({}, state, {
