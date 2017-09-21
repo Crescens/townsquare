@@ -30,7 +30,7 @@ class InnerDeckEditor extends React.Component {
         if(!this.props.deck.outfit && this.props.outfits) {
             let deck = this.copyDeck(this.state.deck);
 
-            //deck.outfit = this.props.outfits['baratheon'];
+            deck.outfit = {};
 
             this.setState({ deck: deck });
             this.props.updateDeck(deck);
@@ -196,13 +196,13 @@ class InnerDeckEditor extends React.Component {
 
         deck = this.copyDeck(deck);
 
-        this.setState({ cardList: event.target.value, deck: deck, showLegends: deck.legend }); // Alliance
+        this.setState({ cardList: event.target.value, deck: deck, showLegends: deck.legend });
         this.props.updateDeck(deck);
     }
 
     addCard(card, number) {
         let deck = this.copyDeck(this.state.deck);
-        let plots = deck.plotCards;
+        //let plots = deck.plotCards;
         let draw = deck.drawCards;
 
         let list;
@@ -237,13 +237,13 @@ class InnerDeckEditor extends React.Component {
                     <Input name='deckName' label='Deck Name' labelClass='col-sm-3' fieldClass='col-sm-9' placeholder='Deck Name'
                         type='text' onChange={this.onChange.bind(this, 'name')} value={ this.state.deck.name } />
                     <Select name='outfit' label='Outfit' labelClass='col-sm-3' fieldClass='col-sm-9' options={ _.toArray(this.props.outfits) }
-                        onChange={ this.onOutfitChange.bind(this) } value={ this.state.deck.outfit ? this.state.deck.outfit.code : undefined }
+                        onChange={ this.onOutfitChange.bind(this) } value={ this.state.deck.outfit ? this.state.deck.outfit.title : undefined }
                         valueKey='code' nameKey='title' blankOption={ { title: '- Select -', code: '' } } />
                     <Select name='legend' label='Legend' labelClass='col-sm-3' fieldClass='col-sm-9' options={ _.toArray(this.props.legends) }
-                        onChange={ this.onLegendChange.bind(this) } value={ this.state.deck.legend ? this.state.deck.legend.code : undefined }
+                        onChange={ this.onLegendChange.bind(this) } value={ this.state.deck.legend ? this.state.deck.legend.title : undefined }
                         valueKey='code' nameKey='title' blankOption={ { title: '- Select -', code: '' } } />
 
-                    { this.state.showLegends }
+                    {/* this.state.showLegends */}
 
                     <Typeahead label='Card' labelClass={'col-sm-3'} fieldClass='col-sm-4' labelKey={'title'} options={ _.toArray(this.props.cards) }
                         onChange={ this.addCardChange.bind(this) }>

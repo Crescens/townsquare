@@ -103,8 +103,3 @@ npm test
 ```
 
 If you are making any game engine changes, these will not be accepted without unit tests to cover them.
-
-### Build Status
-
-[![CircleCI](https://circleci.com/gh/cryogen/throneteki.svg?style=svg)](https://circleci.com/gh/cryogen/throneteki)
-[![Travis Build](https://travis-ci.org/cryogen/throneteki.svg?branch=master)](https://travis-ci.org/cryogen/throneteki)

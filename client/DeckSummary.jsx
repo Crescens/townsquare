@@ -64,15 +64,15 @@ class DeckSummary extends React.Component {
 
         return (
             <div>
-                { this.state.cardToShow ? <img className='hover-image' src={ '/img/cards/' + this.state.cardToShow.code + '.png' } /> : null }
+                { this.state.cardToShow ? <img className='hover-image' src={ '/img/cards/' + this.state.cardToShow.code + '.jpg' } /> : null }
                 <h3>{ this.props.deck.name }</h3>
                 <div className='decklist'>
-                    { this.props.deck.outfit ? <img className='pull-left' src={ '/img/cards/' + this.props.deck.outfit.value + '.png' } /> : null }
-                    { this.props.deck.legend && this.props.deck.legend.code ? <img className='pull-right' src={ '/img/cards/' + this.props.deck.legend.code + '.png' } /> : null }
+                    { this.props.deck.outfit ? <img className='pull-left' src={ '/img/cards/' + this.props.deck.outfit.code + '.jpg' } /> : null }
+                    { this.props.deck.legend && this.props.deck.legend.code ? <img className='pull-right' src={ '/img/cards/' + this.props.deck.legend.code + '.jpg' } /> : null }
                     <div>
-                        <h4>{ this.props.deck.outfit ? this.props.deck.outfit.name : null }</h4>
-                        <div ref='legend'>Legend: { this.props.deck.legend && this.props.deck.legend.label ? <span className='card-link' onMouseOver={ this.onCardMouseOver }
-                            onMouseOut={ this.onCardMouseOut }>{ this.props.deck.legend.label }</span> : <span>None</span> }</div>
+                        <h4>{ this.props.deck.outfit ? this.props.deck.outfit.title : null }</h4>
+                        <div ref='legend'>Legend: { this.props.deck.legend && this.props.deck.legend.title ? <span className='card-link' onMouseOver={ this.onCardMouseOver }
+                            onMouseOut={ this.onCardMouseOut }>{ this.props.deck.legend.title }</span> : <span>None</span> }</div>
 
                          <div ref='drawCount'>Draw deck: { this.props.deck.validation.drawCount } cards</div>
                         <div className={ this.props.deck.validation.status === 'Valid' ? 'text-success' : 'text-danger' }>

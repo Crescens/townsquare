@@ -11,21 +11,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cryogen/throneteki.git"
+    "url": "git+https://bitbucket.org/Blargg/townsquare.git"
   },
   "keywords": [
-    "got",
-    "game",
-    "of",
-    "thrones",
+    "dtr",
+    "doomtown",
+    "reloaded",
     "cardgame"
   ],
-  "author": "Stuart Walsh <stu@ipng.org.uk>",
-  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cryogen/throneteki/issues"
+    "url": "https://bitbucket.org/Blargg/townsquare/issues"
   },
-  "homepage": "https://github.com/cryogen/throneteki#readme",
+  "homepage": "https://dtdb.co/",
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "bcrypt": "^0.8.7",
@@ -66,6 +63,7 @@
     "uuid": "^3.0.1",
     "webpack": "^2.2.1",
     "winston": "^2.2.0",
+    "zeromq": "^4.6.0",
     "zmq": "^2.15.3"
   },
   "devDependencies": {
