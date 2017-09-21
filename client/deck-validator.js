@@ -11,8 +11,8 @@ function getDeckCount(deck) {
     return count;
 }
 
-function hasTrait(card, trait) {
-    return card.traits && card.traits.toLowerCase().indexOf(trait.toLowerCase() + '.') !== -1;
+function hasKeyword(card, keyword) {
+    return card.keywords && card.keywords.toLowerCase().indexOf(keyword.toLowerCase() + '.') !== -1;
 }
 
 function isCardInReleasedPack(packs, card) {
@@ -36,17 +36,17 @@ function isCardInReleasedPack(packs, card) {
     return releaseDate <= now;
 }
 
-function rulesForBanner(faction, factionName) {
+/*function rulesForBanner(outfit, outfitName) {
     return {
-        mayInclude: card => card.faction_code === faction && !card.is_loyal && card.type_code !== 'plot',
+        mayInclude: card => card.outfit_code === outfit && !card.is_loyal && card.type_code !== 'plot',
         rules: [
             {
-                message: 'Must contain 12 or more ' + factionName + ' cards',
-                condition: deck => getDeckCount(_(deck.drawCards).filter(cardQuantity => cardQuantity.card.faction_code === faction)) >= 12
+                message: 'Must contain 12 or more ' + outfitName + ' cards',
+                condition: deck => getDeckCount(_(deck.drawCards).filter(cardQuantity => cardQuantity.card.outfit_code === outfit)) >= 12
             }
         ]
     };
-}
+}*/
 
 /**
  * Validation rule structure is as follows. All fields are optional.
@@ -57,29 +57,13 @@ function rulesForBanner(faction, factionName) {
  * cannotInclude - function that takes a card and return true if it is not allowed in the overall deck.
  * rules         - an array of objects containing a `condition` function that takes a deck and return true if the deck is valid for that rule, and a `message` used for errors when invalid.
  */
-const agendaRules = {
-    // Banner of the stag
-    '01198': rulesForBanner('baratheon', 'Baratheon'),
-    // Banner of the kraken
-    '01199': rulesForBanner('greyjoy', 'Greyjoy'),
-    // Banner of the lion
-    '01200': rulesForBanner('lannister', 'Lannister'),
-    // Banner of the sun
-    '01201': rulesForBanner('martell', 'Martell'),
-    // Banner of the watch
-    '01202': rulesForBanner('thenightswatch', 'Night\'s Watch'),
-    // Banner of the wolf
-    '01203': rulesForBanner('stark', 'Stark'),
-    // Banner of the dragon
-    '01204': rulesForBanner('targaryen', 'Targaryen'),
-    // Banner of the rose
-    '01205': rulesForBanner('tyrell', 'Tyrell'),
-    // Fealty
+const legendRules = {
+/*    // Fealty
     '01027': {
         rules: [
             {
                 message: 'You cannot include more than 15 neutral cards in a deck with Fealty',
-                condition: deck => getDeckCount(_.filter(deck.drawCards, cardQuantity => cardQuantity.card.faction_code === 'neutral')) <= 15
+                condition: deck => getDeckCount(_.filter(deck.drawCards, cardQuantity => cardQuantity.card.outfit_code === 'neutral')) <= 15
             }
         ]
     },
@@ -145,7 +129,7 @@ const agendaRules = {
                 condition: deck => getDeckCount(_(deck.drawCards).filter(cardQuantity => cardQuantity.card.type_code === 'character' && hasTrait(cardQuantity.card, 'Maester'))) >= 12
             }
         ]
-    }
+    }*/
 };
 
 class DeckValidator {
@@ -176,7 +160,7 @@ class DeckValidator {
             }
         });
 
-        let allCards = deck.plotCards.concat(deck.drawCards);
+        let allCards = deck.drawCards;//deck.plotCards.concat(deck.drawCards);
         let cardCountByName = {};
 
         _.each(allCards, cardQuantity => {
@@ -184,7 +168,7 @@ class DeckValidator {
             cardCountByName[cardQuantity.card.name].count += cardQuantity.count;
 
             if(!rules.mayInclude(cardQuantity.card) || rules.cannotInclude(cardQuantity.card)) {
-                errors.push(cardQuantity.card.title + ' is not allowed by faction or agenda');
+                errors.push(cardQuantity.card.title + ' is not allowed by outfit');
             }
 
             if(!isCardInReleasedPack(this.packs, cardQuantity.card)) {
@@ -202,7 +186,6 @@ class DeckValidator {
 
         return {
             status: !isValid ? 'Invalid' : (unreleasedCards.length === 0 ? 'Valid' : 'Unreleased Cards'),
-            plotCount: plotCount,
             drawCount: drawCount,
             extendedStatus: errors.concat(unreleasedCards),
             isValid: isValid
@@ -211,27 +194,25 @@ class DeckValidator {
 
     getRules(deck) {
         const standardRules = {
-            requiredDraw: 60,
-            requiredPlots: 7
+            requiredDraw: 52,
         };
-        let factionRules = this.getFactionRules(deck.faction.value.toLowerCase());
-        let agendaRules = this.getAgendaRules(deck);
-        return this.combineValidationRules([standardRules, factionRules].concat(agendaRules));
+        let outfitRules = this.getOutfitRules(deck.outfit);
+        let legendRules = this.getLegendRules(deck);
+        return this.combineValidationRules([standardRules, outfitRules].concat(legendRules));
     }
 
-    getFactionRules(faction) {
-        return {
-            mayInclude: card => card.faction_code === faction || card.faction_code === 'neutral'
-        };
+    getOutfitRules(outfit) {
+        //No inclusion restrictions for outfit as of TCaR
+        return [];
     }
 
-    getAgendaRules(deck) {
-        if(!deck.agenda) {
+    getLegendRules(deck) {
+        if(!deck.legend) {
             return [];
         }
 
-        let allAgendas = [deck.agenda].concat(deck.bannerCards || []);
-        return _.compact(_(allAgendas).map(agenda => agendaRules[agenda.code]));
+        let allLegends = [];
+        return _.compact(_(allLegends).map(legend => legendRules[legend.code]));
     }
 
     combineValidationRules(validators) {

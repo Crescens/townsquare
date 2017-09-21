@@ -1,23 +1,44 @@
 const _ = require('underscore');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
 
-const actions = require('./actions');
-const deeds = require('./deeds');
-const dudes = require('./dudes');
-const goods = require('./goods');
-const legends = require('./legends');
-const outfits = require('./outfits');
-const spells = require('./spells');
+function getDirectories(srcpath) {
+    let fullPath = path.join(__dirname, srcpath);
+    return fs.readdirSync(fullPath).filter(function(file) {
+        return fs.statSync(path.join(fullPath, file)).isDirectory();
+    });
+}
 
-var cards = {};
+function loadFiles(directory) {
+    let fullPath = path.join(__dirname, directory);
+    let files = fs.readdirSync(fullPath).filter(file => {
+        return !fs.statSync(path.join(fullPath, file)).isDirectory();
+    });
 
-_.each(fs.readdirSync(path.join(__dirname, 'outfits')), file => {
-    var card = require('./outfits/' + file);
+    for(let file of files) {
+        let card = require('./' + directory + '/' + file);
 
-    cards[card.code] = card;
-});
+        cards[card.code] = card;
+    }
+}
 
-cards = _.extend(cards, actions, deeds, dudes, goods, legends, outfits, spells);
+function loadCards(directory) {
+    let cards = {};
+
+    loadFiles(directory);
+
+    _.each(getDirectories(directory), dir => {
+        cards = Object.assign(cards, loadCards(path.join(directory, dir)));
+    });
+
+    return cards;
+}
+
+let cards = {};
+let directories = getDirectories('.');
+
+for(let directory of directories) {
+    cards = Object.assign(cards, loadCards(directory));
+}
 
 module.exports = cards;

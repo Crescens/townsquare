@@ -2,28 +2,27 @@ const _ = require('underscore');
 
 const BaseCard = require('./basecard.js');
 const SetupCardAction = require('./setupcardaction.js');
-const MarshalCardAction = require('./marshalcardaction.js');
-const AmbushCardAction = require('./ambushcardaction.js');
+//const MarshalCardAction = require('./marshalcardaction.js');
+//const AmbushCardAction = require('./ambushcardaction.js');
 
 const StandardPlayActions = [
     new SetupCardAction(),
-    new MarshalCardAction(),
-    new AmbushCardAction()
+    //new MarshalCardAction(),
+    //new AmbushCardAction()
 ];
 
 class DrawCard extends BaseCard {
     constructor(owner, cardData) {
         super(owner, cardData);
 
-        this.dupes = _([]);
         this.attachments = _([]);
         this.icons = {
-            military: 0,
-            intrigue: 0,
-            power: 0
+            bullet: 0,
+            influence: 0,
+            control: 0
         };
 
-        if(cardData.is_military) {
+        /*if(cardData.is_military) {
             this.icons.military++;
         }
 
@@ -33,7 +32,7 @@ class DrawCard extends BaseCard {
 
         if(cardData.is_power) {
             this.icons.power++;
-        }
+        }*/
 
         this.power = 0;
         this.strengthModifier = 0;

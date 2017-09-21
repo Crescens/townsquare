@@ -4,47 +4,47 @@ const Spectator = require('./spectator.js');
 const DrawCard = require('./drawcard.js');
 const Deck = require('./deck.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
-const BestowPrompt = require('./gamesteps/bestowprompt.js');
-const ChallengeTracker = require('./challengetracker.js');
-const PlayableLocation = require('./playablelocation.js');
-const PlayActionPrompt = require('./gamesteps/playactionprompt.js');
-const PlayerPromptState = require('./playerpromptstate.js');
+//const BestowPrompt = require('./gamesteps/bestowprompt.js');
+//const ChallengeTracker = require('./challengetracker.js');
+//const PlayableLocation = require('./playablelocation.js');
+//const PlayActionPrompt = require('./gamesteps/playactionprompt.js');
+//const PlayerPromptState = require('./playerpromptstate.js');
 
-const StartingHandSize = 7;
-const DrawPhaseCards = 2;
+const StartingHandSize = 5;
+//const DrawPhaseCards = 2;
 
 class Player extends Spectator {
     constructor(id, user, owner, game) {
         super(id, user);
 
         this.drawDeck = _([]);
-        this.plotDeck = _([]);
-        this.plotDiscard = _([]);
+        //this.plotDeck = _([]);
+        //this.plotDiscard = _([]);
         this.hand = _([]);
         this.cardsInPlay = _([]);
-        this.deadPile = _([]);
+        this.boothillPile = _([]);
         this.discardPile = _([]);
         this.additionalPiles = {};
 
-        this.faction = new DrawCard(this, {});
+        this.outfit = new DrawCard(this, {});
 
         this.owner = owner;
-        this.takenMulligan = false;
+        //this.takenMulligan = false;
         this.game = game;
 
         this.deck = {};
-        this.challenges = new ChallengeTracker();
+        //this.challenges = new ChallengeTracker();
         this.minReserve = 0;
         this.costReducers = [];
-        this.playableLocations = _.map(['marshal', 'play', 'ambush'], playingType => new PlayableLocation(playingType, this, 'hand'));
-        this.usedPlotsModifier = 0;
-        this.cannotGainGold = false;
-        this.cannotGainChallengeBonus = false;
-        this.cannotTriggerCardAbilities = false;
-        this.cannotMarshalOrPutIntoPlayByTitle = [];
-        this.abilityMaxByTitle = {};
-        this.standPhaseRestrictions = [];
-        this.mustChooseAsClaim = [];
+        //this.playableLocations = _.map(['marshal', 'play', 'ambush'], playingType => new PlayableLocation(playingType, this, 'hand'));
+        //this.usedPlotsModifier = 0;
+        //this.cannotGainGold = false;
+        //this.cannotGainChallengeBonus = false;
+        //this.cannotTriggerCardAbilities = false;
+        //this.cannotMarshalOrPutIntoPlayByTitle = [];
+        //this.abilityMaxByTitle = {};
+        //this.standPhaseRestrictions = [];
+        //this.mustChooseAsClaim = [];
         this.promptedActionWindows = user.promptedActionWindows || {
             plot: false,
             draw: false,
@@ -167,7 +167,7 @@ class Player extends Spectator {
         ));
     }
 
-    getNumberOfChallengesWon(challengeType) {
+    /*getNumberOfChallengesWon(challengeType) {
         return this.challenges.getWon(challengeType);
     }
 
@@ -199,7 +199,7 @@ class Player extends Spectator {
         });
 
         return claim;
-    }
+    }*/
 
     drawCardsToHand(numCards) {
         if(numCards > this.drawDeck.size()) {
@@ -245,12 +245,16 @@ class Player extends Spectator {
         this.discardCards(cards, false, discarded => {
             callback(discarded);
             if(this.drawDeck.size() === 0) {
+
+                /* -- Reshuffle Instead
+
                 var otherPlayer = this.game.getOtherPlayer(this);
 
                 if(otherPlayer) {
                     this.game.addMessage('{0}\'s draw deck is empty', this);
                     this.game.addMessage('{0} wins the game', otherPlayer);
                 }
+                */
             }
         });
     }
@@ -282,6 +286,7 @@ class Player extends Spectator {
         });
     }
 
+    /*
     canInitiateChallenge(challengeType) {
         return !this.challenges.isAtMax(challengeType);
     }
@@ -309,6 +314,7 @@ class Player extends Spectator {
     setCannotInitiateChallengeForType(type, value) {
         this.challenges.setCannotInitiateForType(type, value);
     }
+    */
 
     initDrawDeck() {
         this.hand.each(card => {
@@ -323,11 +329,11 @@ class Player extends Spectator {
     prepareDecks() {
         var deck = new Deck(this.deck);
         var preparedDeck = deck.prepare(this);
-        this.plotDeck = _(preparedDeck.plotCards);
-        this.agenda = preparedDeck.agenda;
-        this.faction = preparedDeck.faction;
+        //this.plotDeck = _(preparedDeck.plotCards);
+        this.legend = preparedDeck.legend;
+        this.outfit = preparedDeck.outfit;
         this.drawDeck = _(preparedDeck.drawCards);
-        this.bannerCards = _(preparedDeck.bannerCards);
+        //this.bannerCards = _(preparedDeck.bannerCards);
         this.allCards = _(preparedDeck.allCards);
     }
 
@@ -335,11 +341,11 @@ class Player extends Spectator {
         this.prepareDecks();
         this.initDrawDeck();
 
-        this.gold = 0;
+        this.ghostrock = 0;
         this.readyToStart = false;
-        this.limitedPlayed = 0;
-        this.maxLimited = 1;
-        this.activePlot = undefined;
+        //this.limitedPlayed = 0;
+        //this.maxLimited = 1;
+        //this.activePlot = undefined;
     }
 
     startGame() {
@@ -347,9 +353,13 @@ class Player extends Spectator {
             return;
         }
 
-        this.gold = 8;
+        /* -- Set to starting wealth
+
+        this.ghostrock = 8;
+        */
     }
 
+    /*
     mulligan() {
         if(this.takenMulligan) {
             return false;
@@ -361,6 +371,7 @@ class Player extends Spectator {
 
         return true;
     }
+    */
 
     keep() {
         this.readyToStart = true;
@@ -422,7 +433,7 @@ class Player extends Spectator {
     }
 
     isCharacterDead(card) {
-        return card.getType() === 'character' && card.isUnique() && this.isCardNameInList(this.deadPile, card);
+        return card.isUnique() && this.isCardNameInList(this.boothillPile, card);
     }
 
     playCard(card) {
@@ -485,7 +496,7 @@ class Player extends Spectator {
     }
 
     canResurrect(card) {
-        return this.deadPile.includes(card) && (!card.isUnique() || this.deadPile.filter(c => c.name === card.name).length === 1);
+        return this.boothillPile.includes(card) && (!card.isUnique() || this.boothillPile.filter(c => c.name === card.name).length === 1);
     }
 
     putIntoPlay(card, playingType = 'play') {
@@ -558,7 +569,7 @@ class Player extends Spectator {
         });
 
         this.cardsInPlay = processedCards;
-        this.gold = 0;
+        this.ghostrock = 0;
     }
 
     startPlotPhase() {
@@ -701,7 +712,7 @@ class Player extends Spectator {
             case 'discard pile':
                 return this.discardPile;
             case 'dead pile':
-                return this.deadPile;
+                return this.boothillPile;
             case 'play area':
                 return this.cardsInPlay;
             case 'active plot':
@@ -733,7 +744,7 @@ class Player extends Spectator {
                 this.discardPile = targetList;
                 break;
             case 'dead pile':
-                this.deadPile = targetList;
+                this.boothillPile = targetList;
                 break;
             case 'play area':
                 this.cardsInPlay = targetList;
@@ -913,17 +924,17 @@ class Player extends Spectator {
             return memo + card.getDominanceStrength();
         }, 0);
 
-        return cardStrength + this.gold;
+        return cardStrength + this.ghostrock;
     }
 
     taxation() {
-        this.gold = 0;
+        this.ghostrock = 0;
     }
 
     getTotalPower() {
         var power = this.cardsInPlay.reduce((memo, card) => {
             return memo + card.getPower();
-        }, this.faction.power);
+        }, this.outfit.power);
 
         return power;
     }
@@ -950,11 +961,11 @@ class Player extends Spectator {
         this.deck = deck;
         this.deck.selected = true;
 
-        this.faction.cardData = deck.faction;
-        this.faction.cardData.name = deck.faction.name;
-        this.faction.cardData.code = deck.faction.value;
-        this.faction.cardData.type_code = 'faction';
-        this.faction.cardData.strength = 0;
+        this.outfit.cardData = deck.outfit;
+        this.outfit.cardData.name = deck.outfit.name;
+        this.outfit.cardData.code = deck.outfit.value;
+        this.outfit.cardData.type_code = 'outfit';
+        this.outfit.cardData.strength = 0;
     }
 
     moveCard(card, targetLocation, options = {}) {
@@ -1164,16 +1175,16 @@ class Player extends Spectator {
                 isPrivate: pile.isPrivate,
                 cards: this.getSummaryForCardList(pile.cards, activePlayer, pile.isPrivate)
             })),
-            agenda: this.agenda ? this.agenda.getSummary(activePlayer) : undefined,
+            legend: this.legend ? this.legend.getSummary(activePlayer) : undefined,
             bannerCards: this.getSummaryForCardList(this.bannerCards, activePlayer),
             cardsInPlay: this.getSummaryForCardList(this.cardsInPlay, activePlayer),
             claim: this.getClaim(),
-            deadPile: this.getSummaryForCardList(this.deadPile, activePlayer),
+            boothillPile: this.getSummaryForCardList(this.boothillPile, activePlayer),
             discardPile: this.getSummaryForCardList(this.discardPile, activePlayer),
             disconnected: this.disconnected,
-            faction: this.faction.getSummary(activePlayer),
+            outfit: this.outfit.getSummary(activePlayer),
             firstPlayer: this.firstPlayer,
-            gold: !isActivePlayer && this.phase === 'setup' ? 0 : this.gold,
+            ghostrock: !isActivePlayer && this.phase === 'setup' ? 0 : this.ghostrock,
             hand: this.getSummaryForCardList(this.hand, activePlayer, true),
             id: this.id,
             left: this.left,

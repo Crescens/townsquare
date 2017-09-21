@@ -821,7 +821,6 @@ config.entry	.\webpack.config.production.js	/^    entry: [$/;"	p
 configurations	.\.vscode\launch.json	/^    "configurations": [$/;"	f
 connect-mongo	.\package.json	/^    "connect-mongo": "^1.3.2",$/;"	f
 console	.\.vscode\launch.json	/^            "console": "internalConsole",$/;"	f
-const.01198	.\client\deck-validator.js	/^    '01198': rulesForBanner('baratheon', 'Baratheon'),$/;"	p
 const.agenda	.\server\game\basecard.js	/^            agenda: 'agenda',$/;"	p
 const.agenda	.\server\game\cardaction.js	/^            agenda: 'agenda',$/;"	p
 const.agenda	.\server\game\triggeredability.js	/^            agenda: 'agenda',$/;"	p
@@ -1327,24 +1326,24 @@ game.claim.type	.\retired\server\game\gamesteps\challenge\applyclaim.js	/^      
 games	.\client\reducers\games.js	/^function games(state = {$/;"	f
 getDebugSessionKey	.\client\configureStore.dev.js	/^function getDebugSessionKey() {$/;"	f
 getDeckCount	.\client\deck-validator.js	/^function getDeckCount(deck) {$/;"	f
+getDirectories	.\server\game\cards\index.js	/^function getDirectories(srcpath) {$/;"	f
 getDirectories	.\server\game\loader.js	/^function getDirectories(srcpath) {$/;"	f
 getInitiativeResult.initiativeTied	.\retired\server\game\gamesteps\revealplots.js	/^        let result = { initiativeTied: false, powerTied: false, player: undefined };$/;"	p
 getInitiativeResult.player	.\retired\server\game\gamesteps\revealplots.js	/^        let result = { initiativeTied: false, powerTied: false, player: undefined };$/;"	p
 getInitiativeResult.powerTied	.\retired\server\game\gamesteps\revealplots.js	/^        let result = { initiativeTied: false, powerTied: false, player: undefined };$/;"	p
-getRules.requiredDraw	.\client\deck-validator.js	/^            requiredDraw: 60,$/;"	p
-getRules.requiredPlots	.\client\deck-validator.js	/^            requiredPlots: 7$/;"	p
+getRules.requiredDraw	.\client\deck-validator.js	/^            requiredDraw: 52,$/;"	p
 global.integration	.\retired\test\helpers\integrationhelper.js	/^global.integration = function(definitions) {$/;"	f
 global.integration	.\retiredtest\helpers\integrationhelper.js	/^global.integration = function(definitions) {$/;"	f
-hasTrait	.\client\deck-validator.js	/^function hasTrait(card, trait) {$/;"	f
+hasKeyword	.\client\deck-validator.js	/^function hasKeyword(card, keyword) {$/;"	f
 hashPassword	.\server\api\account.js	/^function hashPassword(password, rounds) {$/;"	f
 helpers	.\jasmine.json	/^  "helpers": [$/;"	f
 homepage	.\package.json	/^  "homepage": "https:\/\/github.com\/cryogen\/throneteki#readme",$/;"	f
 html-webpack-plugin	.\package.json	/^    "html-webpack-plugin": "^2.22.0",$/;"	f
 httpRequest	.\server\util.js	/^function httpRequest(url) {$/;"	f
 icons	.\retired\server\game\cards\attachments\04\crownofgoldenroses.js	/^        var icons = 0;$/;"	v
-icons.intrigue	.\server\game\drawcard.js	/^            intrigue: 0,$/;"	p
-icons.military	.\server\game\drawcard.js	/^            military: 0,$/;"	p
-icons.power	.\server\game\drawcard.js	/^            power: 0$/;"	p
+icons.bullet	.\server\game\drawcard.js	/^            bullet: 0,$/;"	p
+icons.control	.\server\game\drawcard.js	/^            control: 0$/;"	p
+icons.influence	.\server\game\drawcard.js	/^            influence: 0,$/;"	p
 illustrator	.\retired\test\client\decks\drawBanner.json	/^            "illustrator": "Aaron Riley",$/;"	f
 illustrator	.\retired\test\client\decks\drawBanner.json	/^            "illustrator": "Aleksander Karcz",$/;"	f
 illustrator	.\retired\test\client\decks\drawBanner.json	/^            "illustrator": "Anders Finer",$/;"	f
@@ -2649,6 +2648,8 @@ let.value	.\server\game\baseability.js	/^        let result = { resolved: false,
 let.winner	.\retired\server\game\cards\characters\07\maesteraemon.js	/^            winner: player,$/;"	p
 license	.\package.json	/^  "license": "MIT",$/;"	f
 lint	.\package.json	/^    "lint": "eslint server\/ test\/server\/ client\/",$/;"	f
+loadCards	.\server\game\cards\index.js	/^function loadCards(directory) {$/;"	f
+loadFiles	.\server\game\cards\index.js	/^function loadFiles(directory) {$/;"	f
 localRoot	.\.vscode\launch.json	/^            "localRoot": "${workspaceRoot}",$/;"	f
 locations	.\retired\server\game\cards\characters\index.js	/^var locations = loadCards('characters', __dirname);$/;"	v
 locations	.\retired\server\game\cards\locations\index.js	/^var locations = loadCards('locations', __dirname);$/;"	v
@@ -4101,7 +4102,6 @@ reserve	.\retiredtest\client\decks\plotWinter.json	/^            "reserve": 5,$/
 reserve	.\retiredtest\client\decks\plotWinter.json	/^            "reserve": 6,$/;"	f
 restart	.\.vscode\launch.json	/^            "restart": false,$/;"	f
 returnedWorker	.\server\gamerouter.js	/^        var returnedWorker = undefined;$/;"	v
-rulesForBanner	.\client\deck-validator.js	/^function rulesForBanner(faction, factionName) {$/;"	f
 runServer	.\server\index.js	/^function runServer() {$/;"	f
 runtimeArgs	.\.vscode\launch.json	/^            "runtimeArgs": [$/;"	f
 runtimeExecutable	.\.vscode\launch.json	/^            "runtimeExecutable": null,$/;"	f

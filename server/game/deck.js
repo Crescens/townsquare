@@ -2,8 +2,8 @@ const _ = require('underscore');
 
 const cards = require('./cards');
 const DrawCard = require('./drawcard.js');
-const PlotCard = require('./plotcard.js');
-const AgendaCard = require('./agendacard.js');
+//const PlotCard = require('./plotcard.js');
+//const LegendCard = require('./legendcard.js');
 
 class Deck {
     constructor(data) {
@@ -13,17 +13,18 @@ class Deck {
     prepare(player) {
         var result = {
             drawCards: [],
-            plotCards: []
+            //plotCards: []
         };
 
         this.eachRepeatedCard(this.data.drawCards, cardData => {
-            if(['attachment', 'character', 'event', 'location'].includes(cardData.type_code)) {
+            if(['action', 'deed', 'dude', 'goods', 'spell'].includes(cardData.type_code)) {
                 var drawCard = this.createCard(DrawCard, player, cardData);
                 drawCard.location = 'draw deck';
                 result.drawCards.push(drawCard);
             }
         });
 
+        /* No plot cards necessary
         this.eachRepeatedCard(this.data.plotCards, cardData => {
             if(cardData.type_code === 'plot') {
                 var plotCard = this.createCard(PlotCard, player, cardData);
@@ -31,30 +32,31 @@ class Deck {
                 result.plotCards.push(plotCard);
             }
         });
+        */
 
-        if(this.data.faction) {
-            result.faction = new DrawCard(player, _.extend({
-                code: this.data.faction.value,
-                type_code: 'faction',
-                faction_code: this.data.faction.value
-            }, this.data.faction));
+        if(this.data.outfit) {
+            result.outfit = new DrawCard(player, _.extend({
+                code: this.data.outfit.value,
+                type_code: 'outfit',
+                outfit_code: this.data.outfit.value
+            }, this.data.outfit));
         } else {
-            result.faction = new DrawCard(player, { type_code: 'faction' });
+            result.outfit = new DrawCard(player, { type_code: 'outfit' });
         }
 
-        result.faction.moveTo('faction');
+        result.outfit.moveTo('outfit');
 
-        result.allCards = [result.faction].concat(result.drawCards).concat(result.plotCards);
+        result.allCards = [result.outfit].concat(result.drawCards);//.concat(result.plotCards);
 
-        if(this.data.agenda) {
-            result.agenda = this.createCard(AgendaCard, player, this.data.agenda);
-            result.agenda.moveTo('agenda');
-            result.allCards.push(result.agenda);
+        if(this.data.legend) {
+            result.legend = this.createCard(LegendCard, player, this.data.legend);
+            result.legend.moveTo('legend');
+            result.allCards.push(result.legend);
         } else {
-            result.agenda = undefined;
+            result.legend = undefined;
         }
 
-        result.bannerCards = _.map(this.data.bannerCards, card => this.createCard(AgendaCard, player, card));
+        //result.bannerCards = _.map(this.data.bannerCards, card => this.createCard(LegendCard, player, card));
 
         return result;
     }
