@@ -18,7 +18,7 @@ function processDecks(decks, state) {
             return;
         }
 
-        deck.outfit = state.outfits[deck.outfit.value];
+        deck.outfit = state.outfits[deck.outfit.code];
 
         if(deck.legend) {
             deck.legend = state.legends[deck.legend.code];

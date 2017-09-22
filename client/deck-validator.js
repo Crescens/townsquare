@@ -194,7 +194,7 @@ class DeckValidator {
 
     getRules(deck) {
         const standardRules = {
-            requiredDraw: 52,
+            requiredDraw: 52
         };
         let outfitRules = this.getOutfitRules(deck.outfit);
         let legendRules = this.getLegendRules(deck);

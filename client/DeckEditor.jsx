@@ -30,7 +30,7 @@ class InnerDeckEditor extends React.Component {
         if(!this.props.deck.outfit && this.props.outfits) {
             let deck = this.copyDeck(this.state.deck);
 
-            deck.outfit = {};
+            //deck.outfit = {};
 
             this.setState({ deck: deck });
             this.props.updateDeck(deck);
