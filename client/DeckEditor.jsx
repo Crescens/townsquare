@@ -173,7 +173,9 @@ class InnerDeckEditor extends React.Component {
                 index++;
             }
 
-            let packOffset = line.indexOf('(');
+
+            //let packOffset = line.indexOf('(');
+            let packOffset = -1;
             let cardName = line.substr(index, packOffset === -1 ? line.length : packOffset - index - 1);
             let packName = line.substr(packOffset + 1, line.length - packOffset - 2);
 
@@ -182,9 +184,13 @@ class InnerDeckEditor extends React.Component {
             });
 
             let card = _.find(this.props.cards, function(card) {
+
+                /* -- Pack Data is not included in DTDB data. Parens are used for Experienced and Joker
+                
                 if(pack) {
                     return card.title.toLowerCase() === cardName.toLowerCase() || card.title.toLowerCase() === (cardName + ' (' + pack.code + ')').toLowerCase();
                 }
+                */
 
                 return card.title.toLowerCase() === cardName.toLowerCase();
             });
