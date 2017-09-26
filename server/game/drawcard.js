@@ -402,6 +402,8 @@ class DrawCard extends BaseCard {
                 return attachment.getSummary(activePlayer, hideWhenFaceup);
             }),
             baseStrength: this.getPrintedStrength(),
+            /* -- No Need for Dupe Logic
+
             dupes: this.dupes.map(dupe => {
                 if(dupe.dupes.size() !== 0) {
                     throw new Error('A dupe should not have dupes! ' + dupe.name);
@@ -409,6 +411,7 @@ class DrawCard extends BaseCard {
 
                 return dupe.getSummary(activePlayer, hideWhenFaceup);
             }),
+            */
             iconsAdded: this.getIconsAdded(),
             iconsRemoved: this.getIconsRemoved(),
             inChallenge: this.inChallenge,

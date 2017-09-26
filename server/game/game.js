@@ -9,7 +9,7 @@ const Player = require('./player.js');
 const Spectator = require('./spectator.js');
 const AnonymousSpectator = require('./anonymousspectator.js');
 const GamePipeline = require('./gamepipeline.js');
-//const SetupPhase = require('./gamesteps/setupphase.js');
+const SetupPhase = require('./gamesteps/setupphase.js');
 
 /*
 const PlotPhase = require('./gamesteps/plotphase.js');

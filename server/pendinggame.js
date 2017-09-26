@@ -38,8 +38,8 @@ class PendingGame {
     getSaveState() {
         var players = _.map(this.getPlayers(), player => {
             return {
-                agenda: player.agenda ? player.agenda.cardData.name : undefined,
-                faction: player.faction.cardData.name,
+                legend: player.legend ? player.legend.cardData.name : undefined,
+                outfit: player.outfit.cardData.name,
                 name: player.name
             };
         });
@@ -53,21 +53,21 @@ class PendingGame {
     }
 
     // Helpers
-    setupFaction(player, faction) {
-        player.faction = {};
-        player.faction.cardData = faction;
-        player.faction.cardData.code = faction.value;
-        player.faction.cardData.type_code = 'faction';
-        player.faction.cardData.strength = 0;
+    setupFaction(player, outfit) {
+        player.outfit = {};
+        player.outfit.cardData = outfit;
+        player.outfit.cardData.code = outfit.code;
+        player.outfit.cardData.type_code = 'outfit';
+        player.outfit.cardData.strength = 0;
     }
 
-    setupAgenda(player, agenda) {
-        if(!agenda) {
+    setupAgenda(player, legend) {
+        if(!legend) {
             return;
         }
 
-        player.agenda = {};
-        player.agenda.cardData = agenda;
+        player.legend = {};
+        player.legend.cardData = legend;
     }
 
     // Actions
@@ -236,8 +236,8 @@ class PendingGame {
         player.deck = deck;
         player.deck.selected = true;
 
-        this.setupFaction(player, deck.faction);
-        this.setupAgenda(player, deck.agenda);
+        this.setupFaction(player, deck.outfit);
+        this.setupAgenda(player, deck.legend);
     }
 
     // interrogators
@@ -276,10 +276,10 @@ class PendingGame {
             }
 
             playerSummaries[player.name] = {
-                agenda: this.started && player.agenda ? player.agenda.cardData.code : undefined,
+                legend: this.started && player.legend ? player.legend.cardData.code : undefined,
                 deck: activePlayer ? deck : undefined,
                 emailHash: player.emailHash,
-                faction: this.started && player.faction ? player.faction.cardData.code : undefined,
+                outfit: this.started && player.outfit ? player.outfit.cardData.code : undefined,
                 id: player.id,
                 left: player.left,
                 name: player.name,

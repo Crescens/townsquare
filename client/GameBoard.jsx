@@ -424,27 +424,8 @@ export class InnerGameBoard extends React.Component {
                             </div>
                         </div>
                         <div className='middle'>
-                             <div className='plots-pane'>
-                                <div className='plot-group'>
-                                    {this.getSchemePile(otherPlayer, false)}
-                                    <CardCollection className={otherPlayer && otherPlayer.plotSelected ? 'plot plot-selected' : 'plot'}
-                                                    title='Plots' source='plot deck' cards={otherPlayer ? otherPlayer.plotDeck : []}
-                                                    topCard={{ facedown: true, kneeled: true }} orientation='horizontal'
-                                                    onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} disableMouseOver disablePopup
-                                                    onCardClick={this.onCardClick} orientation='horizontal' />
-                                    <CardCollection className='plot' title='Used Plots' source='revealed plots' cards={otherPlayer ? otherPlayer.plotDiscard : []}
-                                                    topCard={otherPlayer ? otherPlayer.activePlot : undefined} orientation='horizontal' onMouseOver={this.onMouseOver}
-                                                    onMouseOut={this.onMouseOut} onCardClick={this.onCardClick} />
-                                </div>
-                                <div className='plot-group our-side'>
-                                    <CardCollection className='plot' title='Used Plots' source='revealed plots' cards={thisPlayer.plotDiscard} topCard={thisPlayer.activePlot}
-                                                    onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} orientation='horizontal' onMenuItemClick={this.onMenuItemClick}
-                                                    onCardClick={this.onCardClick} onDragDrop={this.onDragDrop} />
-                                    <CardCollection className={thisPlayer.plotSelected ? 'plot plot-selected' : 'plot'}
-                                                    title='Plots' source='plot deck' cards={thisPlayer.plotDeck} topCard={{ facedown: true, kneeled: true }} orientation='horizontal'
-                                                    onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onCardClick={this.onCardClick} onDragDrop={this.onDragDrop} />
-                                    {this.getSchemePile(thisPlayer, !this.state.spectating)}
-                                </div>
+                             <div className=''>
+                                
                             </div>
                             <div className='middle-right'>
                                 <div className='inset-pane'>
@@ -514,7 +495,7 @@ export class InnerGameBoard extends React.Component {
                     </div>
                 </div>
                 <div className='right-side'>
-                    <CardZoom imageUrl={this.props.cardToZoom ? '/img/cards/' + this.props.cardToZoom.code + '.png' : ''}
+                    <CardZoom imageUrl={this.props.cardToZoom ? '/img/cards/' + this.props.cardToZoom.code + '.jpg' : ''}
                         orientation={this.props.cardToZoom ? this.props.cardToZoom.type === 'plot' ? 'horizontal' : 'vertical' : 'vertical'}
                         show={!!this.props.cardToZoom} cardName={this.props.cardToZoom ? this.props.cardToZoom.name : null} />
                     <div className='chat'>

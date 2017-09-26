@@ -167,9 +167,12 @@ class DeckValidator {
             cardCountByName[cardQuantity.card.name] = cardCountByName[cardQuantity.card.name] || { name: cardQuantity.card.name, limit: cardQuantity.card.deck_limit, count: 0 };
             cardCountByName[cardQuantity.card.name].count += cardQuantity.count;
 
+            /* -- No Outfit restrictions as of TCaR
+            
             if(!rules.mayInclude(cardQuantity.card) || rules.cannotInclude(cardQuantity.card)) {
                 errors.push(cardQuantity.card.title + ' is not allowed by outfit');
             }
+            */
 
             if(!isCardInReleasedPack(this.packs, cardQuantity.card)) {
                 unreleasedCards.push(cardQuantity.card.title + ' is not yet released');

@@ -8,7 +8,7 @@ const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 //const ChallengeTracker = require('./challengetracker.js');
 //const PlayableLocation = require('./playablelocation.js');
 //const PlayActionPrompt = require('./gamesteps/playactionprompt.js');
-//const PlayerPromptState = require('./playerpromptstate.js');
+const PlayerPromptState = require('./playerpromptstate.js');
 
 const StartingHandSize = 5;
 //const DrawPhaseCards = 2;
@@ -1176,7 +1176,7 @@ class Player extends Spectator {
                 cards: this.getSummaryForCardList(pile.cards, activePlayer, pile.isPrivate)
             })),
             legend: this.legend ? this.legend.getSummary(activePlayer) : undefined,
-            bannerCards: this.getSummaryForCardList(this.bannerCards, activePlayer),
+            //bannerCards: this.getSummaryForCardList(this.bannerCards, activePlayer),
             cardsInPlay: this.getSummaryForCardList(this.cardsInPlay, activePlayer),
             claim: this.getClaim(),
             boothillPile: this.getSummaryForCardList(this.boothillPile, activePlayer),
@@ -1190,11 +1190,11 @@ class Player extends Spectator {
             left: this.left,
             numDrawCards: this.drawDeck.size(),
             name: this.name,
-            numPlotCards: this.plotDeck.size(),
+            //numPlotCards: this.plotDeck.size(),
             phase: this.phase,
-            plotDeck: this.getSummaryForCardList(this.plotDeck, activePlayer, true),
-            plotDiscard: this.getSummaryForCardList(this.plotDiscard, activePlayer),
-            plotSelected: !!this.selectedPlot,
+            //plotDeck: this.getSummaryForCardList(this.plotDeck, activePlayer, true),
+            //plotDiscard: this.getSummaryForCardList(this.plotDiscard, activePlayer),
+            //plotSelected: !!this.selectedPlot,
             promptedActionWindows: this.promptedActionWindows,
             reserve: this.getTotalReserve(),
             totalPower: this.getTotalPower(),
