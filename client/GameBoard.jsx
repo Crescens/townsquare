@@ -35,7 +35,7 @@ export class InnerGameBoard extends React.Component {
         this.onChange = this.onChange.bind(this);
         this.onScroll = this.onScroll.bind(this);
         this.onMenuItemClick = this.onMenuItemClick.bind(this);
-        this.onFactionCardClick = this.onFactionCardClick.bind(this);
+        this.onOutfitCardClick = this.onOutfitCardClick.bind(this);
 
         this.state = {
             canScroll: true,
@@ -189,8 +189,8 @@ export class InnerGameBoard extends React.Component {
         this.props.sendGameMessage('cardClicked', card.uuid);
     }
 
-    onFactionCardClick() {
-        this.props.sendGameMessage('factionCardClicked');
+    onOutfitCardClick() {
+        this.props.sendGameMessage('outfitCardClicked');
     }
 
     onDrawClick() {
@@ -413,11 +413,11 @@ export class InnerGameBoard extends React.Component {
                 <div className='main-window'>
                     <div className='left-side'>
                         <div className='player-info'>
-                            <PlayerStats gold={otherPlayer ? otherPlayer.gold : 0} claim={otherPlayer ? otherPlayer.claim : 0}
-                                reserve={otherPlayer ? otherPlayer.reserve : 0} power={otherPlayer ? otherPlayer.totalPower : 0} user={otherPlayer ? otherPlayer.user : null} />
+                            <PlayerStats ghostrock={otherPlayer ? otherPlayer.ghostrock : 0} claim={otherPlayer ? otherPlayer.claim : 0}
+                                influence={otherPlayer ? otherPlayer.influence : 0} control={otherPlayer ? otherPlayer.totalControl : 0} user={otherPlayer ? otherPlayer.user : null} />
                             <div className='deck-info'>
                                 <div className='deck-type'>
-                                    <CardCollection className='faction' source='faction' cards={[]} topCard={otherPlayer ? otherPlayer.faction : undefined} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} disablePopup />
+                                    <CardCollection className='outfit' source='outfit' cards={[]} topCard={otherPlayer ? otherPlayer.outfit : undefined} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} disablePopup />
                                     { this.getAgenda(otherPlayer, false, 'bottom') }
                                 </div>
                                 { otherPlayer ? <div className={'first-player-indicator ' + (!thisPlayer.firstPlayer ? '' : 'hidden')}>First player</div> : ''}
@@ -425,7 +425,7 @@ export class InnerGameBoard extends React.Component {
                         </div>
                         <div className='middle'>
                              <div className=''>
-                                
+
                             </div>
                             <div className='middle-right'>
                                 <div className='inset-pane'>
@@ -444,12 +444,12 @@ export class InnerGameBoard extends React.Component {
                             </div>
                         </div>
                         <div className='player-info our-side'>
-                            <PlayerStats gold={thisPlayer.gold || 0} claim={thisPlayer.claim || 0} reserve={thisPlayer.reserve || 0}
-                                        power={thisPlayer.totalPower} isMe={!this.state.spectating} user={thisPlayer.user} />
+                            <PlayerStats ghostrock={thisPlayer.ghostrock || 0} claim={thisPlayer.claim || 0} influence={thisPlayer.influence || 0}
+                                        control={thisPlayer.totalControl} isMe={!this.state.spectating} user={thisPlayer.user} />
                             <div className='deck-info'>
                                 <div className={'first-player-indicator ' + (thisPlayer.firstPlayer ? '' : 'hidden')}>First player</div>
                                 <div className='deck-type'>
-                                    <CardCollection className='faction' source='faction' cards={[]} topCard={thisPlayer.faction} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} disablePopup onCardClick={this.onFactionCardClick} />
+                                    <CardCollection className='outfit' source='outfit' cards={[]} topCard={thisPlayer.outfit} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} disablePopup onCardClick={this.onOutfitCardClick} />
                                     { this.getAgenda(thisPlayer, !this.state.spectating, 'top') }
                                 </div>
                             </div>
@@ -468,9 +468,6 @@ export class InnerGameBoard extends React.Component {
                             onMouseOut={this.onMouseOut}
                             />
                         <div className='play-area'>
-                            <div className='player-board'>
-                                {otherPlayerCards}
-                            </div>
                             <div className='player-board our-side' onDragOver={this.onDragOver}
                                 onDrop={event => this.onDragDropEvent(event, 'play area')} >
                                 {thisPlayerCards}

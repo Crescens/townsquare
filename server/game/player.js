@@ -535,9 +535,11 @@ class Player extends Spectator {
                 card.applyPersistentEffects();
             }
 
+            /* -- No Bestow
             if(this.game.currentPhase !== 'setup' && card.isBestow()) {
                 this.game.queueStep(new BestowPrompt(this.game, this, card));
             }
+            */
 
             this.game.raiseMergedEvent('onCardEntersPlay', { card: card, playingType: playingType, originalLocation: originalLocation });
         }

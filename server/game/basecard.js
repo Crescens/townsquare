@@ -20,7 +20,7 @@ const ValidKeywords = [
     'terminal',
     'limited'
 ];
-const LocationsWithEventHandling = ['play area', 'active plot', 'faction', 'agenda'];
+const LocationsWithEventHandling = ['play area', 'active plot', 'outfit', 'legend'];
 
 class BaseCard {
     constructor(owner, cardData) {
