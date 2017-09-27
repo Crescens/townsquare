@@ -21,7 +21,7 @@ class StandingPhase extends Phase {
     }
 
     standCardsForPlayer(player) {
-        let kneelingCards = this.game.allCards.filter(card => card.location === 'play area' && card.kneeled && card.controller === player && card.allowGameAction('stand'));
+        let kneelingCards = this.game.allCards.filter(card => card.location === 'play area' && card.booted && card.controller === player && card.allowGameAction('stand'));
         let restrictedSubset = [];
         _.each(player.standPhaseRestrictions, restriction => {
             let restrictedCards = _.filter(kneelingCards, card => restriction.match(card));
@@ -39,7 +39,7 @@ class StandingPhase extends Phase {
         });
         this.game.queueSimpleStep(() => {
             let finalCards = _.flatten(_.values(cardsToStand));
-            player.faction.kneeled = false;
+            player.faction.booted = false;
             _.each(finalCards, card => {
                 player.standCard(card);
             });

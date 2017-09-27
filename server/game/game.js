@@ -196,13 +196,13 @@ class Game extends EventEmitter {
             return;
         }
 
-        if(player.outfit.kneeled) {
+        if(player.outfit.booted) {
             player.standCard(player.outfit);
         } else {
             player.kneelCard(player.outfit);
         }
 
-        this.addMessage('{0} {1} their outfit card', player, player.outfit.kneeled ? 'kneels' : 'stands');
+        this.addMessage('{0} {1} their outfit card', player, player.outfit.booted ? 'kneels' : 'stands');
     }
 
     cardClicked(sourcePlayer, cardId) {
@@ -237,13 +237,13 @@ class Game extends EventEmitter {
         }
 
         if(!card.facedown && card.location === 'play area' && card.controller === player) {
-            if(card.kneeled) {
+            if(card.booted) {
                 player.standCard(card);
             } else {
                 player.kneelCard(card);
             }
 
-            this.addMessage('{0} {1} {2}', player, card.kneeled ? 'kneels' : 'stands', card);
+            this.addMessage('{0} {1} {2}', player, card.booted ? 'kneels' : 'stands', card);
         }
     }
 

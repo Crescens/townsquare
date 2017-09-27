@@ -6,7 +6,7 @@ const SetupCardAction = require('./setupcardaction.js');
 //const AmbushCardAction = require('./ambushcardaction.js');
 
 const StandardPlayActions = [
-    new SetupCardAction(),
+    new SetupCardAction()
     //new MarshalCardAction(),
     //new AmbushCardAction()
 ];
@@ -22,6 +22,10 @@ class DrawCard extends BaseCard {
             control: 0
         };
 
+        this.control = 0;
+        this.booted = false;
+        this.minCost = 0;
+
         /*if(cardData.is_military) {
             this.icons.military++;
         }
@@ -32,15 +36,13 @@ class DrawCard extends BaseCard {
 
         if(cardData.is_power) {
             this.icons.power++;
-        }*/
+        }
 
-        this.power = 0;
         this.strengthModifier = 0;
         this.strengthMultiplier = 1;
         this.strengthSet = undefined;
         this.dominanceStrengthModifier = 0;
         this.contributesToDominance = true;
-        this.kneeled = false;
         this.inChallenge = false;
         this.inDanger = false;
         this.wasAmbush = false;
@@ -54,9 +56,10 @@ class DrawCard extends BaseCard {
             mustBeDeclaredAsDefender: false
         };
         this.stealthLimit = 1;
-        this.minCost = 0;
+        */
     }
 
+    /*
     canBeDuplicated() {
         return this.controller === this.owner;
     }
@@ -115,6 +118,7 @@ class DrawCard extends BaseCard {
     hasIcon(icon) {
         return this.icons[icon.toLowerCase()] > 0;
     }
+    */
 
     getPrintedCost() {
         return this.cardData.cost || 0;
@@ -128,14 +132,16 @@ class DrawCard extends BaseCard {
         return this.minCost;
     }
 
+    /*
     getAmbushCost() {
         return this.ambushCost;
     }
-
-    getPower() {
-        return this.power;
+    */
+    getControl() {
+        return this.control;
     }
 
+    /*
     modifyStrength(amount, applying = true) {
         this.strengthModifier += amount;
         this.game.raiseMergedEvent('onCardStrengthChanged', {
@@ -181,7 +187,7 @@ class DrawCard extends BaseCard {
     }
 
     getDominanceStrength() {
-        let baseStrength = !this.kneeled && this.getType() === 'character' && this.contributesToDominance ? this.getStrength() : 0;
+        let baseStrength = !this.booted && this.getType() === 'character' && this.contributesToDominance ? this.getStrength() : 0;
 
         return Math.max(0, baseStrength + this.dominanceStrengthModifier);
     }
@@ -245,23 +251,25 @@ class DrawCard extends BaseCard {
     removeIcon(icon) {
         this.icons[icon]--;
     }
+    */
 
-    modifyPower(power) {
-        this.game.applyGameAction('gainPower', this, card => {
-            let oldPower = card.power;
+    modifyControl(control) {
+        this.game.applyGameAction('gainControl', this, card => {
+            let oldControl = card.control;
 
-            card.power += power;
+            card.control += control;
 
-            if(card.power < 0) {
-                card.power = 0;
+            if(card.control < 0) {
+                card.control = 0;
             }
 
-            this.game.raiseEvent('onCardPowerChanged', this, card.power - oldPower);
+            this.game.raiseEvent('onCardControlChanged', this, card.control - oldControl);
 
             this.game.checkWinCondition(this.controller);
         });
     }
 
+    /*
     needsStealthTarget() {
         return this.isStealth() && !this.stealthTarget;
     }
@@ -280,6 +288,7 @@ class DrawCard extends BaseCard {
 
         return true;
     }
+    */
 
     clearBlank() {
         super.clearBlank();
@@ -326,14 +335,15 @@ class DrawCard extends BaseCard {
     }
 
     leavesPlay() {
-        this.kneeled = false;
-        this.power = 0;
-        this.wasAmbush = false;
-        this.inChallenge = false;
+        this.booted = false;
+        this.control = 0;
+        //this.wasAmbush = false;
+        //this.inChallenge = false;
 
         super.leavesPlay();
     }
 
+    /*
     resetForChallenge() {
         this.stealth = false;
         this.stealthTarget = undefined;
@@ -353,7 +363,7 @@ class DrawCard extends BaseCard {
             this.canParticipateInChallenge() &&
             this.location === 'play area' &&
             !this.stealth &&
-            (!this.kneeled || this.challengeOptions.canBeDeclaredWhileKneeling) &&
+            (!this.booted || this.challengeOptions.canBeDeclaredWhileKneeling) &&
             (this.hasIcon(challengeType) || this.challengeOptions.canBeDeclaredWithoutIcon)
         );
     }
@@ -374,11 +384,13 @@ class DrawCard extends BaseCard {
     canBeMarshaled() {
         return this.allowGameAction('marshal');
     }
+    */
 
     canBePlayed() {
         return this.allowGameAction('play');
     }
 
+    /*
     markAsInDanger() {
         this.inDanger = true;
     }
@@ -392,6 +404,7 @@ class DrawCard extends BaseCard {
         this.inDanger = false;
         this.saved = false;
     }
+    */
 
     getSummary(activePlayer, hideWhenFaceup) {
         let baseSummary = super.getSummary(activePlayer, hideWhenFaceup);
@@ -412,15 +425,15 @@ class DrawCard extends BaseCard {
                 return dupe.getSummary(activePlayer, hideWhenFaceup);
             }),
             */
-            iconsAdded: this.getIconsAdded(),
-            iconsRemoved: this.getIconsRemoved(),
-            inChallenge: this.inChallenge,
-            inDanger: this.inDanger,
-            kneeled: this.kneeled,
-            power: this.power,
-            saved: this.saved,
-            strength: this.getStrength(),
-            stealth: this.stealth
+            //iconsAdded: this.getIconsAdded(),
+            //iconsRemoved: this.getIconsRemoved(),
+            //inChallenge: this.inChallenge,
+            //inDanger: this.inDanger,
+            booted: this.booted,
+            control: this.control
+            //saved: this.saved,
+            //strength: this.getStrength(),
+            //stealth: this.stealth
         });
     }
 }

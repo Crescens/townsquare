@@ -30,13 +30,13 @@ const Costs = {
     kneelSelf: function() {
         return {
             canPay: function(context) {
-                return !context.source.kneeled;
+                return !context.source.booted;
             },
             pay: function(context) {
                 context.source.controller.kneelCard(context.source);
             },
             canUnpay: function(context) {
-                return context.source.kneeled;
+                return context.source.booted;
             },
             unpay: function(context) {
                 context.source.controller.standCard(context.source);
@@ -49,7 +49,7 @@ const Costs = {
     kneelParent: function() {
         return {
             canPay: function(context) {
-                return !!context.source.parent && !context.source.parent.kneeled;
+                return !!context.source.parent && !context.source.parent.booted;
             },
             pay: function(context) {
                 context.source.parent.controller.kneelCard(context.source.parent);
@@ -62,7 +62,7 @@ const Costs = {
     kneelFactionCard: function() {
         return {
             canPay: function(context) {
-                return !context.player.faction.kneeled;
+                return !context.player.faction.booted;
             },
             pay: function(context) {
                 context.player.kneelCard(context.player.faction);
@@ -75,7 +75,7 @@ const Costs = {
      */
     kneel: function(condition) {
         var fullCondition = (card, context) => (
-            !card.kneeled &&
+            !card.booted &&
             card.location === 'play area' &&
             card.controller === context.player &&
             condition(card)
@@ -115,7 +115,7 @@ const Costs = {
      */
     kneelMultiple: function(number, condition) {
         var fullCondition = (card, context) => (
-            !card.kneeled &&
+            !card.booted &&
             card.location === 'play area' &&
             card.controller === context.player &&
             condition(card)
@@ -340,7 +340,7 @@ const Costs = {
     standSelf: function() {
         return {
             canPay: function(context) {
-                return context.source.kneeled;
+                return context.source.booted;
             },
             pay: function(context) {
                 context.source.controller.standCard(context.source);

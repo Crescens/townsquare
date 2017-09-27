@@ -10,8 +10,9 @@ const CardReaction = require('./cardreaction.js');
 const CustomPlayAction = require('./customplayaction.js');
 const EventRegistrar = require('./eventregistrar.js');
 
-const ValidKeywords = [
-    'ambush',
+const SpecialKeywords = [
+//  'Difficulty'
+/*  'ambush',
     'insight',
     'intimidate',
     'pillage',
@@ -19,8 +20,9 @@ const ValidKeywords = [
     'stealth',
     'terminal',
     'limited'
+*/
 ];
-const LocationsWithEventHandling = ['play area', 'active plot', 'outfit', 'legend'];
+const LocationsWithEventHandling = ['play area', 'outfit', 'legend'];
 
 class BaseCard {
     constructor(owner, cardData) {
@@ -36,7 +38,7 @@ class BaseCard {
         this.blankCount = 0;
 
         this.tokens = {};
-        this.plotModifierValues = {
+        /*this.plotModifierValues = {
             gold: 0,
             initiative: 0,
             reserve: 0
@@ -45,30 +47,31 @@ class BaseCard {
             gold: true,
             initiative: true,
             reserve: true
-        };
+        };*/
         this.abilityRestrictions = [];
         this.menu = _([]);
         this.events = new EventRegistrar(this.game, this);
 
         this.abilities = { actions: [], reactions: [], persistentEffects: [], playActions: [] };
-        this.parseKeywords(cardData.text || '');
-        this.parseTraits(cardData.traits || '');
+        //this.parseKeywords(cardData.keywords || '');
+        this.parseKeywords(cardData.keywords || '');
         this.setupCardAbilities(AbilityDsl);
 
         this.factions = {};
         this.addFaction(cardData.faction_code);
     }
 
+    /*
     parseKeywords(text) {
         var firstLine = text.split('\n')[0];
-        var potentialKeywords = _.map(firstLine.split('.'), k => k.toLowerCase().trim());
+        var potentialKeywords = _.map(firstLine.split('\u2022'), k => k.toLowerCase().trim());
 
         this.keywords = {};
         this.printedKeywords = [];
         this.allowedAttachmentTrait = 'any';
 
         _.each(potentialKeywords, keyword => {
-            if(_.contains(ValidKeywords, keyword)) {
+            if(_.contains(RulesKeywords, keyword)) {
                 this.printedKeywords.push(keyword);
             } else if(keyword.indexOf('no attachment') === 0) {
                 var match = keyword.match(/no attachments except <[bi]>(.*)<\/[bi]>/);
@@ -97,13 +100,13 @@ class BaseCard {
             });
         }
     }
+    */
+    parseKeywords(keywords) {
+        this.keywords = {};
 
-    parseTraits(traits) {
-        this.traits = {};
+        var firstLine = keywords.split('\n')[0];
 
-        var firstLine = traits.split('\n')[0];
-
-        _.each(firstLine.split('.'), trait => this.addTrait(trait.toLowerCase().trim()));
+        _.each(firstLine.split('\u2022'), keyword => this.addKeyword(keyword.toLowerCase().trim()));
     }
 
     registerEvents(events) {
@@ -113,6 +116,7 @@ class BaseCard {
     setupCardAbilities() {
     }
 
+    /*
     plotModifiers(modifiers) {
         this.plotModifierValues = _.extend(this.plotModifierValues, modifiers);
         if(modifiers.gold) {
@@ -140,6 +144,7 @@ class BaseCard {
             });
         }
     }
+    */
 
     action(properties) {
         var action = new CardAction(this.game, this, properties);
@@ -414,23 +419,25 @@ class BaseCard {
         this.abilityRestrictions = _.reject(this.abilityRestrictions, r => r === restriction);
     }
 
+    /*
     addKeyword(keyword) {
         var lowerCaseKeyword = keyword.toLowerCase();
         this.keywords[lowerCaseKeyword] = this.keywords[lowerCaseKeyword] || 0;
         this.keywords[lowerCaseKeyword]++;
     }
+    */
 
-    addTrait(trait) {
-        var lowerCaseTrait = trait.toLowerCase();
+    addKeyword(keyword) {
+        var lowerCaseKeyword = keyword.toLowerCase();
 
-        if(!lowerCaseTrait || lowerCaseTrait === '') {
+        if(!lowerCaseKeyword || lowerCaseKeyword === '') {
             return;
         }
 
-        if(!this.traits[lowerCaseTrait]) {
-            this.traits[lowerCaseTrait] = 1;
+        if(!this.keywords[lowerCaseKeyword]) {
+            this.keywords[lowerCaseKeyword] = 1;
         } else {
-            this.traits[lowerCaseTrait]++;
+            this.keywords[lowerCaseKeyword]++;
         }
     }
 

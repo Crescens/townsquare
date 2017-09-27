@@ -73,7 +73,7 @@ class Challenge {
 
     markAsParticipating(cards, participantType, kneel) {
         _.each(cards, card => {
-            if(kneel && !card.kneeled && !card.challengeOptions.doesNotKneelAs[participantType]) {
+            if(kneel && !card.booted && !card.challengeOptions.doesNotKneelAs[participantType]) {
                 card.controller.kneelCard(card);
             }
 

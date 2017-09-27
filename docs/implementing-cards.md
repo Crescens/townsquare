@@ -302,7 +302,7 @@ Card abilities can only be triggered if they have the potential to modify game s
 this.action({
     title: 'Stand attached character',
     // Ensure that the parent card is knelt
-    condition: () => this.parent.kneeled,
+    condition: () => this.parent.booted,
     // ...
 });
 ```
@@ -466,8 +466,8 @@ Each triggered ability has an associated triggering condition. This is done usin
 ```javascript
 this.interrupt({
     when: {
-	    // when the challenges phase ends and the card is not kneeled
-        onPhaseEnded: (e, phase) => phase === 'challenge' && !this.kneeled
+	    // when the challenges phase ends and the card is not booted
+        onPhaseEnded: (e, phase) => phase === 'challenge' && !this.booted
     },
     handler: () => {
         // handler code.

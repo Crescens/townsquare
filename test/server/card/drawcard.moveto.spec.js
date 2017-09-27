@@ -56,7 +56,7 @@ describe('DrawCard', function () {
 
                 describe('and moving to another non-event handling area', function() {
                     beforeEach(function() {
-                        this.card.moveTo('dead pile');
+                        this.card.moveTo('boothill pile');
                     });
 
                     it('should not register events', function() {

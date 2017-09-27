@@ -157,7 +157,7 @@ class CardCollection extends React.Component {
         var cardCount = this.props.cardCount || (this.props.cards ? this.props.cards.length : '0');
         var headerText = this.props.title ? this.props.title + ' (' + (cardCount) + ')' : '';
         var topCard = this.props.topCard || _.last(this.props.cards);
-        var cardOrientation = this.props.orientation === 'horizontal' && topCard && topCard.facedown ? 'kneeled' : this.props.orientation;
+        var cardOrientation = this.props.orientation === 'horizontal' && topCard && topCard.facedown ? 'booted' : this.props.orientation;
 
         if(this.props.hiddenTopCard && topCard) {
             topCard.facedown = true;
@@ -165,7 +165,7 @@ class CardCollection extends React.Component {
             topCard = { facedown: true };
         }
 
-        if(this.props.orientation === 'horizontal' || this.props.orientation === 'kneeled') {
+        if(this.props.orientation === 'horizontal' || this.props.orientation === 'booted') {
             className += ' horizontal';
         } else {
             className += ' vertical';

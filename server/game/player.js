@@ -7,7 +7,7 @@ const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 //const BestowPrompt = require('./gamesteps/bestowprompt.js');
 //const ChallengeTracker = require('./challengetracker.js');
 //const PlayableLocation = require('./playablelocation.js');
-//const PlayActionPrompt = require('./gamesteps/playactionprompt.js');
+const PlayActionPrompt = require('./gamesteps/playactionprompt.js');
 const PlayerPromptState = require('./playerpromptstate.js');
 
 const StartingHandSize = 5;
@@ -1042,24 +1042,24 @@ class Player extends Spectator {
     }
 
     kneelCard(card) {
-        if(card.kneeled) {
+        if(card.booted) {
             return;
         }
 
         this.game.applyGameAction('kneel', card, card => {
-            card.kneeled = true;
+            card.booted = true;
 
             this.game.raiseEvent('onCardKneeled', this, card);
         });
     }
 
     standCard(card) {
-        if(!card.kneeled) {
+        if(!card.booted) {
             return;
         }
 
         this.game.applyGameAction('stand', card, card => {
-            card.kneeled = false;
+            card.booted = false;
 
             this.game.raiseEvent('onCardStood', this, card);
         });

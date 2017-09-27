@@ -76,7 +76,7 @@ describe('the DrawCard', function() {
 
             describe('when the card has a keyword line', function() {
                 beforeEach(function() {
-                    this.card = new DrawCard(this.player, { type_code: 'character', cost: 0, text: 'Intimidate. Renown. Notarealkeyword.\nRobert Baratheon gets +1 STR for each other kneeling character in play.' });
+                    this.card = new DrawCard(this.player, { type_code: 'deed', cost: 0, keywords: 'Experimental \u2022 Improvement \u2022 Gadget \u2022 Difficulty 6' });
                     this.card.location = 'hand';
                     this.player.hand = _([this.card]);
                     this.player.playCard(this.card, true);
@@ -85,23 +85,31 @@ describe('the DrawCard', function() {
                 });
 
                 it('should return true for each keyword', function() {
-                    expect(this.card.hasKeyword('Intimidate')).toBe(true);
-                    expect(this.card.hasKeyword('Renown')).toBe(true);
+                    expect(this.card.hasKeyword('Experimental')).toBe(true);
+                    expect(this.card.hasKeyword('Improvement')).toBe(true);
+                    expect(this.card.hasKeyword('Gadget')).toBe(true);
+                    expect(this.card.hasKeyword('Difficulty 6')).toBe(true);
                 });
+
+                /* -- Keywords work different in DTR
 
                 it('should reject non-valid keywords', function() {
                     expect(this.card.hasKeyword('Notarealkeyword')).toBe(false);
                 });
+                */
+
+                /* -- No text blank effects in DTR
 
                 it('should not blank externally given keywords', function() {
-                    this.card.addKeyword('Stealth');
+                    this.card.addKeyword('Feat');
                     this.card.setBlank();
                     // Resolve events in pipeline.
                     this.game.continue();
-                    expect(this.card.hasKeyword('Intimidate')).toBe(false);
-                    expect(this.card.hasKeyword('Renown')).toBe(false);
-                    expect(this.card.hasKeyword('Stealth')).toBe(true);
+                    expect(this.card.hasKeyword('Experimental')).toBe(false);
+                    expect(this.card.hasKeyword('Improvement')).toBe(false);
+                    expect(this.card.hasKeyword('Feat')).toBe(true);
                 });
+                */
             });
         });
     });

@@ -255,9 +255,9 @@ class Card extends React.Component {
 
         cardClass += ' card-type-' + this.props.card.type;
 
-        if(this.props.orientation === 'kneeled' || this.props.card.kneeled || this.props.orientation === 'horizontal' && this.props.card.type !== 'plot') {
+        if(this.props.orientation === 'booted' || this.props.card.booted || this.props.orientation === 'horizontal' && this.props.card.type !== 'plot') {
             cardClass += ' horizontal';
-            imageClass += ' vertical kneeled';
+            imageClass += ' vertical booted';
         } else if(this.props.orientation === 'horizontal') {
             cardClass += ' horizontal';
             imageClass += ' horizontal';
@@ -342,7 +342,7 @@ Card.propTypes = {
         iconsRemoved: React.PropTypes.array,
         inChallenge: React.PropTypes.bool,
         inDanger: React.PropTypes.bool,
-        kneeled: React.PropTypes.bool,
+        booted: React.PropTypes.bool,
         menu: React.PropTypes.array,
         name: React.PropTypes.string,
         new: React.PropTypes.bool,
@@ -364,7 +364,7 @@ Card.propTypes = {
     onMenuItemClick: React.PropTypes.func,
     onMouseOut: React.PropTypes.func,
     onMouseOver: React.PropTypes.func,
-    orientation: React.PropTypes.oneOf(['horizontal', 'kneeled', 'vertical']),
+    orientation: React.PropTypes.oneOf(['horizontal', 'booted', 'vertical']),
     source: React.PropTypes.oneOf(['hand', 'discard pile', 'play area', 'dead pile', 'draw deck', 'plot deck', 'revealed plots', 'selected plot', 'attachment', 'agenda', 'faction', 'additional']).isRequired,
     style: React.PropTypes.object,
     wrapped: React.PropTypes.bool

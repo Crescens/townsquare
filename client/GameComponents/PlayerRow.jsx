@@ -206,7 +206,7 @@ class PlayerRow extends React.Component {
                                 popupLocation={this.props.isMe || this.props.spectating ? 'top' : 'bottom'} onDragDrop={this.props.onDragDrop} />
                 <CardCollection className='dead' title='Dead' source='dead pile' cards={this.props.deadPile}
                                 onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} onCardClick={this.props.onCardClick}
-                                popupLocation={this.props.isMe || this.props.spectating ? 'top' : 'bottom'} onDragDrop={this.props.onDragDrop} orientation='kneeled' />
+                                popupLocation={this.props.isMe || this.props.spectating ? 'top' : 'bottom'} onDragDrop={this.props.onDragDrop} orientation='booted' />
                   {this.getOutOfGamePile()}
                 </div>
             </div>
