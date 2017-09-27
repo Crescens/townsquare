@@ -39,10 +39,10 @@ describe('Player', function() {
                 expect(this.card.location).toBe('discard pile');
             });
 
-            it('should add the card to the player dead pile', function() {
-                this.player.moveCard(this.card, 'dead pile');
-                expect(this.player.deadPile).toContain(this.card);
-                expect(this.card.location).toBe('dead pile');
+            it('should add the card to the player boothill pile', function() {
+                this.player.moveCard(this.card, 'boothill pile');
+                expect(this.player.boothillPile).toContain(this.card);
+                expect(this.card.location).toBe('boothill pile');
             });
 
             it('should add the card to the player play area', function() {
@@ -84,12 +84,12 @@ describe('Player', function() {
             });
 
             it('should make the card leave play', function() {
-                this.player.moveCard(this.card, 'dead pile');
+                this.player.moveCard(this.card, 'boothill pile');
                 expect(this.card.leavesPlay).toHaveBeenCalled();
             });
 
             it('should raise the left play event', function() {
-                this.player.moveCard(this.card, 'dead pile');
+                this.player.moveCard(this.card, 'boothill pile');
                 expect(this.gameSpy.raiseMergedEvent).toHaveBeenCalled();
             });
 
@@ -130,6 +130,8 @@ describe('Player', function() {
                 });
             });
 
+            /* -- No duplicates
+
             describe('when the card has duplicates', function() {
                 beforeEach(function() {
                     this.dupe = new DrawCard(this.player, {});
@@ -143,6 +145,7 @@ describe('Player', function() {
                     expect(this.dupe.location).toBe('discard pile');
                 });
             });
+            */
         });
 
         describe('when the target location is the draw deck', function() {

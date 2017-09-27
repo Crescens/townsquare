@@ -189,20 +189,20 @@ class Game extends EventEmitter {
         plot.selected = true;
     }
 
-    factionCardClicked(sourcePlayer) {
+    outfitCardClicked(sourcePlayer) {
         var player = this.getPlayerByName(sourcePlayer);
 
         if(!player) {
             return;
         }
 
-        if(player.faction.kneeled) {
-            player.standCard(player.faction);
+        if(player.outfit.kneeled) {
+            player.standCard(player.outfit);
         } else {
-            player.kneelCard(player.faction);
+            player.kneelCard(player.outfit);
         }
 
-        this.addMessage('{0} {1} their faction card', player, player.faction.kneeled ? 'kneels' : 'stands');
+        this.addMessage('{0} {1} their outfit card', player, player.outfit.kneeled ? 'kneels' : 'stands');
     }
 
     cardClicked(sourcePlayer, cardId) {
@@ -283,8 +283,8 @@ class Game extends EventEmitter {
             case 'active plot':
                 this.callCardMenuCommand(player.activePlot, player, menuItem);
                 break;
-            case 'agenda':
-                this.callCardMenuCommand(player.agenda, player, menuItem);
+            case 'legend':
+                this.callCardMenuCommand(player.legend, player, menuItem);
                 break;
             case 'play area':
                 if(card.controller !== player && !menuItem.anyPlayer) {
@@ -338,10 +338,10 @@ class Game extends EventEmitter {
     }
 
     addPower(player, power) {
-        player.faction.power += power;
+        player.outfit.power += power;
 
-        if(player.faction.power < 0) {
-            player.faction.power = 0;
+        if(player.outfit.power < 0) {
+            player.outfit.power = 0;
         }
 
         this.raiseEvent('onStatChanged', player, 'power');
@@ -365,9 +365,9 @@ class Game extends EventEmitter {
     }
 
     transferPower(winner, loser, power) {
-        var appliedPower = Math.min(loser.faction.power, power);
-        loser.faction.power -= appliedPower;
-        winner.faction.power += appliedPower;
+        var appliedPower = Math.min(loser.outfit.power, power);
+        loser.outfit.power -= appliedPower;
+        winner.outfit.power += appliedPower;
 
         this.raiseEvent('onStatChanged', loser, 'power');
         this.raiseEvent('onStatChanged', winner, 'power');
@@ -426,7 +426,7 @@ class Game extends EventEmitter {
         let target = player;
 
         if(stat === 'power') {
-            target = player.faction;
+            target = player.outfit;
         } else if(stat === 'reserve' || stat === 'claim') {
             if(!player.activePlot) {
                 return;
@@ -583,13 +583,12 @@ class Game extends EventEmitter {
 
     beginRound() {
         this.raiseEvent('onBeginRound');
-        this.queueStep(new PlotPhase(this));
-        this.queueStep(new DrawPhase(this));
-        this.queueStep(new MarshalingPhase(this));
-        this.queueStep(new ChallengePhase(this));
-        this.queueStep(new DominancePhase(this));
-        this.queueStep(new StandingPhase(this));
-        this.queueStep(new TaxationPhase(this));
+        /* -- Implement turn structure
+        this.queueStep(new GamblingPhase(this));
+        this.queueStep(new UpkeepPhase(this));
+        this.queueStep(new HighNoonPhase(this));
+        this.queueStep(new SundownPhase(this));
+        */
         this.queueStep(new SimpleStep(this, () => this.beginRound()));
     }
 
@@ -854,8 +853,8 @@ class Game extends EventEmitter {
         var players = _.map(this.getPlayers(), player => {
             return {
                 name: player.name,
-                faction: player.faction.name || player.faction.value,
-                agenda: player.agenda ? player.agenda.name : undefined,
+                outfit: player.outfit.name || player.outfit.value,
+                legend: player.legend ? player.legend.name : undefined,
                 power: player.getTotalPower()
             };
         });
@@ -918,10 +917,10 @@ class Game extends EventEmitter {
             }
 
             playerSummaries[player.name] = {
-                agenda: player.agenda ? player.agenda.code : undefined,
+                legend: player.legend ? player.legend.code : undefined,
                 deck: deck,
                 emailHash: player.emailHash,
-                faction: player.faction.code,
+                outfit: player.outfit.code,
                 id: player.id,
                 lobbyId: player.lobbyId,
                 left: player.left,

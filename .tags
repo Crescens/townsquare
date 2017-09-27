@@ -4539,7 +4539,6 @@ text	.\test\client\decks\plotWinter.json	/^            "text": "<b>When Revealed
 text	.\test\client\decks\plotWinter.json	/^            "text": "You cannot initiate more than 1 challenge during the challenges phase.",$/;"	f
 this.workers.identity	.\server\gamerouter.js	/^                    identity: identityStr,$/;"	p
 this.workers.maxGames	.\server\gamerouter.js	/^                    maxGames: message.arg.maxGames,$/;"	p
-throneteki-data	.\package.json	/^    "throneteki-data": "^1.0.0",$/;"	f
 traits	.\retired\test\client\decks\drawBanner.json	/^            "traits": "Ally. Ironborn. Lord.",$/;"	f
 traits	.\retired\test\client\decks\drawBanner.json	/^            "traits": "Ally. Merchant.",$/;"	f
 traits	.\retired\test\client\decks\drawBanner.json	/^            "traits": "Ally.",$/;"	f

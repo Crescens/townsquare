@@ -97,7 +97,7 @@ describe('the <Card /> component', function() {
             it('should show a facedown image', function() {
                 var cardImage = TestUtils.findRenderedDOMComponentWithTag(this.component, 'img');
 
-                expect(cardImage.src.indexOf('/img/cards/00001.png')).toBe(-1);
+                expect(cardImage.src.indexOf('/img/cards/00001.jpg')).toBe(-1);
                 expect(cardImage.src.indexOf('/img/cards/cardback.jpg')).not.toBe(-1);
             });
         });
@@ -106,7 +106,7 @@ describe('the <Card /> component', function() {
             var cardImage = TestUtils.findRenderedDOMComponentWithTag(this.component, 'img');
             var cardLabel = TestUtils.findRenderedDOMComponentWithClass(this.component, 'card-name');
 
-            expect(cardImage.src.indexOf('/img/cards/00001.png')).not.toBe(-1);
+            expect(cardImage.src.indexOf('/img/cards/00001.jpg')).not.toBe(-1);
             expect(cardLabel.innerText).toBe(this.card.name);
         });
 

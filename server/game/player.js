@@ -713,7 +713,7 @@ class Player extends Spectator {
                 return this.drawDeck;
             case 'discard pile':
                 return this.discardPile;
-            case 'dead pile':
+            case 'boothill pile':
                 return this.boothillPile;
             case 'play area':
                 return this.cardsInPlay;
@@ -745,7 +745,7 @@ class Player extends Spectator {
             case 'discard pile':
                 this.discardPile = targetList;
                 break;
-            case 'dead pile':
+            case 'boothill pile':
                 this.boothillPile = targetList;
                 break;
             case 'play area':
@@ -794,7 +794,7 @@ class Player extends Spectator {
             return false;
         }
 
-        if(target === 'dead pile' && card.getType() !== 'character') {
+        if(target === 'boothill pile' && card.getType() !== 'character') {
             return false;
         }
 
@@ -805,7 +805,7 @@ class Player extends Spectator {
         if(target === 'play area') {
             this.putIntoPlay(card);
         } else {
-            if(target === 'dead pile' && card.location === 'play area') {
+            if(target === 'boothill pile' && card.location === 'play area') {
                 this.killCharacter(card, false);
                 return true;
             }
@@ -995,9 +995,11 @@ class Player extends Spectator {
                     this.removeAttachment(attachment, false);
                 });
 
+                /*
                 while(card.dupes.size() > 0 && targetLocation !== 'play area') {
                     this.removeDuplicate(card, true);
                 }
+                */
 
                 event.card.leavesPlay();
 
@@ -1034,7 +1036,7 @@ class Player extends Spectator {
             this.game.raiseEvent('onCardEntersHand', card);
         }
 
-        if(['dead pile', 'discard pile'].includes(targetLocation)) {
+        if(['boothill pile', 'discard pile'].includes(targetLocation)) {
             this.game.raiseMergedEvent('onCardPlaced', { card: card, location: targetLocation, player: this });
         }
     }
