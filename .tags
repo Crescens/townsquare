@@ -405,9 +405,6 @@ buttons	.\retired\server\game\cards\events\02\ineverbetagainstmyfamily.js	/^    
 buttons	.\retired\server\game\cards\locations\04\caswellskeep.js	/^        var buttons = _.map(this.topCards, card => ({$/;"	v
 buttons	.\retired\server\game\cards\locations\04\theprincespass.js	/^        var buttons = _.map(icons, icon => {$/;"	v
 buttons	.\server\game\gamesteps\bestowprompt.js	/^        var buttons = _.map(range, gold => {$/;"	v
-canProvidePlotModifier.gold	.\server\game\basecard.js	/^            gold: true,$/;"	p
-canProvidePlotModifier.initiative	.\server\game\basecard.js	/^            initiative: true,$/;"	p
-canProvidePlotModifier.reserve	.\server\game\basecard.js	/^            reserve: true$/;"	p
 cannotEffect	.\server\game\effects.js	/^function cannotEffect(type) {$/;"	f
 card	.\retired\server\game\cards\characters\01\greenbloodtrader.js	/^        var card = player.findCardByUuid(player.drawDeck, cardId);$/;"	v
 card	.\retired\server\game\cards\events\01\seeninflames.js	/^        var card = otherPlayer.findCardByUuid(otherPlayer.hand, cardId);$/;"	v
@@ -439,8 +436,6 @@ cardsByName	.\retired\test\helpers\deckbuilder.js	/^        var cardsByName = _.
 cardsByName	.\retiredtest\helpers\deckbuilder.js	/^        var cardsByName = _.filter(this.cards, matchCardByNameAndPack(codeOrLabelOrName));$/;"	v
 cardsToReturn	.\server\game\player.js	/^        var cardsToReturn = [];$/;"	v
 case.name	.\client\reducers\cards.js	/^            var newDeck = { name: 'New Deck' };$/;"	p
-challengeOptions.doesNotContributeStrength	.\server\game\drawcard.js	/^            doesNotContributeStrength: false,$/;"	p
-challengeOptions.doesNotKneelAs	.\server\game\drawcard.js	/^            doesNotKneelAs: {$/;"	p
 challengeTypes.military	.\server\game\challengetracker.js	/^            military: {$/;"	p
 chat	.\client\reducers\chat.js	/^function chat(state = {$/;"	f
 choices.default	.\server\game\promptedtriggeredability.js	/^            choices = { 'default': properties.handler };$/;"	p
@@ -1020,7 +1015,7 @@ count	.\test\client\decks\plotValidDuplicate.json	/^        "count": 2,$/;"	f
 count	.\test\client\decks\plotWinter.json	/^        "count": 1,$/;"	f
 cover	.\package.json	/^    "cover": "cross-env JASMINE_CONFIG_PATH=.\/jasmine.json istanbul cover --include-all-sources jasmine",$/;"	f
 createTarget	.\retired\test\server\effect.spec.js	/^function createTarget(properties = {}) {$/;"	f
-createTarget	.\retiredtest\server\effect.spec.js	/^function createTarget(properties = {}) {$/;"	f
+createTarget	.\test\server\effect.spec.js	/^function createTarget(properties = {}) {$/;"	f
 cross-env	.\package.json	/^    "cross-env": "^3.2.4",$/;"	f
 css-loader	.\package.json	/^    "css-loader": "^0.27.3",$/;"	f
 customMatchers.toHavePrompt	.\retired\test\helpers\integrationhelper.js	/^    toHavePrompt: function(util, customEqualityMatchers) {$/;"	m
@@ -1187,7 +1182,7 @@ faction_name	.\test\client\decks\plotWinter.json	/^            "faction_name": "
 faction_name	.\test\client\decks\plotWinter.json	/^            "faction_name": "Neutral",$/;"	f
 fetchImage	.\server\fetchdata.js	/^function fetchImage(urlPath, code, imagePath, timeout) {$/;"	f
 file-loader	.\package.json	/^    "file-loader": "^0.9.0",$/;"	f
-firstLine	.\server\game\basecard.js	/^        var firstLine = traits.split('\\n')[0];$/;"	v
+firstLine	.\server\game\basecard.js	/^        var firstLine = keywords.split('\\n')[0];$/;"	v
 flavor	.\retired\test\client\decks\drawBanner.json	/^            "flavor": "At first he had consoled himself that this imprisonment could not last long.",$/;"	f
 flavor	.\retired\test\client\decks\drawBanner.json	/^            "flavor": "By the time the maester removed the funnel from his mouth, he was already spiralling back to sleep.",$/;"	f
 flavor	.\retired\test\client\decks\drawBanner.json	/^            "flavor": "He never heard his father speak the words that condemned him. Perhaps no words were necessary. I put my life in the Red Viper's hands, and he dropped it.",$/;"	f
@@ -3620,9 +3615,6 @@ phantomjs	.\package.json	/^    "phantomjs": "^2.1.7",$/;"	f
 playActions	.\server\game\player.js	/^        var playActions = _.filter(card.getPlayActions(), action => action.meetsRequirements(context) && action.canPayCosts(context) && action.canResolveTargets(context));$/;"	v
 player	.\server\gamenode\gameserver.js	/^        var player = game.playersAndSpectators[socket.user.username];$/;"	v
 playersInGame	.\server\pendinggame.js	/^        var playersInGame = _.filter(this.players, player => !player.left);$/;"	v
-plotModifierValues.gold	.\server\game\basecard.js	/^            gold: 0,$/;"	p
-plotModifierValues.initiative	.\server\game\basecard.js	/^            initiative: 0,$/;"	p
-plotModifierValues.reserve	.\server\game\basecard.js	/^            reserve: 0$/;"	p
 plots	.\retired\server\game\cards\plots\index.js	/^var plots = loadCards('plots', __dirname);$/;"	v
 pmx	.\package.json	/^    "pmx": "^1.0.3",$/;"	f
 port	.\.vscode\launch.json	/^            "port": 5858,$/;"	f
@@ -3954,7 +3946,6 @@ position	.\test\client\decks\plotWinter.json	/^            "position": 39,$/;"	f
 position	.\test\client\decks\plotWinter.json	/^            "position": 46,$/;"	f
 position	.\test\client\decks\plotWinter.json	/^            "position": 8,$/;"	f
 position	.\test\client\decks\plotWinter.json	/^            "position": 9,$/;"	f
-potentialKeywords	.\server\game\basecard.js	/^        var potentialKeywords = _.map(firstLine.split('.'), k => k.toLowerCase().trim());$/;"	v
 preLaunchTask	.\.vscode\launch.json	/^            "preLaunchTask": null,$/;"	f
 precss	.\package.json	/^    "precss": "^1.4.0",$/;"	f
 precss	.\webpack.config.js	/^var precss = require('precss');$/;"	v

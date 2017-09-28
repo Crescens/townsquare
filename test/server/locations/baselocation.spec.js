@@ -13,8 +13,16 @@ describe('BaseLocation', function () {
         this.location = new BaseLocation();
     });
 
+    describe('when a location is made adjacent', function () {
+        it('should show in list of adjacent locations', function () {
+            this.location.makeAdjacent(this.testCard, 'placement');
+            expect(this.location.one).toContain(this.testCard, 'placement');
+
+        });
+    });
     /*
-    describe('when new instance created', function() {
+    describe('when new instance created', function()
+    {
         it('should generate a new uuid', function() {
             expect(this.location.uuid).not.toBeUndefined();
         });

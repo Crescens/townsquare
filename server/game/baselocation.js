@@ -5,16 +5,25 @@ const _ = require('underscore');
  */
 class BaseLocation {
     constructor() {
-        this.adjacent = _([]);
-        this.outOfTown = false;
+        this.one = _([]);
+        this.two = _([]);
     }
 
     isAdjacent(location) {
-        return !!this.adjacent[location];
+        return;
     }
 
-    addAdjacent(location) {
-        this.adjacent.push(location);
+    makeAdjacent(one, two) {
+        var obj1 = {};
+        var obj2 = {};
+        obj1[one] = two;
+        obj2[two] = one;
+        this.one.push(obj1);
+        this.two.push(obj2);
+    }
+
+    adjacentLocations() {
+        return this.adjacency;
     }
 }
 
