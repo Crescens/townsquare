@@ -414,7 +414,7 @@ class DrawCard extends BaseCard {
             attachments: this.attachments.map(attachment => {
                 return attachment.getSummary(activePlayer, hideWhenFaceup);
             }),
-            baseStrength: this.getPrintedStrength(),
+            //baseStrength: this.getPrintedStrength(),
             /* -- No Need for Dupe Logic
 
             dupes: this.dupes.map(dupe => {

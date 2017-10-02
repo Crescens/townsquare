@@ -933,9 +933,9 @@ class Player extends Spectator {
         this.ghostrock = 0;
     }
 
-    getTotalPower() {
+    getTotalControl() {
         var power = this.cardsInPlay.reduce((memo, card) => {
-            return memo + card.getPower();
+            return memo + card.getControl();
         }, this.outfit.power);
 
         return power;
@@ -1201,7 +1201,7 @@ class Player extends Spectator {
             //plotSelected: !!this.selectedPlot,
             promptedActionWindows: this.promptedActionWindows,
             reserve: this.getTotalReserve(),
-            totalPower: this.getTotalPower(),
+            totalControl: this.getTotalControl(),
             user: _.omit(this.user, ['password', 'email'])
         };
 
