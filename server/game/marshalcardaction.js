@@ -5,7 +5,7 @@ class MarshalCardAction extends BaseAbility {
     constructor() {
         super({
             cost: [
-                Costs.payReduceableGoldCost('marshal'),
+                Costs.payReduceableGhostRockCost('marshal'),
                 Costs.playLimited()
             ]
         });
@@ -28,7 +28,7 @@ class MarshalCardAction extends BaseAbility {
         if(context.costs.isDupe) {
             context.game.addMessage('{0} duplicates {1} for free', context.player, context.source);
         } else {
-            context.game.addMessage('{0} marshals {1} costing {2}', context.player, context.source, context.costs.gold);
+            context.game.addMessage('{0} marshals {1} costing {2}', context.player, context.source, context.costs.ghostrock);
         }
         context.player.putIntoPlay(context.source, 'marshal');
     }

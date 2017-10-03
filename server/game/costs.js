@@ -25,15 +25,15 @@ const Costs = {
         return new ChooseCost(choices);
     },
     /**
-     * Cost that will kneel the card that initiated the ability.
+     * Cost that will boot the card that initiated the ability.
      */
-    kneelSelf: function() {
+    bootSelf: function() {
         return {
             canPay: function(context) {
                 return !context.source.booted;
             },
             pay: function(context) {
-                context.source.controller.kneelCard(context.source);
+                context.source.controller.bootCard(context.source);
             },
             canUnpay: function(context) {
                 return context.source.booted;
@@ -44,36 +44,36 @@ const Costs = {
         };
     },
     /**
-     * Cost that will kneel the parent card the current card is attached to.
+     * Cost that will boot the parent card the current card is attached to.
      */
-    kneelParent: function() {
+    bootParent: function() {
         return {
             canPay: function(context) {
                 return !!context.source.parent && !context.source.parent.booted;
             },
             pay: function(context) {
-                context.source.parent.controller.kneelCard(context.source.parent);
+                context.source.parent.controller.bootCard(context.source.parent);
             }
         };
     },
     /**
-     * Cost that will kneel the player's faction card.
+     * Cost that will boot the player's outfit card.
      */
-    kneelFactionCard: function() {
+    bootOutfitCard: function() {
         return {
             canPay: function(context) {
-                return !context.player.faction.booted;
+                return !context.player.outfit.booted;
             },
             pay: function(context) {
-                context.player.kneelCard(context.player.faction);
+                context.player.bootCard(context.player.outfit);
             }
         };
     },
     /**
-     * Cost that requires kneeling a card that matches the passed condition
+     * Cost that requires booting a card that matches the passed condition
      * predicate function.
      */
-    kneel: function(condition) {
+    boot: function(condition) {
         var fullCondition = (card, context) => (
             !card.booted &&
             card.location === 'play area' &&
@@ -87,10 +87,10 @@ const Costs = {
             resolve: function(context, result = { resolved: false }) {
                 context.game.promptForSelect(context.player, {
                     cardCondition: card => fullCondition(card, context),
-                    activePromptTitle: 'Select card to kneel',
+                    activePromptTitle: 'Select card to boot',
                     source: context.source,
                     onSelect: (player, card) => {
-                        context.kneelingCostCard = card;
+                        context.bootingCostCard = card;
                         result.value = true;
                         result.resolved = true;
 
@@ -105,15 +105,15 @@ const Costs = {
                 return result;
             },
             pay: function(context) {
-                context.player.kneelCard(context.kneelingCostCard);
+                context.player.bootCard(context.bootingCostCard);
             }
         };
     },
     /**
-     * Cost that requires kneeling a certain number of cards that match the
+     * Cost that requires booting a certain number of cards that match the
      * passed condition predicate function.
      */
-    kneelMultiple: function(number, condition) {
+    bootMultiple: function(number, condition) {
         var fullCondition = (card, context) => (
             !card.booted &&
             card.location === 'play area' &&
@@ -127,7 +127,7 @@ const Costs = {
             resolve: function(context, result = { resolved: false }) {
                 context.game.promptForSelect(context.player, {
                     cardCondition: card => fullCondition(card, context),
-                    activePromptTitle: 'Select ' + number + ' cards to kneel',
+                    activePromptTitle: 'Select ' + number + ' cards to boot',
                     numCards: number,
                     multiSelect: true,
                     source: context.source,
@@ -136,7 +136,7 @@ const Costs = {
                             return false;
                         }
 
-                        context.kneelingCostCards = cards;
+                        context.bootingCostCards = cards;
                         result.value = true;
                         result.resolved = true;
 
@@ -151,8 +151,8 @@ const Costs = {
                 return result;
             },
             pay: function(context) {
-                _.each(context.kneelingCostCards, card => {
-                    context.player.kneelCard(card);
+                _.each(context.bootingCostCards, card => {
+                    context.player.bootCard(card);
                 });
             }
         };
@@ -400,41 +400,41 @@ const Costs = {
         };
     },
     /**
-     * Cost that will pay the reduceable gold cost associated with an event card
+     * Cost that will pay the reduceable ghostrock cost associated with an event card
      * and place it in discard.
      */
     playEvent: function() {
         return Costs.all(
-            Costs.payReduceableGoldCost('play'),
+            Costs.payReduceableGhostRockCost('play'),
             Costs.expendEvent(),
             Costs.playLimited(),
             Costs.playMax()
         );
     },
     /**
-     * Cost that will discard a gold from the card. Used mainly by cards
+     * Cost that will discard a ghostrock from the card. Used mainly by cards
      * having the bestow keyword.
      */
-    discardGold: function() {
+    discardGhostRock: function() {
         return {
             canPay: function(context) {
-                return context.source.hasToken('gold');
+                return context.source.hasToken('ghostrock');
             },
             pay: function(context) {
-                context.source.removeToken('gold', 1);
+                context.source.removeToken('ghostrock', 1);
             }
         };
     },
     /**
-     * Cost that will discard a fixed amount of power from the current card.
+     * Cost that will discard a fixed amount of control from the current card.
      */
-    discardPowerFromSelf: function(amount = 1) {
+    discardControlFromSelf: function(amount = 1) {
         return {
             canPay: function(context) {
-                return context.source.power >= amount;
+                return context.source.control >= amount;
             },
             pay: function(context) {
-                context.source.modifyPower(-amount);
+                context.source.modifyControl(-amount);
             }
         };
     },
@@ -452,25 +452,27 @@ const Costs = {
         };
     },
     /**
-     * Cost that will discard faction power matching the passed amount.
+     * Cost that will discard outfit control matching the passed amount.
      */
-    discardFactionPower: function(amount) {
+    /*
+    discardOutfitControl: function(amount) {
         return {
             canPay: function(context) {
-                return context.player.faction.power >= amount;
+                return context.player.outfit.control >= amount;
             },
             pay: function(context) {
-                context.source.game.addPower(context.player, -amount);
+                context.source.game.addControl(context.player, -amount);
             }
         };
     },
+    */
     /**
-     * Cost that requires discarding a power from a card that matches the passed condition
+     * Cost that requires discarding a control from a card that matches the passed condition
      * predicate function.
      */
-    discardPower: function(amount, condition) {
+    discardControl: function(amount, condition) {
         var fullCondition = (card, context) => (
-            card.getPower() >= amount &&
+            card.getControl() >= amount &&
             card.location === 'play area' &&
             card.controller === context.player &&
             condition(card)
@@ -482,10 +484,10 @@ const Costs = {
             resolve: function(context, result = { resolved: false }) {
                 context.game.promptForSelect(context.player, {
                     cardCondition: card => fullCondition(card, context),
-                    activePromptTitle: 'Select card to discard ' + amount + ' power from',
+                    activePromptTitle: 'Select card to discard ' + amount + ' control from',
                     source: context.source,
                     onSelect: (player, card) => {
-                        context.discardPowerCostCard = card;
+                        context.discardControlCostCard = card;
                         result.value = true;
                         result.resolved = true;
 
@@ -500,7 +502,7 @@ const Costs = {
                 return result;
             },
             pay: function(context) {
-                context.discardPowerCostCard.modifyPower(-amount);
+                context.discardControlCostCard.modifyControl(-amount);
             }
         };
     },
@@ -535,9 +537,9 @@ const Costs = {
         };
     },
     /**
-     * Cost that will pay the exact printed gold cost for the card.
+     * Cost that will pay the exact printed ghostrock cost for the card.
      */
-    payPrintedGoldCost: function() {
+    payPrintedGhostRockCost: function() {
         return {
             canPay: function(context) {
                 var hasDupe = context.player.getDuplicateInPlay(context.source);
@@ -545,7 +547,7 @@ const Costs = {
                     return true;
                 }
 
-                return context.player.gold >= context.source.getCost();
+                return context.player.ghostrock >= context.source.getCost();
             },
             pay: function(context) {
                 var hasDupe = context.player.getDuplicateInPlay(context.source);
@@ -553,16 +555,16 @@ const Costs = {
                     return;
                 }
 
-                context.player.gold -= context.source.getCost();
+                context.player.ghostrock -= context.source.getCost();
             }
         };
     },
     /**
-     * Cost that will pay the printed gold cost on the card minus any active
+     * Cost that will pay the printed ghostrock cost on the card minus any active
      * reducer effects the play has activated. Upon playing the card, all
      * matching reducer effects will expire, if applicable.
      */
-    payReduceableGoldCost: function(playingType) {
+    payReduceableGhostRockCost: function(playingType) {
         return {
             canPay: function(context) {
                 var hasDupe = context.player.getDuplicateInPlay(context.source);
@@ -570,31 +572,31 @@ const Costs = {
                     return true;
                 }
 
-                return context.player.gold >= context.player.getReducedCost(playingType, context.source);
+                return context.player.ghostrock >= context.player.getReducedCost(playingType, context.source);
             },
             pay: function(context) {
                 var hasDupe = context.player.getDuplicateInPlay(context.source);
                 context.costs.isDupe = !!hasDupe;
                 if(hasDupe && playingType === 'marshal') {
-                    context.costs.gold = 0;
+                    context.costs.ghostrock = 0;
                 } else {
-                    context.costs.gold = context.player.getReducedCost(playingType, context.source);
-                    context.player.gold -= context.costs.gold;
+                    context.costs.ghostrock = context.player.getReducedCost(playingType, context.source);
+                    context.player.ghostrock -= context.costs.ghostrock;
                     context.player.markUsedReducers(playingType, context.source);
                 }
             }
         };
     },
     /**
-     * Cost in which the player must pay a fixed, non-reduceable amount of gold.
+     * Cost in which the player must pay a fixed, non-reduceable amount of ghostrock.
      */
-    payGold: function(amount) {
+    payGhostRock: function(amount) {
         return {
             canPay: function(context) {
-                return context.player.gold >= amount;
+                return context.player.ghostrock >= amount;
             },
             pay: function(context) {
-                context.game.addGold(context.player, -amount);
+                context.game.addGhostRock(context.player, -amount);
             }
         };
     }
