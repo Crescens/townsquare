@@ -53,15 +53,15 @@ class PendingGame {
     }
 
     // Helpers
-    setupFaction(player, outfit) {
+    setupOutfit(player, outfit) {
         player.outfit = {};
         player.outfit.cardData = outfit;
         player.outfit.cardData.code = outfit.code;
         player.outfit.cardData.type_code = 'outfit';
-        player.outfit.cardData.strength = 0;
+        //player.outfit.cardData.strength = 0;
     }
 
-    setupAgenda(player, legend) {
+    setupLegend(player, legend) {
         if(!legend) {
             return;
         }
@@ -236,8 +236,8 @@ class PendingGame {
         player.deck = deck;
         player.deck.selected = true;
 
-        this.setupFaction(player, deck.outfit);
-        this.setupAgenda(player, deck.legend);
+        this.setupOutfit(player, deck.outfit);
+        this.setupLegend(player, deck.legend);
     }
 
     // interrogators

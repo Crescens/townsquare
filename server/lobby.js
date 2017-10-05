@@ -458,16 +458,17 @@ class Lobby {
 
                 this.deckRepository.getById(deckId, (err, deck) => {
 
+                    /*
                     _.each(deck.plotCards, plot => {
                         plot.card = cards[plot.card.code];
-                    });
+                    });*/
 
                     _.each(deck.drawCards, draw => {
                         draw.card = cards[draw.card.code];
                     });
 
-                    if(deck.agenda) {
-                        deck.agenda = cards[deck.agenda.code];
+                    if(deck.legend) {
+                        deck.legend = cards[deck.legend.code];
                     }
 
                     let validation = validateDeck(deck, packs);
@@ -563,8 +564,8 @@ class Lobby {
                     name: player.name,
                     emailHash: player.emailHash,
                     owner: game.owner === player.name,
-                    faction: { cardData: { code: player.faction } },
-                    agenda: { cardData: { code: player.agenda } }
+                    outfit: { cardData: { code: player.outfit } },
+                    legend: { cardData: { code: player.legend } }
                 };
             });
 
