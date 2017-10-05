@@ -8,6 +8,7 @@ class BaseLocation {
         //Passed in location for construction. Card object or string "townsquare"
         this.represents = location;
         this.adjacencyMap = new Map();
+        this.cards = _([]);
     }
 
     isAdjacent(location) {
@@ -20,11 +21,11 @@ class BaseLocation {
         return false;
     }
 
-    Attach(location, direction) {
+    attach(location, direction) {
         this.adjacencyMap.set(location, direction);
     }
 
-    Detach(location) {
+    detach(location) {
         this.adjacencyMap.delete(location);
     }
 
@@ -32,11 +33,11 @@ class BaseLocation {
         return this.adjacencyMap;
     }
 
-    Represents() {
+    describe() {
         return this.represents;
     }
 
-    Left() {
+    left() {
         for(var [key,value] of this.adjacencyMap.entries()) {
             if(value === 'left') {
                 return key;
@@ -44,13 +45,30 @@ class BaseLocation {
         }
     }
 
-    Right() {
+    right() {
         for(var [key,value] of this.adjacencyMap.entries()) {
             if(value === 'right') {
                 return key;
             }
         }
     }
+
+    addCard(card) {
+        if(!card) {
+            return;
+        }
+
+        this.cards.push(card);
+    }
+
+    removeCard(card) {
+        if(!card || !this.cards.includes(card)) {
+            return;
+        }
+
+        this.cards = _(this.cards.reject(c => c === card));
+    }
+
 }
 
 module.exports = BaseLocation;
