@@ -48,7 +48,7 @@
     "passport-local": "^1.0.0",
     "pmx": "^1.0.3",
     "raven": "^1.1.1",
-    "react": "^16.0.0",
+    "react": "^15.6.2",
     "react-bootstrap-typeahead": "^0.9.4",
     "react-dom": "^15.3.1",
     "react-redux": "^4.4.5",

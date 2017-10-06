@@ -4043,9 +4043,9 @@ quantity	.\test\client\decks\plotWinter.json	/^            "quantity": 3,$/;"	f
 random	.\jasmine.json	/^  "random": false$/;"	f
 range	.\server\game\gamesteps\bestowprompt.js	/^        var range = _.range(1, limit + 1).reverse();$/;"	v
 raven	.\package.json	/^    "raven": "^1.1.1",$/;"	f
-react	.\package.json	/^    "react": "^16.0.0",$/;"	f
+react	.\package.json	/^    "react": "^15.6.2",$/;"	f
 react-addons-test-utils	.\package.json	/^    "react-addons-test-utils": "^15.3.1",$/;"	f
-react-bootstrap-typeahead	.\package.json	/^    "react-bootstrap-typeahead": "^0.9.2",$/;"	f
+react-bootstrap-typeahead	.\package.json	/^    "react-bootstrap-typeahead": "^0.9.4",$/;"	f
 react-dom	.\package.json	/^    "react-dom": "^15.3.1",$/;"	f
 react-hot-loader	.\package.json	/^    "react-hot-loader": "^3.0.0-beta.4",$/;"	f
 react-redux	.\package.json	/^    "react-redux": "^4.4.5",$/;"	f
