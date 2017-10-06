@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'underscore';
 
@@ -83,10 +84,10 @@ class InnerMessages extends React.Component {
 
 InnerMessages.displayName = 'Messages';
 InnerMessages.propTypes = {
-    messages: React.PropTypes.array,
-    onCardMouseOut: React.PropTypes.func,
-    onCardMouseOver: React.PropTypes.func,
-    socket: React.PropTypes.object
+    messages: PropTypes.array,
+    onCardMouseOut: PropTypes.func,
+    onCardMouseOver: PropTypes.func,
+    socket: PropTypes.object
 };
 
 function mapStateToProps(state) {
@@ -98,4 +99,3 @@ function mapStateToProps(state) {
 const Messages = connect(mapStateToProps, actions)(InnerMessages);
 
 export default Messages;
-

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'underscore';
 import {connect} from 'react-redux';
 
@@ -83,7 +84,7 @@ class InnerDecks extends React.Component {
         let content = null;
 
         let successPanel = null;
-        
+
         if(this.props.deckDeleted) {
             setTimeout(() => {
                 this.props.clearDeckStatus();
@@ -91,7 +92,7 @@ class InnerDecks extends React.Component {
             successPanel = (
                 <AlertPanel message='Deck deleted successfully' type={ 'success' } />
             );
-        }    
+        }
 
         if(this.props.loading) {
             content = <div>Loading decks from the server...</div>;
@@ -115,17 +116,17 @@ class InnerDecks extends React.Component {
 
 InnerDecks.displayName = 'Decks';
 InnerDecks.propTypes = {
-    apiError: React.PropTypes.string,
-    cards: React.PropTypes.object,
-    clearDeckStatus: React.PropTypes.func,
-    deckDeleted: React.PropTypes.bool,
-    decks: React.PropTypes.array,
-    deleteDeck: React.PropTypes.func,
-    loadDecks: React.PropTypes.func,
-    loading: React.PropTypes.bool,
-    navigate: React.PropTypes.func,
-    selectDeck: React.PropTypes.func,
-    selectedDeck: React.PropTypes.object
+    apiError: PropTypes.string,
+    cards: PropTypes.object,
+    clearDeckStatus: PropTypes.func,
+    deckDeleted: PropTypes.bool,
+    decks: PropTypes.array,
+    deleteDeck: PropTypes.func,
+    loadDecks: PropTypes.func,
+    loading: PropTypes.bool,
+    navigate: PropTypes.func,
+    selectDeck: PropTypes.func,
+    selectedDeck: PropTypes.object
 };
 
 function mapStateToProps(state) {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'underscore';
 
 import CardCollection from './CardCollection.jsx';
@@ -30,13 +31,13 @@ class AdditionalCardPile extends React.Component {
 
 AdditionalCardPile.displayName = 'AdditionalCardPile';
 AdditionalCardPile.propTypes = {
-    className: React.PropTypes.string,
-    isMe: React.PropTypes.bool,
-    onMouseOut: React.PropTypes.func,
-    onMouseOver: React.PropTypes.func,
-    pile: React.PropTypes.object,
-    spectating: React.PropTypes.bool,
-    title: React.PropTypes.string
+    className: PropTypes.string,
+    isMe: PropTypes.bool,
+    onMouseOut: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    pile: PropTypes.object,
+    spectating: PropTypes.bool,
+    title: PropTypes.string
 };
 
 export default AdditionalCardPile;

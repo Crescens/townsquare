@@ -1,5 +1,6 @@
 import Typeahead from 'react-bootstrap-typeahead';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Input extends React.Component {
     render() {
@@ -21,16 +22,16 @@ class Input extends React.Component {
 
 Input.displayName = 'TypeAhead';
 Input.propTypes = {
-    children: React.PropTypes.object,
-    fieldClass: React.PropTypes.string,
-    label: React.PropTypes.string,
-    labelClass: React.PropTypes.string,
-    labelKey: React.PropTypes.string,
-    name: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    options: React.PropTypes.array,
-    validationMessage: React.PropTypes.string,
-    value: React.PropTypes.string
+    children: PropTypes.object,
+    fieldClass: PropTypes.string,
+    label: PropTypes.string,
+    labelClass: PropTypes.string,
+    labelKey: PropTypes.string,
+    name: PropTypes.string,
+    onChange: PropTypes.func,
+    options: PropTypes.array,
+    validationMessage: PropTypes.string,
+    value: PropTypes.string
 };
 
 export default Input;

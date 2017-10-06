@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import $ from 'jquery';
 import _ from 'underscore';
 import { bindActionCreators } from 'redux';
@@ -344,37 +345,37 @@ class App extends React.Component {
 
 App.displayName = 'Application';
 App.propTypes = {
-    clearGameState: React.PropTypes.func,
-    currentGame: React.PropTypes.object,
-    disconnecting: React.PropTypes.bool,
-    dispatch: React.PropTypes.func,
-    gameSocketConnectError: React.PropTypes.func,
-    gameSocketConnected: React.PropTypes.func,
-    gameSocketConnecting: React.PropTypes.func,
-    gameSocketDisconnect: React.PropTypes.func,
-    gameSocketReconnecting: React.PropTypes.func,
-    games: React.PropTypes.array,
-    loadCards: React.PropTypes.func,
-    loadOutfits: React.PropTypes.func,
-    loadPacks: React.PropTypes.func,
-    loggedIn: React.PropTypes.bool,
-    navigate: React.PropTypes.func,
-    path: React.PropTypes.string,
-    receiveBannerNotice: React.PropTypes.func,
-    receiveGameState: React.PropTypes.func,
-    receiveGames: React.PropTypes.func,
-    receiveJoinGame: React.PropTypes.func,
-    receiveLobbyMessage: React.PropTypes.func,
-    receiveLobbyMessages: React.PropTypes.func,
-    receiveNewGame: React.PropTypes.func,
-    receivePasswordError: React.PropTypes.func,
-    receiveUsers: React.PropTypes.func,
-    sendGameSocketConnectFailed: React.PropTypes.func,
-    setContextMenu: React.PropTypes.func,
-    socketConnected: React.PropTypes.func,
-    token: React.PropTypes.string,
-    user: React.PropTypes.object,
-    username: React.PropTypes.string
+    clearGameState: PropTypes.func,
+    currentGame: PropTypes.object,
+    disconnecting: PropTypes.bool,
+    dispatch: PropTypes.func,
+    gameSocketConnectError: PropTypes.func,
+    gameSocketConnected: PropTypes.func,
+    gameSocketConnecting: PropTypes.func,
+    gameSocketDisconnect: PropTypes.func,
+    gameSocketReconnecting: PropTypes.func,
+    games: PropTypes.array,
+    loadCards: PropTypes.func,
+    loadOutfits: PropTypes.func,
+    loadPacks: PropTypes.func,
+    loggedIn: PropTypes.bool,
+    navigate: PropTypes.func,
+    path: PropTypes.string,
+    receiveBannerNotice: PropTypes.func,
+    receiveGameState: PropTypes.func,
+    receiveGames: PropTypes.func,
+    receiveJoinGame: PropTypes.func,
+    receiveLobbyMessage: PropTypes.func,
+    receiveLobbyMessages: PropTypes.func,
+    receiveNewGame: PropTypes.func,
+    receivePasswordError: PropTypes.func,
+    receiveUsers: PropTypes.func,
+    sendGameSocketConnectFailed: PropTypes.func,
+    setContextMenu: PropTypes.func,
+    socketConnected: PropTypes.func,
+    token: PropTypes.string,
+    user: PropTypes.object,
+    username: PropTypes.string
 };
 
 function mapStateToProps(state) {

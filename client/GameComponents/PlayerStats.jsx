@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Avatar from '../Avatar.jsx';
@@ -68,14 +69,14 @@ export class InnerPlayerStats extends React.Component {
 
 InnerPlayerStats.displayName = 'PlayerStats';
 InnerPlayerStats.propTypes = {
-    claim: React.PropTypes.number,
-    gold: React.PropTypes.number,
-    isMe: React.PropTypes.bool,
-    playerName: React.PropTypes.string,
-    power: React.PropTypes.number,
-    reserve: React.PropTypes.number,
-    sendGameMessage: React.PropTypes.func,
-    user: React.PropTypes.object
+    claim: PropTypes.number,
+    gold: PropTypes.number,
+    isMe: PropTypes.bool,
+    playerName: PropTypes.string,
+    power: PropTypes.number,
+    reserve: PropTypes.number,
+    sendGameMessage: PropTypes.func,
+    user: PropTypes.object
 };
 
 function mapStateToProps() {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'underscore';
 import $ from 'jquery';
 
@@ -193,25 +194,25 @@ class CardCollection extends React.Component {
 
 CardCollection.displayName = 'CardCollection';
 CardCollection.propTypes = {
-    cardCount: React.PropTypes.number,
-    cards: React.PropTypes.array,
-    className: React.PropTypes.string,
-    disableMouseOver: React.PropTypes.bool,
-    disablePopup: React.PropTypes.bool,
-    hiddenTopCard: React.PropTypes.bool,
-    menu: React.PropTypes.array,
-    onCardClick: React.PropTypes.func,
-    onDragDrop: React.PropTypes.func,
-    onMenuItemClick: React.PropTypes.func,
-    onMouseOut: React.PropTypes.func,
-    onMouseOver: React.PropTypes.func,
-    onTouchMove: React.PropTypes.func,
-    orientation: React.PropTypes.string,
-    popupLocation: React.PropTypes.string,
-    popupMenu: React.PropTypes.array,
-    source: React.PropTypes.oneOf(['hand', 'discard pile', 'play area', 'dead pile', 'draw deck', 'plot deck', 'revealed plots', 'selected plot', 'attachment', 'legend', 'outfit', 'additional']).isRequired,
-    title: React.PropTypes.string,
-    topCard: React.PropTypes.object
+    cardCount: PropTypes.number,
+    cards: PropTypes.array,
+    className: PropTypes.string,
+    disableMouseOver: PropTypes.bool,
+    disablePopup: PropTypes.bool,
+    hiddenTopCard: PropTypes.bool,
+    menu: PropTypes.array,
+    onCardClick: PropTypes.func,
+    onDragDrop: PropTypes.func,
+    onMenuItemClick: PropTypes.func,
+    onMouseOut: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    onTouchMove: PropTypes.func,
+    orientation: PropTypes.string,
+    popupLocation: PropTypes.string,
+    popupMenu: PropTypes.array,
+    source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'dead pile', 'draw deck', 'plot deck', 'revealed plots', 'selected plot', 'attachment', 'legend', 'outfit', 'additional']).isRequired,
+    title: PropTypes.string,
+    topCard: PropTypes.object
 };
 CardCollection.defaultProps = {
     orientation: 'vertical'

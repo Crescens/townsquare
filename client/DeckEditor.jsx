@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'underscore';
 import $ from 'jquery';
 import {connect} from 'react-redux';
@@ -186,7 +187,7 @@ class InnerDeckEditor extends React.Component {
             let card = _.find(this.props.cards, function(card) {
 
                 /* -- Pack Data is not included in DTDB data. Parens are used for Experienced and Joker
-                
+
                 if(pack) {
                     return card.title.toLowerCase() === cardName.toLowerCase() || card.title.toLowerCase() === (cardName + ' (' + pack.code + ')').toLowerCase();
                 }
@@ -275,15 +276,15 @@ class InnerDeckEditor extends React.Component {
 
 InnerDeckEditor.displayName = 'DeckEditor';
 InnerDeckEditor.propTypes = {
-    legends: React.PropTypes.object,
-    cards: React.PropTypes.object,
-    deck: React.PropTypes.object,
-    outfits: React.PropTypes.object,
-    loading: React.PropTypes.bool,
-    mode: React.PropTypes.string,
-    onDeckSave: React.PropTypes.func,
-    packs: React.PropTypes.array,
-    updateDeck: React.PropTypes.func
+    legends: PropTypes.object,
+    cards: PropTypes.object,
+    deck: PropTypes.object,
+    outfits: PropTypes.object,
+    loading: PropTypes.bool,
+    mode: PropTypes.string,
+    onDeckSave: PropTypes.func,
+    packs: PropTypes.array,
+    updateDeck: PropTypes.func
 };
 
 function mapStateToProps(state) {

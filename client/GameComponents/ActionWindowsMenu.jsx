@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'underscore';
 
 class ActionWindowsMenu extends React.Component {
@@ -47,8 +48,8 @@ class ActionWindowsMenu extends React.Component {
 
 ActionWindowsMenu.displayName = 'ActionWindowsMenu';
 ActionWindowsMenu.propTypes = {
-    onToggle: React.PropTypes.func,
-    options: React.PropTypes.object
+    onToggle: PropTypes.func,
+    options: PropTypes.object
 };
 
 export default ActionWindowsMenu;

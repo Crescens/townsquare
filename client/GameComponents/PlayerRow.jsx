@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'underscore';
 import $ from 'jquery';
 
@@ -216,25 +217,25 @@ class PlayerRow extends React.Component {
 
 PlayerRow.displayName = 'PlayerRow';
 PlayerRow.propTypes = {
-    additionalPiles: React.PropTypes.object,
-    deadPile: React.PropTypes.array,
-    discardPile: React.PropTypes.array,
-    drawDeck: React.PropTypes.array,
-    hand: React.PropTypes.array,
-    isMe: React.PropTypes.bool,
-    numDrawCards: React.PropTypes.number,
-    onCardClick: React.PropTypes.func,
-    onDiscardedCardClick: React.PropTypes.func,
-    onDragDrop: React.PropTypes.func,
-    onDrawClick: React.PropTypes.func,
-    onMenuItemClick: React.PropTypes.func,
-    onMouseOut: React.PropTypes.func,
-    onMouseOver: React.PropTypes.func,
-    onShuffleClick: React.PropTypes.func,
-    plotDeck: React.PropTypes.array,
-    power: React.PropTypes.number,
-    showDrawDeck: React.PropTypes.bool,
-    spectating: React.PropTypes.bool
+    additionalPiles: PropTypes.object,
+    deadPile: PropTypes.array,
+    discardPile: PropTypes.array,
+    drawDeck: PropTypes.array,
+    hand: PropTypes.array,
+    isMe: PropTypes.bool,
+    numDrawCards: PropTypes.number,
+    onCardClick: PropTypes.func,
+    onDiscardedCardClick: PropTypes.func,
+    onDragDrop: PropTypes.func,
+    onDrawClick: PropTypes.func,
+    onMenuItemClick: PropTypes.func,
+    onMouseOut: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    onShuffleClick: PropTypes.func,
+    plotDeck: PropTypes.array,
+    power: PropTypes.number,
+    showDrawDeck: PropTypes.bool,
+    spectating: PropTypes.bool
 };
 
 export default PlayerRow;

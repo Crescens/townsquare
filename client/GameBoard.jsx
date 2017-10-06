@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'underscore';
 import $ from 'jquery';
@@ -511,15 +512,15 @@ export class InnerGameBoard extends React.Component {
 
 InnerGameBoard.displayName = 'GameBoard';
 InnerGameBoard.propTypes = {
-    cardToZoom: React.PropTypes.object,
-    clearZoom: React.PropTypes.func,
-    closeGameSocket: React.PropTypes.func,
-    currentGame: React.PropTypes.object,
-    sendGameMessage: React.PropTypes.func,
-    setContextMenu: React.PropTypes.func,
-    socket: React.PropTypes.object,
-    username: React.PropTypes.string,
-    zoomCard: React.PropTypes.func
+    cardToZoom: PropTypes.object,
+    clearZoom: PropTypes.func,
+    closeGameSocket: PropTypes.func,
+    currentGame: PropTypes.object,
+    sendGameMessage: PropTypes.func,
+    setContextMenu: PropTypes.func,
+    socket: PropTypes.object,
+    username: PropTypes.string,
+    zoomCard: PropTypes.func
 };
 
 function mapStateToProps(state) {

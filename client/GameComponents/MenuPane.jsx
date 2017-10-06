@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'underscore';
 
 class MenuPane extends React.Component {
@@ -67,13 +68,13 @@ class MenuPane extends React.Component {
 
 MenuPane.displayName = 'MenuPane';
 MenuPane.propTypes = {
-    buttons: React.PropTypes.array,
-    onButtonClick: React.PropTypes.func,
-    onMouseOut: React.PropTypes.func,
-    onMouseOver: React.PropTypes.func,
-    promptTitle: React.PropTypes.string,
-    socket: React.PropTypes.object,
-    title: React.PropTypes.string
+    buttons: PropTypes.array,
+    onButtonClick: PropTypes.func,
+    onMouseOut: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    promptTitle: PropTypes.string,
+    socket: PropTypes.object,
+    title: PropTypes.string
 };
 
 export default MenuPane;

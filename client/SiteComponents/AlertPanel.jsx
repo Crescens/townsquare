@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class AlertPanel extends React.Component {
     render() {
@@ -29,16 +30,16 @@ class AlertPanel extends React.Component {
                     <span className='sr-only'>{ this.props.title }</span>
                     &nbsp;{ this.props.message }
                     &nbsp;{ this.props.children }
-                </div>);        
+                </div>);
     }
 }
 
 AlertPanel.displayName = 'AlertPanel';
 AlertPanel.propTypes = {
-    children: React.PropTypes.any,
-    message: React.PropTypes.string,
-    title: React.PropTypes.string,
-    type: React.PropTypes.oneOf(['warning', 'info', 'success', 'error'])
+    children: PropTypes.any,
+    message: PropTypes.string,
+    title: PropTypes.string,
+    type: PropTypes.oneOf(['warning', 'info', 'success', 'error'])
 };
 
 export default AlertPanel;

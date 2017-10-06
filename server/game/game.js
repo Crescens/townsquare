@@ -24,7 +24,7 @@ const TaxationPhase = require('./gamesteps/taxationphase.js');
 const SimpleStep = require('./gamesteps/simplestep.js');
 const DeckSearchPrompt = require('./gamesteps/decksearchprompt.js');
 const MenuPrompt = require('./gamesteps/menuprompt.js');
-const IconPrompt = require('./gamesteps/iconprompt.js');
+//const IconPrompt = require('./gamesteps/iconprompt.js');
 const SelectCardPrompt = require('./gamesteps/selectcardprompt.js');
 const EventWindow = require('./gamesteps/eventwindow.js');
 const AtomicEventWindow = require('./gamesteps/atomiceventwindow.js');
@@ -40,7 +40,7 @@ class Game extends EventEmitter {
 
         this.effectEngine = new EffectEngine(this);
         this.playersAndSpectators = {};
-        this.playerPlots = {};
+        //this.playerPlots = {};
         this.playerCards = {};
         this.gameChat = new GameChat();
         this.chatCommands = new ChatCommands(this);
@@ -155,12 +155,14 @@ class Game extends EventEmitter {
         return foundCards;
     }
 
+    /*
     anyPlotHasTrait(trait) {
         return _.any(this.getPlayers(), player =>
             player.activePlot &&
             player.activePlot.hasTrait(trait));
-    }
+    }*/
 
+    /*
     getNumberOfPlotsWithTrait(trait) {
         return _.reduce(this.getPlayers(), (sum, player) => {
             if(player.activePlot && player.activePlot.hasTrait(trait)) {
@@ -169,12 +171,13 @@ class Game extends EventEmitter {
 
             return sum;
         }, 0);
-    }
+    }*/
 
     addEffect(source, properties) {
         this.effectEngine.add(new Effect(this, source, properties));
     }
 
+    /*
     selectPlot(player, plotId) {
         var plot = player.findCardByUuid(player.plotDeck, plotId);
 
@@ -187,7 +190,7 @@ class Game extends EventEmitter {
         });
 
         plot.selected = true;
-    }
+    }*/
 
     outfitCardClicked(sourcePlayer) {
         var player = this.getPlayerByName(sourcePlayer);
@@ -197,12 +200,12 @@ class Game extends EventEmitter {
         }
 
         if(player.outfit.booted) {
-            player.standCard(player.outfit);
+            player.unbootCard(player.outfit);
         } else {
-            player.kneelCard(player.outfit);
+            player.bootCard(player.outfit);
         }
 
-        this.addMessage('{0} {1} their outfit card', player, player.outfit.booted ? 'kneels' : 'stands');
+        this.addMessage('{0} {1} their outfit card', player, player.outfit.booted ? 'boots' : 'unboots');
     }
 
     cardClicked(sourcePlayer, cardId) {
@@ -238,12 +241,12 @@ class Game extends EventEmitter {
 
         if(!card.facedown && card.location === 'play area' && card.controller === player) {
             if(card.booted) {
-                player.standCard(card);
+                player.unbootCard(card);
             } else {
-                player.kneelCard(card);
+                player.bootCard(card);
             }
 
-            this.addMessage('{0} {1} {2}', player, card.booted ? 'kneels' : 'stands', card);
+            this.addMessage('{0} {1} {2}', player, card.booted ? 'boots' : 'unboots', card);
         }
     }
 
@@ -280,9 +283,9 @@ class Game extends EventEmitter {
         }
 
         switch(card.location) {
-            case 'active plot':
-                this.callCardMenuCommand(player.activePlot, player, menuItem);
-                break;
+            //case 'active plot':
+            //    this.callCardMenuCommand(player.activePlot, player, menuItem);
+            //    break;
             case 'legend':
                 this.callCardMenuCommand(player.legend, player, menuItem);
                 break;
@@ -323,7 +326,7 @@ class Game extends EventEmitter {
 
         if(player.drop(cardId, source, target)) {
             var movedCard = 'a card';
-            if(!_.isEmpty(_.intersection(['dead pile', 'discard pile', 'out of game', 'play area'],
+            if(!_.isEmpty(_.intersection(['boothill pile', 'discard pile', 'out of game', 'play area'],
                                          [source, target]))) {
                 // log the moved card only if it moved from/to a public place
                 var card = this.findAnyCardInAnyList(cardId);
@@ -349,19 +352,19 @@ class Game extends EventEmitter {
         this.checkWinCondition(player);
     }
 
-    addGold(player, gold) {
-        if(gold > 0 && player.cannotGainGold) {
-            this.addMessage('{0} cannot gain gold', player);
+    addGhostRock(player, ghostrock) {
+        if(ghostrock > 0 && player.cannotGainGhostRock) {
+            this.addMessage('{0} cannot gain ghostrock', player);
             return;
         }
 
-        player.gold += gold;
+        player.ghostrock += ghostrock;
 
-        if(player.gold < 0) {
-            player.gold = 0;
+        if(player.ghostrock < 0) {
+            player.ghostrock = 0;
         }
 
-        this.raiseEvent('onStatChanged', player, 'gold');
+        this.raiseEvent('onStatChanged', player, 'ghostrock');
     }
 
     transferPower(winner, loser, power) {
@@ -375,16 +378,16 @@ class Game extends EventEmitter {
         this.checkWinCondition(winner);
     }
 
-    transferGold(to, from, gold) {
-        var appliedGold = Math.min(from.gold, gold);
+    transferGhostRock(to, from, ghostrock) {
+        var appliedGhostRock = Math.min(from.ghostrock, ghostrock);
 
-        from.gold -= appliedGold;
-        to.gold += appliedGold;
+        from.ghostrock -= appliedGhostRock;
+        to.ghostrock += appliedGhostRock;
 
-        this.raiseEvent('onStatChanged', from, 'gold');
-        this.raiseEvent('onStatChanged', to, 'gold');
+        this.raiseEvent('onStatChanged', from, 'ghostrock');
+        this.raiseEvent('onStatChanged', to, 'ghostrock');
 
-        this.raiseMergedEvent('onGoldTransferred', { source: from, target: to, amount: gold });
+        this.raiseMergedEvent('onGhostRockTransferred', { source: from, target: to, amount: ghostrock });
     }
 
     checkWinCondition(player) {
@@ -392,6 +395,7 @@ class Game extends EventEmitter {
             this.recordWinner(player, 'power');
         }
     }
+
 
     playerDecked(player) {
         var otherPlayer = this.getOtherPlayer(player);
@@ -417,6 +421,7 @@ class Game extends EventEmitter {
         this.router.gameWon(this, reason, winner);
     }
 
+    /*
     changeStat(playerName, stat, value) {
         let player = this.getPlayerByName(playerName);
         if(!player) {
@@ -457,7 +462,7 @@ class Game extends EventEmitter {
         } else {
             this.addMessage('{0} sets {1} to {2} ({3})', player, stat, target[stat], (value > 0 ? '+' : '') + value);
         }
-    }
+    }*/
 
     chat(playerName, message) {
         var player = this.playersAndSpectators[playerName];
@@ -517,9 +522,10 @@ class Game extends EventEmitter {
         this.queueStep(new MenuPrompt(this, player, contextObj, properties));
     }
 
+    /*
     promptForIcon(player, callback = () => true) {
         this.queueStep(new IconPrompt(this, player, callback));
-    }
+    }*/
 
     promptForSelect(player, properties) {
         this.queueStep(new SelectCardPrompt(this, player, properties));
