@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'underscore';
 import $ from 'jquery';
-import 'jquery-migrate';
+//import 'jquery-migrate'; -- Removed due to errors with webpack and I can't figure out why this is still needed
 import 'jquery-nearest';
 
 import CardMenu from './CardMenu.jsx';
@@ -319,7 +319,6 @@ class Card extends React.Component {
             return (
                     <div className='card-wrapper' style={this.props.style}>
                         {this.getCard()}
-                        {this.getDupes()}
                         {this.getAttachments()}
                     </div>);
         }

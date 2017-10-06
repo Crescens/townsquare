@@ -1,7 +1,6 @@
 import React from 'react';
 import _ from 'underscore';
 import $ from 'jquery';
-import 'jquery-migrate';
 import 'jquery-nearest';
 
 class Location extends React.Component {

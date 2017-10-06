@@ -387,10 +387,11 @@ autoprefixer	.\package.json	/^    "autoprefixer": "^6.4.1",$/;"	f
 autoprefixer	.\webpack.config.js	/^var autoprefixer = require('autoprefixer');$/;"	v
 babel-core	.\package.json	/^    "babel-core": "^6.14.0",$/;"	f
 babel-eslint	.\package.json	/^    "babel-eslint": "^7.1.0",$/;"	f
-babel-loader	.\package.json	/^    "babel-loader": "^6.2.5",$/;"	f
+babel-loader	.\package.json	/^    "babel-loader": "^7.1.2",$/;"	f
 babel-plugin-istanbul	.\package.json	/^    "babel-plugin-istanbul": "^2.0.1",$/;"	f
 babel-plugin-transform-object-assign	.\package.json	/^    "babel-plugin-transform-object-assign": "^6.8.0",$/;"	f
 babel-polyfill	.\package.json	/^    "babel-polyfill": "^6.23.0",$/;"	f
+babel-preset-env	.\package.json	/^    "babel-preset-env": "^1.6.0",$/;"	f
 babel-preset-es2015	.\package.json	/^    "babel-preset-es2015": "^6.14.0",$/;"	f
 babel-preset-react	.\package.json	/^    "babel-preset-react": "^6.11.1",$/;"	f
 bcrypt	.\package.json	/^    "bcrypt": "^0.8.7",$/;"	f
@@ -2274,7 +2275,7 @@ karma	.\package.json	/^    "karma": "^1.3.0",$/;"	f
 karma-babel-preprocessor	.\package.json	/^    "karma-babel-preprocessor": "^6.0.1",$/;"	f
 karma-coverage	.\package.json	/^    "karma-coverage": "^1.1.1",$/;"	f
 karma-jasmine	.\package.json	/^    "karma-jasmine": "^1.0.2",$/;"	f
-karma-phantomjs-launcher	.\package.json	/^    "karma-phantomjs-launcher": "^1.0.2",$/;"	f
+karma-phantomjs-launcher	.\package.json	/^    "karma-phantomjs-launcher": "^1.0.4",$/;"	f
 karma-sourcemap-loader	.\package.json	/^    "karma-sourcemap-loader": "^0.3.7",$/;"	f
 karma-webpack	.\package.json	/^    "karma-webpack": "^2.0.3",$/;"	f
 keywords	.\package.json	/^  "keywords": [$/;"	f
@@ -3034,7 +3035,7 @@ navigate	.\client\reducers\navigation.js	/^function navigate(state, newPath, sea
 newController	.\server\game\game.js	/^        var newController = player;$/;"	v
 news	.\client\reducers\news.js	/^function news(state = {$/;"	f
 node-sass	.\package.json	/^    "node-sass": "^4.5.0",$/;"	f
-nodemailer	.\package.json	/^    "nodemailer": "^2.7.2",$/;"	f
+nodemailer	.\package.json	/^    "nodemailer": "^4.0.1",$/;"	f
 octgn_id	.\retired\test\client\decks\drawBanner.json	/^            "octgn_id": "014da37c-9903-418d-a043-ee2191b9d169",$/;"	f
 octgn_id	.\retired\test\client\decks\drawBanner.json	/^            "octgn_id": "0c297793-b421-4f54-96b1-028622a0c1cf",$/;"	f
 octgn_id	.\retired\test\client\decks\drawBanner.json	/^            "octgn_id": "1913dcf2-dc68-4427-a3ae-5deb5e054d8c",$/;"	f
@@ -3611,7 +3612,7 @@ passport	.\package.json	/^    "passport": "^0.3.2",$/;"	f
 passport-local	.\package.json	/^    "passport-local": "^1.0.0",$/;"	f
 path	.\webpack.config.js	/^var path = require('path');$/;"	v
 path	.\webpack.config.production.js	/^var path = require('path');$/;"	v
-phantomjs	.\package.json	/^    "phantomjs": "^2.1.7",$/;"	f
+phantomjs-prebuilt	.\package.json	/^    "phantomjs-prebuilt": "^2.1.7",$/;"	f
 playActions	.\server\game\player.js	/^        var playActions = _.filter(card.getPlayActions(), action => action.meetsRequirements(context) && action.canPayCosts(context) && action.canResolveTargets(context));$/;"	v
 player	.\server\gamenode\gameserver.js	/^        var player = game.playersAndSpectators[socket.user.username];$/;"	v
 playersInGame	.\server\pendinggame.js	/^        var playersInGame = _.filter(this.players, player => !player.left);$/;"	v
@@ -5247,7 +5248,7 @@ var.params.card	.\server\game\player.js	/^                card: card$/;"	p
 var.params.player	.\server\game\player.js	/^                player: this,$/;"	p
 version	.\.vscode\launch.json	/^    "version": "0.2.0",$/;"	f
 version	.\package.json	/^  "version": "1.0.2",$/;"	f
-webpack	.\package.json	/^    "webpack": "^2.2.1",$/;"	f
+webpack	.\package.json	/^    "webpack": "^3.6.0",$/;"	f
 webpack	.\webpack.config.js	/^var webpack = require('webpack');$/;"	v
 webpack	.\webpack.config.production.js	/^var webpack = require('webpack');$/;"	v
 webpack-dev-middleware	.\package.json	/^    "webpack-dev-middleware": "^1.10.1",$/;"	f
