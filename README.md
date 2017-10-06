@@ -10,7 +10,17 @@ The original code is for [TheIronThrone.net](https://theironthrone.net) and was 
 
 ~~Glad you noticed!  Yes, jinteki was a huge inspiration for this project, as the interface is clean and user friendly, so I've tried to make this similar in a lot of ways~~
 
-### Project Milestones and Current Progress
+### In Progress
+
+~~dtdb data import~~ Complete
+~~deckbuilder~~ Functional
+~~game node~~ Can connect to gamenode
+Remove GoT-specific components All cards/game steps/GoT effects removed == Currently lots of variable renaming but only on files I've looked at for other reasons.
+
+faction/Faction == outfit/Outfit
+agenda/Agenda == legend/Legend
+power/Power == control/Control
+kneel/Kneel == boot/Boot
 
 Client side - Implement React component for Locations
 Server side - Dig into game pipeline and setup step
@@ -20,7 +30,7 @@ The code is written in node.js(server) and React/Redux.
 
 Please follow the style of the existing code as much as possible.
 
-Also bear in mind there is an .eslintrc file in the project so try to follow those rules.
+Recommend set up linting with .eslintrc configuration in the project.
 
 
 ## Development (Unmodified from TheIronThrone repo)
