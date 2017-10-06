@@ -1,36 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'underscore';
-import $ from 'jquery';
+//import _ from 'underscore';
+//import $ from 'jquery';
 import 'jquery-nearest';
 
 class Location extends React.Component {
-    constructor() {
-        super();
-
-        };
-    }
-
-    getReactComponentFromDOMNode(dom) {
-        for(var key in dom) {
-            if(key.indexOf('__reactInternalInstance$') === 0) {
-                var compInternals = dom[key]._currentElement;
-                var compWrapper = compInternals._owner;
-                var comp = compWrapper._instance;
-                return comp;
-            }
-        }
-
-        return null;
-    }
-
-    getCardOrder() {
-        if(!this.props.location.order) {
-            return null;
-        }
-
-        return (<div className='location-order'>{this.props.location.order}</div>);
-    }
 
     render() {
 
@@ -81,13 +55,14 @@ Location.propTypes = {
     onMouseOver: PropTypes.func,
     orientation: PropTypes.oneOf(['horizontal', 'booted', 'vertical']),
     source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'dead pile', 'draw deck', 'plot deck', 'revealed plots', 'selected plot', 'attachment', 'agenda', 'faction', 'additional']).isRequired,
-    style: PropTypes.object,
+
     wrapped: PropTypes.bool
     */
+    style: PropTypes.object
 };
 Location.defaultProps = {
-    orientation: 'vertical',
-    wrapped: true
+//    orientation: 'vertical',
+//    wrapped: true
 };
 
 export default Location;
