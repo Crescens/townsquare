@@ -6,58 +6,52 @@ import 'jquery-nearest';
 
 class Location extends React.Component {
 
+    getLocation() {
+        var locationClass = 'location';
+        var imageClass = 'location-image';
+
+        if(!this.props.location) {
+            return <div />;
+        }
+
+        if(this.props.className) {
+            locationClass += ' ' + this.props.className;
+        }
+
+        return (
+                <div className='location-frame' ref='locationFrame'>
+                    <div className={locationClass} >
+                        <div>
+                            <span className='location-name'>{this.props.location.name}</span>
+                            <img className={imageClass} src={'/img/cards/' + (this.props.location.code + '.jpg')} />
+                        </div>
+                    </div>
+                </div>);
+    }
+
+    getCards() {
+
+    }
+
     render() {
 
         return (
             <div className='location-wrapper' style={this.props.style}>
                 {this.getLocation()}
                 {this.getCards()}
-            </div>);
+            </div>
+        );
 
     }
 }
 
 Location.displayName = 'Location';
 Location.propTypes = {
-    /*className: PropTypes.string,
-    disableMouseOver: PropTypes.bool,
-    location: PropTypes.shape({
-        attached: PropTypes.bool,
-        attachments: PropTypes.array,
-        baseStrength: PropTypes.number,
-        code: PropTypes.string,
-        controlled: PropTypes.bool,
-        dupes: PropTypes.array,
-        facedown: PropTypes.bool,
-        iconsAdded: PropTypes.array,
-        iconsRemoved: PropTypes.array,
-        inChallenge: PropTypes.bool,
-        inDanger: PropTypes.bool,
-        booted: PropTypes.bool,
-        menu: PropTypes.array,
-        name: PropTypes.string,
-        new: PropTypes.bool,
-        order: PropTypes.number,
-        power: PropTypes.number,
-        saved: PropTypes.bool,
-        selectable: PropTypes.bool,
-        selected: PropTypes.bool,
-        stealth: PropTypes.bool,
-        strength: PropTypes.number,
-        tokens: PropTypes.object,
-        type: PropTypes.string,
-        unselectable: PropTypes.bool
-    }).isRequired,
-    onClick: PropTypes.func,
-    onDragDrop: PropTypes.func,
-    onMenuItemClick: PropTypes.func,
-    onMouseOut: PropTypes.func,
-    onMouseOver: PropTypes.func,
-    orientation: PropTypes.oneOf(['horizontal', 'booted', 'vertical']),
-    source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'dead pile', 'draw deck', 'plot deck', 'revealed plots', 'selected plot', 'attachment', 'agenda', 'faction', 'additional']).isRequired,
-
-    wrapped: PropTypes.bool
-    */
+    cardLocation: PropTypes.bool.isRequired,
+    cards: PropTypes.array,
+    className: PropTypes.string,
+    location: PropTypes.object.isRequired,
+    name: PropTypes.string,
     style: PropTypes.object
 };
 Location.defaultProps = {

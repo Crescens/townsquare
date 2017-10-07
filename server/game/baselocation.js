@@ -5,10 +5,16 @@ const _ = require('underscore');
  */
 class BaseLocation {
     constructor(location) {
-        //Passed in location for construction. Card object or string "townsquare"
+        //Passed in location for construction. Card object or string e.g."townsquare"
         this.represents = location;
         this.adjacencyMap = new Map();
         this.cards = _([]);
+        this.cardLocation = true;
+
+        if(typeof(location) === 'string') {
+            this.cardLocation = false;
+            this.represents = { code: location }; //All represents now objects for React UI
+        }
     }
 
     isAdjacent(location) {
@@ -19,6 +25,10 @@ class BaseLocation {
         }
 
         return false;
+    }
+
+    isCardLocation() {
+        return this.cardLocation;
     }
 
     attach(location, direction) {
@@ -33,7 +43,7 @@ class BaseLocation {
         return this.adjacencyMap;
     }
 
-    describe() {
+    get() {
         return this.represents;
     }
 
@@ -67,6 +77,10 @@ class BaseLocation {
         }
 
         this.cards = _(this.cards.reject(c => c === card));
+    }
+
+    cards() {
+        return this.cards;
     }
 
 }

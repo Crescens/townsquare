@@ -17,8 +17,9 @@ describe('BaseLocation', function () {
     describe('when a location is created with a string', function () {
         it('should have a bare string in its represents property', function() {
             this.location = new BaseLocation('testlocation');
-            expect(this.location.represents).toEqual('testlocation');
-            expect(this.location.describe()).toEqual('testlocation');
+            expect(this.location.represents).not.toEqual('testlocation');
+            expect(this.location.get()).toEqual({ code: 'testlocation'});
+            expect(this.location.isCardLocation()).toBe(false);
         });
     });
 
@@ -26,7 +27,8 @@ describe('BaseLocation', function () {
         it('should have an object in its represents property', function() {
             this.location = new BaseLocation(this.testCard1);
             expect(this.location.represents).toEqual(this.testCard1);
-            expect(this.location.describe()).toEqual(this.testCard1);
+            expect(this.location.get()).toEqual(this.testCard1);
+            expect(this.location.isCardLocation()).toBe(true);
         });
     });
 
