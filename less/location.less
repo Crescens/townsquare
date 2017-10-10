@@ -1,0 +1,93 @@
+@import "variables";
+
+.location-wrapper {
+  margin: 0px 4px 0px 0px;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+}
+
+.location-frame {
+  display: flex;
+  align-self: center;
+  position: relative;
+}
+
+.location {
+  position: relative;
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
+  overflow: hidden;
+  z-index: @layer-locations;
+
+  &.vertical {
+    height: @location-height;
+    width: @location-width;
+  }
+
+  &.horizontal {
+    height: @location-width;
+    width: @location-height;
+  }
+
+  &.new {
+    box-shadow: 0 0 1px 2px @brand-info;
+  }
+
+  &.shootout {
+    box-shadow: 0 0 1px 2px @brand-danger;
+  }
+
+}
+
+.location-image {
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
+.location-order {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.9);
+  border-radius: 4px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  height: 26px;
+  left: 50%;
+  line-height: 24px;
+  margin: 0 0 0 -12px;
+  position: absolute;
+  text-align: center;
+  top: -28px;
+  width: 24px;
+}
+
+.location-name {
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.location-large {
+  width: 220px;
+  height: 307px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.location-large-horizontal {
+  width: 307px;
+  height: 220px;
+  position: relative;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.townsquare {
+    width: 200px;
+    height: 113px;
+    margin: 0 auto;
+}

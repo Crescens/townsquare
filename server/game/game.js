@@ -340,16 +340,8 @@ class Game extends EventEmitter {
         }
     }
 
-    addPower(player, power) {
-        player.outfit.power += power;
-
-        if(player.outfit.power < 0) {
-            player.outfit.power = 0;
-        }
-
-        this.raiseEvent('onStatChanged', player, 'power');
-
-        this.checkWinCondition(player);
+    addControl(player, control) {
+        return;
     }
 
     addGhostRock(player, ghostrock) {
@@ -367,17 +359,6 @@ class Game extends EventEmitter {
         this.raiseEvent('onStatChanged', player, 'ghostrock');
     }
 
-    transferPower(winner, loser, power) {
-        var appliedPower = Math.min(loser.outfit.power, power);
-        loser.outfit.power -= appliedPower;
-        winner.outfit.power += appliedPower;
-
-        this.raiseEvent('onStatChanged', loser, 'power');
-        this.raiseEvent('onStatChanged', winner, 'power');
-
-        this.checkWinCondition(winner);
-    }
-
     transferGhostRock(to, from, ghostrock) {
         var appliedGhostRock = Math.min(from.ghostrock, ghostrock);
 
@@ -391,9 +372,12 @@ class Game extends EventEmitter {
     }
 
     checkWinCondition(player) {
-        if(player.getTotalPower() >= 15) {
-            this.recordWinner(player, 'power');
-        }
+        //Called at Sundown
+        //If
+        //player.getTotalControl()
+        //greater than
+        //all opponents influence
+        //this.recordWinner(player, 'control');
     }
 
 
@@ -859,9 +843,9 @@ class Game extends EventEmitter {
         var players = _.map(this.getPlayers(), player => {
             return {
                 name: player.name,
-                outfit: player.outfit.name || player.outfit.value,
+                outfit: player.outfit.name || player.outfit.code,
                 legend: player.legend ? player.legend.name : undefined,
-                power: player.getTotalPower()
+                control: player.getTotalControl()
             };
         });
 

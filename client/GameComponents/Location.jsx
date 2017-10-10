@@ -24,13 +24,14 @@ class Location extends React.Component {
                         <div>
                             <span className='location-name'>{this.props.location.name}</span>
                             <img className={imageClass} src={'/img/cards/' + (this.props.location.code + '.jpg')} />
+                            
                         </div>
                     </div>
                 </div>);
     }
 
     getCards() {
-
+        return;
     }
 
     render() {

@@ -13,6 +13,7 @@ import Messages from './GameComponents/Messages.jsx';
 import AdditionalCardPile from './GameComponents/AdditionalCardPile.jsx';
 import Card from './GameComponents/Card.jsx';
 import CardCollection from './GameComponents/CardCollection.jsx';
+import Location from './GameComponents/Location.jsx';
 import ActionWindowsMenu from './GameComponents/ActionWindowsMenu.jsx';
 import {tryParseJSON} from './util.js';
 
@@ -272,15 +273,16 @@ export class InnerGameBoard extends React.Component {
         return cardsByLocation;
     }
 
-    getAgenda(player, isMe, popupLocation) {
-        if(!player || !player.agenda || player.agenda.code === '') {
-            return <div className='agenda card-pile vertical panel' />;
+    getLegend(player, isMe, popupLocation) {
+        if(!player || !player.legend || player.legend.code === '') {
+            return <div className='legend card-pile vertical panel' />;
         }
 
         let cards = [];
         let disablePopup = false;
         let title;
 
+        /*
         // Alliance
         if(player.agenda.code === '06018') {
             cards = player.bannerCards;
@@ -289,12 +291,12 @@ export class InnerGameBoard extends React.Component {
             cards = pile.cards;
             title = 'Conclave';
             disablePopup = !isMe;
-        }
+        }*/
 
         disablePopup = disablePopup || cards.length === 0;
 
         return (
-            <CardCollection className='agenda'
+            <CardCollection className='legend'
                 cards={ cards }
                 disablePopup={ disablePopup }
                 onCardClick={ this.onCardClick }
@@ -302,12 +304,13 @@ export class InnerGameBoard extends React.Component {
                 onMouseOut={ this.onMouseOut }
                 onMouseOver={ this.onMouseOver }
                 popupLocation={ popupLocation }
-                source='agenda'
+                source='legend'
                 title={ title }
-                topCard={ player.agenda } />
+                topCard={ player.legend } />
         );
     }
 
+    /*
     getSchemePile(player, isMe) {
         let schemePile = player && player.additionalPiles['scheme plots'];
 
@@ -325,7 +328,7 @@ export class InnerGameBoard extends React.Component {
                 spectating={this.state.spectating}
                 title='Schemes' />
         );
-    }
+    }*/
 
     onCommand(command, arg, method) {
         var commandArg = arg;
@@ -419,15 +422,12 @@ export class InnerGameBoard extends React.Component {
                             <div className='deck-info'>
                                 <div className='deck-type'>
                                     <CardCollection className='outfit' source='outfit' cards={[]} topCard={otherPlayer ? otherPlayer.outfit : undefined} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} disablePopup />
-                                    { this.getAgenda(otherPlayer, false, 'bottom') }
+                                    { this.getLegend(otherPlayer, false, 'bottom') }
                                 </div>
                                 { otherPlayer ? <div className={'first-player-indicator ' + (!thisPlayer.firstPlayer ? '' : 'hidden')}>First player</div> : ''}
                             </div>
                         </div>
                         <div className='middle'>
-                             <div className=''>
-
-                            </div>
                             <div className='middle-right'>
                                 <div className='inset-pane'>
                                     { !this.state.spectating && this.state.showActionWindowsMenu ?
@@ -451,7 +451,7 @@ export class InnerGameBoard extends React.Component {
                                 <div className={'first-player-indicator ' + (thisPlayer.firstPlayer ? '' : 'hidden')}>First player</div>
                                 <div className='deck-type'>
                                     <CardCollection className='outfit' source='outfit' cards={[]} topCard={thisPlayer.outfit} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} disablePopup onCardClick={this.onOutfitCardClick} />
-                                    { this.getAgenda(thisPlayer, !this.state.spectating, 'top') }
+                                    { this.getLegend(thisPlayer, !this.state.spectating, 'top') }
                                 </div>
                             </div>
                         </div>
@@ -468,11 +468,10 @@ export class InnerGameBoard extends React.Component {
                             onMouseOver={this.onMouseOver}
                             onMouseOut={this.onMouseOut}
                             />
-                        <div className='play-area'>
-                            <div className='player-board our-side' onDragOver={this.onDragOver}
+                        <div className='play-area' onDragOver={this.onDragOver}
                                 onDrop={event => this.onDragDropEvent(event, 'play area')} >
+                                <Location location={{code:'townsquare', name:'Town Square'}} cardLocation={false} className='townsquare' />
                                 {thisPlayerCards}
-                            </div>
                         </div>
                         <PlayerRow isMe={!this.state.spectating}
                             additionalPiles={thisPlayer.additionalPiles}

@@ -79,7 +79,7 @@ class Card extends React.Component {
 
     onTouchEnd(event) {
         var target = $(event.currentTarget);
-        var nearestPile = target.nearest('.card-pile, .hand, .player-board');
+        var nearestPile = target.nearest('.card-pile, .hand, .location');
 
         var pilePosition = nearestPile.position();
         var cardPosition = target.position();
@@ -89,7 +89,7 @@ class Card extends React.Component {
 
             if(_.includes(nearestPile.attr('class'), 'hand')) {
                 dropTarget = 'hand';
-            } else if(_.includes(nearestPile.attr('class'), 'player-board')) {
+            } else if(_.includes(nearestPile.attr('class'), 'location')) {
                 dropTarget = 'play area';
             } else {
                 var component = this.getReactComponentFromDOMNode(nearestPile[0]);
@@ -231,7 +231,7 @@ class Card extends React.Component {
     }
 
     showCounters() {
-        if(this.props.source !== 'play area' && this.props.source !== 'faction' && this.props.source !== 'revealed plots') {
+        if(this.props.source !== 'play area') {
             return false;
         }
 
@@ -365,7 +365,7 @@ Card.propTypes = {
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,
     orientation: PropTypes.oneOf(['horizontal', 'booted', 'vertical']),
-    source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'dead pile', 'draw deck', 'plot deck', 'revealed plots', 'selected plot', 'attachment', 'agenda', 'faction', 'additional']).isRequired,
+    source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'dead pile', 'draw deck', 'plot deck', 'revealed plots', 'selected plot', 'attachment', 'agenda', 'outfit', 'additional']).isRequired,
     style: PropTypes.object,
     wrapped: PropTypes.bool
 };
