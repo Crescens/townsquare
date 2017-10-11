@@ -39,12 +39,10 @@ The game uses mongodb as storage so you'll need that installed and running.
 
 ```
 Clone the repository
-git submodule init
-git submodule update
 Run npm install
 mkdir server/logs
 cd server
-node fetchdata.js
+Import DB and cards from Bitbucket/Downloads ("node fetchdata.js" - needs to be updated to parse this automatically)
 cd ..
 node .
 node server/gamenode
