@@ -23,8 +23,11 @@ export class InnerGameBoard extends React.Component {
     constructor() {
         super();
 
+        this.onMouseOut = this.onMouseOut.bind(this);
+        this.onMouseOver = this.onMouseOver.bind(this);
         this.onDrawClick = this.onDrawClick.bind(this);
         this.onDragDrop = this.onDragDrop.bind(this);
+        this.onCardClick = this.onCardClick.bind(this);
         this.onCommand = this.onCommand.bind(this);
         this.onConcedeClick = this.onConcedeClick.bind(this);
         this.onLeaveClick = this.onLeaveClick.bind(this);
@@ -174,6 +177,14 @@ export class InnerGameBoard extends React.Component {
 
         this.props.sendGameMessage('leavegame');
         this.props.closeGameSocket();
+    }
+
+    onMouseOut() {
+        this.props.clearZoom();
+    }
+
+    onMouseOver(card) {
+        this.props.zoomCard(card);
     }
 
     onCardClick(card) {
@@ -377,6 +388,8 @@ export class InnerGameBoard extends React.Component {
             return player.name !== thisPlayer.name;
         });
 
+        /* TODO: Used to get entire game board card set, port to location-based
+
         var thisPlayerCards = [];
 
         var index = 0;
@@ -400,20 +413,22 @@ export class InnerGameBoard extends React.Component {
         for(i = otherPlayerCards.length; i < 2; i++) {
             thisPlayerCards.push(<div className='card-row' key={'other-empty' + i} />);
         }
+        */
 
         return (
             <div className='game-board'>
                 <div className='main-window'>
                     <div className='left-side'>
                         <div className='player-info'>
-                            <PlayerStats ghostrock={otherPlayer ? otherPlayer.ghostrock : 0} claim={otherPlayer ? otherPlayer.claim : 0}
-                                influence={otherPlayer ? otherPlayer.influence : 0} control={otherPlayer ? otherPlayer.totalControl : 0} user={otherPlayer ? otherPlayer.user : null} />
+                            <PlayerStats ghostrock={otherPlayer ? otherPlayer.ghostrock : 0}
+                                         influence={otherPlayer ? otherPlayer.influence : 0}
+                                         control={otherPlayer ? otherPlayer.totalControl : 0}
+                                         user={otherPlayer ? otherPlayer.user : null} />
                             <div className='deck-info'>
                                 <div className='deck-type'>
-                                    <CardCollection className='outfit' source='outfit' cards={[]} topCard={otherPlayer ? otherPlayer.outfit : undefined} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} disablePopup />
                                     { this.getLegend(otherPlayer, false, 'bottom') }
                                 </div>
-                                { otherPlayer ? <div className={'first-player-indicator ' + (!thisPlayer.firstPlayer ? '' : 'hidden')}>First player</div> : ''}
+                                { otherPlayer ? <div className={'first-player-indicator ' + (!thisPlayer.firstPlayer ? '' : 'hidden')}>Winner</div> : ''}
                             </div>
                         </div>
                         <div className='middle'>
@@ -430,16 +445,14 @@ export class InnerGameBoard extends React.Component {
                                     <MenuPane title={ thisPlayer.menuTitle } buttons={ thisPlayer.buttons } promptTitle={ thisPlayer.promptTitle } onButtonClick={ this.onCommand }
                                                 onMouseOver={ this.onMouseOver } onMouseOut={ this.onMouseOut } onTitleClick={ this.onMenuTitleClick.bind(this) } />
                                 </div>
-                                <div className='schemes-pane' />
                             </div>
                         </div>
                         <div className='player-info our-side'>
-                            <PlayerStats ghostrock={thisPlayer.ghostrock || 0} claim={thisPlayer.claim || 0} influence={thisPlayer.influence || 0}
+                            <PlayerStats ghostrock={thisPlayer.ghostrock || 0} influence={thisPlayer.influence || 0}
                                         control={thisPlayer.totalControl} isMe={!this.state.spectating} user={thisPlayer.user} />
                             <div className='deck-info'>
-                                <div className={'first-player-indicator ' + (thisPlayer.firstPlayer ? '' : 'hidden')}>First player</div>
+                                <div className={'first-player-indicator ' + (thisPlayer.firstPlayer ? '' : 'hidden')}>Winner</div>
                                 <div className='deck-type'>
-                                    <CardCollection className='outfit' source='outfit' cards={[]} topCard={thisPlayer.outfit} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} disablePopup onCardClick={this.onOutfitCardClick} />
                                     { this.getLegend(thisPlayer, !this.state.spectating, 'top') }
                                 </div>
                             </div>
@@ -452,16 +465,21 @@ export class InnerGameBoard extends React.Component {
                             hand={otherPlayer ? otherPlayer.hand : []} isMe={false}
                             numDrawCards={otherPlayer ? otherPlayer.numDrawCards : 0}
                             discardPile={otherPlayer ? otherPlayer.discardPile : []}
-                            deadPile={otherPlayer ? otherPlayer.deadPile : []}
+                            boothillPile={otherPlayer ? otherPlayer.boothillPile : []}
                             onCardClick={this.onCardClick}
                             onMouseOver={this.onMouseOver}
                             onMouseOut={this.onMouseOut}
                             />
                         <div className='play-area' onDragOver={this.onDragOver}
                                 onDrop={event => this.onDragDropEvent(event, 'play area')} >
-                                <GameLocation location={{code:'townsquare', name:'Town Square'}} cardLocation={false} className='townsquare'
-                                    onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick}/>
-                                {thisPlayerCards}
+                                <GameLocation location={{code:'townsquare', name:'Town Square'}}
+                                    cardLocation={false} className='townsquare'
+                                    onMouseOver={this.onMouseOver}
+                                    onMouseOut={this.onMouseOut}
+                                    onClick={this.onCardClick}
+                                    otherPlayer={otherPlayer}
+                                    thisPlayer={thisPlayer}
+                                />
                         </div>
                         <PlayerRow isMe={!this.state.spectating}
                             additionalPiles={thisPlayer.additionalPiles}

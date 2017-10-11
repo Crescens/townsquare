@@ -89,8 +89,8 @@ class Card extends React.Component {
 
             if(_.includes(nearestPile.attr('class'), 'hand')) {
                 dropTarget = 'hand';
-            } else if(_.includes(nearestPile.attr('class'), 'location')) {
-                dropTarget = 'play area';
+            //} else if(_.includes(nearestPile.attr('class'), 'location')) {
+            //    dropTarget = 'play area';
             } else {
                 var component = this.getReactComponentFromDOMNode(nearestPile[0]);
                 dropTarget = component.props.source;
@@ -106,7 +106,7 @@ class Card extends React.Component {
     }
 
     isAllowedMenuSource() {
-        return this.props.source === 'play area' || this.props.source === 'agenda' || this.props.source === 'revealed plots';
+        return this.props.source === 'play area' || this.props.source === 'legend' || this.props.source === 'revealed plots';
     }
 
     onClick(event, card) {
@@ -183,6 +183,7 @@ class Card extends React.Component {
         return attachments;
     }
 
+    /*
     getDupes() {
         if(this.props.source !== 'play area') {
             return null;
@@ -208,7 +209,7 @@ class Card extends React.Component {
         });
 
         return dupes;
-    }
+    }*/
 
     getCardOrder() {
         if(!this.props.card.order) {
@@ -365,7 +366,7 @@ Card.propTypes = {
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,
     orientation: PropTypes.oneOf(['horizontal', 'booted', 'vertical']),
-    source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'boothill pile', 'draw deck', 'attachment', 'agenda', 'outfit', 'additional']).isRequired,
+    source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'boothill pile', 'draw deck', 'attachment', 'legend', 'outfit', 'additional']).isRequired,
     style: PropTypes.object,
     wrapped: PropTypes.bool
 };

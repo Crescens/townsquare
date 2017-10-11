@@ -1,12 +1,12 @@
 /* global describe, it, expect, beforeEach, afterEach jasmine */
 /* eslint camelcase: 0, no-invalid-this: 0 */
 
-import Location from '../../client/GameComponents/Location.jsx';
+import GameLocation from '../../client/GameComponents/GameLocation.jsx';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 
-describe('the <Location /> component', function() {
+describe('the <GameLocation /> component', function() {
     beforeEach(function() {
         this.node = document.createElement('div');
 
@@ -15,9 +15,9 @@ describe('the <Location /> component', function() {
             name: 'Town Square'
         };
 
-        //this.spy = jasmine.createSpyObj('spy', ['onMouseOver', 'onMouseOut', 'onClick']);
+        this.spy = jasmine.createSpyObj('spy', ['onMouseOver', 'onMouseOut', 'onClick']);
 
-        this.component = ReactDOM.render(<Location location={this.location} />, this.node);
+        this.component = ReactDOM.render(<GameLocation location={this.location} cardLocation={false} />, this.node);
     });
 
 
@@ -26,7 +26,7 @@ describe('the <Location /> component', function() {
             var locationImage = TestUtils.findRenderedDOMComponentWithTag(this.component, 'img');
             var locationLabel = TestUtils.findRenderedDOMComponentWithClass(this.component, 'location-name');
 
-            expect(locationImage.src.indexOf('/img/cards/townsquare.jpg')).not.toBe(-1);
+            expect(locationImage.src.indexOf('/img/townsquare.jpg')).not.toBe(-1);
             expect(locationLabel.innerText).toBe(this.location.name);
         });
     });

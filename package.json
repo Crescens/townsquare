@@ -24,6 +24,7 @@
   },
   "homepage": "https://dtdb.co/",
   "dependencies": {
+    "babel-preset-env": "^1.6.0",
     "babel-polyfill": "^6.23.0",
     "bcrypt": "^0.8.7",
     "bootstrap": "^3.3.7",
