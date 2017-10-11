@@ -61,7 +61,7 @@ describe('the DrawCard', function() {
         describe('parsing initial keywords', function() {
             describe('when the card mentions a keyword in its body', function() {
                 beforeEach(function() {
-                    this.card = new DrawCard(this.player, { text: 'Each <i>Ranger</i> character you control cannot be bypassed by stealth.\n<b>Interrupt:</b> When Benjen Stark is killed, gain 2 power for your faction. Then, shuffle him back into your deck instead of placing him in your dead pile."' });
+                    this.card = new DrawCard(this.player, { text: 'Each <i>Ranger</i> character you control cannot be bypassed by stealth.\n<b>Interrupt:</b> When Benjen Stark is killed, gain 2 power for your faction. Then, shuffle him back into your deck instead of placing him in your boothill pile."' });
                     this.card.location = 'hand';
                     this.player.hand = _([this.card]);
                     this.player.playCard(this.card, true);

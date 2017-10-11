@@ -210,7 +210,7 @@ CardCollection.propTypes = {
     orientation: PropTypes.string,
     popupLocation: PropTypes.string,
     popupMenu: PropTypes.array,
-    source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'dead pile', 'draw deck', 'plot deck', 'revealed plots', 'selected plot', 'attachment', 'legend', 'outfit', 'additional']).isRequired,
+    source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'boothill pile', 'draw deck', 'attachment', 'legend', 'outfit', 'additional']).isRequired,
     title: PropTypes.string,
     topCard: PropTypes.object
 };

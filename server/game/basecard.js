@@ -10,7 +10,7 @@ const CardReaction = require('./cardreaction.js');
 const CustomPlayAction = require('./customplayaction.js');
 const EventRegistrar = require('./eventregistrar.js');
 
-const SpecialKeywords = [
+//const SpecialKeywords = [
 //  'Difficulty'
 /*  'ambush',
     'insight',
@@ -21,7 +21,7 @@ const SpecialKeywords = [
     'terminal',
     'limited'
 */
-];
+//];
 const LocationsWithEventHandling = ['play area', 'outfit', 'legend'];
 
 class BaseCard {
@@ -156,6 +156,12 @@ class BaseCard {
         this.abilities.actions.push(action);
     }
 
+    //Comprehensive Rules React Priorities
+    // 1) Traits with "instead"
+    // 2) Reacts with "instead"
+    // 3) Other traits
+    // 4) Other reacts
+    //
     reaction(properties) {
         var reaction = new CardReaction(this.game, this, properties);
         this.abilities.reactions.push(reaction);

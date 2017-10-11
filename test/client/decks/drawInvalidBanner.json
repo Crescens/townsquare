@@ -13,7 +13,7 @@
             "code": "01065",
             "name": "Aeron Damphair",
             "cost": 3,
-            "text": "<b>Reaction:</b> After you win dominance, put an <i>Ironborn</i> character into play from your dead pile.",
+            "text": "<b>Reaction:</b> After you win dominance, put an <i>Ironborn</i> character into play from your boothill pile.",
             "quantity": 1,
             "deck_limit": 3,
             "strength": 3,

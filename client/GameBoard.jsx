@@ -13,7 +13,7 @@ import Messages from './GameComponents/Messages.jsx';
 import AdditionalCardPile from './GameComponents/AdditionalCardPile.jsx';
 import Card from './GameComponents/Card.jsx';
 import CardCollection from './GameComponents/CardCollection.jsx';
-import Location from './GameComponents/Location.jsx';
+import GameLocation from './GameComponents/GameLocation.jsx';
 import ActionWindowsMenu from './GameComponents/ActionWindowsMenu.jsx';
 import {tryParseJSON} from './util.js';
 
@@ -23,9 +23,6 @@ export class InnerGameBoard extends React.Component {
     constructor() {
         super();
 
-        this.onMouseOut = this.onMouseOut.bind(this);
-        this.onMouseOver = this.onMouseOver.bind(this);
-        this.onCardClick = this.onCardClick.bind(this);
         this.onDrawClick = this.onDrawClick.bind(this);
         this.onDragDrop = this.onDragDrop.bind(this);
         this.onCommand = this.onCommand.bind(this);
@@ -177,14 +174,6 @@ export class InnerGameBoard extends React.Component {
 
         this.props.sendGameMessage('leavegame');
         this.props.closeGameSocket();
-    }
-
-    onMouseOver(card) {
-        this.props.zoomCard(card);
-    }
-
-    onMouseOut() {
-        this.props.clearZoom();
     }
 
     onCardClick(card) {
@@ -470,7 +459,8 @@ export class InnerGameBoard extends React.Component {
                             />
                         <div className='play-area' onDragOver={this.onDragOver}
                                 onDrop={event => this.onDragDropEvent(event, 'play area')} >
-                                <Location location={{code:'townsquare', name:'Town Square'}} cardLocation={false} className='townsquare' />
+                                <GameLocation location={{code:'townsquare', name:'Town Square'}} cardLocation={false} className='townsquare'
+                                    onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick}/>
                                 {thisPlayerCards}
                         </div>
                         <PlayerRow isMe={!this.state.spectating}
