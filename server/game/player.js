@@ -506,43 +506,26 @@ class Player extends Spectator {
 
         var dupeCard = this.getDuplicateInPlay(card);
 
-        if(card.getType() === 'attachment' && playingType !== 'setup' && !dupeCard) {
+        //Replace this with a bool on card that tells whether it is an attachment among types
+        if(card.getType() === 'attachment' && playingType !== 'setup') {
             this.promptForAttachment(card, playingType);
             return;
         }
 
-        if(dupeCard && playingType !== 'setup') {
-            this.removeCardFromPile(card);
-            dupeCard.addDuplicate(card);
-        } else {
-            // Attachments placed in setup should not be considered to be 'played',
-            // as it will cause then to double their effects when attached later.
-            let isSetupAttachment = playingType === 'setup' && card.getType() === 'attachment';
+        let originalLocation = card.location;
 
-            let originalLocation = card.location;
-
-            card.facedown = this.game.currentPhase === 'setup';
-            card.new = true;
-            this.moveCard(card, 'play area', { isDupe: !!dupeCard });
-            if(card.controller !== this) {
-                card.controller.allCards = _(card.controller.allCards.reject(c => c === card));
-                this.allCards.push(card);
-            }
-            card.controller = this;
-            card.wasAmbush = (playingType === 'ambush');
-
-            if(!dupeCard && !isSetupAttachment) {
-                card.applyPersistentEffects();
-            }
-
-            /* -- No Bestow
-            if(this.game.currentPhase !== 'setup' && card.isBestow()) {
-                this.game.queueStep(new BestowPrompt(this.game, this, card));
-            }
-            */
-
-            this.game.raiseMergedEvent('onCardEntersPlay', { card: card, playingType: playingType, originalLocation: originalLocation });
+        card.facedown = this.game.currentPhase === 'setup';
+        card.new = true;
+        this.moveCard(card, 'play area', { isDupe: !!dupeCard });
+        if(card.controller !== this) {
+            card.controller.allCards = _(card.controller.allCards.reject(c => c === card));
+            this.allCards.push(card);
         }
+        card.controller = this;
+
+        card.applyPersistentEffects();
+
+        this.game.raiseMergedEvent('onCardEntersPlay', { card: card, playingType: playingType, originalLocation: originalLocation });
     }
 
     setupDone() {
@@ -794,10 +777,6 @@ class Player extends Spectator {
             return false;
         }
 
-        if(target === 'boothill pile' && card.getType() !== 'character') {
-            return false;
-        }
-
         if(target === 'play area' && card.getType() === 'event') {
             return false;
         }
@@ -914,24 +893,6 @@ class Player extends Spectator {
         });
     }
 
-    /**
-     * @deprecated Use `Game.killCharacter` instead.
-     */
-    killCharacter(card, allowSave = true) {
-        this.game.killCharacter(card, allowSave);
-    }
-
-    getDominance() {
-        let cardStrength = this.cardsInPlay.reduce((memo, card) => {
-            return memo + card.getDominanceStrength();
-        }, 0);
-
-        return cardStrength + this.ghostrock;
-    }
-
-    taxation() {
-        this.ghostrock = 0;
-    }
 
     getTotalControl() {
         var power = this.cardsInPlay.reduce((memo, card) => {
@@ -941,21 +902,8 @@ class Player extends Spectator {
         return power;
     }
 
-    removeAttachment(attachment, allowSave = true) {
-        if(allowSave && !attachment.dupes.isEmpty() && this.removeDuplicate(attachment)) {
-            this.game.addMessage('{0} discards a duplicate to save {1}', this, attachment);
-            return;
-        }
-
-        while(attachment.dupes.size() > 0) {
-            this.removeDuplicate(attachment, true);
-        }
-
-        if(attachment.isTerminal()) {
-            attachment.owner.moveCard(attachment, 'discard pile');
-        } else {
-            attachment.owner.moveCard(attachment, 'hand');
-        }
+    removeAttachment(attachment) {
+        return attachment.owner.moveCard(attachment, 'discard pile');
     }
 
     selectDeck(deck) {
@@ -995,12 +943,6 @@ class Player extends Spectator {
                     this.removeAttachment(attachment, false);
                 });
 
-                /*
-                while(card.dupes.size() > 0 && targetLocation !== 'play area') {
-                    this.removeDuplicate(card, true);
-                }
-                */
-
                 event.card.leavesPlay();
 
                 if(event.card.parent) {
@@ -1015,18 +957,11 @@ class Player extends Spectator {
             this.game.raiseEvent('onCardLeftHand', card);
         }
 
-        if(card.location === 'active plot') {
-            card.leavesPlay();
-            this.game.raiseMergedEvent('onCardLeftPlay', { player: this, card: card });
-        }
-
         if(card.location !== 'play area') {
             card.moveTo(targetLocation);
         }
 
-        if(targetLocation === 'active plot') {
-            this.activePlot = card;
-        } else if(targetLocation === 'draw deck' && !options.bottom) {
+        if(targetLocation === 'draw deck' && !options.bottom) {
             targetPile.unshift(card);
         } else {
             targetPile.push(card);
@@ -1188,7 +1123,7 @@ class Player extends Spectator {
             disconnected: this.disconnected,
             outfit: this.outfit.getSummary(activePlayer),
             firstPlayer: this.firstPlayer,
-            ghostrock: !isActivePlayer && this.phase === 'setup' ? 0 : this.ghostrock,
+            ghostrock: this.ghostrock,
             hand: this.getSummaryForCardList(this.hand, activePlayer, true),
             id: this.id,
             left: this.left,

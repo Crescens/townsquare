@@ -6,6 +6,7 @@ const GameChat = require('./gamechat.js');
 const EffectEngine = require('./effectengine.js');
 const Effect = require('./effect.js');
 const Player = require('./player.js');
+const GameLocation = require('./baselocation.js');
 const Spectator = require('./spectator.js');
 const AnonymousSpectator = require('./anonymousspectator.js');
 const GamePipeline = require('./gamepipeline.js');
@@ -20,6 +21,7 @@ const DominancePhase = require('./gamesteps/dominancephase.js');
 const StandingPhase = require('./gamesteps/standingphase.js');
 const TaxationPhase = require('./gamesteps/taxationphase.js');
 */
+
 
 const SimpleStep = require('./gamesteps/simplestep.js');
 const DeckSearchPrompt = require('./gamesteps/decksearchprompt.js');
@@ -42,6 +44,7 @@ class Game extends EventEmitter {
         this.playersAndSpectators = {};
         //this.playerPlots = {};
         this.playerCards = {};
+        this.locations = {};
         this.gameChat = new GameChat();
         this.chatCommands = new ChatCommands(this);
         this.pipeline = new GamePipeline();

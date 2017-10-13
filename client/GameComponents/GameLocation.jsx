@@ -17,6 +17,73 @@ export class InnerGameLocation extends React.Component {
         this.onCardClick = this.onCardClick.bind(this);
     }
 
+    onCardClick(card) {
+        this.props.sendGameMessage('cardClicked', card.uuid);
+    }
+
+    onMouseOut() {
+        this.props.clearZoom();
+    }
+
+    onMouseOver(card) {
+        this.props.zoomCard(card);
+    }
+
+    getCards(thisPlayer, otherPlayer) {
+        var thisPlayerCards = [];
+
+        var index = 0;
+
+        var thisCardsInPlay = this.getCardsHere(thisPlayer, true);
+        _.each(thisCardsInPlay, cards => {
+            thisPlayerCards.push(<div className='card-row' key={'this-loc' + index++}>{cards}</div>);
+        });
+        var otherPlayerCards = [];
+
+        if(otherPlayer) {
+            _.each(this.getCardsHere(otherPlayer, false), cards => {
+                otherPlayerCards.push(<div className='card-row' key={'other-loc' + index++}>{cards}</div>);
+            });
+        }
+
+        for(var i = thisPlayerCards.length; i < 2; i++) {
+            thisPlayerCards.push(<div className='card-row' key={'this-empty' + i} />);
+        }
+
+        for(i = otherPlayerCards.length; i < 2; i++) {
+            thisPlayerCards.push(<div className='card-row' key={'other-empty' + i} />);
+        }
+    }
+
+    getCardsHere(player) {
+        if(!player) {
+            return [];
+        }
+
+        var cardsByLocation = [];
+
+        _.each(this.props.cards, cards => {
+            var cardsInPlay = _.map(cards, card => {
+                return (<Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.onMenuItemClick}
+                                    onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onDragDrop={this.onDragDrop} />);
+            });
+            cardsByLocation.push(cardsInPlay);
+        });
+
+        return cardsByLocation;
+    }
+
+    getImageLocation(imageClass) {
+        return (<img className={imageClass} src={'/img/' + (this.props.location.code + '.jpg')} />);
+    }
+
+    getCardLocation(card) {
+        return (
+            <Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.onMenuItemClick}
+                                onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onDragDrop={this.onDragDrop} />
+        );
+    }
+
     getLocation() {
         var locationClass = 'location';
         var imageClass = 'location-image';
@@ -40,88 +107,6 @@ export class InnerGameLocation extends React.Component {
                 </div>);
     }
 
-    onCardClick(card) {
-        this.props.sendGameMessage('cardClicked', card.uuid);
-    }
-
-    onMouseOut() {
-        this.props.clearZoom();
-    }
-
-    onMouseOver(card) {
-        this.props.zoomCard(card);
-    }
-
-    getCards() {
-
-        var thisPlayerCards = [];
-
-        var index = 0;
-
-        var thisCardsAtLocation = this.getCardsAtLocation(this.props.thisPlayer, true);
-        _.each(thisCardsAtLocation, cards => {
-            thisPlayerCards.push(<div className='card-row' key={'this-loc' + index++}>{cards}</div>);
-        });
-
-        var otherPlayerCards = [];
-
-        if(this.props.otherPlayer) {
-            _.each(this.getCardsAtLocation(this.props.otherPlayer, false), cards => {
-                otherPlayerCards.push(<div className='card-row' key={'other-loc' + index++}>{cards}</div>);
-            });
-        }
-
-        for(var i = thisPlayerCards.length; i < 2; i++) {
-            thisPlayerCards.push(<div className='card-row' key={'this-empty' + i} />);
-        }
-
-        for(i = otherPlayerCards.length; i < 2; i++) {
-            thisPlayerCards.push(<div className='card-row' key={'other-empty' + i} />);
-        }
-    }
-
-    getCardsAtLocation(player, isMe) {
-        if(!player) {
-            return [];
-        }
-
-        var sortedCards = _.sortBy(player.cardsInPlay, card => {
-            return card.type;
-        });
-
-        if(!isMe) {
-            // we want locations on the bottom, other side wants locations on top
-            sortedCards = sortedCards.reverse();
-        }
-
-        var cardsByType = _.groupBy(sortedCards, card => {
-            return card.type;
-        });
-
-        var cardsByLocation = [];
-
-        _.each(cardsByType, cards => {
-            var cardsInPlay = _.map(cards, card => {
-                return (<Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.onMenuItemClick}
-                                    onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onDragDrop={this.onDragDrop} />);
-            });
-            cardsByLocation.push(cardsInPlay);
-        });
-
-        return cardsByLocation;
-    }
-
-    getImageLocation(imageClass) {
-        return (<img className={imageClass} src={'/img/' + (this.props.location.code + '.jpg')} />);
-    }
-
-    getCardLocation(card) {
-        return (
-            <Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.onMenuItemClick}
-                                onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onDragDrop={this.onDragDrop} />
-        );
-    }
-
     render() {
 
         return (
@@ -134,33 +119,28 @@ export class InnerGameLocation extends React.Component {
     }
 }
 
-InnerGameLocation.displayName = 'Location';
+InnerGameLocation.displayName = 'GameLocation';
 InnerGameLocation.propTypes = {
     cardLocation: PropTypes.bool.isRequired,
     cards: PropTypes.array,
     className: PropTypes.string,
     clearZoom: PropTypes.func,
-    currentGame: PropTypes.object,
     location: PropTypes.object.isRequired,
     name: PropTypes.string,
     onClick: PropTypes.func,
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,
-    otherPlayer: PropTypes.object,
     sendGameMessage: PropTypes.func,
     style: PropTypes.object,
-    thisPlayer: PropTypes.object,
-    username: PropTypes.string,
     zoomCard: PropTypes.func
 };
 
 function mapStateToProps(state) {
     return {
-        cardToZoom: state.cards.zoomCard,
-        username: state.auth.username
+        cardToZoom: state.cards.zoomCard
     };
 }
 
-const GameLocation = connect(mapStateToProps, actions, null, { withRef: true })(InnerGameLocation);
+const GameLocation = connect(mapStateToProps, actions, null, { withRef: true})(InnerGameLocation);
 
 export default GameLocation;

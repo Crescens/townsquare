@@ -1,7 +1,7 @@
 /* global describe, it, expect, beforeEach, afterEach jasmine */
 /* eslint camelcase: 0, no-invalid-this: 0 */
 
-import GameLocation from '../../client/GameComponents/GameLocation.jsx';
+/*import GameLocation from '../../client/GameComponents/GameLocation.jsx';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
@@ -45,5 +45,4 @@ describe('the <GameLocation /> component', function() {
             expect(cardLabel.innerText).toBe(this.card.name);
         });
     });
-    */
-});
+});*/
