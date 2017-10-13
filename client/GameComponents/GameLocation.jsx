@@ -74,7 +74,7 @@ export class InnerGameLocation extends React.Component {
     }
 
     getImageLocation(imageClass) {
-        return (<img className={imageClass} src={'/img/' + (this.props.location.code + '.jpg')} />);
+        return (<img className={imageClass} src={'/img/' + (this.props.location.key + '.jpg')} />);
     }
 
     getCardLocation(card) {

@@ -6,7 +6,7 @@ const GameChat = require('./gamechat.js');
 const EffectEngine = require('./effectengine.js');
 const Effect = require('./effect.js');
 const Player = require('./player.js');
-const GameLocation = require('./baselocation.js');
+const BaseLocation = require('./baselocation.js');
 const Spectator = require('./spectator.js');
 const AnonymousSpectator = require('./anonymousspectator.js');
 const GamePipeline = require('./gamepipeline.js');
@@ -42,7 +42,6 @@ class Game extends EventEmitter {
 
         this.effectEngine = new EffectEngine(this);
         this.playersAndSpectators = {};
-        //this.playerPlots = {};
         this.playerCards = {};
         this.locations = {};
         this.gameChat = new GameChat();
@@ -156,6 +155,10 @@ class Game extends EventEmitter {
         });
 
         return foundCards;
+    }
+
+    getLocations() {
+        return this.locations;
     }
 
     /*

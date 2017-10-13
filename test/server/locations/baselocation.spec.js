@@ -1,12 +1,13 @@
 /*global describe, it, beforeEach, expect, jasmine*/
 /*eslint camelcase: 0, no-invalid-this: 0 */
 const _ = require('underscore');
+const uuid = require('uuid');
 const BaseLocation = require('../../../server/game/baselocation.js');
 
 describe('BaseLocation', function () {
     beforeEach(function () {
-        this.testCard1 = { code: '111', title: 'test 1' };
-        this.testCard2 = { code: '222', title: 'test 2' };
+        this.testCard1 = { key: uuid.v1(), title: 'test 1' };
+        this.testCard2 = { key: uuid.v1(), title: 'test 2' };
         this.game = jasmine.createSpyObj('game', ['raiseMergedEvent']);
         this.owner = jasmine.createSpyObj('owner', ['getCardSelectionState']);
         this.owner.getCardSelectionState.and.returnValue({});
@@ -18,7 +19,7 @@ describe('BaseLocation', function () {
         it('should have a bare string in its represents property', function() {
             this.location = new BaseLocation('testlocation');
             expect(this.location.represents).not.toEqual('testlocation');
-            expect(this.location.get()).toEqual({ code: 'testlocation'});
+            expect(this.location.get()).toEqual({ key: 'testlocation'});
             expect(this.location.isCardLocation()).toBe(false);
         });
     });

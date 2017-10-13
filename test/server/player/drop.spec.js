@@ -112,6 +112,8 @@ describe('Player', () => {
                 });
             });
 
+            /* No special cases for Boot Hill, all types of cards can go there
+
             describe('when the card is in hand and is a location', function() {
                 beforeEach(function() {
                     this.cardSpy.getType.and.returnValue('location');
@@ -149,7 +151,7 @@ describe('Player', () => {
                     expect(this.dropSucceeded).toBe(false);
                     expect(this.player.boothillPile.size()).toBe(0);
                 });
-            });
+            });*/
 
             describe('when the card is in hand and is a character', function() {
                 beforeEach(function() {
@@ -348,6 +350,8 @@ describe('Player', () => {
             });
         });
 
+        /* Avoid Kill Character function for now
+
         describe('event order', function() {
             beforeEach(function() {
                 this.player.cardsInPlay.push(this.cardSpy);
@@ -362,6 +366,6 @@ describe('Player', () => {
                 expect(result).toBe(true);
                 expect(this.player.killCharacter).toHaveBeenCalledWith(this.cardSpy, false);
             });
-        });
+        });*/
     });
 });

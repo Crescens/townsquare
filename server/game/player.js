@@ -699,13 +699,7 @@ class Player extends Spectator {
             case 'boothill pile':
                 return this.boothillPile;
             case 'play area':
-                return this.cardsInPlay;
-            case 'active plot':
-                return _([]);
-            case 'plot deck':
-                return this.plotDeck;
-            case 'revealed plots':
-                return this.plotDiscard;
+                return this.game.getLocations();
             default:
                 if(this.additionalPiles[source]) {
                     return this.additionalPiles[source].cards;
@@ -777,17 +771,18 @@ class Player extends Spectator {
             return false;
         }
 
-        if(target === 'play area' && card.getType() === 'event') {
+        if(target === 'play area' && (card.getType() === 'action' || card.getType() === 'joker')) {
             return false;
         }
 
         if(target === 'play area') {
             this.putIntoPlay(card);
         } else {
+            /* Ace card
             if(target === 'boothill pile' && card.location === 'play area') {
                 this.killCharacter(card, false);
                 return true;
-            }
+            } */
 
             if(target === 'discard pile') {
                 this.discardCard(card, false);
@@ -913,9 +908,9 @@ class Player extends Spectator {
 
         this.outfit.cardData = deck.outfit;
         this.outfit.cardData.name = deck.outfit.name;
-        this.outfit.cardData.code = deck.outfit.value;
+        this.outfit.cardData.code = deck.outfit.code;
         this.outfit.cardData.type_code = 'outfit';
-        this.outfit.cardData.strength = 0;
+        //this.outfit.cardData.strength = 0;
     }
 
     moveCard(card, targetLocation, options = {}) {
@@ -923,7 +918,11 @@ class Player extends Spectator {
 
         var targetPile = this.getSourceList(targetLocation);
 
-        if(!targetPile || targetPile.contains(card)) {
+        if(!targetPile) {
+            return;
+        }
+
+        if(targetPile.contains(card) && card.location !== 'play area') {
             return;
         }
 
@@ -938,6 +937,8 @@ class Player extends Spectator {
                 card: card
             };
 
+            //Assumes that a card being moved from play area is leaving play,
+            //incorrect for DTR
             this.game.raiseMergedEvent('onCardLeftPlay', params, event => {
                 card.attachments.each(attachment => {
                     this.removeAttachment(attachment, false);
@@ -976,6 +977,8 @@ class Player extends Spectator {
         }
     }
 
+    // Must change onCardKneeled and onCardStood events before changing these functions
+
     kneelCard(card) {
         if(card.booted) {
             return;
@@ -1000,23 +1003,6 @@ class Player extends Spectator {
         });
     }
 
-    removeDuplicate(card, force = false) {
-        if(card.dupes.isEmpty()) {
-            return false;
-        }
-
-        var dupe = card.removeDuplicate(force);
-        if(!dupe) {
-            return false;
-        }
-
-        dupe.moveTo('discard pile');
-        dupe.owner.discardPile.push(dupe);
-        this.game.raiseEvent('onDupeDiscarded', this, card, dupe);
-
-        return true;
-    }
-
     removeCardFromPile(card) {
         if(card.controller !== this) {
             card.controller.removeCardFromPile(card);
@@ -1035,14 +1021,7 @@ class Player extends Spectator {
         }
     }
 
-    getTotalInitiative() {
-        if(!this.activePlot) {
-            return 0;
-        }
-
-        return this.activePlot.getInitiative();
-    }
-
+    /*
     getTotalIncome() {
         if(!this.activePlot) {
             return 0;
@@ -1050,6 +1029,7 @@ class Player extends Spectator {
 
         return this.activePlot.getIncome();
     }
+
 
     getTotalReserve() {
         if(!this.activePlot) {
@@ -1062,6 +1042,7 @@ class Player extends Spectator {
     getClaim() {
         return this.activePlot ? this.activePlot.getClaim() : 0;
     }
+    */
 
     isBelowReserve() {
         return this.hand.size() <= this.getTotalReserve();
@@ -1129,11 +1110,7 @@ class Player extends Spectator {
             left: this.left,
             numDrawCards: this.drawDeck.size(),
             name: this.name,
-            //numPlotCards: this.plotDeck.size(),
             phase: this.phase,
-            //plotDeck: this.getSummaryForCardList(this.plotDeck, activePlayer, true),
-            //plotDiscard: this.getSummaryForCardList(this.plotDiscard, activePlayer),
-            //plotSelected: !!this.selectedPlot,
             promptedActionWindows: this.promptedActionWindows,
             reserve: this.getTotalReserve(),
             totalControl: this.getTotalControl(),

@@ -5,15 +5,17 @@ const _ = require('underscore');
  */
 class BaseLocation {
     constructor(location) {
-        //Passed in location for construction. Card object or string e.g."townsquare"
+        //Passed in location for construction. Card uuid or string e.g."townsquare"
         this.represents = location;
         this.adjacencyMap = new Map();
         this.cards = _([]);
         this.cardLocation = true;
 
-        if(typeof(location) === 'string') {
+        var uuidmatch = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+        if(!uuidmatch.test(location.key)) {
             this.cardLocation = false;
-            this.represents = { code: location }; //All represents now objects for React UI
+            this.represents = { key: location }; //All represents now objects for React UI
         }
     }
 

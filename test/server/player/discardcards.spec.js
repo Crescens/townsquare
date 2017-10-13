@@ -96,39 +96,6 @@ describe('Player', function () {
     });
 
     describe('discardCard()', function () {
-        describe('when the card has dupes', function() {
-            beforeEach(function() {
-                this.dupe = createCardSpy(3, this.player);
-                this.card1.removeDuplicate.and.returnValue(this.dupe);
-                this.card1.dupes.push(this.dupe);
-            });
-
-            describe('and the discard can be saved', function() {
-                beforeEach(function() {
-                    this.player.discardCard(this.card1, true);
-                });
-
-                it('should not raise the onCardsDiscarded event', function() {
-                    expect(this.gameSpy.raiseMergedEvent).not.toHaveBeenCalledWith('onCardsDiscarded', jasmine.any(Object), jasmine.any(Function));
-                });
-
-                it('should remove the dupe', function() {
-                    expect(this.card1.removeDuplicate).toHaveBeenCalled();
-                });
-            });
-
-            describe('and the discard cannot be saved', function() {
-                beforeEach(function() {
-                    this.eventOuterParams = { player: this.player, cards: [this.card1], allowSave: false, originalLocation: 'loc' };
-                    this.player.discardCard(this.card1, false);
-                });
-
-                it('should raise the onCardsDiscarded event', function() {
-                    expect(this.gameSpy.raiseMergedEvent).toHaveBeenCalledWith('onCardsDiscarded', this.eventOuterParams, jasmine.any(Function));
-                });
-            });
-        });
-
         describe('when the card has no dupes', function() {
             beforeEach(function() {
                 this.eventOuterParams = { player: this.player, cards: [this.card1], allowSave: false, originalLocation: 'loc' };
