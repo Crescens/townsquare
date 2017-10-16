@@ -36,6 +36,11 @@ const ForcedTriggeredAbilityWindow = require('./gamesteps/forcedtriggeredability
 const TriggeredAbilityWindow = require('./gamesteps/triggeredabilitywindow.js');
 //const KillCharacters = require('./gamesteps/killcharacters.js');
 
+const TownSquare = {
+  code: 'townsquare',
+  name: 'Town Square'
+};
+
 class Game extends EventEmitter {
     constructor(details, options = {}) {
         super();
@@ -157,31 +162,10 @@ class Game extends EventEmitter {
         return foundCards;
     }
 
-<<<<<<< HEAD
     getLocations() {
         return this.locations;
     }
 
-    /*
-    anyPlotHasTrait(trait) {
-        return _.any(this.getPlayers(), player =>
-            player.activePlot &&
-            player.activePlot.hasTrait(trait));
-    }*/
-
-    /*
-    getNumberOfPlotsWithTrait(trait) {
-        return _.reduce(this.getPlayers(), (sum, player) => {
-            if(player.activePlot && player.activePlot.hasTrait(trait)) {
-                return sum + 1;
-            }
-
-            return sum;
-        }, 0);
-    }*/
-
-=======
->>>>>>> 60b6cd6f20535b065e85cd2074558aa9f47112b4
     addEffect(source, properties) {
         this.effectEngine.add(new Effect(this, source, properties));
     }
