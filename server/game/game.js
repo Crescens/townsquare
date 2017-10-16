@@ -36,11 +36,6 @@ const ForcedTriggeredAbilityWindow = require('./gamesteps/forcedtriggeredability
 const TriggeredAbilityWindow = require('./gamesteps/triggeredabilitywindow.js');
 //const KillCharacters = require('./gamesteps/killcharacters.js');
 
-const TownSquare = {
-  code: 'townsquare',
-  name: 'Town Square'
-};
-
 class Game extends EventEmitter {
     constructor(details, options = {}) {
         super();
@@ -48,7 +43,7 @@ class Game extends EventEmitter {
         this.effectEngine = new EffectEngine(this);
         this.playersAndSpectators = {};
         this.playerCards = {};
-        this.locations = {};
+        this.locations = [];
         this.gameChat = new GameChat();
         this.chatCommands = new ChatCommands(this);
         this.pipeline = new GamePipeline();
@@ -540,6 +535,8 @@ class Game extends EventEmitter {
 
         this.playStarted = true;
         this.startedAt = new Date();
+
+        this.locations.push(new BaseLocation('townsquare'));
 
         this.continue();
     }

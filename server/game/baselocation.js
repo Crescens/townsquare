@@ -1,5 +1,10 @@
 const _ = require('underscore');
 
+const TownSquare = {
+    code: 'townsquare',
+    name: 'Town Square'
+};
+
 /**
  * Base class representing a location on the game board.
  */
@@ -13,9 +18,8 @@ class BaseLocation {
 
         var uuidmatch = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-        if(!uuidmatch.test(location.key)) {
+        if(!uuidmatch.test(location)) {
             this.cardLocation = false;
-            this.represents = { key: location }; //All represents now objects for React UI
         }
     }
 
@@ -46,7 +50,7 @@ class BaseLocation {
     }
 
     get() {
-        return this.represents;
+        return this;
     }
 
     left() {

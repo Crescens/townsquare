@@ -699,7 +699,8 @@ class Player extends Spectator {
             case 'boothill pile':
                 return this.boothillPile;
             case 'play area':
-                return this.game.getLocations();
+                return;
+                //return this.game.getLocations();
             default:
                 if(this.additionalPiles[source]) {
                     return this.additionalPiles[source].cards;

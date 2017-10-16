@@ -18,17 +18,16 @@ describe('BaseLocation', function () {
     describe('when a location is created with a string', function () {
         it('should have a bare string in its represents property', function() {
             this.location = new BaseLocation('testlocation');
-            expect(this.location.represents).not.toEqual('testlocation');
-            expect(this.location.get()).toEqual({ key: 'testlocation'});
+            expect(this.location.get()).toEqual(jasmine.objectContaining({ represents: 'testlocation' }));
             expect(this.location.isCardLocation()).toBe(false);
         });
     });
 
     describe('when a location is created with an object', function () {
         it('should have an object in its represents property', function() {
-            this.location = new BaseLocation(this.testCard1);
-            expect(this.location.represents).toEqual(this.testCard1);
-            expect(this.location.get()).toEqual(this.testCard1);
+            this.location = new BaseLocation(this.testCard1.key);
+            expect(this.location.represents).toEqual(this.testCard1.key);
+            expect(this.location.get()).toEqual(jasmine.objectContaining({ represents: this.testCard1.key }));
             expect(this.location.isCardLocation()).toBe(true);
         });
     });
