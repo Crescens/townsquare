@@ -34,7 +34,7 @@ const SimultaneousEventWindow = require('./gamesteps/simultaneouseventwindow.js'
 const AbilityResolver = require('./gamesteps/abilityresolver.js');
 const ForcedTriggeredAbilityWindow = require('./gamesteps/forcedtriggeredabilitywindow.js');
 const TriggeredAbilityWindow = require('./gamesteps/triggeredabilitywindow.js');
-const KillCharacters = require('./gamesteps/killcharacters.js');
+//const KillCharacters = require('./gamesteps/killcharacters.js');
 
 class Game extends EventEmitter {
     constructor(details, options = {}) {
@@ -158,42 +158,13 @@ class Game extends EventEmitter {
         return foundCards;
     }
 
-    /*
-    anyPlotHasTrait(trait) {
-        return _.any(this.getPlayers(), player =>
-            player.activePlot &&
-            player.activePlot.hasTrait(trait));
-    }*/
-
-    /*
-    getNumberOfPlotsWithTrait(trait) {
-        return _.reduce(this.getPlayers(), (sum, player) => {
-            if(player.activePlot && player.activePlot.hasTrait(trait)) {
-                return sum + 1;
-            }
-
-            return sum;
-        }, 0);
-    }*/
-
     addEffect(source, properties) {
         this.effectEngine.add(new Effect(this, source, properties));
     }
 
-    /*
-    selectPlot(player, plotId) {
-        var plot = player.findCardByUuid(player.plotDeck, plotId);
-
-        if(!plot) {
-            return;
-        }
-
-        player.plotDeck.each(p => {
-            p.selected = false;
-        });
-
-        plot.selected = true;
-    }*/
+    /* -- This is an artifact of the way the factions were implemented in
+          Throneteki. They weren't cards in the previous game engine, but they
+          probably just need to be treated like any other card for us
 
     outfitCardClicked(sourcePlayer) {
         var player = this.getPlayerByName(sourcePlayer);
@@ -209,7 +180,7 @@ class Game extends EventEmitter {
         }
 
         this.addMessage('{0} {1} their outfit card', player, player.outfit.booted ? 'boots' : 'unboots');
-    }
+    }*/
 
     cardClicked(sourcePlayer, cardId) {
         var player = this.getPlayerByName(sourcePlayer);
@@ -224,11 +195,6 @@ class Game extends EventEmitter {
             return;
         }
 
-        if(card.location === 'plot deck') {
-            this.selectPlot(player, cardId);
-            return;
-        }
-
         if(this.pipeline.handleCardClicked(player, card)) {
             return;
         }
@@ -238,6 +204,7 @@ class Game extends EventEmitter {
             return;
         }
 
+        // TODO: What is this for?
         if(card.onClick(player)) {
             return;
         }
@@ -286,9 +253,6 @@ class Game extends EventEmitter {
         }
 
         switch(card.location) {
-            //case 'active plot':
-            //    this.callCardMenuCommand(player.activePlot, player, menuItem);
-            //    break;
             case 'legend':
                 this.callCardMenuCommand(player.legend, player, menuItem);
                 break;
@@ -343,13 +307,16 @@ class Game extends EventEmitter {
         }
     }
 
+    /* I don't even think we need this, as control is not generically on
+       the outfit in DTR. - 20171015 JW
+
     addControl(player, control) {
         return;
-    }
+    }*/
 
     addGhostRock(player, ghostrock) {
         if(ghostrock > 0 && player.cannotGainGhostRock) {
-            this.addMessage('{0} cannot gain ghostrock', player);
+            this.addMessage('{0} cannot gain ghost rock', player);
             return;
         }
 
@@ -383,15 +350,9 @@ class Game extends EventEmitter {
         //this.recordWinner(player, 'control');
     }
 
-
+    // Decked i.e. Deck empty, reshuffle.
     playerDecked(player) {
-        var otherPlayer = this.getOtherPlayer(player);
-
-        if(otherPlayer) {
-            this.addMessage('{0}\'s draw deck is empty', player);
-
-            this.recordWinner(otherPlayer, 'decked');
-        }
+        this.shuffleDeck(player);
     }
 
     recordWinner(winner, reason) {
@@ -408,7 +369,8 @@ class Game extends EventEmitter {
         this.router.gameWon(this, reason, winner);
     }
 
-    /*
+    /* None of the stuff in here works, but this structure might be useful for
+
     changeStat(playerName, stat, value) {
         let player = this.getPlayerByName(playerName);
         if(!player) {
@@ -674,13 +636,14 @@ class Game extends EventEmitter {
         this.queueStep(new SimultaneousEventWindow(this, cards, properties));
     }
 
-    killCharacters(cards, allowSave = true) {
-        this.queueStep(new KillCharacters(this, cards, allowSave));
+    /* Need to create this
+    killDudes(cards, allowSave = true) {
+        this.queueStep(new KillDudes(this, cards, allowSave));
     }
 
-    killCharacter(card, allowSave = true) {
-        this.killCharacters([card], allowSave);
-    }
+    killDude(card, allowSave = true) {
+        this.killDudes([card], allowSave);
+    }*/
 
     takeControl(player, card) {
         var oldController = card.controller;
