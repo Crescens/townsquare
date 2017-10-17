@@ -1074,7 +1074,6 @@ doSingleCardDiscard.originalLocation	.\server\game\player.js	/^            origi
 doSingleCardDiscard.player	.\server\game\player.js	/^            player: this,$/;"	p
 dominanceLoser	.\server\game\gamesteps\dominancephase.js	/^        var dominanceLoser = dominanceWinner ? this.game.getOtherPlayer(dominanceWinner) : undefined;$/;"	v
 dominanceWinner	.\server\game\gamesteps\dominancephase.js	/^        var dominanceWinner = undefined;$/;"	v
-dupe	.\server\game\player.js	/^        var dupe = card.removeDuplicate(force);$/;"	v
 eligibleCharacters	.\retired\server\game\cards\locations\04\houseoftheundying.js	/^        var eligibleCharacters = opponent.deadPile.filter(card => {$/;"	v
 env	.\.vscode\launch.json	/^            "env": { "JASMINE_CONFIG_PATH": ".\/jasmine.json" },$/;"	f
 env	.\.vscode\launch.json	/^            "env": {$/;"	f
@@ -4529,7 +4528,6 @@ text	.\test\client\decks\plotWinter.json	/^            "text": "<b>When Revealed
 text	.\test\client\decks\plotWinter.json	/^            "text": "<b>When Revealed:<\/b> Name a challenge type. Until you reveal a new plot card, reduce the claim value on the attacking player\\"s revealed plot card by 1 during challenges of that type in which you are the defending player.",$/;"	f
 text	.\test\client\decks\plotWinter.json	/^            "text": "<b>When Revealed:<\/b> Search your deck for a <i>Direwolf<\/i> card, reveal it, and add it to your hand. If that card\\"s printed cost is 3 or lower, you may put it into play instead. Shuffle your deck.\\n<b>Card design by 2012 North American Champion, Dan Seefeldt.<\/b>",$/;"	f
 text	.\test\client\decks\plotWinter.json	/^            "text": "You cannot initiate more than 1 challenge during the challenges phase.",$/;"	f
-this.represents.code	.\server\game\baselocation.js	/^            this.represents = { code: location }; \/\/All represents now objects for React UI$/;"	p
 this.workers.identity	.\server\gamerouter.js	/^                    identity: identityStr,$/;"	p
 this.workers.maxGames	.\server\gamerouter.js	/^                    maxGames: message.arg.maxGames,$/;"	p
 traits	.\retired\test\client\decks\drawBanner.json	/^            "traits": "Ally. Ironborn. Lord.",$/;"	f

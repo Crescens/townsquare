@@ -6,7 +6,7 @@ const GameChat = require('./gamechat.js');
 const EffectEngine = require('./effectengine.js');
 const Effect = require('./effect.js');
 const Player = require('./player.js');
-const BaseLocation = require('./baselocation.js');
+const GameLocation = require('./gamelocation.js');
 const Spectator = require('./spectator.js');
 const AnonymousSpectator = require('./anonymousspectator.js');
 const GamePipeline = require('./gamepipeline.js');
@@ -159,6 +159,10 @@ class Game extends EventEmitter {
 
     getLocations() {
         return this.locations;
+    }
+
+    addGameLocation(location) {
+        this.locations.push(new GameLocation(location));
     }
 
     addEffect(source, properties) {
@@ -373,6 +377,7 @@ class Game extends EventEmitter {
     }
 
     /* None of the stuff in here works, but this structure might be useful for
+       influence, control, bullet modifiers, etc...
 
     changeStat(playerName, stat, value) {
         let player = this.getPlayerByName(playerName);
@@ -536,7 +541,7 @@ class Game extends EventEmitter {
         this.playStarted = true;
         this.startedAt = new Date();
 
-        this.locations.push(new BaseLocation('townsquare'));
+        this.addGameLocation('townsquare');
 
         this.continue();
     }

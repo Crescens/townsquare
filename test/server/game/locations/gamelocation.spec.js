@@ -2,9 +2,9 @@
 /*eslint camelcase: 0, no-invalid-this: 0 */
 const _ = require('underscore');
 const uuid = require('uuid');
-const BaseLocation = require('../../../server/game/baselocation.js');
+const GameLocation = require('../../../../server/game/gamelocation.js');
 
-describe('BaseLocation', function () {
+describe('GameLocation', function () {
     beforeEach(function () {
         this.testCard1 = { key: uuid.v1(), title: 'test 1' };
         this.testCard2 = { key: uuid.v1(), title: 'test 2' };
@@ -12,12 +12,12 @@ describe('BaseLocation', function () {
         this.owner = jasmine.createSpyObj('owner', ['getCardSelectionState']);
         this.owner.getCardSelectionState.and.returnValue({});
         this.owner.game = this.game;
-        this.location = new BaseLocation('townsquare');
+        this.location = new GameLocation('townsquare');
     });
 
     describe('when a location is created with a string', function () {
         it('should have a bare string in its represents property', function() {
-            this.location = new BaseLocation('testlocation');
+            this.location = new GameLocation('testlocation');
             expect(this.location.get()).toEqual(jasmine.objectContaining({ represents: 'testlocation' }));
             expect(this.location.isCardLocation()).toBe(false);
         });
@@ -25,7 +25,7 @@ describe('BaseLocation', function () {
 
     describe('when a location is created with an object', function () {
         it('should have an object in its represents property', function() {
-            this.location = new BaseLocation(this.testCard1.key);
+            this.location = new GameLocation(this.testCard1.key);
             expect(this.location.represents).toEqual(this.testCard1.key);
             expect(this.location.get()).toEqual(jasmine.objectContaining({ represents: this.testCard1.key }));
             expect(this.location.isCardLocation()).toBe(true);

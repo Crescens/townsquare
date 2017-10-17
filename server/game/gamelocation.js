@@ -1,14 +1,9 @@
 const _ = require('underscore');
 
-const TownSquare = {
-    code: 'townsquare',
-    name: 'Town Square'
-};
-
 /**
  * Base class representing a location on the game board.
  */
-class BaseLocation {
+class GameLocation {
     constructor(location) {
         //Passed in location for construction. Card uuid or string e.g."townsquare"
         this.represents = location;
@@ -91,4 +86,4 @@ class BaseLocation {
 
 }
 
-module.exports = BaseLocation;
+module.exports = GameLocation;

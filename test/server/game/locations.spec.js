@@ -1,5 +1,6 @@
 /*global describe, it, beforeEach, expect, jasmine*/
 /* eslint camelcase: 0, no-invalid-this: 0 */
+const uuid = require('uuid');
 
 const Game = require('../../../server/game/game.js');
 const Player = require('../../../server/game/player.js');
@@ -18,8 +19,8 @@ describe('Game', function() {
 
         this.game.initialise();
 
-        this.card1 = jasmine.createSpyObj('card', ['allowGameAction']);
-        this.card2 = jasmine.createSpyObj('card', ['allowGameAction']);
+        this.testCard1 = { key: uuid.v1(), title: 'test 1' };
+        //this.card2 = jasmine.createSpyObj('card', ['allowGameAction']);
         this.handler = jasmine.createSpy('handler');
     });
 
@@ -27,7 +28,23 @@ describe('Game', function() {
         describe('immediately after game creation', function() {
             it('should not be empty', function() {
                 expect(this.game.getLocations().length).not.toBe(0);
+            });
+            it('should contain an object that represents townsquare', function() {
                 expect(this.game.locations).toContain(jasmine.objectContaining({represents: 'townsquare'}));
+            });
+        });
+
+        describe('after adding a location', function () {
+            beforeEach(function () {
+                this.game.addGameLocation(this.testCard1.key);
+            });
+
+            it('should have two objects', function () {
+                expect(this.game.getLocations().length).toBe(2);
+            });
+
+            it('should contain the added card', function () {
+                
             });
         });
     });
