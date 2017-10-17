@@ -44,7 +44,7 @@ describe('Game', function() {
             });
 
             it('should contain the added card', function () {
-                
+                expect(this.game.getLocations()).toContain(jasmine.objectContaining({represents: this.testCard1.key}));
             });
         });
     });

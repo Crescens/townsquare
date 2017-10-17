@@ -413,15 +413,14 @@ export class InnerGameBoard extends React.Component {
                             onMouseOut={this.onMouseOut}
                             />
                         <div className='play-area' onDragOver={this.onDragOver}
-                                onDrop={event => this.onDragDropEvent(event, 'play area')} >
-                                <GameLocation location={{code:'townsquare', name:'Town Square'}}
+                             onDrop={event => this.onDragDropEvent(event, 'play area')} >
+                                <GameLocation location={{key:'townsquare', name:'Town Square'}}
                                     cardLocation={false} className='townsquare'
                                     onMouseOver={this.onMouseOver}
                                     onMouseOut={this.onMouseOut}
                                     onClick={this.onCardClick}
                                     otherPlayer={otherPlayer}
-                                    thisPlayer={thisPlayer}
-                                />
+                                    thisPlayer={thisPlayer}/>
                         </div>
                         <PlayerRow isMe={!this.state.spectating}
                             additionalPiles={thisPlayer.additionalPiles}

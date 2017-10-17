@@ -165,6 +165,15 @@ class Game extends EventEmitter {
         this.locations.push(new GameLocation(location));
     }
 
+    getLocationByID(id) {
+        if(!id) {
+            return;
+        }
+
+        return _.find(this.locations, (location) => (location.represents === id));
+
+    }
+
     addEffect(source, properties) {
         this.effectEngine.add(new Effect(this, source, properties));
     }

@@ -1099,7 +1099,7 @@ class Player extends Spectator {
             legend: this.legend ? this.legend.getSummary(activePlayer) : undefined,
             //bannerCards: this.getSummaryForCardList(this.bannerCards, activePlayer),
             cardsInPlay: this.getSummaryForCardList(this.cardsInPlay, activePlayer),
-            claim: this.getClaim(),
+            //claim: this.getClaim(),
             boothillPile: this.getSummaryForCardList(this.boothillPile, activePlayer),
             discardPile: this.getSummaryForCardList(this.discardPile, activePlayer),
             disconnected: this.disconnected,
@@ -1113,7 +1113,7 @@ class Player extends Spectator {
             name: this.name,
             phase: this.phase,
             promptedActionWindows: this.promptedActionWindows,
-            reserve: this.getTotalReserve(),
+            //reserve: this.getTotalReserve(),
             totalControl: this.getTotalControl(),
             user: _.omit(this.user, ['password', 'email'])
         };
