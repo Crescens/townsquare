@@ -48,4 +48,12 @@ describe('Game', function() {
             });
         });
     });
+
+    describe('getLocationByID()', function() {
+        describe('immediately after game creation', function() {
+            it('should be able to return the townsquare', function() {
+                expect(this.game.getLocationByID('townsquare')).not.toBe(null);
+            });
+        });
+    });
 });
