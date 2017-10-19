@@ -1,15 +1,22 @@
-const _ = require('underscore');
+//const _ = require('underscore');
 
 /**
  * Base class representing a location on the game board.
  */
 class GameLocation {
-    constructor(location) {
+    constructor(location, order) {
         //Passed in location for construction. Card uuid or string e.g."townsquare"
         this.represents = location;
         this.adjacencyMap = new Map();
-        this.cards = _([]);
+        //this.cards = _([]);
         this.cardLocation = true;
+        /*Keeps track of location order on player street
+          for flexbox order parameter info
+          0 === outfit (on street) or townsquare
+          >=1 === right of outfit
+          <=-1 === left of outfit
+        */
+        this.order = order;
 
         var uuidmatch = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -44,8 +51,16 @@ class GameLocation {
         return this.adjacencyMap;
     }
 
-    get() {
-        return this;
+    getOrder() {
+        return this.order;
+    }
+
+    setOrder(order) {
+        this.order = order;
+    }
+
+    getKey() {
+        return this.represents;
     }
 
     left() {
@@ -63,6 +78,9 @@ class GameLocation {
             }
         }
     }
+
+    /* Considering removing card state and mapping only between some identifier
+       and each card's card.location parameter
 
     addCard(card) {
         if(!card) {
@@ -82,7 +100,7 @@ class GameLocation {
 
     cards() {
         return this.cards;
-    }
+    }*/
 
 }
 

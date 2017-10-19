@@ -36,6 +36,7 @@ class BaseCard {
         this.name = cardData.name;
         this.facedown = false;
         this.blankCount = 0;
+        this.gamelocation = ''
 
         this.tokens = {};
         /*this.plotModifierValues = {
@@ -57,8 +58,10 @@ class BaseCard {
         this.parseKeywords(cardData.keywords || '');
         this.setupCardAbilities(AbilityDsl);
 
+        /*
         this.factions = {};
         this.addFaction(cardData.faction_code);
+        */
     }
 
     /*
@@ -507,6 +510,18 @@ class BaseCard {
         }
     }
 
+    setGameLocation(location) {
+        if(!location) {
+            return;
+        }
+
+        this.gamelocation = location;
+    }
+
+    getGameLocation() {
+        return this.gamelocation;
+    }
+
     onClick(player) {
         var action = _.find(this.abilities.actions, action => action.isClickToActivate());
         if(action) {
@@ -537,6 +552,7 @@ class BaseCard {
             code: this.cardData.code,
             controlled: this.owner !== this.controller,
             facedown: this.facedown,
+            gamelocation: this.gamelocation,
             menu: this.getMenu(),
             name: this.cardData.label,
             new: this.new,

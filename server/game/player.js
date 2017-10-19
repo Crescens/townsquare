@@ -353,10 +353,7 @@ class Player extends Spectator {
             return;
         }
 
-        /* -- Set to starting wealth
-
-        this.ghostrock = 8;
-        */
+        this.ghostrock = this.outfit.wealth;
     }
 
     /*

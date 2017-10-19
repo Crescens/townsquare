@@ -29,6 +29,7 @@ export class InnerGameLocation extends React.Component {
         this.props.zoomCard(card);
     }
 
+    /*
     getCards(thisPlayer, otherPlayer) {
         var thisPlayerCards = [];
 
@@ -54,23 +55,31 @@ export class InnerGameLocation extends React.Component {
             thisPlayerCards.push(<div className='card-row' key={'other-empty' + i} />);
         }
     }
+    */
 
     getCardsHere(player) {
         if(!player) {
             return [];
         }
 
+        var playerCardsHere = [];
         var cardsByLocation = [];
 
-        _.each(this.props.cards, cards => {
-            var cardsInPlay = _.map(cards, card => {
-                return (<Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.onMenuItemClick}
-                                    onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onDragDrop={this.onDragDrop} />);
+        _.each(player.findCards, (cards) => {
+            var cardsInPlay = _.map(cards, (card) => {
+                if(card.getLocation() === this.location.getKey()) {
+                    return (<Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.onMenuItemClick}
+                                  onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onDragDrop={this.onDragDrop} />);
+                }
             });
             cardsByLocation.push(cardsInPlay);
         });
 
-        return cardsByLocation;
+        for(var i = cardsByLocation.length; i < 2; i++) {
+            playerCardsHere.push(<div className='card-row' key={'this-empty' + i} />);
+        }
+
+        return playerCardsHere;
     }
 
     getImageLocation(imageClass) {
@@ -111,8 +120,9 @@ export class InnerGameLocation extends React.Component {
 
         return (
             <div className='location-wrapper' style={this.props.style}>
+                {this.getCardsHere(this.props.otherPlayer)}
                 {this.getLocation()}
-                {this.getCards()}
+                {this.getCardsHere(this.props.thisPlayer)}
             </div>
         );
 
@@ -130,8 +140,11 @@ InnerGameLocation.propTypes = {
     onClick: PropTypes.func,
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,
+    order: PropTypes.number,
+    otherPlayer: PropTypes.object,
     sendGameMessage: PropTypes.func,
     style: PropTypes.object,
+    thisPlayer: PropTypes.object,
     zoomCard: PropTypes.func
 };
 
