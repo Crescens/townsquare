@@ -2,6 +2,7 @@
 /* eslint camelcase: 0, no-invalid-this: 0 */
 
 const _ = require('underscore');
+const uuid = require('uuid');
 const Player = require('../../../server/game/player.js');
 
 describe('Player', () => {
@@ -21,7 +22,6 @@ describe('Player', () => {
             this.cardSpy.uuid = '1111';
             this.cardSpy.controller = this.cardSpy.owner = this.player;
             this.cardSpy.attachments = _([]);
-            this.cardSpy.dupes = _([]);
         });
 
         describe('when dragging a card from hand to play area', function() {
@@ -41,7 +41,7 @@ describe('Player', () => {
                     expect(this.player.hand.size()).toBe(1);
                 });
             });
-            
+
             describe('when the card is in hand and a dude', function() {
                 beforeEach(function() {
                     this.cardSpy.getType.and.returnValue('dude');
@@ -81,6 +81,7 @@ describe('Player', () => {
                 });
             });
 
+            /* Extend for spells/goods/gadgets
             describe('when the card is in hand and an attachment', function() {
                 beforeEach(function() {
                     this.cardSpy.getType.and.returnValue('attachment');
@@ -92,7 +93,7 @@ describe('Player', () => {
                     expect(this.dropSucceeded).toBe(true);
                     expect(this.player.putIntoPlay).toHaveBeenCalledWith(this.cardSpy);
                 });
-            });
+            });*/
         });
 
         describe('when dragging a card from hand to the boothill pile', function() {
@@ -338,8 +339,6 @@ describe('Player', () => {
                 });
             });
 
-            /* Won't work correctly until moving in/out of play area is changed
-
             describe('when the card is in play', function() {
                 beforeEach(function() {
                     this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'play area', 'discard pile');
@@ -349,7 +348,24 @@ describe('Player', () => {
                     expect(this.dropSucceeded).toBe(true);
                     expect(this.player.discardCard).toHaveBeenCalled();
                 });
-            });*/
+            });
+        });
+
+        describe('when dragging a card between game locations', function() {
+            beforeEach(function () {
+
+                this.player.cardsInPlay.push(this.cardSpy);
+
+                this.cardSpy.location = 'play area';
+                this.cardSpy.gamelocation = uuid.v1();
+
+                var gamelocation = uuid.v1();
+                this.gameSpy.addGameLocation(gamelocation);
+            });
+
+            it('should return false if the card is a deed', function() {
+                
+            });
         });
 
         /* Avoid Kill Character function for now

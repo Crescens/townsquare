@@ -501,10 +501,8 @@ class Player extends Spectator {
             return;
         }
 
-        var dupeCard = this.getDuplicateInPlay(card);
-
         //Replace this with a bool on card that tells whether it is an attachment among types
-        if(card.getType() === 'attachment' && playingType !== 'setup') {
+        if(card.isAttachment() && playingType !== 'setup') {
             this.promptForAttachment(card, playingType);
             return;
         }
@@ -513,7 +511,7 @@ class Player extends Spectator {
 
         card.facedown = this.game.currentPhase === 'setup';
         card.new = true;
-        this.moveCard(card, 'play area', { isDupe: !!dupeCard });
+        this.moveCard(card, 'play area');
         if(card.controller !== this) {
             card.controller.allCards = _(card.controller.allCards.reject(c => c === card));
             this.allCards.push(card);
@@ -614,7 +612,7 @@ class Player extends Spectator {
 
     hasUnmappedAttachments() {
         return this.cardsInPlay.any(card => {
-            return card.getType() === 'attachment';
+            return card.isAttachment();
         });
     }
 
@@ -666,6 +664,7 @@ class Player extends Spectator {
     }
 
     isValidDropCombination(source, target) {
+        /*
         if(source === 'plot deck' && target !== 'revealed plots') {
             return false;
         }
@@ -680,8 +679,7 @@ class Player extends Spectator {
 
         if(target === 'revealed plots' && source !== 'plot deck') {
             return false;
-        }
-
+        }*/
         return source !== target;
     }
 
@@ -696,7 +694,7 @@ class Player extends Spectator {
             case 'boothill pile':
                 return this.boothillPile;
             case 'play area':
-                return;
+                return this.cardsInPlay;
                 //return this.game.getLocations();
             default:
                 if(this.additionalPiles[source]) {
@@ -709,6 +707,8 @@ class Player extends Spectator {
         this.additionalPiles[name] = _.extend({ cards: _([]) }, properties);
     }
 
+    //play area wraps the main board and the out of town boards
+    //
     updateSourceList(source, targetList) {
         switch(source) {
             case 'hand':
@@ -739,9 +739,44 @@ class Player extends Spectator {
         }
     }
 
+    betweenLocations(cardId, source, target) {
+        var uuidmatch = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        var ts = /^townsquare$/i;
+
+        if((uuidmatch.test(source) || ts.test(source)) &&
+           (uuidmatch.test(target) || ts.test(target))) {
+
+            var card = this.findCardByUuid(this.cardsInPlay, cardId);
+
+            if(card.controller !== this) {
+                return false;
+            }
+
+            if(card.getType() !== 'dude') {
+                return false;
+            }
+
+            //let originalLocation = card.gamelocation;
+
+            card.gamelocation = target;
+
+            //this.game.raiseMergedEvent('onCardMovesGameLocation', { card: card, originalLocation: originalLocation, newLocation: target });
+
+            return true;
+        }
+
+        return false;
+    }
+
     drop(cardId, source, target) {
         if(!this.isValidDropCombination(source, target)) {
             return false;
+        }
+
+        //Moving between locations on the game board will update
+        //by simply changing the gamelocation parameter on the cardId
+        if(this.betweenLocations(cardId, source, target)) {
+            return true;
         }
 
         var sourceList = this.getSourceList(source);

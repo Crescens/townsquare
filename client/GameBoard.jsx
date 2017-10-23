@@ -421,6 +421,13 @@ export class InnerGameBoard extends React.Component {
                                     onClick={this.onCardClick}
                                     otherPlayer={otherPlayer}
                                     thisPlayer={thisPlayer}/>
+                                <GameLocation location={thisPlayer.outfit}
+                                    cardLocation={thisPlayer.outfit.cardLocation()} className={thisPlayer.outfit.className}
+                                    onMouseOver={this.onMouseOver}
+                                    onMouseOut={this.onMouseOut}
+                                    onClick={this.onCardClick}
+                                    otherPlayer={otherPlayer}
+                                    thisPlayer={thisPlayer}/>
                         </div>
                         <PlayerRow isMe={!this.state.spectating}
                             additionalPiles={thisPlayer.additionalPiles}

@@ -140,12 +140,8 @@ InnerGameLocation.propTypes = {
     onClick: PropTypes.func,
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,
-<<<<<<< Updated upstream
     order: PropTypes.number,
     otherPlayer: PropTypes.object,
-=======
-    order: PropTypes.int,
->>>>>>> Stashed changes
     sendGameMessage: PropTypes.func,
     style: PropTypes.object,
     thisPlayer: PropTypes.object,
@@ -158,6 +154,6 @@ function mapStateToProps(state) {
     };
 }
 
-const GameLocation = connect(mapStateToProps, actions, null, { withRef: true})(InnerGameLocation);
+const GameLocation = connect(mapStateToProps, actions, null, {withRef: true})(InnerGameLocation);
 
 export default GameLocation;

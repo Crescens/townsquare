@@ -510,7 +510,7 @@ const Costs = {
      * Cost that ensures that the player can still play a Limited card this
      * round.
      */
-    playLimited: function() {
+    /*playLimited: function() {
         return {
             canPay: function(context) {
                 return !context.source.isLimited() || context.player.limitedPlayed < context.player.maxLimited;
@@ -521,7 +521,7 @@ const Costs = {
                 }
             }
         };
-    },
+    },*/
     /**
      * Cost that ensures that the player has not exceeded the maximum usage for
      * an ability.

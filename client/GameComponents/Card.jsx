@@ -4,6 +4,7 @@ import _ from 'underscore';
 import $ from 'jquery';
 //import 'jquery-migrate'; -- Removed due to errors with webpack and I can't figure out why this is still needed
 import 'jquery-nearest';
+import 'react-logger';
 
 import CardMenu from './CardMenu.jsx';
 import CardCounters from './CardCounters.jsx';
@@ -79,7 +80,10 @@ class Card extends React.Component {
 
     onTouchEnd(event) {
         var target = $(event.currentTarget);
-        var nearestPile = target.nearest('.card-pile, .hand, .location');
+        var nearestLocation = target.nearest('.location');
+        var nearestPile = target.nearest('.card-pile, .hand, .player-board');
+
+        console.log(nearestLocation);
 
         var pilePosition = nearestPile.position();
         var cardPosition = target.position();
@@ -89,8 +93,11 @@ class Card extends React.Component {
 
             if(_.includes(nearestPile.attr('class'), 'hand')) {
                 dropTarget = 'hand';
-            //} else if(_.includes(nearestPile.attr('class'), 'location')) {
-            //    dropTarget = 'play area';
+            } else if(_.includes(nearestPile.attr('class'), 'location')) {
+                var location = this.getReactComponentFromDOMNode(nearestPile[0]);
+                dropTarget = location.getKey();
+            } else if(_.includes(nearestPile.attr('class'), 'player-board')) {
+                dropTarget = 'play area';
             } else {
                 var component = this.getReactComponentFromDOMNode(nearestPile[0]);
                 dropTarget = component.props.source;

@@ -17,7 +17,7 @@ function fetchImage(urlPath, code, imagePath, timeout) {
 }
 
 request.get(apiUrl + 'cards', function(error, res, body) {
-    if (error) {
+    if(error) {
         console.error('Unable to fetch cards');
         return;
     }
@@ -32,7 +32,7 @@ request.get(apiUrl + 'cards', function(error, res, body) {
     cards.forEach(function(card) {
         var imagePath = path.join(imageDir, card.code + '.jpg');
 
-        if (card.imagesrc && !fs.existsSync(imagePath)) {
+        if(card.imagesrc && !fs.existsSync(imagePath)) {
             fetchImage(card.imagesrc, card.code, imagePath, i++ * 200);
         }
     });
@@ -49,7 +49,7 @@ request.get(apiUrl + 'cards', function(error, res, body) {
 });
 
 request.get(apiUrl + 'sets', function(error, res, body) {
-    if (error) {
+    if(error) {
         console.error('Unable to fetch packs');
         return;
     }

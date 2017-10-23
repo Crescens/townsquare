@@ -36,7 +36,7 @@ class BaseCard {
         this.name = cardData.name;
         this.facedown = false;
         this.blankCount = 0;
-        this.gamelocation = ''
+        this.gamelocation = '';
 
         this.tokens = {};
         /*this.plotModifierValues = {
@@ -393,6 +393,8 @@ class BaseCard {
         return this.cardData.type_code;
     }
 
+    //This needs to stay as Faction, to return
+    //one of our six factions on Dudes
     getPrintedFaction() {
         return this.cardData.faction_code;
     }
@@ -538,6 +540,12 @@ class BaseCard {
             name: this.cardData.name,
             type: this.getType()
         };
+    }
+
+    isAttachment() {
+        if(!_.isEmpty(_.intersection(['spell', 'goods'],[this.type_code]))) {
+            return true;
+        }
     }
 
     getSummary(activePlayer, hideWhenFaceup) {
