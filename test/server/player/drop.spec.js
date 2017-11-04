@@ -8,7 +8,7 @@ const Player = require('../../../server/game/player.js');
 describe('Player', () => {
     describe('drop()', function() {
         beforeEach(function() {
-            this.gameSpy = jasmine.createSpyObj('game', ['getOtherPlayer', 'raiseEvent', 'raiseMergedEvent', 'playerDecked']);
+            this.gameSpy = jasmine.createSpyObj('game', ['getOtherPlayer', 'raiseEvent', 'raiseMergedEvent', 'playerDecked', 'addGameLocation']);
 
             this.player = new Player('1', 'Player 1', true, this.gameSpy);
             this.player.initialise();
@@ -364,7 +364,7 @@ describe('Player', () => {
             });
 
             it('should return false if the card is a deed', function() {
-                
+
             });
         });
 

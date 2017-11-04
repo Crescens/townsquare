@@ -407,7 +407,6 @@ const Costs = {
         return Costs.all(
             Costs.payReduceableGhostRockCost('play'),
             Costs.expendEvent(),
-            Costs.playLimited(),
             Costs.playMax()
         );
     },
