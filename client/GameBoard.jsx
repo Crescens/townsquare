@@ -415,14 +415,14 @@ export class InnerGameBoard extends React.Component {
                         <div className='play-area' onDragOver={this.onDragOver}
                              onDrop={event => this.onDragDropEvent(event, 'play area')} >
                                 <GameLocation location={{key:'townsquare', name:'Town Square'}}
-                                    cardLocation={false} className='townsquare'
+                                    cardLocation='townsquare' className='townsquare'
                                     onMouseOver={this.onMouseOver}
                                     onMouseOut={this.onMouseOut}
                                     onClick={this.onCardClick}
                                     otherPlayer={otherPlayer}
                                     thisPlayer={thisPlayer}/>
                                 <GameLocation location={thisPlayer.outfit}
-                                    cardLocation={thisPlayer.outfit.cardLocation()} className={thisPlayer.outfit.className}
+                                    cardLocation={thisPlayer.outfit.code} className={thisPlayer.outfit.className}
                                     onMouseOver={this.onMouseOver}
                                     onMouseOut={this.onMouseOut}
                                     onClick={this.onCardClick}

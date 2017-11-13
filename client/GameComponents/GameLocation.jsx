@@ -97,6 +97,8 @@ export class InnerGameLocation extends React.Component {
         var locationClass = 'location';
         var imageClass = 'location-image';
 
+        var isCard = /\d{5}/;
+
         if(!this.props.location) {
             return <div />;
         }
@@ -110,7 +112,7 @@ export class InnerGameLocation extends React.Component {
                     <div className={locationClass} >
                         <div>
                             <span className='location-name'>{this.props.location.name}</span>
-                            { this.cardLocation ? this.getCardLocation(this.props.location) : this.getImageLocation(imageClass) }
+                            { isCard.test(this.props.location.code) ? this.getCardLocation(this.props.location) : this.getImageLocation(imageClass) }
                         </div>
                     </div>
                 </div>);
@@ -131,7 +133,7 @@ export class InnerGameLocation extends React.Component {
 
 InnerGameLocation.displayName = 'GameLocation';
 InnerGameLocation.propTypes = {
-    cardLocation: PropTypes.bool.isRequired,
+    cardLocation: PropTypes.string.isRequired,
     cards: PropTypes.array,
     className: PropTypes.string,
     clearZoom: PropTypes.func,
