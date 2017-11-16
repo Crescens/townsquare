@@ -96,8 +96,10 @@ export class InnerGameLocation extends React.Component {
     getLocation() {
         var locationClass = 'location';
         var imageClass = 'location-image';
+        var frameClass = 'location-frame';
 
-        var isCard = /\d{5}/;
+        var cardRegEx = /\d{5}/;
+        var isCard = cardRegEx.test(this.props.location.code);
 
         if(!this.props.location) {
             return <div />;
@@ -107,13 +109,15 @@ export class InnerGameLocation extends React.Component {
             locationClass += ' ' + this.props.className;
         }
 
+        if(isCard) {
+            frameClass += ' ' + this.props.location.type;
+        }
+
         return (
-                <div className='location-frame' ref='locationFrame'>
+                <div className={frameClass} ref='locationFrame'>
                     <div className={locationClass} >
-                        <div>
-                            <span className='location-name'>{this.props.location.name}</span>
-                            { isCard.test(this.props.location.code) ? this.getCardLocation(this.props.location) : this.getImageLocation(imageClass) }
-                        </div>
+                        <span className='location-name'>{this.props.location.name}</span>
+                        { isCard ? this.getCardLocation(this.props.location) : this.getImageLocation(imageClass) }
                     </div>
                 </div>);
     }
