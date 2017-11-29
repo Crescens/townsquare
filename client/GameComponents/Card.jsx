@@ -83,21 +83,19 @@ class Card extends React.Component {
         var nearestLocation = target.nearest('.location');
         var nearestPile = target.nearest('.card-pile, .hand, .player-board');
 
-        console.log(nearestLocation);
-
         var pilePosition = nearestPile.position();
         var cardPosition = target.position();
 
         if(cardPosition.left + target.width() > pilePosition.left - 10 && cardPosition.left < pilePosition.left + nearestPile.width() + 10) {
             var dropTarget = '';
 
+            console.debug(nearestLocation);
+            console.debug(nearestPile);
+
             if(_.includes(nearestPile.attr('class'), 'hand')) {
                 dropTarget = 'hand';
-            } else if(_.includes(nearestPile.attr('class'), 'location')) {
-                var location = this.getReactComponentFromDOMNode(nearestPile[0]);
-                dropTarget = location.getKey();
             } else if(_.includes(nearestPile.attr('class'), 'player-board')) {
-                dropTarget = 'play area';
+                dropTarget = nearestLocation;
             } else {
                 var component = this.getReactComponentFromDOMNode(nearestPile[0]);
                 dropTarget = component.props.source;
