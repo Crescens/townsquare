@@ -13,6 +13,8 @@ const PlayerPromptState = require('./playerpromptstate.js');
 const StartingHandSize = 5;
 //const DrawPhaseCards = 2;
 
+const uuidmatch = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 class Player extends Spectator {
     constructor(id, user, owner, game) {
         super(id, user);
@@ -739,12 +741,11 @@ class Player extends Spectator {
         }
     }
 
-    betweenLocations(cardId, source, target) {
-        var uuidmatch = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    toGameLocation(cardId, target) {
+
         var ts = /^townsquare$/i;
 
-        if((uuidmatch.test(source) || ts.test(source)) &&
-           (uuidmatch.test(target) || ts.test(target))) {
+        if(uuidmatch.test(target) || ts.test(target)) {
 
             var card = this.findCardByUuid(this.cardsInPlay, cardId);
 
@@ -773,12 +774,6 @@ class Player extends Spectator {
             return false;
         }
 
-        //Moving between locations on the game board will update
-        //by simply changing the gamelocation parameter on the cardId
-        if(this.betweenLocations(cardId, source, target)) {
-            return true;
-        }
-
         var sourceList = this.getSourceList(source);
         var card = this.findCardByUuid(sourceList, cardId);
 
@@ -804,11 +799,17 @@ class Player extends Spectator {
             return false;
         }
 
-        if(target === 'play area' && (card.getType() === 'action' || card.getType() === 'joker')) {
+        if(source === 'hand' && (card.getType() === 'action' || card.getType() === 'joker')) {
             return false;
         }
 
-        if(target === 'play area') {
+        //Moving between locations on the game board will update
+        //by simply changing the gamelocation parameter on the cardId
+        if(this.toGameLocation(cardId, target)) {
+            card.setGameLocation(target);
+        }
+
+        if(target === 'play area' || uuidmatch.test(target)) {
             this.putIntoPlay(card);
         } else {
             /* Ace card
@@ -826,6 +827,10 @@ class Player extends Spectator {
         }
 
         return true;
+    }
+
+    moveDude(cardId) {
+
     }
 
     promptForAttachment(card, playingType) {

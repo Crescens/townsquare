@@ -8187,7 +8187,6 @@ trim-right	.\package-lock.json	/^        "trim-right": "https:\/\/registry.npmjs
 trim-right	.\package-lock.json	/^    "trim-right": {$/;"	f
 tryit	.\package-lock.json	/^        "tryit": "https:\/\/registry.npmjs.org\/tryit\/-\/tryit-1.0.3.tgz"$/;"	f
 tryit	.\package-lock.json	/^    "tryit": {$/;"	f
-ts	.\server\game\player.js	/^        var ts = \/^townsquare$\/i;$/;"	v
 tty-browserify	.\package-lock.json	/^        "tty-browserify": "https:\/\/registry.npmjs.org\/tty-browserify\/-\/tty-browserify-0.0.0.tgz",$/;"	f
 tty-browserify	.\package-lock.json	/^    "tty-browserify": {$/;"	f
 tunnel-agent	.\package-lock.json	/^            "tunnel-agent": "https:\/\/registry.npmjs.org\/tunnel-agent\/-\/tunnel-agent-0.6.0.tgz",$/;"	f

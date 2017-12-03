@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'underscore';
 import 'jquery-nearest';
+import {tryParseJSON} from '../util.js';
 
 import Card from './Card.jsx';
 
@@ -15,6 +16,7 @@ export class InnerGameLocation extends React.Component {
         this.onMouseOut = this.onMouseOut.bind(this);
         this.onMouseOver = this.onMouseOver.bind(this);
         this.onCardClick = this.onCardClick.bind(this);
+        this.onDragDrop = this.onDragDrop.bind(this);
     }
 
     onCardClick(card) {
@@ -27,6 +29,28 @@ export class InnerGameLocation extends React.Component {
 
     onMouseOver(card) {
         this.props.zoomCard(card);
+    }
+
+    onDragDropEvent(event, target) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        var card = event.dataTransfer.getData('Text');
+        if(!card) {
+            return;
+        }
+
+        var dragData = tryParseJSON(card);
+
+        if(!dragData) {
+            return;
+        }
+
+        this.onDragDrop(dragData.card, dragData.source, target);
+    }
+
+    onDragDrop(card, source, target) {
+        this.props.sendGameMessage('drop', card.uuid, source, target);
     }
 
     /*
@@ -125,7 +149,7 @@ export class InnerGameLocation extends React.Component {
     render() {
 
         return (
-            <div className='location-wrapper' style={this.props.style}>
+            <div className='location-wrapper' style={this.props.style} onDrop={event => this.onDragDropEvent(event, this.props.location.uuid)}>
                 {this.getCardsHere(this.props.otherPlayer)}
                 {this.getLocation()}
                 {this.getCardsHere(this.props.thisPlayer)}

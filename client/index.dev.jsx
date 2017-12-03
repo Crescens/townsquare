@@ -4,10 +4,10 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import configureStore from './configureStore';
 import {navigate, login} from './actions';
-import DevTools from './DevTools';
 import 'bootstrap/dist/js/bootstrap';
 import ReduxToastr from 'react-redux-toastr';
 import { AppContainer } from 'react-hot-loader';
+import DevTools from './DevTools';
 
 const store = configureStore();
 
@@ -32,7 +32,7 @@ const render = () => {
                     preventDuplicates
                     position='top-right'
                     transitionIn='fadeIn'
-                    transitionOut='fadeOut'/>  
+                    transitionOut='fadeOut'/>
                 <Application />
                 <DevTools />
             </div>

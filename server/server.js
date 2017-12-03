@@ -43,10 +43,10 @@ class Server {
 
     init() {
         if(!this.isDeveloping) {
-            Raven.config(config.sentryDsn, { release: version }).install();
+            //Raven.config(config.sentryDsn, { release: version }).install();
 
-            app.use(Raven.requestHandler());
-            app.use(Raven.errorHandler());
+            //app.use(Raven.requestHandler());
+            //app.use(Raven.errorHandler());
         }
 
         app.use(session({

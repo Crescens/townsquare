@@ -89,9 +89,6 @@ class Card extends React.Component {
         if(cardPosition.left + target.width() > pilePosition.left - 10 && cardPosition.left < pilePosition.left + nearestPile.width() + 10) {
             var dropTarget = '';
 
-            console.debug(nearestLocation);
-            console.debug(nearestPile);
-
             if(_.includes(nearestPile.attr('class'), 'hand')) {
                 dropTarget = 'hand';
             } else if(_.includes(nearestPile.attr('class'), 'player-board')) {
