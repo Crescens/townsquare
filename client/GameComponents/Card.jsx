@@ -4,6 +4,7 @@ import _ from 'underscore';
 import $ from 'jquery';
 //import 'jquery-migrate'; -- Removed due to errors with webpack and I can't figure out why this is still needed
 import 'jquery-nearest';
+import 'react-logger';
 
 import CardMenu from './CardMenu.jsx';
 import CardCounters from './CardCounters.jsx';
@@ -79,7 +80,8 @@ class Card extends React.Component {
 
     onTouchEnd(event) {
         var target = $(event.currentTarget);
-        var nearestPile = target.nearest('.card-pile, .hand, .location');
+        var nearestLocation = target.nearest('.location');
+        var nearestPile = target.nearest('.card-pile, .hand, .player-board');
 
         var pilePosition = nearestPile.position();
         var cardPosition = target.position();
@@ -89,8 +91,8 @@ class Card extends React.Component {
 
             if(_.includes(nearestPile.attr('class'), 'hand')) {
                 dropTarget = 'hand';
-            } else if(_.includes(nearestPile.attr('class'), 'location')) {
-                dropTarget = 'play area';
+            } else if(_.includes(nearestPile.attr('class'), 'player-board')) {
+                dropTarget = nearestLocation;
             } else {
                 var component = this.getReactComponentFromDOMNode(nearestPile[0]);
                 dropTarget = component.props.source;
@@ -106,7 +108,7 @@ class Card extends React.Component {
     }
 
     isAllowedMenuSource() {
-        return this.props.source === 'play area' || this.props.source === 'agenda' || this.props.source === 'revealed plots';
+        return this.props.source === 'play area' || this.props.source === 'legend' || this.props.source === 'revealed plots';
     }
 
     onClick(event, card) {
@@ -183,6 +185,7 @@ class Card extends React.Component {
         return attachments;
     }
 
+    /*
     getDupes() {
         if(this.props.source !== 'play area') {
             return null;
@@ -208,7 +211,7 @@ class Card extends React.Component {
         });
 
         return dupes;
-    }
+    }*/
 
     getCardOrder() {
         if(!this.props.card.order) {
@@ -334,15 +337,16 @@ Card.propTypes = {
         attached: PropTypes.bool,
         attachments: PropTypes.array,
         baseStrength: PropTypes.number,
+        booted: PropTypes.bool,
         code: PropTypes.string,
         controlled: PropTypes.bool,
         dupes: PropTypes.array,
         facedown: PropTypes.bool,
+        gamelocation: PropTypes.string,
         iconsAdded: PropTypes.array,
         iconsRemoved: PropTypes.array,
         inChallenge: PropTypes.bool,
         inDanger: PropTypes.bool,
-        booted: PropTypes.bool,
         menu: PropTypes.array,
         name: PropTypes.string,
         new: PropTypes.bool,
@@ -365,7 +369,7 @@ Card.propTypes = {
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,
     orientation: PropTypes.oneOf(['horizontal', 'booted', 'vertical']),
-    source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'dead pile', 'draw deck', 'plot deck', 'revealed plots', 'selected plot', 'attachment', 'agenda', 'outfit', 'additional']).isRequired,
+    source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'boothill pile', 'draw deck', 'attachment', 'legend', 'outfit', 'additional']).isRequired,
     style: PropTypes.object,
     wrapped: PropTypes.bool
 };

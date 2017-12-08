@@ -1,12 +1,12 @@
 /*global user, authToken, Raven */
 import React from 'react';
 import {render} from 'react-dom';
-import Application from './Application.jsx';
 import {Provider} from 'react-redux';
 import configureStore from './configureStore';
 import {navigate, login} from './actions';
 import 'bootstrap/dist/js/bootstrap';
 import ReduxToastr from 'react-redux-toastr';
+import Application from './Application.jsx';
 
 import version from '../version.js';
 

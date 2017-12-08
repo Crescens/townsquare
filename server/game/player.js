@@ -13,6 +13,8 @@ const PlayerPromptState = require('./playerpromptstate.js');
 const StartingHandSize = 5;
 //const DrawPhaseCards = 2;
 
+const uuidmatch = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 class Player extends Spectator {
     constructor(id, user, owner, game) {
         super(id, user);
@@ -353,10 +355,7 @@ class Player extends Spectator {
             return;
         }
 
-        /* -- Set to starting wealth
-
-        this.ghostrock = 8;
-        */
+        this.ghostrock = this.outfit.wealth;
     }
 
     /*
@@ -504,45 +503,26 @@ class Player extends Spectator {
             return;
         }
 
-        var dupeCard = this.getDuplicateInPlay(card);
-
-        if(card.getType() === 'attachment' && playingType !== 'setup' && !dupeCard) {
+        //Replace this with a bool on card that tells whether it is an attachment among types
+        if(card.isAttachment() && playingType !== 'setup') {
             this.promptForAttachment(card, playingType);
             return;
         }
 
-        if(dupeCard && playingType !== 'setup') {
-            this.removeCardFromPile(card);
-            dupeCard.addDuplicate(card);
-        } else {
-            // Attachments placed in setup should not be considered to be 'played',
-            // as it will cause then to double their effects when attached later.
-            let isSetupAttachment = playingType === 'setup' && card.getType() === 'attachment';
+        let originalLocation = card.location;
 
-            let originalLocation = card.location;
-
-            card.facedown = this.game.currentPhase === 'setup';
-            card.new = true;
-            this.moveCard(card, 'play area', { isDupe: !!dupeCard });
-            if(card.controller !== this) {
-                card.controller.allCards = _(card.controller.allCards.reject(c => c === card));
-                this.allCards.push(card);
-            }
-            card.controller = this;
-            card.wasAmbush = (playingType === 'ambush');
-
-            if(!dupeCard && !isSetupAttachment) {
-                card.applyPersistentEffects();
-            }
-
-            /* -- No Bestow
-            if(this.game.currentPhase !== 'setup' && card.isBestow()) {
-                this.game.queueStep(new BestowPrompt(this.game, this, card));
-            }
-            */
-
-            this.game.raiseMergedEvent('onCardEntersPlay', { card: card, playingType: playingType, originalLocation: originalLocation });
+        card.facedown = this.game.currentPhase === 'setup';
+        card.new = true;
+        this.moveCard(card, 'play area');
+        if(card.controller !== this) {
+            card.controller.allCards = _(card.controller.allCards.reject(c => c === card));
+            this.allCards.push(card);
         }
+        card.controller = this;
+
+        card.applyPersistentEffects();
+
+        this.game.raiseMergedEvent('onCardEntersPlay', { card: card, playingType: playingType, originalLocation: originalLocation });
     }
 
     setupDone() {
@@ -634,7 +614,7 @@ class Player extends Spectator {
 
     hasUnmappedAttachments() {
         return this.cardsInPlay.any(card => {
-            return card.getType() === 'attachment';
+            return card.isAttachment();
         });
     }
 
@@ -686,6 +666,7 @@ class Player extends Spectator {
     }
 
     isValidDropCombination(source, target) {
+        /*
         if(source === 'plot deck' && target !== 'revealed plots') {
             return false;
         }
@@ -700,8 +681,7 @@ class Player extends Spectator {
 
         if(target === 'revealed plots' && source !== 'plot deck') {
             return false;
-        }
-
+        }*/
         return source !== target;
     }
 
@@ -717,12 +697,7 @@ class Player extends Spectator {
                 return this.boothillPile;
             case 'play area':
                 return this.cardsInPlay;
-            case 'active plot':
-                return _([]);
-            case 'plot deck':
-                return this.plotDeck;
-            case 'revealed plots':
-                return this.plotDiscard;
+                //return this.game.getLocations();
             default:
                 if(this.additionalPiles[source]) {
                     return this.additionalPiles[source].cards;
@@ -734,6 +709,8 @@ class Player extends Spectator {
         this.additionalPiles[name] = _.extend({ cards: _([]) }, properties);
     }
 
+    //play area wraps the main board and the out of town boards
+    //
     updateSourceList(source, targetList) {
         switch(source) {
             case 'hand':
@@ -762,6 +739,34 @@ class Player extends Spectator {
                     this.additionalPiles[source].cards = targetList;
                 }
         }
+    }
+
+    toGameLocation(cardId, target) {
+
+        var ts = /^townsquare$/i;
+
+        if(uuidmatch.test(target) || ts.test(target)) {
+
+            var card = this.findCardByUuid(this.cardsInPlay, cardId);
+
+            if(card.controller !== this) {
+                return false;
+            }
+
+            if(card.getType() !== 'dude') {
+                return false;
+            }
+
+            //let originalLocation = card.gamelocation;
+
+            card.gamelocation = target;
+
+            //this.game.raiseMergedEvent('onCardMovesGameLocation', { card: card, originalLocation: originalLocation, newLocation: target });
+
+            return true;
+        }
+
+        return false;
     }
 
     drop(cardId, source, target) {
@@ -794,21 +799,24 @@ class Player extends Spectator {
             return false;
         }
 
-        if(target === 'boothill pile' && card.getType() !== 'character') {
+        if(source === 'hand' && (card.getType() === 'action' || card.getType() === 'joker')) {
             return false;
         }
 
-        if(target === 'play area' && card.getType() === 'event') {
-            return false;
+        //Moving between locations on the game board will update
+        //by simply changing the gamelocation parameter on the cardId
+        if(this.toGameLocation(cardId, target)) {
+            card.setGameLocation(target);
         }
 
-        if(target === 'play area') {
+        if(target === 'play area' || uuidmatch.test(target)) {
             this.putIntoPlay(card);
         } else {
+            /* Ace card
             if(target === 'boothill pile' && card.location === 'play area') {
                 this.killCharacter(card, false);
                 return true;
-            }
+            } */
 
             if(target === 'discard pile') {
                 this.discardCard(card, false);
@@ -819,6 +827,10 @@ class Player extends Spectator {
         }
 
         return true;
+    }
+
+    moveDude(cardId) {
+
     }
 
     promptForAttachment(card, playingType) {
@@ -914,24 +926,6 @@ class Player extends Spectator {
         });
     }
 
-    /**
-     * @deprecated Use `Game.killCharacter` instead.
-     */
-    killCharacter(card, allowSave = true) {
-        this.game.killCharacter(card, allowSave);
-    }
-
-    getDominance() {
-        let cardStrength = this.cardsInPlay.reduce((memo, card) => {
-            return memo + card.getDominanceStrength();
-        }, 0);
-
-        return cardStrength + this.ghostrock;
-    }
-
-    taxation() {
-        this.ghostrock = 0;
-    }
 
     getTotalControl() {
         var power = this.cardsInPlay.reduce((memo, card) => {
@@ -941,21 +935,8 @@ class Player extends Spectator {
         return power;
     }
 
-    removeAttachment(attachment, allowSave = true) {
-        if(allowSave && !attachment.dupes.isEmpty() && this.removeDuplicate(attachment)) {
-            this.game.addMessage('{0} discards a duplicate to save {1}', this, attachment);
-            return;
-        }
-
-        while(attachment.dupes.size() > 0) {
-            this.removeDuplicate(attachment, true);
-        }
-
-        if(attachment.isTerminal()) {
-            attachment.owner.moveCard(attachment, 'discard pile');
-        } else {
-            attachment.owner.moveCard(attachment, 'hand');
-        }
+    removeAttachment(attachment) {
+        return attachment.owner.moveCard(attachment, 'discard pile');
     }
 
     selectDeck(deck) {
@@ -965,9 +946,9 @@ class Player extends Spectator {
 
         this.outfit.cardData = deck.outfit;
         this.outfit.cardData.name = deck.outfit.name;
-        this.outfit.cardData.code = deck.outfit.value;
+        this.outfit.cardData.code = deck.outfit.code;
         this.outfit.cardData.type_code = 'outfit';
-        this.outfit.cardData.strength = 0;
+        //this.outfit.cardData.strength = 0;
     }
 
     moveCard(card, targetLocation, options = {}) {
@@ -975,7 +956,11 @@ class Player extends Spectator {
 
         var targetPile = this.getSourceList(targetLocation);
 
-        if(!targetPile || targetPile.contains(card)) {
+        if(!targetPile) {
+            return;
+        }
+
+        if(targetPile.contains(card) && card.location !== 'play area') {
             return;
         }
 
@@ -990,16 +975,12 @@ class Player extends Spectator {
                 card: card
             };
 
+            //Assumes that a card being moved from play area is leaving play,
+            //incorrect for DTR
             this.game.raiseMergedEvent('onCardLeftPlay', params, event => {
                 card.attachments.each(attachment => {
                     this.removeAttachment(attachment, false);
                 });
-
-                /*
-                while(card.dupes.size() > 0 && targetLocation !== 'play area') {
-                    this.removeDuplicate(card, true);
-                }
-                */
 
                 event.card.leavesPlay();
 
@@ -1015,18 +996,11 @@ class Player extends Spectator {
             this.game.raiseEvent('onCardLeftHand', card);
         }
 
-        if(card.location === 'active plot') {
-            card.leavesPlay();
-            this.game.raiseMergedEvent('onCardLeftPlay', { player: this, card: card });
-        }
-
         if(card.location !== 'play area') {
             card.moveTo(targetLocation);
         }
 
-        if(targetLocation === 'active plot') {
-            this.activePlot = card;
-        } else if(targetLocation === 'draw deck' && !options.bottom) {
+        if(targetLocation === 'draw deck' && !options.bottom) {
             targetPile.unshift(card);
         } else {
             targetPile.push(card);
@@ -1040,6 +1014,8 @@ class Player extends Spectator {
             this.game.raiseMergedEvent('onCardPlaced', { card: card, location: targetLocation, player: this });
         }
     }
+
+    // Must change onCardKneeled and onCardStood events before changing these functions
 
     kneelCard(card) {
         if(card.booted) {
@@ -1065,23 +1041,6 @@ class Player extends Spectator {
         });
     }
 
-    removeDuplicate(card, force = false) {
-        if(card.dupes.isEmpty()) {
-            return false;
-        }
-
-        var dupe = card.removeDuplicate(force);
-        if(!dupe) {
-            return false;
-        }
-
-        dupe.moveTo('discard pile');
-        dupe.owner.discardPile.push(dupe);
-        this.game.raiseEvent('onDupeDiscarded', this, card, dupe);
-
-        return true;
-    }
-
     removeCardFromPile(card) {
         if(card.controller !== this) {
             card.controller.removeCardFromPile(card);
@@ -1100,14 +1059,7 @@ class Player extends Spectator {
         }
     }
 
-    getTotalInitiative() {
-        if(!this.activePlot) {
-            return 0;
-        }
-
-        return this.activePlot.getInitiative();
-    }
-
+    /*
     getTotalIncome() {
         if(!this.activePlot) {
             return 0;
@@ -1115,6 +1067,7 @@ class Player extends Spectator {
 
         return this.activePlot.getIncome();
     }
+
 
     getTotalReserve() {
         if(!this.activePlot) {
@@ -1127,6 +1080,7 @@ class Player extends Spectator {
     getClaim() {
         return this.activePlot ? this.activePlot.getClaim() : 0;
     }
+    */
 
     isBelowReserve() {
         return this.hand.size() <= this.getTotalReserve();
@@ -1182,25 +1136,21 @@ class Player extends Spectator {
             legend: this.legend ? this.legend.getSummary(activePlayer) : undefined,
             //bannerCards: this.getSummaryForCardList(this.bannerCards, activePlayer),
             cardsInPlay: this.getSummaryForCardList(this.cardsInPlay, activePlayer),
-            claim: this.getClaim(),
+            //claim: this.getClaim(),
             boothillPile: this.getSummaryForCardList(this.boothillPile, activePlayer),
             discardPile: this.getSummaryForCardList(this.discardPile, activePlayer),
             disconnected: this.disconnected,
             outfit: this.outfit.getSummary(activePlayer),
             firstPlayer: this.firstPlayer,
-            ghostrock: !isActivePlayer && this.phase === 'setup' ? 0 : this.ghostrock,
+            ghostrock: this.ghostrock,
             hand: this.getSummaryForCardList(this.hand, activePlayer, true),
             id: this.id,
             left: this.left,
             numDrawCards: this.drawDeck.size(),
             name: this.name,
-            //numPlotCards: this.plotDeck.size(),
             phase: this.phase,
-            //plotDeck: this.getSummaryForCardList(this.plotDeck, activePlayer, true),
-            //plotDiscard: this.getSummaryForCardList(this.plotDiscard, activePlayer),
-            //plotSelected: !!this.selectedPlot,
             promptedActionWindows: this.promptedActionWindows,
-            reserve: this.getTotalReserve(),
+            //reserve: this.getTotalReserve(),
             totalControl: this.getTotalControl(),
             user: _.omit(this.user, ['password', 'email'])
         };

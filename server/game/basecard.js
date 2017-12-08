@@ -10,7 +10,7 @@ const CardReaction = require('./cardreaction.js');
 const CustomPlayAction = require('./customplayaction.js');
 const EventRegistrar = require('./eventregistrar.js');
 
-const SpecialKeywords = [
+//const SpecialKeywords = [
 //  'Difficulty'
 /*  'ambush',
     'insight',
@@ -21,7 +21,7 @@ const SpecialKeywords = [
     'terminal',
     'limited'
 */
-];
+//];
 const LocationsWithEventHandling = ['play area', 'outfit', 'legend'];
 
 class BaseCard {
@@ -36,6 +36,7 @@ class BaseCard {
         this.name = cardData.name;
         this.facedown = false;
         this.blankCount = 0;
+        this.gamelocation = '';
 
         this.tokens = {};
         /*this.plotModifierValues = {
@@ -57,8 +58,10 @@ class BaseCard {
         this.parseKeywords(cardData.keywords || '');
         this.setupCardAbilities(AbilityDsl);
 
+        /*
         this.factions = {};
         this.addFaction(cardData.faction_code);
+        */
     }
 
     /*
@@ -156,6 +159,12 @@ class BaseCard {
         this.abilities.actions.push(action);
     }
 
+    //Comprehensive Rules React Priorities
+    // 1) Traits with "instead"
+    // 2) Reacts with "instead"
+    // 3) Other traits
+    // 4) Other reacts
+    //
     reaction(properties) {
         var reaction = new CardReaction(this.game, this, properties);
         this.abilities.reactions.push(reaction);
@@ -384,6 +393,8 @@ class BaseCard {
         return this.cardData.type_code;
     }
 
+    //This needs to stay as Faction, to return
+    //one of our six factions on Dudes
     getPrintedFaction() {
         return this.cardData.faction_code;
     }
@@ -501,6 +512,18 @@ class BaseCard {
         }
     }
 
+    setGameLocation(location) {
+        if(!location) {
+            return;
+        }
+
+        this.gamelocation = location;
+    }
+
+    getGameLocation() {
+        return this.gamelocation;
+    }
+
     onClick(player) {
         var action = _.find(this.abilities.actions, action => action.isClickToActivate());
         if(action) {
@@ -519,6 +542,12 @@ class BaseCard {
         };
     }
 
+    isAttachment() {
+        if(!_.isEmpty(_.intersection(['spell', 'goods'],[this.type_code]))) {
+            return true;
+        }
+    }
+
     getSummary(activePlayer, hideWhenFaceup) {
         let isActivePlayer = activePlayer === this.owner;
 
@@ -531,6 +560,7 @@ class BaseCard {
             code: this.cardData.code,
             controlled: this.owner !== this.controller,
             facedown: this.facedown,
+            gamelocation: this.gamelocation,
             menu: this.getMenu(),
             name: this.cardData.label,
             new: this.new,

@@ -205,7 +205,7 @@ class PlayerRow extends React.Component {
                 <CardCollection className='discard' title='Discard' source='discard pile' cards={this.props.discardPile}
                                 onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} onCardClick={this.props.onCardClick}
                                 popupLocation={this.props.isMe || this.props.spectating ? 'top' : 'bottom'} onDragDrop={this.props.onDragDrop} />
-                <CardCollection className='dead' title='Dead' source='dead pile' cards={this.props.deadPile}
+                <CardCollection className='boothill' title='Boot Hill' source='boothill pile' cards={this.props.boothillPile}
                                 onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} onCardClick={this.props.onCardClick}
                                 popupLocation={this.props.isMe || this.props.spectating ? 'top' : 'bottom'} onDragDrop={this.props.onDragDrop} orientation='booted' />
                   {this.getOutOfGamePile()}
@@ -218,7 +218,8 @@ class PlayerRow extends React.Component {
 PlayerRow.displayName = 'PlayerRow';
 PlayerRow.propTypes = {
     additionalPiles: PropTypes.object,
-    deadPile: PropTypes.array,
+    boothillPile: PropTypes.array,
+    control: PropTypes.number,
     discardPile: PropTypes.array,
     drawDeck: PropTypes.array,
     hand: PropTypes.array,
@@ -232,8 +233,7 @@ PlayerRow.propTypes = {
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,
     onShuffleClick: PropTypes.func,
-    plotDeck: PropTypes.array,
-    power: PropTypes.number,
+    //plotDeck: PropTypes.array,
     showDrawDeck: PropTypes.bool,
     spectating: PropTypes.bool
 };

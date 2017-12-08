@@ -277,7 +277,7 @@ class ChatCommands {
         this.game.promptForSelect(player, {
             activePromptTitle: 'Select a character',
             waitingPromptTitle: 'Waiting for opponent to give control',
-            cardCondition: card => ['play area', 'discard pile', 'dead pile'].includes(card.location) && card.controller === player,
+            cardCondition: card => ['play area', 'discard pile', 'boothill pile'].includes(card.location) && card.controller === player,
             onSelect: (p, card) => {
                 var otherPlayer = this.game.getOtherPlayer(player);
                 if(!otherPlayer) {

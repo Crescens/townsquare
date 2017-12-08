@@ -5,8 +5,8 @@ class SetupCardAction extends BaseAbility {
     constructor() {
         super({
             cost: [
-                Costs.payPrintedGhostRockCost(),
-                Costs.playLimited()
+                Costs.payPrintedGhostRockCost()
+                //Costs.playLimited()
             ]
         });
         this.title = 'Setup';

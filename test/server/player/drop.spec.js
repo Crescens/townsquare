@@ -2,12 +2,13 @@
 /* eslint camelcase: 0, no-invalid-this: 0 */
 
 const _ = require('underscore');
+const uuid = require('uuid');
 const Player = require('../../../server/game/player.js');
 
 describe('Player', () => {
     describe('drop()', function() {
         beforeEach(function() {
-            this.gameSpy = jasmine.createSpyObj('game', ['getOtherPlayer', 'raiseEvent', 'raiseMergedEvent', 'playerDecked']);
+            this.gameSpy = jasmine.createSpyObj('game', ['getOtherPlayer', 'raiseEvent', 'raiseMergedEvent', 'playerDecked', 'addGameLocation']);
 
             this.player = new Player('1', 'Player 1', true, this.gameSpy);
             this.player.initialise();
@@ -21,7 +22,6 @@ describe('Player', () => {
             this.cardSpy.uuid = '1111';
             this.cardSpy.controller = this.cardSpy.owner = this.player;
             this.cardSpy.attachments = _([]);
-            this.cardSpy.dupes = _([]);
         });
 
         describe('when dragging a card from hand to play area', function() {
@@ -42,9 +42,9 @@ describe('Player', () => {
                 });
             });
 
-            describe('when the card is in hand and a character', function() {
+            describe('when the card is in hand and a dude', function() {
                 beforeEach(function() {
-                    this.cardSpy.getType.and.returnValue('character');
+                    this.cardSpy.getType.and.returnValue('dude');
 
                     this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', 'play area');
                 });
@@ -68,9 +68,9 @@ describe('Player', () => {
                 });
             });
 
-            describe('when the card is in hand and an event', function() {
+            describe('when the card is in hand and an action', function() {
                 beforeEach(function() {
-                    this.cardSpy.getType.and.returnValue('event');
+                    this.cardSpy.getType.and.returnValue('action');
 
                     this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', 'play area');
                 });
@@ -81,6 +81,7 @@ describe('Player', () => {
                 });
             });
 
+            /* Extend for spells/goods/gadgets
             describe('when the card is in hand and an attachment', function() {
                 beforeEach(function() {
                     this.cardSpy.getType.and.returnValue('attachment');
@@ -92,7 +93,7 @@ describe('Player', () => {
                     expect(this.dropSucceeded).toBe(true);
                     expect(this.player.putIntoPlay).toHaveBeenCalledWith(this.cardSpy);
                 });
-            });
+            });*/
         });
 
         describe('when dragging a card from hand to the boothill pile', function() {
@@ -111,6 +112,8 @@ describe('Player', () => {
                     expect(this.player.boothillPile.size()).toBe(0);
                 });
             });
+
+            /* No special cases for Boot Hill, all types of cards can go there
 
             describe('when the card is in hand and is a location', function() {
                 beforeEach(function() {
@@ -149,16 +152,16 @@ describe('Player', () => {
                     expect(this.dropSucceeded).toBe(false);
                     expect(this.player.boothillPile.size()).toBe(0);
                 });
-            });
+            });*/
 
-            describe('when the card is in hand and is a character', function() {
+            describe('when the card is in hand and is a dude', function() {
                 beforeEach(function() {
-                    this.cardSpy.getType.and.returnValue('character');
+                    this.cardSpy.getType.and.returnValue('dude');
 
                     this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', 'boothill pile');
                 });
 
-                it('should return true and put the character in the boothill pile', function() {
+                it('should return true and put the dude in the boothill pile', function() {
                     expect(this.dropSucceeded).toBe(true);
                     expect(this.player.boothillPile.size()).toBe(1);
                 });
@@ -221,14 +224,14 @@ describe('Player', () => {
                 });
             });
 
-            describe('when the card is in hand and is a character', function() {
+            describe('when the card is in hand and is a dude', function() {
                 beforeEach(function() {
-                    this.cardSpy.getType.and.returnValue('character');
+                    this.cardSpy.getType.and.returnValue('dude');
 
                     this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', 'discard pile');
                 });
 
-                it('should return true and put the character in the boothill pile', function() {
+                it('should return true and put the dude in the boothill pile', function() {
                     expect(this.dropSucceeded).toBe(true);
                     expect(this.player.discardCard).toHaveBeenCalled();
                 });
@@ -288,9 +291,9 @@ describe('Player', () => {
                 });
             });
 
-            describe('when the card is in hand and is a character', function() {
+            describe('when the card is in hand and is a dude', function() {
                 beforeEach(function() {
-                    this.cardSpy.getType.and.returnValue('character');
+                    this.cardSpy.getType.and.returnValue('dude');
                     this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', 'draw deck');
                 });
 
@@ -348,6 +351,25 @@ describe('Player', () => {
             });
         });
 
+        describe('when dragging a card between game locations', function() {
+            beforeEach(function () {
+
+                this.player.cardsInPlay.push(this.cardSpy);
+
+                this.cardSpy.location = 'play area';
+                this.cardSpy.gamelocation = uuid.v1();
+
+                var gamelocation = uuid.v1();
+                this.gameSpy.addGameLocation(gamelocation);
+            });
+
+            it('should return false if the card is a deed', function() {
+
+            });
+        });
+
+        /* Avoid Kill Character function for now
+
         describe('event order', function() {
             beforeEach(function() {
                 this.player.cardsInPlay.push(this.cardSpy);
@@ -362,6 +384,6 @@ describe('Player', () => {
                 expect(result).toBe(true);
                 expect(this.player.killCharacter).toHaveBeenCalledWith(this.cardSpy, false);
             });
-        });
+        });*/
     });
 });

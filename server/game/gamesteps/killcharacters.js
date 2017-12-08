@@ -72,7 +72,7 @@ class KillCharacters extends BaseStep {
             ordered: true,
             multiSelect: true,
             numCards: _.size(cardsOwnedByPlayer),
-            activePromptTitle: 'Select order to place cards in dead pile (top first)',
+            activePromptTitle: 'Select order to place cards in boothill pile (top first)',
             cardCondition: card => cardsOwnedByPlayer.includes(card),
             onSelect: (player, selectedCards) => {
                 if(cardsOwnedByPlayer.length !== selectedCards.length) {
@@ -95,7 +95,7 @@ class KillCharacters extends BaseStep {
             return;
         }
 
-        player.moveCard(card, 'dead pile');
+        player.moveCard(card, 'boothill pile');
         this.game.addMessage('{0} kills {1}', player, card);
     }
 }

@@ -5,8 +5,8 @@ class MarshalCardAction extends BaseAbility {
     constructor() {
         super({
             cost: [
-                Costs.payReduceableGhostRockCost('marshal'),
-                Costs.playLimited()
+                Costs.payReduceableGhostRockCost('marshal')
+                //Costs.playLimited()
             ]
         });
         this.title = 'Marshal';
