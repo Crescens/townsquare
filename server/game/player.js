@@ -23,6 +23,7 @@ class Player extends Spectator {
         //this.plotDeck = _([]);
         //this.plotDiscard = _([]);
         this.hand = _([]);
+        this.drawhand = _([]);
         this.cardsInPlay = _([]);
         this.boothillPile = _([]);
         this.discardPile = _([]);
@@ -203,18 +204,36 @@ class Player extends Spectator {
         return claim;
     }*/
 
-    drawCardsToHand(numCards) {
+    drawCardsToHand(target, numCards) {
+
+        if(target !== 'hand' && target !== 'draw hand') {
+            return false;
+        }
+
+        var remainder = 0;
+
         if(numCards > this.drawDeck.size()) {
+            remainder = numCards - this.drawDeck.size();
             numCards = this.drawDeck.size();
         }
 
         var cards = this.drawDeck.first(numCards);
         _.each(cards, card => {
-            this.moveCard(card, 'hand');
+            this.moveCard(card, target);
         });
 
         if(this.drawDeck.size() === 0) {
-            this.game.playerDecked(this);
+            this.shuffleDiscardToDrawDeck();
+        }
+
+        if(remainder > 0) {
+            var remainingCards = this.drawDeck.first(remainder);
+
+            _.each(remainingCards, card => {
+                this.moveCard(card, target);
+            });
+
+            cards = _.union(cards, remainingCards);
         }
 
         return (cards.length > 1) ? cards : cards[0];
@@ -238,6 +257,15 @@ class Player extends Spectator {
 
     shuffleDrawDeck() {
         this.drawDeck = _(this.drawDeck.shuffle());
+    }
+
+    shuffleDiscardToDrawDeck() {
+
+        _.each(this.discardPile, card => {
+            this.moveCard(card, 'draw deck');
+        });
+
+        this.shuffleDrawDeck();
     }
 
     discardFromDraw(number, callback = () => true) {
@@ -324,8 +352,9 @@ class Player extends Spectator {
             this.drawDeck.push(card);
         });
         this.hand = _([]);
+        //Put Starting Posse in Hand Somewhere Here
         this.shuffleDrawDeck();
-        this.drawCardsToHand(StartingHandSize);
+        this.drawCardsToHand(StartingHandSize); //change with starting posse
     }
 
     prepareDecks() {
@@ -689,6 +718,8 @@ class Player extends Spectator {
         switch(source) {
             case 'hand':
                 return this.hand;
+            case 'draw hand':
+                return this.drawhand;
             case 'draw deck':
                 return this.drawDeck;
             case 'discard pile':
@@ -748,6 +779,11 @@ class Player extends Spectator {
         if(uuidmatch.test(target) || ts.test(target)) {
 
             var card = this.findCardByUuid(this.cardsInPlay, cardId);
+
+            if(!card) {
+                this.findCardByUuid(this.hand, cardId);
+            }
+
 
             if(card.controller !== this) {
                 return false;
@@ -1082,9 +1118,10 @@ class Player extends Spectator {
     }
     */
 
+    /*
     isBelowReserve() {
         return this.hand.size() <= this.getTotalReserve();
-    }
+    }*/
 
     setSelectedCards(cards) {
         this.promptState.setSelectedCards(cards);
@@ -1140,6 +1177,7 @@ class Player extends Spectator {
             boothillPile: this.getSummaryForCardList(this.boothillPile, activePlayer),
             discardPile: this.getSummaryForCardList(this.discardPile, activePlayer),
             disconnected: this.disconnected,
+            drawhand: this.getSummaryForCardList(this.drawhand, activePlayer, true),
             outfit: this.outfit.getSummary(activePlayer),
             firstPlayer: this.firstPlayer,
             ghostrock: this.ghostrock,
