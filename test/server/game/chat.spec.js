@@ -77,7 +77,7 @@ describe('the Game', function() {
                         this.game.chat(this.player1.name, '/draw');
 
                         expect(this.game.messages.length).toBe(1);
-                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith(1);
+                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith('hand', 1);
                     });
                 });
 
@@ -86,7 +86,7 @@ describe('the Game', function() {
                         this.game.chat(this.player1.name, '/draw test');
 
                         expect(this.game.messages.length).toBe(1);
-                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith(1);
+                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith('hand', 1);
                     });
                 });
 
@@ -95,7 +95,7 @@ describe('the Game', function() {
                         this.game.chat(this.player1.name, '/draw -1');
 
                         expect(this.game.messages.length).toBe(1);
-                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith(1);
+                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith('hand', 1);
                     });
                 });
 
@@ -104,13 +104,63 @@ describe('the Game', function() {
                         this.game.chat(this.player1.name, '/draw 4');
 
                         expect(this.game.messages.length).toBe(1);
-                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith(4);
+                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith('hand', 4);
                     });
                 });
 
                 describe('half way through a message', function() {
                     it('should not trigger the /draw command', function() {
                         this.game.chat(this.player1.name, 'test test /draw test');
+
+                        expect(this.player1.drawCardsToHand).not.toHaveBeenCalled();
+                    });
+                });
+            });
+
+            describe('with a /drawhand command', function() {
+                beforeEach(function() {
+                    spyOn(this.player1, 'drawCardsToHand');
+                });
+
+                describe('with no arguments', function() {
+                    it('should draw 1 card to draw hand', function () {
+                        this.game.chat(this.player1.name, '/drawhand');
+
+                        expect(this.game.messages.length).toBe(1);
+                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith('draw hand', 1);
+                    });
+                });
+
+                describe('with a string argument', function() {
+                    it('should draw 1 card to draw hand', function () {
+                        this.game.chat(this.player1.name, '/drawhand test');
+
+                        expect(this.game.messages.length).toBe(1);
+                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith('draw hand', 1);
+                    });
+                });
+
+                describe('with a negative argument', function() {
+                    it('should draw 1 card to draw hand', function () {
+                        this.game.chat(this.player1.name, '/drawhand -1');
+
+                        expect(this.game.messages.length).toBe(1);
+                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith('draw hand', 1);
+                    });
+                });
+
+                describe('with a valid argument', function() {
+                    it('should draw 4 cards to draw hand', function () {
+                        this.game.chat(this.player1.name, '/drawhand 4');
+
+                        expect(this.game.messages.length).toBe(1);
+                        expect(this.player1.drawCardsToHand).toHaveBeenCalledWith('draw hand', 4);
+                    });
+                });
+
+                describe('half way through a message', function() {
+                    it('should not trigger the /drawhand command', function() {
+                        this.game.chat(this.player1.name, 'test test /drawhand test');
 
                         expect(this.player1.drawCardsToHand).not.toHaveBeenCalled();
                     });

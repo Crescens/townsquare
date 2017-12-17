@@ -5,6 +5,7 @@ class ChatCommands {
         this.game = game;
         this.commands = {
             '/draw': this.draw,
+            '/drawhand': this.drawhand,
             '/power': this.power,
             '/kill': this.kill,
             '/blank': this.blank,
@@ -55,7 +56,15 @@ class ChatCommands {
 
         this.game.addMessage('{0} uses the /draw command to draw {1} cards to their hand', player, num);
 
-        player.drawCardsToHand(num);
+        player.drawCardsToHand('hand', num);
+    }
+
+    drawhand(player, args) {
+        var num = this.getNumberOrDefault(args[1], 1);
+
+        this.game.addMessage('{0} uses the /drawhand command to draw {1} cards to their draw hand', player, num);
+
+        player.drawCardsToHand('draw hand', num);
     }
 
     power(player, args) {

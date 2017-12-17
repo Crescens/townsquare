@@ -80,14 +80,14 @@ class PlayerRow extends React.Component {
         }
     }
 
-    getHand(needsSquish) {
+    getHand(target, needsSquish) {
         var cardIndex = 0;
-        var handLength = this.props.hand ? this.props.hand.length : 0;
+        var handLength = target ? target.length : 0;
         var requiredWidth = handLength * 64;
         var overflow = requiredWidth - 342;
         var offset = overflow / (handLength - 1);
 
-        var hand = _.map(this.props.hand, card => {
+        var hand = _.map(target, card => {
             var left = (64 - offset) * cardIndex++;
 
             var style = {};
@@ -97,7 +97,7 @@ class PlayerRow extends React.Component {
                 };
             }
 
-            return (<Card key={card.uuid} card={card} style={style} disableMouseOver={!this.props.isMe} source='hand'
+            return (<Card key={card.uuid} card={card} style={style} disableMouseOver={!this.props.isMe} source={(target === this.props.hand) ? 'hand' : 'draw hand'}
                          onMouseOver={this.props.onMouseOver}
                          onMouseOut={this.props.onMouseOut}
                          onClick={this.props.onCardClick}
@@ -176,7 +176,8 @@ class PlayerRow extends React.Component {
             className += ' squish';
         }
 
-        var hand = this.getHand(needsSquish);
+        var hand = this.getHand(this.props.hand, needsSquish);
+        var drawHand = this.getHand(this.props.drawHand, needsSquish);
 
         var drawDeckMenu = [
             { text: 'Show', handler: this.onShowDeckClick, showPopup: true },
@@ -209,6 +210,13 @@ class PlayerRow extends React.Component {
                                 onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} onCardClick={this.props.onCardClick}
                                 popupLocation={this.props.isMe || this.props.spectating ? 'top' : 'bottom'} onDragDrop={this.props.onDragDrop} orientation='booted' />
                   {this.getOutOfGamePile()}
+
+                  <div className={className} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} onDrop={(event) => this.onDragDrop(event, 'hand')}>
+                      <div className='panel-header'>
+                          {'Draw Hand (' + drawHand.length + ')'}
+                      </div>
+                      {drawHand}
+                  </div>
                 </div>
             </div>
         );
@@ -222,6 +230,7 @@ PlayerRow.propTypes = {
     control: PropTypes.number,
     discardPile: PropTypes.array,
     drawDeck: PropTypes.array,
+    drawHand: PropTypes.array,
     hand: PropTypes.array,
     isMe: PropTypes.bool,
     numDrawCards: PropTypes.number,

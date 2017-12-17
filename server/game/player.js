@@ -23,7 +23,7 @@ class Player extends Spectator {
         //this.plotDeck = _([]);
         //this.plotDiscard = _([]);
         this.hand = _([]);
-        this.drawhand = _([]);
+        this.drawHand = _([]);
         this.cardsInPlay = _([]);
         this.boothillPile = _([]);
         this.discardPile = _([]);
@@ -719,7 +719,7 @@ class Player extends Spectator {
             case 'hand':
                 return this.hand;
             case 'draw hand':
-                return this.drawhand;
+                return this.drawHand;
             case 'draw deck':
                 return this.drawDeck;
             case 'discard pile':
@@ -1177,7 +1177,7 @@ class Player extends Spectator {
             boothillPile: this.getSummaryForCardList(this.boothillPile, activePlayer),
             discardPile: this.getSummaryForCardList(this.discardPile, activePlayer),
             disconnected: this.disconnected,
-            drawhand: this.getSummaryForCardList(this.drawhand, activePlayer, true),
+            drawHand: this.getSummaryForCardList(this.drawHand, activePlayer, true),
             outfit: this.outfit.getSummary(activePlayer),
             firstPlayer: this.firstPlayer,
             ghostrock: this.ghostrock,
