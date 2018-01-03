@@ -33,6 +33,13 @@ Please follow the style of the existing code as much as possible.
 Recommend set up linting with .eslintrc configuration in the project.
 
 
+## Architecture Notes
+
+**Server**
+
+**Client**
+
+
 ## Development (Unmodified from TheIronThrone repo)
 
 The game uses mongodb as storage so you'll need that installed and running.
