@@ -3,6 +3,7 @@ const _ = require('underscore');
 const Spectator = require('./spectator.js');
 const DrawCard = require('./drawcard.js');
 const Deck = require('./deck.js');
+const HandRank = require('./handrank.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 //const BestowPrompt = require('./gamesteps/bestowprompt.js');
 //const ChallengeTracker = require('./challengetracker.js');
@@ -364,7 +365,6 @@ class Player extends Spectator {
         this.legend = preparedDeck.legend;
         this.outfit = preparedDeck.outfit;
         this.drawDeck = _(preparedDeck.drawCards);
-        //this.bannerCards = _(preparedDeck.bannerCards);
         this.allCards = _(preparedDeck.allCards);
     }
 
@@ -741,7 +741,6 @@ class Player extends Spectator {
     }
 
     //play area wraps the main board and the out of town boards
-    //
     updateSourceList(source, targetList) {
         switch(source) {
             case 'hand':

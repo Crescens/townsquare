@@ -7162,6 +7162,7 @@ regjsparser	.\package-lock.json	/^        "regjsparser": "https:\/\/registry.npm
 regjsparser	.\package-lock.json	/^    "regjsparser": {$/;"	f
 relateurl	.\package-lock.json	/^        "relateurl": "https:\/\/registry.npmjs.org\/relateurl\/-\/relateurl-0.2.7.tgz",$/;"	f
 relateurl	.\package-lock.json	/^    "relateurl": {$/;"	f
+remainder	.\server\game\player.js	/^        var remainder = 0;$/;"	v
 remoteRoot	.\.vscode\launch.json	/^            "remoteRoot": null$/;"	f
 remove-trailing-separator	.\package-lock.json	/^        "remove-trailing-separator": "https:\/\/registry.npmjs.org\/remove-trailing-separator\/-\/remove-trailing-separator-1.1.0.tgz"$/;"	f
 remove-trailing-separator	.\package-lock.json	/^    "remove-trailing-separator": {$/;"	f

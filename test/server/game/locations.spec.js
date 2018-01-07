@@ -56,6 +56,4 @@ describe('Game', function() {
             });
         });
     });
-
-    describe
 });
