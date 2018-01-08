@@ -1,4 +1,4 @@
-const _ = require('underscore');
+const _ = require('lodash');
 
 /**
  * Class to evaluate hand rank from a hand of cards.
@@ -8,9 +8,6 @@ class HandRank {
     constructor(hand) {
 
         this.modifier = 0;
-        this.rank = 0;
-        this.bestlegal = ([]);
-        this.bestcheating = ([]);
 
         if(!hand) {
             return;
@@ -20,6 +17,14 @@ class HandRank {
             return;
         }
 
+        this.pokerhand = this.PokerHand(hand);
+
+        this.GetRank().then((rank) => {
+            this.rank = rank;
+        });
+    }
+
+    async _initialize() {
 
         this.handEvaluators = [
             this.Jokers,
@@ -36,12 +41,9 @@ class HandRank {
             this.HighCard
         ];
 
-        let pokerhand = this.PokerHand(hand);
-
         for(let i = 0; i < 12; i++) {
-            this.handEvaluators[i](pokerhand);
+            this.handEvaluators[i](this.pokerhand);
         }
-
     }
 
     Jokers(hand) {
@@ -49,15 +51,21 @@ class HandRank {
     }
 
     DeadMansHand(hand) {
+        /*
         let dmh = [{value: 1, suit: 'spades'},
                    {value: 1, suit: 'clubs'},
                    {value: 8, suit: 'spades'},
                    {value: 8, suit: 'clubs'},
                    {value: 11, suit: 'diamonds'}];
 
-        let diff = _.difference(dmh, hand);
+        let diff = _.intersectionBy(dmh, hand, ['value', 'suit']);
 
-        console.log(diff);
+        if(diff.length === 0) {
+
+            this.rank = 11;
+        }
+        */
+        return 11;
     }
 
     PokerHand(hand) {
@@ -88,10 +96,12 @@ class HandRank {
 
     OnePair() {}
 
-    HighCard() {
+    HighCard() {}
 
-        return true;
+    async GetRank() {
+        return await this._initialize();
     }
+
 }
 
 

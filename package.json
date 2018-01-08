@@ -39,6 +39,7 @@
     "jquery-nearest": "^1.4.0",
     "jsonwebtoken": "^7.1.9",
     "karma-webpack": "^2.0.3",
+    "lodash": "^4.17.4",
     "moment": "^2.15.0",
     "mongodb": "^2.2.9",
     "mongoskin": "^2.1.0",

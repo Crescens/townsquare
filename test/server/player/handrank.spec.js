@@ -22,13 +22,13 @@ describe('Game', function() {
     describe('HandRank()', function() {
         describe('called with no argument', function() {
             it('returns an invalid hand rank.', function() {
-                expect(new HandRank().rank).toBe(0);
+                expect(new HandRank().Rank()).toBe(0);
             });
         });
 
         describe('called with an argument that is not an array', function() {
             it('returns an invalid hand rank.', function() {
-                expect(new HandRank(1).rank).toBe(0);
+                expect(new HandRank(1).Rank()).toBe(0);
             });
         });
 
@@ -69,7 +69,8 @@ describe('Game', function() {
             });
 
             it('should return a Hand Rank of 11', function() {
-                expect(new HandRank(this.hand).rank).toBe(11);
+                let handrank = new HandRank(this.hand);
+                expect(handrank.Rank()).toBe(11);
             });
 
         });
