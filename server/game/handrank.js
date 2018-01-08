@@ -22,6 +22,7 @@ class HandRank {
 
 
         this.handEvaluators = [
+            this.Jokers,
             this.DeadMansHand,
             this.FiveOfAKind,
             this.StraightFlush,
@@ -35,17 +36,39 @@ class HandRank {
             this.HighCard
         ];
 
-        for(let i = 0; i < 11; i++) {
+        let pokerhand = this.PokerHand(hand);
 
-            this.handEvaluators[i]();
-
+        for(let i = 0; i < 12; i++) {
+            this.handEvaluators[i](pokerhand);
         }
 
     }
 
-    Jokers() {}
+    Jokers(hand) {
 
-    DeadMansHand() {}
+    }
+
+    DeadMansHand(hand) {
+        let dmh = [{value: 1, suit: 'spades'},
+                   {value: 1, suit: 'clubs'},
+                   {value: 8, suit: 'spades'},
+                   {value: 8, suit: 'clubs'},
+                   {value: 11, suit: 'diamonds'}];
+
+        let diff = _.difference(dmh, hand);
+
+        console.log(diff);
+    }
+
+    PokerHand(hand) {
+        let strippedhand = [];
+
+        _.each(hand, (card) => {
+            strippedhand.push({value: card.value, suit: card.suit});
+        });
+
+        return strippedhand;
+    }
 
     FiveOfAKind() {}
 

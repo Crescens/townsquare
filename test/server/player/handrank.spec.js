@@ -85,7 +85,7 @@ class Card {
         if(rank === 'A') {
             this.value = 1;
         } else if(rank >= 2 && rank <= 10) {
-            this.value = rank;
+            this.value = parseInt(rank);
         } else if(rank === 'J') {
             this.value = 11;
         } else if(rank === 'Q') {
@@ -106,7 +106,7 @@ class Card {
         } else if(suit === 'H') {
             this.suit = 'hearts';
         } else if(suit === 'D') {
-            this.suit === 'diamonds';
+            this.suit = 'diamonds';
         } else {
             throw 'invalid argument';
         }
