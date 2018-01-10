@@ -13,6 +13,7 @@ AbilityLimit.perRound	.\server\game\abilitylimit.js	/^AbilityLimit.perRound = fu
 AbilityLimit.repeatable	.\server\game\abilitylimit.js	/^AbilityLimit.repeatable = function(max, eventName) {$/;"	f
 BUILD_DIR	.\webpack.config.js	/^var BUILD_DIR = path.resolve(__dirname, 'public');$/;"	v
 BUILD_DIR	.\webpack.config.production.js	/^var BUILD_DIR = path.resolve(__dirname, 'public');$/;"	v
+DeadMansHand.hands.rank	.\server\game\handrank.js	/^        this.hands[11] = {rank: 11};$/;"	p
 LESS_DIR	.\webpack.config.js	/^var LESS_DIR = path.resolve(__dirname, 'less');$/;"	v
 LESS_DIR	.\webpack.config.production.js	/^var LESS_DIR = path.resolve(__dirname, 'less');$/;"	v
 NODE_ENV	.\.vscode\launch.json	/^                "NODE_ENV": "development"$/;"	f
@@ -5094,6 +5095,7 @@ lodash	.\package-lock.json	/^        "lodash": "https:\/\/registry.npmjs.org\/lo
 lodash	.\package-lock.json	/^        "lodash": "https:\/\/registry.npmjs.org\/lodash\/-\/lodash-4.17.4.tgz",$/;"	f
 lodash	.\package-lock.json	/^        "lodash": {$/;"	f
 lodash	.\package-lock.json	/^    "lodash": {$/;"	f
+lodash	.\package.json	/^    "lodash": "^4.17.4",$/;"	f
 lodash-es	.\package-lock.json	/^        "lodash-es": "https:\/\/registry.npmjs.org\/lodash-es\/-\/lodash-es-4.17.4.tgz",$/;"	f
 lodash-es	.\package-lock.json	/^    "lodash-es": {$/;"	f
 lodash._getnative	.\package-lock.json	/^        "lodash._getnative": "https:\/\/registry.npmjs.org\/lodash._getnative\/-\/lodash._getnative-3.9.1.tgz"$/;"	f

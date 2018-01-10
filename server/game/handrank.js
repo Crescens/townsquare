@@ -8,6 +8,7 @@ class HandRank {
     constructor(hand) {
 
         this.modifier = 0;
+        this.hands = [];
 
         if(!hand) {
             return;
@@ -17,17 +18,18 @@ class HandRank {
             return;
         }
 
-        this.pokerhand = this.PokerHand(hand);
+        this.pokerHand = this.PokerHand(hand);
 
-        this.GetRank().then((rank) => {
-            this.rank = rank;
-        });
+        this.HandRanks();
     }
 
-    async _initialize() {
+    HandRanks() {
+
+        if(this.handRanks) {
+            return;
+        }
 
         this.handEvaluators = [
-            this.Jokers,
             this.DeadMansHand,
             this.FiveOfAKind,
             this.StraightFlush,
@@ -41,9 +43,11 @@ class HandRank {
             this.HighCard
         ];
 
-        for(let i = 0; i < 12; i++) {
-            this.handEvaluators[i](this.pokerhand);
-        }
+        this.Jokers()
+            .then(Promise.all(this.handEvaluators))
+            .then((result) => {
+                return result;
+            });
     }
 
     Jokers(hand) {
@@ -65,7 +69,7 @@ class HandRank {
             this.rank = 11;
         }
         */
-        return 11;
+        this.hands[11] = {rank: 11};
     }
 
     PokerHand(hand) {
@@ -97,10 +101,6 @@ class HandRank {
     OnePair() {}
 
     HighCard() {}
-
-    async GetRank() {
-        return await this._initialize();
-    }
 
 }
 
