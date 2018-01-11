@@ -3,13 +3,23 @@ const _ = require('lodash');
 /**
  * Class to evaluate hand rank from a hand of cards.
  */
-
+/*
+ const handEvaluators = [
+     DeadMansHand,
+     FiveOfAKind,
+     StraightFlush,
+     FourOfAKind,
+     FullHouse,
+     Flush,
+     Straight,
+     ThreeOfAKind,
+     TwoPair,
+     OnePair,
+     HighCard
+ ];
+*/
 class HandRank {
     constructor(hand) {
-
-        this.modifier = 0;
-        this.hands = [];
-
         if(!hand) {
             return;
         }
@@ -18,70 +28,51 @@ class HandRank {
             return;
         }
 
-        this.pokerHand = this.PokerHand(hand);
-
-        this.HandRanks();
+        this.pokerHands = this.PokerHands(hand);
     }
 
-    HandRanks() {
+    PokerHands(hand) {
+        let strippedHand = [];
+        let jokers = 0;
 
-        if(this.handRanks) {
-            return;
-        }
+        _.each(hand, (card) => {
 
-        this.handEvaluators = [
-            this.DeadMansHand,
-            this.FiveOfAKind,
-            this.StraightFlush,
-            this.FourOfAKind,
-            this.FullHouse,
-            this.Flush,
-            this.Straight,
-            this.ThreeOfAKind,
-            this.TwoPair,
-            this.OnePair,
-            this.HighCard
-        ];
+            if(card.suit === 'joker') {
+                jokers++;
+            }
 
-        this.Jokers()
-            .then(Promise.all(this.handEvaluators))
-            .then((result) => {
-                return result;
-            });
+            strippedHand.push({value: card.value, suit: card.suit});
+        });
+
+        this.DeadMansHand = new DeadMansHand(strippedHand, jokers);
     }
 
-    Jokers(hand) {
-
+    Hand() {
+        return _.reduce(this.pokerHands, (result, value) => {
+            console.info('butt');
+            return (result.rank < value.rank) ? result : value;
+        });
     }
+}
 
-    DeadMansHand(hand) {
-        /*
+class DeadMansHand {
+    constructor(hand, jokers) {
         let dmh = [{value: 1, suit: 'spades'},
                    {value: 1, suit: 'clubs'},
                    {value: 8, suit: 'spades'},
                    {value: 8, suit: 'clubs'},
                    {value: 11, suit: 'diamonds'}];
 
-        let diff = _.intersectionBy(dmh, hand, ['value', 'suit']);
+        //let diff = _.intersectionBy(dmh, hand, ['value', 'suit']);
 
-        if(diff.length === 0) {
-
+        //if(diff.length <= jokers) {
             this.rank = 11;
-        }
-        */
-        this.hands[11] = {rank: 11};
+        //}
     }
+}
 
-    PokerHand(hand) {
-        let strippedhand = [];
 
-        _.each(hand, (card) => {
-            strippedhand.push({value: card.value, suit: card.suit});
-        });
-
-        return strippedhand;
-    }
-
+/*
     FiveOfAKind() {}
 
     StraightFlush() {}
@@ -101,8 +92,7 @@ class HandRank {
     OnePair() {}
 
     HighCard() {}
-
-}
+*/
 
 
 module.exports = HandRank;

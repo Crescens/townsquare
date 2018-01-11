@@ -22,44 +22,14 @@ describe('Game', function() {
     describe('HandRank()', function() {
         describe('called with no argument', function() {
             it('returns an invalid hand rank.', function() {
-                expect(new HandRank().Rank()).toBe(0);
+                expect(new HandRank().Hand()).toBeUndefined();
             });
         });
 
         describe('called with an argument that is not an array', function() {
             it('returns an invalid hand rank.', function() {
-                expect(new HandRank(1).Rank()).toBe(0);
-            });
-        });
-
-        describe('called with an empty array', function() {
-            it('should run through all the evaluator functions.', function() {
-
-                spyOn(HandRank.prototype, 'DeadMansHand');
-                spyOn(HandRank.prototype, 'FiveOfAKind');
-                spyOn(HandRank.prototype, 'StraightFlush');
-                spyOn(HandRank.prototype, 'FourOfAKind');
-                spyOn(HandRank.prototype, 'FullHouse');
-                spyOn(HandRank.prototype, 'Flush');
-                spyOn(HandRank.prototype, 'Straight');
-                spyOn(HandRank.prototype, 'ThreeOfAKind');
-                spyOn(HandRank.prototype, 'TwoPair');
-                spyOn(HandRank.prototype, 'OnePair');
-                spyOn(HandRank.prototype, 'HighCard');
-
-                let spy = new HandRank([]);
-
-                expect(spy.DeadMansHand).toHaveBeenCalled();
-                expect(spy.FiveOfAKind).toHaveBeenCalled();
-                expect(spy.StraightFlush).toHaveBeenCalled();
-                expect(spy.FourOfAKind).toHaveBeenCalled();
-                expect(spy.FullHouse).toHaveBeenCalled();
-                expect(spy.Flush).toHaveBeenCalled();
-                expect(spy.Straight).toHaveBeenCalled();
-                expect(spy.ThreeOfAKind).toHaveBeenCalled();
-                expect(spy.TwoPair).toHaveBeenCalled();
-                expect(spy.OnePair).toHaveBeenCalled();
-                expect(spy.HighCard).toHaveBeenCalled();
+                expect(new HandRank(1).Hand()).toBeUndefined();
+                expect(new HandRank('foo').Hand()).toBeUndefined();
             });
         });
 
@@ -70,7 +40,7 @@ describe('Game', function() {
 
             it('should return a Hand Rank of 11', function() {
                 let handrank = new HandRank(this.hand);
-                expect(handrank.Rank()).toBe(11);
+                expect(handrank.Hand().rank).toBe(11);
             });
 
         });
