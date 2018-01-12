@@ -4,7 +4,6 @@ const Game = require('../../../server/game/game.js');
 const Player = require('../../../server/game/player.js');
 const HandRank = require('../../../server/game/handrank.js');
 
-
 describe('Game', function() {
     beforeEach(function() {
         this.gameRepository = jasmine.createSpyObj('gameRepository', ['save']);
@@ -22,14 +21,14 @@ describe('Game', function() {
     describe('HandRank()', function() {
         describe('called with no argument', function() {
             it('returns an invalid hand rank.', function() {
-                expect(new HandRank().Hand()).toBeUndefined();
+                expect(new HandRank().Rank()).toEqual(0);
             });
         });
 
         describe('called with an argument that is not an array', function() {
             it('returns an invalid hand rank.', function() {
-                expect(new HandRank(1).Hand()).toBeUndefined();
-                expect(new HandRank('foo').Hand()).toBeUndefined();
+                expect(new HandRank(1).Rank()).toEqual(0);
+                expect(new HandRank('foo').Rank()).toEqual(0);
             });
         });
 
@@ -38,9 +37,23 @@ describe('Game', function() {
                 this.hand = [new Card('A', 'S'), new Card('A', 'C'), new Card('8', 'S'), new Card('8', 'C'), new Card('J', 'D')];
             });
 
-            it('should return a Hand Rank of 11', function() {
+            it('should return a valid DeadMansHand with exactly the correct hand', function() {
                 let handrank = new HandRank(this.hand);
-                expect(handrank.Hand().rank).toBe(11);
+                expect(handrank.pokerHands.DeadMansHand).not.toBeUndefined();
+                expect(handrank.Rank()).toBe(11);
+            });
+
+            it('should return a valid DeadMansHand if it contains extra cards', function() {
+                this.hand.push(new Card('K', 'D'));
+                let handrank = new HandRank(this.hand);
+                expect(handrank.pokerHands.DeadMansHand).not.toBeUndefined();
+                expect(handrank.Rank()).toBe(11);
+            });
+
+            it('should no longer return a valid DeadMansHand with four cards', function() {
+                this.hand.pop();
+                let handrank = new HandRank(this.hand);
+                expect(handrank.Rank()).not.toBe(11);
             });
 
         });

@@ -4,7 +4,7 @@
   "description": "Doomtown:Reloaded Card Game Server",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env JASMINE_CONFIG_PATH=./jasmine.json jasmine && karma start karma.config.js --single-run",
+    "test": "cross-env JASMINE_CONFIG_PATH=./jasmine.json jasmine && karma start karma.config.js --browsers=Chrome --single-run=false --auto-watch",
     "cover": "cross-env JASMINE_CONFIG_PATH=./jasmine.json istanbul cover --include-all-sources jasmine",
     "lint": "eslint server/ test/server/ client/",
     "build": "cross-env NODE_ENV=production webpack -p --config webpack.config.production.js"

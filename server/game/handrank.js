@@ -28,10 +28,22 @@ class HandRank {
             return;
         }
 
-        this.pokerHands = this.PokerHands(hand);
+        this.pokerHands = new PokerHands(hand);
     }
 
-    PokerHands(hand) {
+    Rank() {
+        console.log(this.pokerHands);
+        return _.reduce(this.pokerHands, (result, value) => {
+            if(value.rank) {
+                return (result.rank > value.rank) ? result.rank : value.rank;
+            }
+        }, 0);
+    }
+
+}
+
+class PokerHands {
+    constructor(hand) {
         let strippedHand = [];
         let jokers = 0;
 
@@ -45,54 +57,77 @@ class HandRank {
         });
 
         this.DeadMansHand = new DeadMansHand(strippedHand, jokers);
-    }
-
-    Hand() {
-        return _.reduce(this.pokerHands, (result, value) => {
-            console.info('butt');
-            return (result.rank < value.rank) ? result : value;
-        });
+        this.FiveOfAKind = new FiveOfAKind(strippedHand, jokers);
+        this.StraightFlush = new StraightFlush(strippedHand, jokers);
+        this.FourOfAKind = new FourOfAKind(strippedHand, jokers);
+        this.FullHouse = new FullHouse(strippedHand, jokers);
+        this.Flush = new Flush(strippedHand, jokers);
+        this.Straight = new Straight(strippedHand, jokers);
+        this.ThreeOfAKind = new ThreeOfAKind(strippedHand, jokers);
+        this.TwoPair = new TwoPair(strippedHand, jokers);
+        this.OnePair = new OnePair(strippedHand, jokers);
+        this.HighCard = new HighCard(strippedHand, jokers);
     }
 }
 
 class DeadMansHand {
     constructor(hand, jokers) {
+
         let dmh = [{value: 1, suit: 'spades'},
                    {value: 1, suit: 'clubs'},
                    {value: 8, suit: 'spades'},
                    {value: 8, suit: 'clubs'},
                    {value: 11, suit: 'diamonds'}];
 
-        //let diff = _.intersectionBy(dmh, hand, ['value', 'suit']);
+        let matches = _.intersectionWith(dmh, hand, (left, right) => {
+            return ((left.value === right.value) && (left.suit === right.suit));
+        });
 
-        //if(diff.length <= jokers) {
+        if((matches.length + jokers) >= 5) {
             this.rank = 11;
-        //}
+        }
     }
 }
 
+class FiveOfAKind {
+    constructor(hand, jokers) {}
+}
 
-/*
-    FiveOfAKind() {}
+class StraightFlush {
+    constructor(hand, jokers) {}
+}
 
-    StraightFlush() {}
+class FourOfAKind {
+    constructor(hand, jokers) {}
+}
 
-    FourOfAKind() {}
+class FullHouse {
+    constructor(hand, jokers) {}
+}
 
-    FullHouse() {}
+class Flush {
+    constructor(hand, jokers) {}
+}
 
-    Flush() {}
+class Straight {
+    constructor(hand, jokers) {}
+}
 
-    Straight() {}
+class ThreeOfAKind {
+    constructor(hand, jokers) {}
+}
 
-    ThreeOfAKind() {}
+class TwoPair {
+    constructor(hand, jokers) {}
+}
 
-    TwoPair() {}
+class OnePair {
+    constructor(hand, jokers) {}
+}
 
-    OnePair() {}
-
-    HighCard() {}
-*/
+class HighCard {
+    constructor(hand, jokers) {}
+}
 
 
 module.exports = HandRank;
