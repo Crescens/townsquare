@@ -28,16 +28,17 @@ class HandRank {
             return;
         }
 
-        this.pokerHands = new PokerHands(hand);
+        this.pokerHands = _.filter(new PokerHands(hand), (hr) => (hr.rank !== undefined));
+
+        //console.log(this.pokerHands);
     }
 
+    //This method should return the "best" rank at the given context of the game
+    //i.e. lowest possible hand in Gamblin', highest in Noon
     Rank() {
-        console.log(this.pokerHands);
-        return _.reduce(this.pokerHands, (result, value) => {
-            if(value.rank) {
-                return (result.rank > value.rank) ? result.rank : value.rank;
-            }
-        }, 0);
+        let bestRank = _.orderBy(this.pokerHands, 'rank', 'desc');
+        //console.log(bestRank);
+        return (bestRank[0] ? bestRank[0].rank : 0);
     }
 
 }
@@ -49,11 +50,14 @@ class PokerHands {
 
         _.each(hand, (card) => {
 
-            if(card.suit === 'joker') {
+            //console.log(card);
+
+            if(card.type === 'joker') {
+                //console.log('joker found');
                 jokers++;
             }
 
-            strippedHand.push({value: card.value, suit: card.suit});
+            strippedHand.push({key: card.key, value: card.value, suit: card.suit, type: card.type});
         });
 
         this.DeadMansHand = new DeadMansHand(strippedHand, jokers);
@@ -67,6 +71,14 @@ class PokerHands {
         this.TwoPair = new TwoPair(strippedHand, jokers);
         this.OnePair = new OnePair(strippedHand, jokers);
         this.HighCard = new HighCard(strippedHand, jokers);
+
+    }
+}
+
+class HandEvaluator {
+
+    LegalHand(hand) {
+        return _.uniqBy(hand, 'value', 'suit');
     }
 }
 
@@ -79,42 +91,142 @@ class DeadMansHand {
                    {value: 8, suit: 'clubs'},
                    {value: 11, suit: 'diamonds'}];
 
-        let matches = _.intersectionWith(dmh, hand, (left, right) => {
+        this.matches = _.intersectionWith(dmh, hand, (left, right) => {
             return ((left.value === right.value) && (left.suit === right.suit));
         });
 
-        if((matches.length + jokers) >= 5) {
+        if((this.matches.length + jokers) >= 5) {
             this.rank = 11;
         }
     }
 }
 
 class FiveOfAKind {
-    constructor(hand, jokers) {}
+    constructor(hand, jokers) {
+
+        //Check for 5oaK, starting from the best (Ks)
+        //down to the worst (As). Only return the best hand
+        for(let i = 13; i > 0; i--) {
+            this.matches = _.filter(hand, (card) => {
+                return (card.value === i);
+            });
+
+            if((this.matches.length + jokers) >= 5) {
+                this.rank = 10;
+                break;
+            }
+        }
+    }
 }
 
 class StraightFlush {
-    constructor(hand, jokers) {}
+    constructor(hand, jokers) {
+
+        let suits = ['clubs', 'diamonds', 'hearts', 'spades'];
+
+        suits.forEach((suit) => {
+            for(let i = 13; i > 0; i--) {
+                let straightFlush = [{value: i, suit: suit},
+                                     {value: i - 1, suit: suit},
+                                     {value: i - 2, suit: suit},
+                                     {value: i - 3, suit: suit},
+                                     {value: i - 4, suit: suit}];
+
+                this.matches = _.intersectionWith(hand, straightFlush, (left, right) => {
+                    return ((left.value === right.value) && (left.suit === right.suit));
+                });
+
+                if((this.matches.length + jokers) >= 5) {
+                    this.rank = 9;
+                    break;
+                }
+            }
+        });
+    }
 }
 
 class FourOfAKind {
-    constructor(hand, jokers) {}
+    constructor(hand, jokers) {
+        //Check for 4oaK, starting from the best (Ks, value 13)
+        //down to the worst (As, value 1). Only return the best hand
+        for(let i = 13; i > 0; i--) {
+            this.matches = _.filter(hand, (card) => {
+                return (card.value === i);
+            });
+
+            if((this.matches.length + jokers) === 4) {
+                this.rank = 8;
+                break;
+            }
+        }
+    }
 }
 
 class FullHouse {
     constructor(hand, jokers) {}
 }
 
-class Flush {
-    constructor(hand, jokers) {}
+class Flush extends HandEvaluator {
+    super(hand, jokers) {
+
+        suits.forEach((suit) => {
+            for(let i = 13; i > 0; i--) {
+
+                let flush = [{value: i, suit: suit},
+                             {suit: suit},
+                             {suit: suit},
+                             {suit: suit},
+                             {suit: suit}];
+
+                console.log(this.LegalHand(hand));
+
+                this.matches = _.intersectionWith(hand, flush, (left, right) => {
+                    return (left.suit === right.suit);
+                });
+
+                if((this.matches.length + jokers) >= 5) {
+                    this.rank = 6;
+                    break;
+                }
+            }
+        });
+    }
 }
 
 class Straight {
-    constructor(hand, jokers) {}
+    constructor(hand, jokers) {
+        for(let i = 13; i > 0; i--) {
+            let straight = [{value: i},
+                            {value: i - 1},
+                            {value: i - 2},
+                            {value: i - 3},
+                            {value: i - 4}];
+
+            this.matches = _.intersectionBy(hand, straight, 'value');
+
+            if((this.matches.length + jokers) >= 5) {
+                this.rank = 5;
+                break;
+            }
+        }
+    }
 }
 
 class ThreeOfAKind {
-    constructor(hand, jokers) {}
+    constructor(hand, jokers) {
+        //Check for 3oaK, starting from the best (Ks)
+        //down to the worst (As). Only return the best hand
+        for(let i = 13; i > 0; i--) {
+            this.matches = _.filter(hand, (card) => {
+                return (card.value === i);
+            });
+
+            if((this.matches.length + jokers) === 3) {
+                this.rank = 4;
+                break;
+            }
+        }
+    }
 }
 
 class TwoPair {
@@ -122,7 +234,20 @@ class TwoPair {
 }
 
 class OnePair {
-    constructor(hand, jokers) {}
+    constructor(hand, jokers) {
+        //Check for 1P, starting from the best (Ks)
+        //down to the worst (As). Only return the best hand
+        for(let i = 13; i > 0; i--) {
+            this.matches = _.filter(hand, (card) => {
+                return (card.value === i);
+            });
+
+            if((this.matches.length + jokers) === 2) {
+                this.rank = 2;
+                break;
+            }
+        }
+    }
 }
 
 class HighCard {
