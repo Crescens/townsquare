@@ -196,6 +196,46 @@ describe('HandRank()', function() {
         });
     });
 
+    describe('FullHouse', function() {
+        beforeEach(function() {
+            this.cheatinHand = [new Card('6', 'C'), new Card('6', 'D'), new Card('6', 'C'), new Card('A', 'S'), new Card('A', 'D')];
+            this.legalHand = [new Card('K', 'S'), new Card('K', 'H'), new Card('K', 'D'), new Card('10', 'D'), new Card('10', 'S')];
+        });
+
+        it('should return a valid FullHouse with exactly the correct hand', function() {
+            let legalHandRank = new HandRank(this.legalHand);
+            let cheatinHandRank = new HandRank(this.cheatinHand);
+
+            expect(legalHandRank.Rank()).toBe(7);
+            expect(cheatinHandRank.Rank()).toBe(7);
+        });
+
+        it('should return a valid FullHouse with additional cards', function() {
+            this.cheatinHand.push(new Card('10', 'H'));
+            this.legalHand.push(new Card('Q', 'H'));
+
+            let legalHandRank = new HandRank(this.legalHand);
+            let cheatinHandRank = new HandRank(this.cheatinHand);
+
+            expect(legalHandRank.Rank()).toBe(7);
+            expect(cheatinHandRank.Rank()).toBe(7);
+        });
+
+        it('should no longer return FullHouse with 3 cards', function() {
+            this.cheatinHand.pop();
+            this.cheatinHand.pop();
+
+            this.legalHand.pop();
+            this.legalHand.pop();
+
+            let legalHandRank = new HandRank(this.legalHand);
+            let cheatinHandRank = new HandRank(this.cheatinHand);
+
+            expect(legalHandRank.Rank()).not.toBe(7);
+            expect(cheatinHandRank.Rank()).not.toBe(7);
+        });
+    });
+
     describe('Flush', function() {
         beforeEach(function() {
             this.cheatinHand = [new Card('7', 'H'), new Card('2', 'H'), new Card('J', 'H'), new Card('J', 'H'), new Card('7', 'H')];
@@ -303,6 +343,46 @@ describe('HandRank()', function() {
         });
     });
 
+    describe('TwoPair', function() {
+        beforeEach(function() {
+            this.cheatinHand = [new Card('9', 'D'), new Card('9', 'D'), new Card('Q', 'C'), new Card('Q', 'S'), new Card('4', 'D')];
+            this.legalHand = [new Card('8', 'S'), new Card('8', 'H'), new Card('2', 'D'), new Card('2', 'D'), new Card('10', 'S')];
+        });
+
+        it('should return a valid TwoPair with exactly the correct hand', function() {
+            let legalHandRank = new HandRank(this.legalHand);
+            let cheatinHandRank = new HandRank(this.cheatinHand);
+
+            expect(legalHandRank.Rank()).toBe(3);
+            expect(cheatinHandRank.Rank()).toBe(3);
+        });
+
+        it('should return a valid TwoPair with additional cards', function() {
+            this.cheatinHand.push(new Card('10', 'H'));
+            this.legalHand.push(new Card('Q', 'H'));
+
+            let legalHandRank = new HandRank(this.legalHand);
+            let cheatinHandRank = new HandRank(this.cheatinHand);
+
+            expect(legalHandRank.Rank()).toBe(3);
+            expect(cheatinHandRank.Rank()).toBe(3);
+        });
+
+        it('should no longer return TwoPair with 3 cards', function() {
+            this.cheatinHand.pop();
+            this.cheatinHand.pop();
+
+            this.legalHand.pop();
+            this.legalHand.pop();
+
+            let legalHandRank = new HandRank(this.legalHand);
+            let cheatinHandRank = new HandRank(this.cheatinHand);
+
+            expect(legalHandRank.Rank()).not.toBe(3);
+            expect(cheatinHandRank.Rank()).not.toBe(3);
+        });
+    });
+
     describe('OnePair', function() {
         beforeEach(function() {
             this.cheatinHand = [new Card('A', 'S'), new Card('A', 'S'), new Card('7', 'D'), new Card('9', 'C'), new Card('8', 'D')];
@@ -344,6 +424,40 @@ describe('HandRank()', function() {
 
             expect(legalHandRank.Rank()).not.toBe(2);
             expect(cheatinHandRank.Rank()).not.toBe(2);
+        });
+    });
+
+    describe('HighCard', function() {
+        beforeEach(function() {
+            this.legalHand = [new Card('Q', 'S'), new Card('2', 'S'), new Card('7', 'D'), new Card('9', 'C'), new Card('8', 'D')];
+        });
+
+        it('should return a valid HighCard with exactly the correct hand', function() {
+            let legalHandRank = new HandRank(this.legalHand);
+
+            expect(legalHandRank.Rank()).toBe(1);
+        });
+
+        it('should return a valid HighCard with additional cards', function() {
+            this.legalHand.push(new Card('K', 'H'));
+
+            let legalHandRank = new HandRank(this.legalHand);
+
+            expect(legalHandRank.Rank()).toBe(1);
+        });
+
+        it('should no longer return HighCard with 0 cards', function() {
+            this.legalHand.pop();
+            this.legalHand.pop();
+            this.legalHand.pop();
+            this.legalHand.pop();
+            this.legalHand.pop();
+
+            let legalHandRank = new HandRank(this.legalHand);
+            let cheatinHandRank = new HandRank(this.cheatinHand);
+
+            expect(legalHandRank.Rank()).not.toBe(1);
+            expect(cheatinHandRank.Rank()).not.toBe(1);
         });
     });
 });

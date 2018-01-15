@@ -70,17 +70,10 @@ class PokerHands {
         this.ThreeOfAKind = new ThreeOfAKind(strippedHand, jokers);
         this.TwoPair = new TwoPair(strippedHand, jokers);
         this.OnePair = new OnePair(strippedHand, jokers);
-        this.HighCard = new HighCard(strippedHand, jokers);
-
+        this.HighCards = new HighCard(strippedHand);
     }
 }
 
-class HandEvaluator {
-
-    LegalHand(hand) {
-        return _.uniqBy(hand, 'value', 'suit');
-    }
-}
 
 class DeadMansHand {
     constructor(hand, jokers) {
@@ -162,33 +155,57 @@ class FourOfAKind {
     }
 }
 
+
 class FullHouse {
-    constructor(hand, jokers) {}
-}
+    constructor(hand, jokers) {
 
-class Flush extends HandEvaluator {
-    super(hand, jokers) {
+        let matches3, matches2;
 
-        suits.forEach((suit) => {
-            for(let i = 13; i > 0; i--) {
+        for(let i = 13; i > 0; i--) {
+            matches3 = _.filter(hand, (card) => {
+                return (card.value === i);
+            });
 
-                let flush = [{value: i, suit: suit},
-                             {suit: suit},
-                             {suit: suit},
-                             {suit: suit},
-                             {suit: suit}];
+            if(matches3.length + jokers >= 3) {
 
-                console.log(this.LegalHand(hand));
+                for(let j = 13; j > 0; j--) {
+                    matches2 = _.filter(hand, (card) => {
+                        if(j !== i) {
+                            return (card.value === j);
+                        }
+                    });
 
-                this.matches = _.intersectionWith(hand, flush, (left, right) => {
-                    return (left.suit === right.suit);
-                });
+                    if(matches2.length + jokers >= 2) {
 
-                if((this.matches.length + jokers) >= 5) {
-                    this.rank = 6;
-                    break;
+                        this.matches = matches3 + matches2;
+
+                        if((this.matches.length + jokers) >= 5) {
+                            this.rank = 7;
+                            break;
+                        }
+                    }
                 }
             }
+        }
+    }
+}
+
+class Flush {
+    constructor(hand, jokers) {
+
+        let orderedHand = _.orderBy(hand, 'value', 'desc');
+        let suits = ['clubs', 'diamonds', 'hearts', 'spades'];
+
+        suits.forEach((suit) => {
+            this.matches = _.filter(orderedHand, (card) => {
+                return card.suit === suit;
+            });
+
+            if((this.matches.length + jokers) >= 5) {
+                this.rank = 6;
+                return;
+            }
+
         });
     }
 }
@@ -230,7 +247,37 @@ class ThreeOfAKind {
 }
 
 class TwoPair {
-    constructor(hand, jokers) {}
+    constructor(hand, jokers) {
+
+        let matchesFirst, matchesSecond;
+
+        for(let i = 13; i > 0; i--) {
+            matchesFirst = _.filter(hand, (card) => {
+                return (card.value === i);
+            });
+
+            if(matchesFirst.length + jokers >= 2) {
+
+                for(let j = 13; j > 0; j--) {
+                    matchesSecond = _.filter(hand, (card) => {
+                        if(j !== i) {
+                            return (card.value === j);
+                        }
+                    });
+
+                    if(matchesSecond.length + jokers >= 2) {
+
+                        this.matches = matchesFirst + matchesSecond;
+
+                        if((this.matches.length + jokers) >= 5) {
+                            this.rank = 3;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 class OnePair {
@@ -251,7 +298,13 @@ class OnePair {
 }
 
 class HighCard {
-    constructor(hand, jokers) {}
+    constructor(hand) {
+        this.matches = _.take(_.orderBy(hand, 'value', 'desc'), 5);
+
+        if(this.matches.length > 0) {
+            this.rank = 1;
+        }
+    }
 }
 
 

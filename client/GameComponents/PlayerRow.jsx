@@ -6,6 +6,7 @@ import $ from 'jquery';
 import AdditionalCardPile from './AdditionalCardPile.jsx';
 import Card from './Card.jsx';
 import CardCollection from './CardCollection.jsx';
+import HandRank from './HandRank.jsx';
 import {tryParseJSON} from '../util.js';
 
 class PlayerRow extends React.Component {
@@ -210,6 +211,8 @@ class PlayerRow extends React.Component {
                                 onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} onCardClick={this.props.onCardClick}
                                 popupLocation={this.props.isMe || this.props.spectating ? 'top' : 'bottom'} onDragDrop={this.props.onDragDrop} orientation='booted' />
                   {this.getOutOfGamePile()}
+
+                  <HandRank onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} />
 
                   <div className={className} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} onDrop={(event) => this.onDragDrop(event, 'hand')}>
                       <div className='panel-header'>

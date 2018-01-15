@@ -25,6 +25,7 @@ class Player extends Spectator {
         //this.plotDiscard = _([]);
         this.hand = _([]);
         this.drawHand = _([]);
+        this.handRank = new HandRank([]);
         this.cardsInPlay = _([]);
         this.boothillPile = _([]);
         this.discardPile = _([]);
@@ -235,6 +236,10 @@ class Player extends Spectator {
             });
 
             cards = _.union(cards, remainingCards);
+        }
+
+        if(cards.length > 1) {
+            this.handRank = new HandRank(this.drawHand);
         }
 
         return (cards.length > 1) ? cards : cards[0];
@@ -581,51 +586,6 @@ class Player extends Spectator {
 
         this.cardsInPlay = processedCards;
         this.ghostrock = 0;
-    }
-
-    startPlotPhase() {
-        this.firstPlayer = false;
-        this.selectedPlot = undefined;
-        this.roundDone = false;
-
-        this.challenges.reset();
-
-        this.challengerLimit = 0;
-        this.drawPhaseCards = DrawPhaseCards;
-
-        this.cardsInPlay.each(card => {
-            card.new = false;
-        });
-    }
-
-    flipPlotFaceup() {
-        this.selectedPlot.flipFaceup();
-        this.moveCard(this.selectedPlot, 'active plot');
-        this.selectedPlot.applyPersistentEffects();
-
-        this.game.raiseMergedEvent('onCardEntersPlay', { card: this.activePlot, playingType: 'plot' });
-
-        this.selectedPlot = undefined;
-    }
-
-    recyclePlots() {
-        if(this.plotDeck.isEmpty()) {
-            this.plotDiscard.each(plot => {
-                this.moveCard(plot, 'plot deck');
-            });
-
-            this.game.raiseEvent('onPlotsRecycled', this);
-        }
-    }
-
-    removeActivePlot() {
-        if(this.activePlot) {
-            let plot = this.activePlot;
-            this.moveCard(this.activePlot, 'revealed plots');
-            this.game.raiseMergedEvent('onPlotDiscarded', { player: this, card: plot });
-            this.activePlot = undefined;
-            return plot;
-        }
     }
 
     drawPhase() {
@@ -1045,6 +1005,10 @@ class Player extends Spectator {
             this.game.raiseEvent('onCardEntersHand', card);
         }
 
+        if(targetLocation === 'draw hand') {
+            this.game.raiseEvent('onCardEntersDrawHand', card);
+        }
+
         if(['boothill pile', 'discard pile'].includes(targetLocation)) {
             this.game.raiseMergedEvent('onCardPlaced', { card: card, location: targetLocation, player: this });
         }
@@ -1181,6 +1145,7 @@ class Player extends Spectator {
             firstPlayer: this.firstPlayer,
             ghostrock: this.ghostrock,
             hand: this.getSummaryForCardList(this.hand, activePlayer, true),
+            handrank: this.handRank,
             id: this.id,
             left: this.left,
             numDrawCards: this.drawDeck.size(),
