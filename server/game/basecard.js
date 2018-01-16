@@ -37,6 +37,9 @@ class BaseCard {
         this.facedown = false;
         this.blankCount = 0;
         this.gamelocation = '';
+        this.value = cardData.rank;
+        this.suit = cardData.suit;
+        this.type = cardData.type_code;
 
         this.tokens = {};
         /*this.plotModifierValues = {
