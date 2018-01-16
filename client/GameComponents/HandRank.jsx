@@ -29,8 +29,7 @@ class HandRank extends React.Component {
     render() {
         return (
             <div className='hand-ranks' style={this.props.style} >
-                {this.getBestHand()}
-                {this.getNextHand()}
+                {this.props.handrank}
             </div>
         );
 

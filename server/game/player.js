@@ -25,7 +25,7 @@ class Player extends Spectator {
         //this.plotDiscard = _([]);
         this.hand = _([]);
         this.drawHand = _([]);
-        this.handRank = new HandRank([]);
+        this.handRank = 0;
         this.cardsInPlay = _([]);
         this.boothillPile = _([]);
         this.discardPile = _([]);
@@ -137,6 +137,10 @@ class Player extends Spectator {
         return cardsToReturn;
     }
 
+    findCardsByList(list) {
+        return this.findCard(list, card => (card === card));
+    }
+
     anyCardsInPlay(predicate) {
         return this.allCards.any(card => card.location === 'play area' && predicate(card));
     }
@@ -239,7 +243,7 @@ class Player extends Spectator {
         }
 
         if(cards.length > 1) {
-            this.handRank = new HandRank(this.drawHand);
+            this.handRank = new HandRank(this.drawHand.toArray()).Rank();
         }
 
         return (cards.length > 1) ? cards : cards[0];
@@ -280,9 +284,7 @@ class Player extends Spectator {
         var cards = this.drawDeck.first(number);
         this.discardCards(cards, false, discarded => {
             callback(discarded);
-            if(this.drawDeck.size() === 0) {
-
-                /* -- Reshuffle Instead
+            /*if(this.drawDeck.size() === 0) {
 
                 var otherPlayer = this.game.getOtherPlayer(this);
 
@@ -290,8 +292,8 @@ class Player extends Spectator {
                     this.game.addMessage('{0}\'s draw deck is empty', this);
                     this.game.addMessage('{0} wins the game', otherPlayer);
                 }
-                */
-            }
+
+            }*/
         });
     }
 
@@ -705,6 +707,9 @@ class Player extends Spectator {
         switch(source) {
             case 'hand':
                 this.hand = targetList;
+                break;
+            case 'draw hand':
+                this.drawHand = targetList;
                 break;
             case 'draw deck':
                 this.drawDeck = targetList;

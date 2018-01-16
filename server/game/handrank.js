@@ -24,7 +24,7 @@ class HandRank {
             return;
         }
 
-        if(!Array.isArray(hand)) {
+        if(!_.isArray(hand)) {
             return;
         }
 
@@ -57,7 +57,7 @@ class PokerHands {
                 jokers++;
             }
 
-            strippedHand.push({key: card.key, value: card.value, suit: card.suit, type: card.type});
+            strippedHand.push({uuid: card.uuid, value: card.value, suit: card.suit, type: card.type});
         });
 
         this.DeadMansHand = new DeadMansHand(strippedHand, jokers);
