@@ -27,6 +27,7 @@ class DrawCard extends BaseCard {
         this.minCost = 0;
 
         if(cardData.starting) {
+            //
             this.starting = true;
         }
 
