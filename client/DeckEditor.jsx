@@ -164,11 +164,11 @@ class InnerDeckEditor extends React.Component {
         _.each(split, line => {
             line = line.trim();
 
-            let numstarting = 0;
+            let starting = 0;
             let quantity = line.split(' ', 1).pop();
             let cardName = line.replace(quantity, '').trim();
 
-            numstarting = (quantity.match(/\*/g) || []).length;
+            starting = (quantity.match(/\*/g) || []).length;
 
             quantity = quantity.replace('*', '');
 
@@ -191,7 +191,7 @@ class InnerDeckEditor extends React.Component {
             });
 
             if(card) {
-                this.addCard(card, num, numstarting);
+                this.addCard(card, num, starting);
             }
         });
 
@@ -201,7 +201,7 @@ class InnerDeckEditor extends React.Component {
         this.props.updateDeck(deck);
     }
 
-    addCard(card, number, numstarting) {
+    addCard(card, number, starting) {
         let deck = this.copyDeck(this.state.deck);
         //let plots = deck.plotCards;
         let draw = deck.drawCards;
@@ -213,7 +213,7 @@ class InnerDeckEditor extends React.Component {
         if(list[card.code]) {
             list[card.code].count += number;
         } else {
-            list.push({ count: number, card: card, starting: numstarting });
+            list.push({ count: number, card: card, starting: starting });
         }
     }
 

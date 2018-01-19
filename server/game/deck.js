@@ -12,17 +12,26 @@ class Deck {
 
     prepare(player) {
         var result = {
-            drawCards: [],
-            //plotCards: []
+            drawCards: []
         };
 
+        result.starting = 0;
+
         this.eachRepeatedCard(this.data.drawCards, cardData => {
+
             if(['action', 'deed', 'dude', 'goods', 'spell'].includes(cardData.type_code)) {
                 var drawCard = this.createCard(DrawCard, player, cardData);
                 drawCard.location = 'draw deck';
-                result.drawCards.push(drawCard);
+
+                if(!drawCard.starting) {
+                    result.drawCards.push(drawCard);
+                } else {
+                    result.starting++;
+                    result.drawCards.unshift(drawCard);
+                }
             }
         });
+
 
         /* No plot cards necessary
         this.eachRepeatedCard(this.data.plotCards, cardData => {
@@ -49,7 +58,7 @@ class Deck {
         result.allCards = [result.outfit].concat(result.drawCards);//.concat(result.plotCards);
 
         if(this.data.legend) {
-            result.legend = this.createCard(LegendCard, player, this.data.legend);
+            result.legend = this.createCard(DrawCard, player, this.data.legend);
             result.legend.moveTo('legend');
             result.allCards.push(result.legend);
         } else {
@@ -63,7 +72,14 @@ class Deck {
 
     eachRepeatedCard(cards, func) {
         _.each(cards, cardEntry => {
+            let starting = cardEntry.starting;
             for(var i = 0; i < cardEntry.count; i++) {
+
+                if(starting > 0) {
+                    cardEntry.card.starting = true;
+                    starting--;
+                }
+
                 func(cardEntry.card);
             }
         });

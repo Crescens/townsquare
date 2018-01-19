@@ -353,8 +353,8 @@ class Player extends Spectator {
         });
         this.hand = _([]);
         //Put Starting Posse in Hand Somewhere Here
-        this.shuffleDrawDeck();
-        this.drawCardsToHand(StartingHandSize); //change with starting posse
+        //this.shuffleDrawDeck();
+        this.drawCardsToHand('hand', this.startingPosse); //change with starting posse
     }
 
     prepareDecks() {
@@ -366,6 +366,7 @@ class Player extends Spectator {
         this.drawDeck = _(preparedDeck.drawCards);
         //this.bannerCards = _(preparedDeck.bannerCards);
         this.allCards = _(preparedDeck.allCards);
+        this.startingPosse = preparedDeck.starting;
     }
 
     initialise() {
