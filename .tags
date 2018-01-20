@@ -7287,7 +7287,7 @@ precss	.\webpack.config.js	/^var precss = require('precss');$/;"	v
 prelude-ls	.\package-lock.json	/^        "prelude-ls": "https:\/\/registry.npmjs.org\/prelude-ls\/-\/prelude-ls-1.1.2.tgz"$/;"	f
 prelude-ls	.\package-lock.json	/^        "prelude-ls": "https:\/\/registry.npmjs.org\/prelude-ls\/-\/prelude-ls-1.1.2.tgz",$/;"	f
 prelude-ls	.\package-lock.json	/^    "prelude-ls": {$/;"	f
-prepare.drawCards	.\server\game\deck.js	/^            drawCards: [],$/;"	p
+prepare.drawCards	.\server\game\deck.js	/^            drawCards: []$/;"	p
 preparedDeck	.\server\game\player.js	/^        var preparedDeck = deck.prepare(this);$/;"	v
 prepend-http	.\package-lock.json	/^        "prepend-http": "https:\/\/registry.npmjs.org\/prepend-http\/-\/prepend-http-1.0.4.tgz",$/;"	f
 prepend-http	.\package-lock.json	/^    "prepend-http": {$/;"	f
