@@ -502,7 +502,7 @@ babel-plugin-transform-strict-mode	.\package-lock.json	/^    "babel-plugin-trans
 babel-polyfill	.\package-lock.json	/^    "babel-polyfill": {$/;"	f
 babel-polyfill	.\package.json	/^    "babel-polyfill": "^6.23.0",$/;"	f
 babel-preset-env	.\package-lock.json	/^    "babel-preset-env": {$/;"	f
-babel-preset-env	.\package.json	/^    "babel-preset-env": "^1.6.0",$/;"	f
+babel-preset-env	.\package.json	/^    "babel-preset-env": "^1.6.1",$/;"	f
 babel-preset-es2015	.\package-lock.json	/^    "babel-preset-es2015": {$/;"	f
 babel-preset-es2015	.\package.json	/^    "babel-preset-es2015": "^6.14.0",$/;"	f
 babel-preset-flow	.\package-lock.json	/^        "babel-preset-flow": "https:\/\/registry.npmjs.org\/babel-preset-flow\/-\/babel-preset-flow-6.23.0.tgz"$/;"	f
@@ -1536,7 +1536,7 @@ expand-template	.\package-lock.json	/^        "expand-template": "https:\/\/regi
 expand-template	.\package-lock.json	/^    "expand-template": {$/;"	f
 express	.\package-lock.json	/^        "express": "4.16.2",$/;"	f
 express	.\package-lock.json	/^    "express": {$/;"	f
-express	.\package.json	/^    "express": "^4.14.0",$/;"	f
+express	.\package.json	/^    "express": "^4.16.2",$/;"	f
 express-session	.\package-lock.json	/^    "express-session": {$/;"	f
 express-session	.\package.json	/^    "express-session": "^1.14.1",$/;"	f
 extend	.\package-lock.json	/^            "extend": "3.0.1",$/;"	f
@@ -3984,13 +3984,13 @@ karma-babel-preprocessor	.\package.json	/^    "karma-babel-preprocessor": "^6.0.
 karma-coverage	.\package-lock.json	/^    "karma-coverage": {$/;"	f
 karma-coverage	.\package.json	/^    "karma-coverage": "^1.1.1",$/;"	f
 karma-jasmine	.\package-lock.json	/^    "karma-jasmine": {$/;"	f
-karma-jasmine	.\package.json	/^    "karma-jasmine": "^1.0.2",$/;"	f
+karma-jasmine	.\package.json	/^    "karma-jasmine": "^1.1.1",$/;"	f
 karma-phantomjs-launcher	.\package-lock.json	/^    "karma-phantomjs-launcher": {$/;"	f
 karma-phantomjs-launcher	.\package.json	/^    "karma-phantomjs-launcher": "^1.0.4",$/;"	f
 karma-sourcemap-loader	.\package-lock.json	/^    "karma-sourcemap-loader": {$/;"	f
 karma-sourcemap-loader	.\package.json	/^    "karma-sourcemap-loader": "^0.3.7",$/;"	f
 karma-webpack	.\package-lock.json	/^    "karma-webpack": {$/;"	f
-karma-webpack	.\package.json	/^    "karma-webpack": "^2.0.3",$/;"	f
+karma-webpack	.\package.json	/^    "karma-webpack": "^2.0.9",$/;"	f
 kew	.\package-lock.json	/^            "kew": "https:\/\/registry.npmjs.org\/kew\/-\/kew-0.7.0.tgz",$/;"	f
 kew	.\package-lock.json	/^        "kew": "https:\/\/registry.npmjs.org\/kew\/-\/kew-0.7.0.tgz",$/;"	f
 kew	.\package-lock.json	/^    "kew": {$/;"	f
@@ -4195,7 +4195,7 @@ lcid	.\package-lock.json	/^            "lcid": "1.0.0",$/;"	f
 lcid	.\package-lock.json	/^        "lcid": "1.0.0"$/;"	f
 lcid	.\package-lock.json	/^    "lcid": {$/;"	f
 less	.\package-lock.json	/^    "less": {$/;"	f
-less	.\package.json	/^    "less": "^2.7.1",$/;"	f
+less	.\package.json	/^    "less": "^2.7.3",$/;"	f
 less-loader	.\package-lock.json	/^    "less-loader": {$/;"	f
 less-loader	.\package.json	/^    "less-loader": "^2.2.3",$/;"	f
 let.activePlot	.\server\game\player.js	/^            activePlot: this.activePlot ? this.activePlot.getSummary(activePlayer) : undefined,$/;"	p
@@ -4245,6 +4245,7 @@ lodash	.\package-lock.json	/^        "lodash": "https:\/\/registry.npmjs.org\/lo
 lodash	.\package-lock.json	/^        "lodash": "https:\/\/registry.npmjs.org\/lodash\/-\/lodash-4.17.4.tgz",$/;"	f
 lodash	.\package-lock.json	/^        "lodash": {$/;"	f
 lodash	.\package-lock.json	/^    "lodash": {$/;"	f
+lodash	.\package.json	/^    "lodash": "^4.17.4",$/;"	f
 lodash-es	.\package-lock.json	/^        "lodash-es": "https:\/\/registry.npmjs.org\/lodash-es\/-\/lodash-es-4.17.4.tgz",$/;"	f
 lodash-es	.\package-lock.json	/^    "lodash-es": {$/;"	f
 lodash._getnative	.\package-lock.json	/^        "lodash._getnative": "3.9.1"$/;"	f
@@ -4417,10 +4418,10 @@ module.exports.loadCards	.\server\game\loader.js	/^    loadCards: function(baseP
 module.exports.tryParseJSON	.\client\util.js	/^    tryParseJSON: function(jsonString) {$/;"	m
 moment	.\package-lock.json	/^        "moment": "2.20.1",$/;"	f
 moment	.\package-lock.json	/^    "moment": {$/;"	f
-moment	.\package.json	/^    "moment": "^2.15.0",$/;"	f
+moment	.\package.json	/^    "moment": "^2.20.1",$/;"	f
 mongodb	.\package-lock.json	/^        "mongodb": "2.2.34"$/;"	f
 mongodb	.\package-lock.json	/^    "mongodb": {$/;"	f
-mongodb	.\package.json	/^    "mongodb": "^2.2.9",$/;"	f
+mongodb	.\package.json	/^    "mongodb": "^2.2.34",$/;"	f
 mongodb-core	.\package-lock.json	/^        "mongodb-core": "2.1.18",$/;"	f
 mongodb-core	.\package-lock.json	/^    "mongodb-core": {$/;"	f
 mongoskin	.\package-lock.json	/^    "mongoskin": {$/;"	f
@@ -4655,9 +4656,9 @@ node-libs-browser	.\package-lock.json	/^    "node-libs-browser": {$/;"	f
 node-pre-gyp	.\package-lock.json	/^        "node-pre-gyp": "0.6.39"$/;"	f
 node-pre-gyp	.\package-lock.json	/^        "node-pre-gyp": {$/;"	f
 node-sass	.\package-lock.json	/^    "node-sass": {$/;"	f
-node-sass	.\package.json	/^    "node-sass": "^4.5.0",$/;"	f
+node-sass	.\package.json	/^    "node-sass": "^4.7.2",$/;"	f
 nodemailer	.\package-lock.json	/^    "nodemailer": {$/;"	f
-nodemailer	.\package.json	/^    "nodemailer": "^4.0.1",$/;"	f
+nodemailer	.\package.json	/^    "nodemailer": "^4.4.1",$/;"	f
 noop-logger	.\package-lock.json	/^        "noop-logger": "https:\/\/registry.npmjs.org\/noop-logger\/-\/noop-logger-0.1.1.tgz",$/;"	f
 noop-logger	.\package-lock.json	/^    "noop-logger": {$/;"	f
 nopt	.\package-lock.json	/^            "nopt": "4.0.1",$/;"	f
@@ -5151,7 +5152,7 @@ performance-now	.\package-lock.json	/^    "performance-now": {$/;"	f
 phantomjs-prebuilt	.\package-lock.json	/^        "phantomjs-prebuilt": "https:\/\/registry.npmjs.org\/phantomjs-prebuilt\/-\/phantomjs-prebuilt-2.1.15.tgz"$/;"	f
 phantomjs-prebuilt	.\package-lock.json	/^        "phantomjs-prebuilt": {$/;"	f
 phantomjs-prebuilt	.\package-lock.json	/^    "phantomjs-prebuilt": {$/;"	f
-phantomjs-prebuilt	.\package.json	/^    "phantomjs-prebuilt": "^2.1.7",$/;"	f
+phantomjs-prebuilt	.\package.json	/^    "phantomjs-prebuilt": "^2.1.16",$/;"	f
 pify	.\package-lock.json	/^            "pify": "2.3.0",$/;"	f
 pify	.\package-lock.json	/^            "pify": "3.0.0",$/;"	f
 pify	.\package-lock.json	/^            "pify": "https:\/\/registry.npmjs.org\/pify\/-\/pify-2.3.0.tgz"$/;"	f
@@ -5182,7 +5183,7 @@ plots	.\retired\server\game\cards\plots\index.js	/^var plots = loadCards('plots'
 pluralize	.\package-lock.json	/^        "pluralize": "https:\/\/registry.npmjs.org\/pluralize\/-\/pluralize-1.2.1.tgz",$/;"	f
 pluralize	.\package-lock.json	/^    "pluralize": {$/;"	f
 pmx	.\package-lock.json	/^    "pmx": {$/;"	f
-pmx	.\package.json	/^    "pmx": "^1.0.3",$/;"	f
+pmx	.\package.json	/^    "pmx": "^1.5.5",$/;"	f
 port	.\.vscode\launch.json	/^            "port": 5858,$/;"	f
 portfinder	.\package-lock.json	/^        "portfinder": "1.0.13",$/;"	f
 portfinder	.\package-lock.json	/^    "portfinder": {$/;"	f
@@ -5648,7 +5649,7 @@ react-dom	.\package.json	/^    "react-dom": "^15.3.1",$/;"	f
 react-highlighter	.\package-lock.json	/^        "react-highlighter": "https:\/\/registry.npmjs.org\/react-highlighter\/-\/react-highlighter-0.3.5.tgz",$/;"	f
 react-highlighter	.\package-lock.json	/^    "react-highlighter": {$/;"	f
 react-hot-loader	.\package-lock.json	/^    "react-hot-loader": {$/;"	f
-react-hot-loader	.\package.json	/^    "react-hot-loader": "^3.0.0-beta.4",$/;"	f
+react-hot-loader	.\package.json	/^    "react-hot-loader": "^3.1.3",$/;"	f
 react-input-autosize	.\package-lock.json	/^        "react-input-autosize": "https:\/\/registry.npmjs.org\/react-input-autosize\/-\/react-input-autosize-1.2.0.tgz",$/;"	f
 react-input-autosize	.\package-lock.json	/^    "react-input-autosize": {$/;"	f
 react-json-tree	.\package-lock.json	/^        "react-json-tree": "0.11.0",$/;"	f
@@ -5703,13 +5704,13 @@ reducedCost	.\server\game\player.js	/^        var reducedCost = _.reduce(matchin
 redux	.\package-lock.json	/^    "redux": {$/;"	f
 redux	.\package.json	/^    "redux": "^3.6.0",$/;"	f
 redux-devtools	.\package-lock.json	/^    "redux-devtools": {$/;"	f
-redux-devtools	.\package.json	/^    "redux-devtools": "^3.3.1",$/;"	f
+redux-devtools	.\package.json	/^    "redux-devtools": "^3.4.1",$/;"	f
 redux-devtools-dock-monitor	.\package-lock.json	/^    "redux-devtools-dock-monitor": {$/;"	f
-redux-devtools-dock-monitor	.\package.json	/^    "redux-devtools-dock-monitor": "^1.1.1",$/;"	f
+redux-devtools-dock-monitor	.\package.json	/^    "redux-devtools-dock-monitor": "^1.1.3",$/;"	f
 redux-devtools-instrument	.\package-lock.json	/^        "redux-devtools-instrument": "1.8.2"$/;"	f
 redux-devtools-instrument	.\package-lock.json	/^    "redux-devtools-instrument": {$/;"	f
 redux-devtools-log-monitor	.\package-lock.json	/^    "redux-devtools-log-monitor": {$/;"	f
-redux-devtools-log-monitor	.\package.json	/^    "redux-devtools-log-monitor": "^1.0.11",$/;"	f
+redux-devtools-log-monitor	.\package.json	/^    "redux-devtools-log-monitor": "^1.4.0",$/;"	f
 redux-devtools-themes	.\package-lock.json	/^        "redux-devtools-themes": "1.0.0"$/;"	f
 redux-devtools-themes	.\package-lock.json	/^    "redux-devtools-themes": {$/;"	f
 redux-thunk	.\package-lock.json	/^    "redux-thunk": {$/;"	f
@@ -6541,7 +6542,7 @@ tar-stream	.\package-lock.json	/^        "tar-stream": "https:\/\/registry.npmjs
 tar-stream	.\package-lock.json	/^    "tar-stream": {$/;"	f
 tcomb	.\package-lock.json	/^        "tcomb": "https:\/\/registry.npmjs.org\/tcomb\/-\/tcomb-2.7.0.tgz"$/;"	f
 tcomb	.\package-lock.json	/^    "tcomb": {$/;"	f
-test	.\package.json	/^    "test": "cross-env JASMINE_CONFIG_PATH=.\/jasmine.json jasmine && karma start karma.config.js --single-run",$/;"	f
+test	.\package.json	/^    "test": "cross-env JASMINE_CONFIG_PATH=.\/jasmine.json jasmine && karma start karma.config.js --single-run=true",$/;"	f
 test-exclude	.\package-lock.json	/^        "test-exclude": "https:\/\/registry.npmjs.org\/test-exclude\/-\/test-exclude-2.1.3.tgz"$/;"	f
 test-exclude	.\package-lock.json	/^    "test-exclude": {$/;"	f
 text	.\retired\test\client\decks\drawBanner.json	/^            "text": "<b>Action:<\/b> Kneel Pyke to choose a character. Until the end of the phase, that character gains stealth.",$/;"	f
@@ -8371,17 +8372,17 @@ watchpack	.\package-lock.json	/^    "watchpack": {$/;"	f
 wbuf	.\package-lock.json	/^        "wbuf": "1.7.2"$/;"	f
 wbuf	.\package-lock.json	/^    "wbuf": {$/;"	f
 webpack	.\package-lock.json	/^    "webpack": {$/;"	f
-webpack	.\package.json	/^    "webpack": "^3.6.0",$/;"	f
+webpack	.\package.json	/^    "webpack": "^3.10.0",$/;"	f
 webpack	.\webpack.config.js	/^var webpack = require('webpack');$/;"	v
 webpack	.\webpack.config.production.js	/^var webpack = require('webpack');$/;"	v
 webpack-dev-middleware	.\package-lock.json	/^        "webpack-dev-middleware": "1.12.2"$/;"	f
 webpack-dev-middleware	.\package-lock.json	/^        "webpack-dev-middleware": "1.12.2",$/;"	f
 webpack-dev-middleware	.\package-lock.json	/^    "webpack-dev-middleware": {$/;"	f
-webpack-dev-middleware	.\package.json	/^    "webpack-dev-middleware": "^1.10.1",$/;"	f
+webpack-dev-middleware	.\package.json	/^    "webpack-dev-middleware": "^1.12.2",$/;"	f
 webpack-dev-server	.\package-lock.json	/^    "webpack-dev-server": {$/;"	f
-webpack-dev-server	.\package.json	/^    "webpack-dev-server": "^2.4.2",$/;"	f
+webpack-dev-server	.\package.json	/^    "webpack-dev-server": "^2.10.1",$/;"	f
 webpack-hot-middleware	.\package-lock.json	/^    "webpack-hot-middleware": {$/;"	f
-webpack-hot-middleware	.\package.json	/^    "webpack-hot-middleware": "^2.17.1"$/;"	f
+webpack-hot-middleware	.\package.json	/^    "webpack-hot-middleware": "^2.21.0"$/;"	f
 webpack-sources	.\package-lock.json	/^        "webpack-sources": "1.1.0"$/;"	f
 webpack-sources	.\package-lock.json	/^        "webpack-sources": "1.1.0",$/;"	f
 webpack-sources	.\package-lock.json	/^    "webpack-sources": {$/;"	f
