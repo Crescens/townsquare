@@ -25,7 +25,7 @@ function processDecks(decks, state) {
         }
 
         deck.drawCards = _.map(deck.drawCards, card => {
-            return { count: card.count, card: state.cards[card.card.code] };
+            return { count: card.count, card: state.cards[card.card.code], starting: card.starting };
         });
 
         deck.validation = validateDeck(deck, state.packs);

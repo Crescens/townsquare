@@ -26,6 +26,10 @@ class DrawCard extends BaseCard {
         this.booted = false;
         this.minCost = 0;
 
+        if(cardData.starting) {
+            this.starting = true;
+        }
+
         /*if(cardData.is_military) {
             this.icons.military++;
         }
