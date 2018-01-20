@@ -163,22 +163,28 @@ class InnerDeckEditor extends React.Component {
 
         _.each(split, line => {
             line = line.trim();
+            let index = 2;
 
-            let starting = 0;
-            let quantity = line.split(' ', 1).pop();
-            let cardName = line.replace(quantity, '').trim();
-
-            starting = (quantity.match(/\*/g) || []).length;
-
-            quantity = quantity.replace('*', '');
-
-            if(!$.isNumeric(quantity[0])) {
+            if(!$.isNumeric(line[0])) {
                 return;
             }
 
-            let num = parseInt(quantity[0]);
+            let num = parseInt(line[0]);
+            if(line[1] === 'x') {
+                index++;
+            }
 
-            let card = _.find(this.props.cards, (card) => {
+
+            //let packOffset = line.indexOf('(');
+            let packOffset = -1;
+            let cardName = line.substr(index, packOffset === -1 ? line.length : packOffset - index - 1);
+            let packName = line.substr(packOffset + 1, line.length - packOffset - 2);
+
+            let pack = _.find(this.props.packs, function(pack) {
+                return pack.code.toLowerCase() === packName.toLowerCase() || pack.name.toLowerCase() === packName.toLowerCase();
+            });
+
+            let card = _.find(this.props.cards, function(card) {
 
                 /* -- Pack Data is not included in DTDB data. Parens are used for Experienced and Joker
 
@@ -191,7 +197,7 @@ class InnerDeckEditor extends React.Component {
             });
 
             if(card) {
-                this.addCard(card, num, starting);
+                this.addCard(card, num);
             }
         });
 
@@ -201,7 +207,7 @@ class InnerDeckEditor extends React.Component {
         this.props.updateDeck(deck);
     }
 
-    addCard(card, number, starting) {
+    addCard(card, number) {
         let deck = this.copyDeck(this.state.deck);
         //let plots = deck.plotCards;
         let draw = deck.drawCards;
@@ -213,7 +219,7 @@ class InnerDeckEditor extends React.Component {
         if(list[card.code]) {
             list[card.code].count += number;
         } else {
-            list.push({ count: number, card: card, starting: starting });
+            list.push({ count: number, card: card });
         }
     }
 
@@ -270,13 +276,13 @@ class InnerDeckEditor extends React.Component {
 
 InnerDeckEditor.displayName = 'DeckEditor';
 InnerDeckEditor.propTypes = {
+    legends: PropTypes.object,
     cards: PropTypes.object,
     deck: PropTypes.object,
-    legends: PropTypes.object,
+    outfits: PropTypes.object,
     loading: PropTypes.bool,
     mode: PropTypes.string,
     onDeckSave: PropTypes.func,
-    outfits: PropTypes.object,
     packs: PropTypes.array,
     updateDeck: PropTypes.func
 };
