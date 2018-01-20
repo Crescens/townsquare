@@ -41,11 +41,7 @@ class InnerDeckEditor extends React.Component {
 
         if(this.props.deck && (this.props.deck.drawCards || this.props.deck.plotCards)) {
             _.each(this.props.deck.drawCards, card => {
-                cardList += card.count + ' ' + card.card.title + '\n';
-            });
-
-            _.each(this.props.deck.plotCards, card => {
-                cardList += card.count + ' ' + card.card.title + '\n';
+                cardList += '*'.repeat(card.starting) + card.count + ' ' + card.card.title + '\n';
             });
 
             this.setState({ cardList: cardList });
@@ -163,28 +159,22 @@ class InnerDeckEditor extends React.Component {
 
         _.each(split, line => {
             line = line.trim();
-            let index = 2;
 
-            if(!$.isNumeric(line[0])) {
+            let starting = 0;
+            let quantity = line.split(' ', 1).pop();
+            let cardName = line.replace(quantity, '').trim();
+
+            starting = (quantity.match(/\*/g) || []).length;
+
+            quantity = quantity.replace('*', '');
+
+            if(!$.isNumeric(quantity[0])) {
                 return;
             }
 
-            let num = parseInt(line[0]);
-            if(line[1] === 'x') {
-                index++;
-            }
+            let num = parseInt(quantity[0]);
 
-
-            //let packOffset = line.indexOf('(');
-            let packOffset = -1;
-            let cardName = line.substr(index, packOffset === -1 ? line.length : packOffset - index - 1);
-            let packName = line.substr(packOffset + 1, line.length - packOffset - 2);
-
-            let pack = _.find(this.props.packs, function(pack) {
-                return pack.code.toLowerCase() === packName.toLowerCase() || pack.name.toLowerCase() === packName.toLowerCase();
-            });
-
-            let card = _.find(this.props.cards, function(card) {
+            let card = _.find(this.props.cards, (card) => {
 
                 /* -- Pack Data is not included in DTDB data. Parens are used for Experienced and Joker
 
@@ -197,7 +187,7 @@ class InnerDeckEditor extends React.Component {
             });
 
             if(card) {
-                this.addCard(card, num);
+                this.addCard(card, num, starting);
             }
         });
 
@@ -207,7 +197,7 @@ class InnerDeckEditor extends React.Component {
         this.props.updateDeck(deck);
     }
 
-    addCard(card, number) {
+    addCard(card, number, starting) {
         let deck = this.copyDeck(this.state.deck);
         //let plots = deck.plotCards;
         let draw = deck.drawCards;
@@ -219,7 +209,7 @@ class InnerDeckEditor extends React.Component {
         if(list[card.code]) {
             list[card.code].count += number;
         } else {
-            list.push({ count: number, card: card });
+            list.push({ count: number, card: card, starting: starting });
         }
     }
 
@@ -276,13 +266,13 @@ class InnerDeckEditor extends React.Component {
 
 InnerDeckEditor.displayName = 'DeckEditor';
 InnerDeckEditor.propTypes = {
-    legends: PropTypes.object,
     cards: PropTypes.object,
     deck: PropTypes.object,
-    outfits: PropTypes.object,
+    legends: PropTypes.object,
     loading: PropTypes.bool,
     mode: PropTypes.string,
     onDeckSave: PropTypes.func,
+    outfits: PropTypes.object,
     packs: PropTypes.array,
     updateDeck: PropTypes.func
 };
