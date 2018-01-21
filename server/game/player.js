@@ -362,13 +362,12 @@ class Player extends Spectator {
         this.hand = _([]);
         //Put Starting Posse in Hand Somewhere Here
         //this.shuffleDrawDeck();
-        this.drawCardsToHand('hand', this.startingPosse); //change with starting posse
     }
 
     prepareDecks() {
         var deck = new Deck(this.deck);
         var preparedDeck = deck.prepare(this);
-        //this.plotDeck = _(preparedDeck.plotCards);
+        //this.plotDeck = _( /"dDeck.plotCards);
         this.legend = preparedDeck.legend;
         this.outfit = preparedDeck.outfit;
         this.drawDeck = _(preparedDeck.drawCards);
@@ -391,6 +390,8 @@ class Player extends Spectator {
         if(!this.readyToStart) {
             return;
         }
+
+        this.drawCardsToHand('hand', this.startingPosse);
 
         this.ghostrock = this.outfit.wealth;
     }
