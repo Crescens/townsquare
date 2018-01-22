@@ -747,7 +747,7 @@ class Player extends Spectator {
             var card = this.findCardByUuid(this.cardsInPlay, cardId);
 
             if(!card) {
-                this.findCardByUuid(this.hand, cardId);
+                card = this.findCardByUuid(this.hand, cardId);
             }
 
             if(card.controller !== this) {
