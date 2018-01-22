@@ -9,8 +9,9 @@ class SetupPhase extends Phase {
     constructor(game) {
         super(game, 'setup');
         this.initialise([
-            new SimpleStep(game, () => this.prepareDecks()),
-            new KeepOrMulliganPrompt(game),
+            () => new SimpleStep(game, () => this.prepareDecks()),
+            () => new SimpleStep(game, () => this.drawStartingPosse()),
+            new KeepOrMulliganPrompt(game), //Change to Grifter prompt, add additional prompt for S
             new SimpleStep(game, () => this.startGame()),
             new SetupCardsPrompt(game),
             new SimpleStep(game, () => this.setupDone()),
@@ -27,6 +28,12 @@ class SetupPhase extends Phase {
         });
         this.game.allCards.each(card => {
             card.applyAnyLocationPersistentEffects();
+        });
+    }
+
+    drawStartingPosse() {
+        _.each(this.game.getPlayers(), player => {
+            player.drawCardsToHand('hand', player.startingPosse);
         });
     }
 

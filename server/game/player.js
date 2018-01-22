@@ -271,11 +271,13 @@ class Player extends Spectator {
 
     shuffleDiscardToDrawDeck() {
 
-        _.each(this.discardPile, card => {
-            this.moveCard(card, 'draw deck');
-        });
+        if(this.discardPile.size() > 0) {
+            _.each(this.discardPile, card => {
+                this.moveCard(card, 'draw deck');
+            });
 
-        this.shuffleDrawDeck();
+            this.shuffleDrawDeck();
+        }
     }
 
     discardFromDraw(number, callback = () => true) {
@@ -390,8 +392,6 @@ class Player extends Spectator {
         if(!this.readyToStart) {
             return;
         }
-
-        this.drawCardsToHand('hand', this.startingPosse);
 
         this.ghostrock = this.outfit.wealth;
     }
@@ -749,7 +749,6 @@ class Player extends Spectator {
             if(!card) {
                 this.findCardByUuid(this.hand, cardId);
             }
-
 
             if(card.controller !== this) {
                 return false;

@@ -550,7 +550,12 @@ class Game extends EventEmitter {
         this.playStarted = true;
         this.startedAt = new Date();
 
+        //Replace this with setting up all locations
         this.addGameLocation('townsquare');
+
+        _.each(this.getPlayers(), player => {
+            //player.drawCardsToHand('hand', player.startingPosse);
+        });
 
         this.continue();
     }

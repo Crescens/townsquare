@@ -70,7 +70,6 @@ describe('the DrawCard', function() {
                 });
 
                 it('should return false.', function() {
-                    console.log(this.player);
                     expect(this.card.hasKeyword('Stealth')).toBe(false);
                 });
             });
