@@ -162,7 +162,7 @@ class Game extends EventEmitter {
     }
 
     addGameLocation(location) {
-        this.locations.push(new GameLocation(location));
+        this.locations.push(location);
     }
 
     getLocationByID(id) {
@@ -552,7 +552,7 @@ class Game extends EventEmitter {
 
         //Replace this with setting up all locations
         this.addGameLocation(new TownSquare());
-        
+
         this.continue();
     }
 

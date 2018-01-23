@@ -6,7 +6,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-
  */
 class GameLocation {
     constructor(location, order) {
-        //Passed in location for construction. Card uuid or string e.g."townsquare"
+        //Passed in location for construction. Card uuid is main identifier.
         this.uuid = location;
         this.adjacencyMap = new Map();
         //this.cards = _([]);
@@ -50,16 +50,8 @@ class GameLocation {
         return this.adjacencyMap;
     }
 
-    getOrder() {
-        return this.order;
-    }
-
     setOrder(order) {
         this.order = order;
-    }
-
-    getKey() {
-        return this.represents;
     }
 
     left() {

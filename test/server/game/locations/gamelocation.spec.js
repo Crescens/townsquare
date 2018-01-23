@@ -2,7 +2,7 @@
 /*eslint camelcase: 0, no-invalid-this: 0 */
 //const _ = require('underscore');
 const uuid = require('uuid');
-const GameLocation = require('../../../../server/game/gamelocation.js');
+const {GameLocation, TownSquare} = require('../../../../server/game/gamelocation.js');
 
 describe('GameLocation', function () {
     beforeEach(function () {
@@ -13,15 +13,18 @@ describe('GameLocation', function () {
         this.owner.getCardSelectionState.and.returnValue({});
         this.owner.game = this.game;
         this.location = new GameLocation('townsquare', 0);
+        this.townsquare = new TownSquare();
     });
 
-    describe('when a location is created with a string', function () {
+    //No longer create locations with bare strings, TownSquare is a singleton
+    //GameLocation with its own UUID
+    /*describe('when a location is created with a string', function () {
         it('should have a bare string in its uuid property', function() {
             this.location = new GameLocation('testlocation', 1);
             expect(this.location.getKey()).toEqual('testlocation');
             expect(this.location.isCardLocation()).toBe(false);
         });
-    });
+    });*/
 
     describe('when a location is created with a uuid', function () {
         beforeEach(function() {
@@ -30,7 +33,6 @@ describe('GameLocation', function () {
 
         it('should have an uuid in its uuid property', function() {
             expect(this.location.uuid).toEqual(this.testCard1.uuid);
-            expect(this.location.getKey()).toEqual(this.testCard1.uuid);
         });
 
         it('isCardLocation should return true', function() {

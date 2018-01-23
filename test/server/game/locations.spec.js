@@ -19,7 +19,7 @@ describe('Game', function() {
 
         this.game.initialise();
 
-        this.testCard1 = { key: uuid.v1(), title: 'test 1' };
+        this.testCard1 = { uuid: uuid.v1(), title: 'test 1' };
         //this.card2 = jasmine.createSpyObj('card', ['allowGameAction']);
         this.handler = jasmine.createSpy('handler');
     });
@@ -29,8 +29,10 @@ describe('Game', function() {
             it('should not be empty', function() {
                 expect(this.game.getLocations().length).not.toBe(0);
             });
+
             it('should contain an object townsquare', function() {
-                expect(this.game.locations).toContain(jasmine.objectContaining({uuid: 'townsquare'}));
+                console.log(this.game.locations);
+                expect(this.game.locations).toContain(jasmine.objectContaining({key: 'townsquare'}));
             });
         });
 
@@ -44,7 +46,7 @@ describe('Game', function() {
             });
 
             it('should contain the added card', function () {
-                expect(this.game.getLocations()).toContain(jasmine.objectContaining({represents: this.testCard1.key}));
+                expect(this.game.getLocations()).toContain(jasmine.objectContaining({uuid: this.testCard1.uuid}));
             });
         });
     });
