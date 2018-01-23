@@ -83,7 +83,7 @@ export class InnerGameLocation extends React.Component {
 
     cardsHereByPlayer(player) {
         if(!player) {
-            return [];
+            return <div className='card-row'/>;
         }
 
         var cardRow = _.map(player.cardsInPlay, (card) => {
@@ -93,7 +93,7 @@ export class InnerGameLocation extends React.Component {
             }
         });
 
-        return cardRow;
+        return <div className='card-row'>{cardRow}</div>;
     }
 
     getImageLocation(imageClass) {
