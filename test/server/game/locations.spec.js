@@ -29,8 +29,8 @@ describe('Game', function() {
             it('should not be empty', function() {
                 expect(this.game.getLocations().length).not.toBe(0);
             });
-            it('should contain an object that represents townsquare', function() {
-                expect(this.game.locations).toContain(jasmine.objectContaining({represents: 'townsquare'}));
+            it('should contain an object townsquare', function() {
+                expect(this.game.locations).toContain(jasmine.objectContaining({uuid: 'townsquare'}));
             });
         });
 

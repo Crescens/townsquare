@@ -137,10 +137,6 @@ class Player extends Spectator {
         return cardsToReturn;
     }
 
-    findCardsByList(list) {
-        return this.findCard(list, card => (card === card));
-    }
-
     anyCardsInPlay(predicate) {
         return this.allCards.any(card => card.location === 'play area' && predicate(card));
     }

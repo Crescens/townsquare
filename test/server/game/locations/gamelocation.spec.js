@@ -16,7 +16,7 @@ describe('GameLocation', function () {
     });
 
     describe('when a location is created with a string', function () {
-        it('should have a bare string in its represents property', function() {
+        it('should have a bare string in its uuid property', function() {
             this.location = new GameLocation('testlocation', 1);
             expect(this.location.getKey()).toEqual('testlocation');
             expect(this.location.isCardLocation()).toBe(false);
@@ -28,8 +28,8 @@ describe('GameLocation', function () {
             this.location = new GameLocation(this.testCard1.uuid, -1);
         });
 
-        it('should have an uuid in its represents property', function() {
-            expect(this.location.represents).toEqual(this.testCard1.uuid);
+        it('should have an uuid in its uuid property', function() {
+            expect(this.location.uuid).toEqual(this.testCard1.uuid);
             expect(this.location.getKey()).toEqual(this.testCard1.uuid);
         });
 

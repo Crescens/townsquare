@@ -6,7 +6,7 @@ const GameChat = require('./gamechat.js');
 const EffectEngine = require('./effectengine.js');
 const Effect = require('./effect.js');
 const Player = require('./player.js');
-const GameLocation = require('./gamelocation.js');
+const { GameLocation, TownSquare } = require('./gamelocation.js');
 const Spectator = require('./spectator.js');
 const AnonymousSpectator = require('./anonymousspectator.js');
 const GamePipeline = require('./gamepipeline.js');
@@ -551,12 +551,8 @@ class Game extends EventEmitter {
         this.startedAt = new Date();
 
         //Replace this with setting up all locations
-        this.addGameLocation('townsquare');
-
-        _.each(this.getPlayers(), player => {
-            //player.drawCardsToHand('hand', player.startingPosse);
-        });
-
+        this.addGameLocation(new TownSquare());
+        
         this.continue();
     }
 

@@ -1,12 +1,13 @@
 //const _ = require('underscore');
-
+const uuid = require('uuid');
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 /**
  * Base class representing a location on the game board.
  */
 class GameLocation {
     constructor(location, order) {
         //Passed in location for construction. Card uuid or string e.g."townsquare"
-        this.represents = location;
+        this.uuid = location;
         this.adjacencyMap = new Map();
         //this.cards = _([]);
         this.cardLocation = true;
@@ -18,9 +19,7 @@ class GameLocation {
         */
         this.order = order;
 
-        var uuidmatch = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-        if(!uuidmatch.test(location)) {
+        if(!UUID.test(location)) {
             this.cardLocation = false;
         }
     }
@@ -104,4 +103,34 @@ class GameLocation {
 
 }
 
-module.exports = GameLocation;
+/**
+ * Singleton class representing the Town Square.
+ * Generates with its own ID and at order 0 in the
+ * central game flex box
+ */
+class TownSquare extends GameLocation {
+    constructor() {
+        super(uuid.v1(), 0);
+
+        this.key = 'townsquare';
+    }
+
+    north() {
+        for(var [key,value] of this.adjacencyMap.entries()) {
+            if(value === 'north') {
+                return key;
+            }
+        }
+    }
+
+    south() {
+        for(var [key,value] of this.adjacencyMap.entries()) {
+            if(value === 'south') {
+                return key;
+            }
+        }
+    }
+}
+
+
+module.exports = { GameLocation, TownSquare };

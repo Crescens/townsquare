@@ -81,29 +81,19 @@ export class InnerGameLocation extends React.Component {
     }
     */
 
-    getCardsHere(player) {
+    cardsHereByPlayer(player) {
         if(!player) {
             return [];
         }
 
-        var playerCardsHere = [];
-        var cardsByLocation = [];
-
-        _.each(player.findCards, (cards) => {
-            var cardsInPlay = _.map(cards, (card) => {
-                if(card.getLocation() === this.location.getKey()) {
-                    return (<Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.onMenuItemClick}
-                                  onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onDragDrop={this.onDragDrop} />);
-                }
-            });
-            cardsByLocation.push(cardsInPlay);
+        var cardRow = _.map(player.cardsInPlay, (card) => {
+            if(card.gamelocation === this.props.location.uuid) {
+                return (<Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.onMenuItemClick}
+                              onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onDragDrop={this.onDragDrop} />);
+            }
         });
 
-        for(var i = cardsByLocation.length; i < 2; i++) {
-            playerCardsHere.push(<div className='card-row' key={'this-empty' + i} />);
-        }
-
-        return playerCardsHere;
+        return cardRow;
     }
 
     getImageLocation(imageClass) {
@@ -150,9 +140,9 @@ export class InnerGameLocation extends React.Component {
 
         return (
             <div className='location-wrapper' style={this.props.style} onDrop={event => this.onDragDropEvent(event, this.props.location.uuid)}>
-                {this.getCardsHere(this.props.otherPlayer)}
+                {this.cardsHereByPlayer(this.props.otherPlayer)}
                 {this.getLocation()}
-                {this.getCardsHere(this.props.thisPlayer)}
+                {this.cardsHereByPlayer(this.props.thisPlayer)}
             </div>
         );
 

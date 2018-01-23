@@ -310,9 +310,9 @@ class BaseCard {
         return !!this.factions[normalizedFaction];
     }
 
-    isLoyal() {
+    /*isLoyal() {
         return this.cardData.is_loyal;
-    }
+    }*/
 
     applyAnyLocationPersistentEffects() {
         _.each(this.abilities.persistentEffects, effect => {
