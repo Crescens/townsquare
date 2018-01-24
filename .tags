@@ -940,8 +940,6 @@ claim	.\test\client\decks\plotValidDuplicate.json	/^            "claim": 1,$/;"	
 claim	.\test\client\decks\plotValidDuplicate.json	/^            "claim": 2,$/;"	f
 claim	.\test\client\decks\plotWinter.json	/^            "claim": 1,$/;"	f
 claim	.\test\client\decks\plotWinter.json	/^            "claim": 2,$/;"	f
-claim.isApplying	.\server\game\game.js	/^            isApplying: false,$/;"	p
-claim.type	.\server\game\game.js	/^            type: undefined$/;"	p
 clap	.\package-lock.json	/^        "clap": "https:\/\/registry.npmjs.org\/clap\/-\/clap-1.2.3.tgz",$/;"	f
 clap	.\package-lock.json	/^    "clap": {$/;"	f
 class-utils	.\package-lock.json	/^        "class-utils": "0.3.6",$/;"	f

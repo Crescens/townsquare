@@ -46,7 +46,7 @@ class GameLocation {
         this.adjacencyMap.delete(location);
     }
 
-    adjacentLocations() {
+    adjacent() {
         return this.adjacencyMap;
     }
 
