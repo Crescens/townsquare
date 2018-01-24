@@ -26,7 +26,7 @@ class Player extends Spectator {
         //this.plotDiscard = _([]);
         this.hand = _([]);
         this.drawHand = _([]);
-        this.locations = _([]);
+        this.locations = [];
         this.handRank = 0;
         this.cardsInPlay = _([]);
         this.boothillPile = _([]);
@@ -93,8 +93,14 @@ class Player extends Spectator {
         }));
     }
 
-    findLocations(predicate) {
+    addLocation(location) {
+        this.locations.push(location);
+    }
 
+    findLocations(predicate) {
+        if(!predicate) {
+            return this.locations;
+        }
     }
 
     findCardByName(list, name) {
@@ -386,7 +392,7 @@ class Player extends Spectator {
         //this.game.townsquare.attach(this.outfit.uuid, this.name);
 
         var outfit = new GameLocation(this.outfit.uuid, 0);
-        outfit.attach(this.game.townsquare.uuid, 'townsquare');
+        outfit.attach('townsquare', 'townsquare');
         this.locations.push(outfit);
     }
 

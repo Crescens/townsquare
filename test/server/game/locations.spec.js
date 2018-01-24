@@ -5,6 +5,7 @@ const uuid = require('uuid');
 const Game = require('../../../server/game/game.js');
 const Player = require('../../../server/game/player.js');
 const Spectator = require('../../../server/game/spectator.js');
+const {GameLocation} = require('../../../server/game/gamelocation.js');
 
 describe('Game', function() {
     beforeEach(function() {
@@ -24,28 +25,24 @@ describe('Game', function() {
         this.handler = jasmine.createSpy('handler');
     });
 
-    xdescribe('getLocations()', function() {
+    describe('findLocations()', function() {
         describe('immediately after game creation', function() {
             it('should not be empty', function() {
-                expect(this.game.findLocations().length).not.toBe(0);
-            });
-
-            it('should contain an object townsquare', function() {
-                expect(this.game.locations).toContain(jasmine.objectContaining({key: 'townsquare'}));
+                expect(this.player1.findLocations().length).not.toBe(0);
             });
         });
 
-        xdescribe('after adding a location', function () {
+        describe('after adding a location', function () {
             beforeEach(function () {
-                this.game.addGameLocation(this.testCard1.key);
+                this.player1.addLocation(new GameLocation(this.testCard1.uuid, 0));
             });
 
             it('should have two objects', function () {
-                expect(this.game.findLocations().length).toBe(2);
+                expect(this.player1.locations.length).toBe(2);
             });
 
             it('should contain the added card', function () {
-                expect(this.game.findLocations()).toContain(jasmine.objectContaining({uuid: this.testCard1.uuid}));
+                expect(this.player1.findLocations()).toContain(jasmine.objectContaining({uuid: this.testCard1.uuid}));
             });
         });
     });

@@ -35,10 +35,6 @@ describe('GameLocation', function () {
             expect(this.location.uuid).toEqual(this.testCard1.uuid);
         });
 
-        it('isCardLocation should return true', function() {
-            expect(this.location.isCardLocation()).toBe(true);
-        });
-
         it('should have an order parameter that matches what was passed', function () {
             expect(this.location.order).toBe(-1);
         });

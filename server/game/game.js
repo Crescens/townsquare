@@ -162,10 +162,6 @@ class Game extends EventEmitter {
         return foundLocations;
     }
 
-    /*addGameLocation(location) {
-        this.locations.push(location);
-    }*/
-
     getLocationByID(id) {
         if(!id) {
             return;
