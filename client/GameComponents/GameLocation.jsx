@@ -151,7 +151,6 @@ export class InnerGameLocation extends React.Component {
 
 InnerGameLocation.displayName = 'GameLocation';
 InnerGameLocation.propTypes = {
-    cardLocation: PropTypes.string.isRequired,
     cards: PropTypes.array,
     className: PropTypes.string,
     clearZoom: PropTypes.func,

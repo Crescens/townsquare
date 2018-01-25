@@ -4,6 +4,7 @@ const Spectator = require('./spectator.js');
 const DrawCard = require('./drawcard.js');
 const Deck = require('./deck.js');
 const HandRank = require('./handrank.js');
+const { GameLocation } = require('./gamelocation.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 //const BestowPrompt = require('./gamesteps/bestowprompt.js');
 //const ChallengeTracker = require('./challengetracker.js');
@@ -25,12 +26,14 @@ class Player extends Spectator {
         //this.plotDiscard = _([]);
         this.hand = _([]);
         this.drawHand = _([]);
+        this.locations = [];
         this.handRank = 0;
         this.cardsInPlay = _([]);
         this.boothillPile = _([]);
         this.discardPile = _([]);
         this.additionalPiles = {};
 
+        //TODO: Refactor legacy outfit code from GoT
         this.outfit = new DrawCard(this, {});
 
         this.owner = owner;
@@ -88,6 +91,16 @@ class Player extends Spectator {
         return _(list.reject(card => {
             return card.uuid === uuid;
         }));
+    }
+
+    addLocation(location) {
+        this.locations.push(location);
+    }
+
+    findLocations(predicate) {
+        if(!predicate) {
+            return this.locations;
+        }
     }
 
     findCardByName(list, name) {
@@ -159,7 +172,7 @@ class Player extends Spectator {
         return _.any(this.playableLocations, location => location.playingType === playingType && location.contains(card));
     }
 
-    getDuplicateInPlay(card) {
+    /*getDuplicateInPlay(card) {
         if(!card.isUnique()) {
             return undefined;
         }
@@ -170,7 +183,7 @@ class Player extends Spectator {
             (playCard.code === card.code || playCard.name === card.name) &&
             playCard.owner === this
         ));
-    }
+    }*/
 
     /*getNumberOfChallengesWon(challengeType) {
         return this.challenges.getWon(challengeType);
@@ -373,9 +386,22 @@ class Player extends Spectator {
         this.startingPosse = preparedDeck.starting;
     }
 
+    addOutfitToTown() {
+        //Maybe we don't need to manage a TownSquare object, just treat
+        //it as abstract adjacency direction.
+        //this.game.townsquare.attach(this.outfit.uuid, this.name);
+
+        var outfit = new GameLocation(this.outfit.uuid, 0);
+        outfit.attach('townsquare', 'townsquare');
+        this.locations.push(outfit);
+        this.moveCard(this.outfit, 'play area');
+    }
+
     initialise() {
         this.prepareDecks();
         this.initDrawDeck();
+
+        this.addOutfitToTown();
 
         this.ghostrock = 0;
         this.readyToStart = false;
@@ -1150,6 +1176,7 @@ class Player extends Spectator {
             handrank: this.handRank,
             id: this.id,
             left: this.left,
+            locations: this.locations,
             numDrawCards: this.drawDeck.size(),
             name: this.name,
             phase: this.phase,

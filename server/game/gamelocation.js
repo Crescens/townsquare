@@ -1,6 +1,5 @@
 //const _ = require('underscore');
 const uuid = require('uuid');
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 /**
  * Base class representing a location on the game board.
  */
@@ -9,8 +8,6 @@ class GameLocation {
         //Passed in location for construction. Card uuid is main identifier.
         this.uuid = location;
         this.adjacencyMap = new Map();
-        //this.cards = _([]);
-        this.cardLocation = true;
         /*Keeps track of location order on player street
           for flexbox order parameter info
           0 === outfit (on street) or townsquare
@@ -18,15 +15,11 @@ class GameLocation {
           <=-1 === left of outfit
         */
         this.order = order;
-
-        if(!UUID.test(location)) {
-            this.cardLocation = false;
-        }
     }
 
-    isAdjacent(location) {
+    isAdjacent(uuid) {
         for(var key of this.adjacencyMap.keys()) {
-            if(location === key) {
+            if(uuid === key) {
                 return true;
             }
         }
@@ -34,24 +27,16 @@ class GameLocation {
         return false;
     }
 
-    isCardLocation() {
-        return this.cardLocation;
+    attach(uuid, direction) {
+        this.adjacencyMap.set(uuid, direction);
     }
 
-    attach(location, direction) {
-        this.adjacencyMap.set(location, direction);
+    detach(uuid) {
+        this.adjacencyMap.delete(uuid);
     }
 
-    detach(location) {
-        this.adjacencyMap.delete(location);
-    }
-
-    adjacentLocations() {
+    adjacent() {
         return this.adjacencyMap;
-    }
-
-    setOrder(order) {
-        this.order = order;
     }
 
     left() {
