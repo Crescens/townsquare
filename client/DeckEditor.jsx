@@ -164,9 +164,15 @@ class InnerDeckEditor extends React.Component {
             let quantity = line.split(' ', 1).pop();
             let cardName = line.replace(quantity, '').trim();
 
-            starting = (quantity.match(/\*/g) || []).length;
+            let index = cardName.lastIndexOf('(');
+            cardName = cardName.slice(0, index).trim();
+            
 
-            quantity = quantity.replace('*', '');
+            starting = (cardName.match(/\*/g) || []).length;
+
+            while(cardName.endsWith('*')) {
+                cardName = cardName.replace('*', '');
+            }
 
             if(!$.isNumeric(quantity[0])) {
                 return;
