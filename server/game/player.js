@@ -394,6 +394,7 @@ class Player extends Spectator {
         var outfit = new GameLocation(this.outfit.uuid, 0);
         outfit.attach('townsquare', 'townsquare');
         this.locations.push(outfit);
+        this.moveCard(this.outfit, 'play area');
     }
 
     initialise() {
@@ -1175,6 +1176,7 @@ class Player extends Spectator {
             handrank: this.handRank,
             id: this.id,
             left: this.left,
+            locations: this.locations,
             numDrawCards: this.drawDeck.size(),
             name: this.name,
             phase: this.phase,

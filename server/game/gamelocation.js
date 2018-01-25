@@ -17,9 +17,9 @@ class GameLocation {
         this.order = order;
     }
 
-    isAdjacent(location) {
+    isAdjacent(uuid) {
         for(var key of this.adjacencyMap.keys()) {
-            if(location === key) {
+            if(uuid === key) {
                 return true;
             }
         }
@@ -27,24 +27,16 @@ class GameLocation {
         return false;
     }
 
-    isCardLocation() {
-        return this.cardLocation;
+    attach(uuid, direction) {
+        this.adjacencyMap.set(uuid, direction);
     }
 
-    attach(location, direction) {
-        this.adjacencyMap.set(location, direction);
-    }
-
-    detach(location) {
-        this.adjacencyMap.delete(location);
+    detach(uuid) {
+        this.adjacencyMap.delete(uuid);
     }
 
     adjacent() {
         return this.adjacencyMap;
-    }
-
-    setOrder(order) {
-        this.order = order;
     }
 
     left() {
