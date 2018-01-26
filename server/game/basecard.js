@@ -10,6 +10,7 @@ const CardReaction = require('./cardreaction.js');
 const CustomPlayAction = require('./customplayaction.js');
 const EventRegistrar = require('./eventregistrar.js');
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 //const SpecialKeywords = [
 //  'Difficulty'
 /*  'ambush',
@@ -202,10 +203,9 @@ class BaseCard {
      * is both in play and not blank.
      */
     persistentEffect(properties) {
-        const allowedLocations = ['active plot', 'agenda', 'any', 'play area'];
+        const allowedLocations = ['legend', 'any', 'play area'];
         const defaultLocationForType = {
-            agenda: 'agenda',
-            plot: 'active plot'
+            legend: 'legend'
         };
 
         let location = properties.location || defaultLocationForType[this.getType()] || 'play area';
@@ -516,16 +516,23 @@ class BaseCard {
         }
     }
 
-    setGameLocation(location) {
-        if(!location) {
-            return;
+    updateGameLocation(target) {
+        if(UUID.test(target) || 'townsquare'.test(target)) {
+
+            if(this.getType() !== 'dude') {
+                return false;
+            }
+
+            //let originalLocation = card.gamelocation;
+
+            this.gamelocation = target;
+
+            //this.game.raiseMergedEvent('onCardMovesGameLocation', { card: card, originalLocation: originalLocation, newLocation: target });
+
+            return true;
         }
 
-        this.gamelocation = location;
-    }
-
-    getGameLocation() {
-        return this.gamelocation;
+        return false;
     }
 
     onClick(player) {
@@ -572,7 +579,7 @@ class BaseCard {
             tokens: this.tokens,
             type: this.getType(),
             uuid: this.uuid,
-            value: this.value,
+            value: this.value
         };
 
         return _.extend(state, selectionState);

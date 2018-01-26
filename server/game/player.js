@@ -1,10 +1,9 @@
 const _ = require('underscore');
 
 const Spectator = require('./spectator.js');
-const DrawCard = require('./drawcard.js');
 const Deck = require('./deck.js');
 const HandRank = require('./handrank.js');
-const { GameLocation } = require('./gamelocation.js');
+const GameLocation = require('./gamelocation.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 //const BestowPrompt = require('./gamesteps/bestowprompt.js');
 //const ChallengeTracker = require('./challengetracker.js');
@@ -14,8 +13,6 @@ const PlayerPromptState = require('./playerpromptstate.js');
 
 const StartingHandSize = 5;
 //const DrawPhaseCards = 2;
-
-const uuidmatch = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 class Player extends Spectator {
     constructor(id, user, owner, game) {
@@ -32,9 +29,6 @@ class Player extends Spectator {
         this.boothillPile = _([]);
         this.discardPile = _([]);
         this.additionalPiles = {};
-
-        //TODO: Refactor legacy outfit code from GoT
-        this.outfit = new DrawCard(this, {});
 
         this.owner = owner;
         //this.takenMulligan = false;
@@ -760,38 +754,6 @@ class Player extends Spectator {
         }
     }
 
-    toGameLocation(cardId, target) {
-
-        var ts = /^townsquare$/i;
-
-        if(uuidmatch.test(target) || ts.test(target)) {
-
-            var card = this.findCardByUuid(this.cardsInPlay, cardId);
-
-            if(!card) {
-                card = this.findCardByUuid(this.hand, cardId);
-            }
-
-            if(card.controller !== this) {
-                return false;
-            }
-
-            if(card.getType() !== 'dude') {
-                return false;
-            }
-
-            //let originalLocation = card.gamelocation;
-
-            card.gamelocation = target;
-
-            //this.game.raiseMergedEvent('onCardMovesGameLocation', { card: card, originalLocation: originalLocation, newLocation: target });
-
-            return true;
-        }
-
-        return false;
-    }
-
     drop(cardId, source, target) {
         if(!this.isValidDropCombination(source, target)) {
             return false;
@@ -828,11 +790,9 @@ class Player extends Spectator {
 
         //Moving between locations on the game board will update
         //by simply changing the gamelocation parameter on the cardId
-        if(this.toGameLocation(cardId, target)) {
-            card.setGameLocation(target);
-        }
+        card.updateGameLocation(target);
 
-        if(target === 'play area' || uuidmatch.test(target)) {
+        if(target === 'play area') {
             this.putIntoPlay(card);
         } else {
             /* Ace card
@@ -951,11 +911,11 @@ class Player extends Spectator {
 
 
     getTotalControl() {
-        var power = this.cardsInPlay.reduce((memo, card) => {
+        var control = this.cardsInPlay.reduce((memo, card) => {
             return memo + card.getControl();
-        }, this.outfit.power);
+        }, this.outfit.control);
 
-        return power;
+        return control;
     }
 
     removeAttachment(attachment) {
