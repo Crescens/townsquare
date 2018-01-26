@@ -141,14 +141,15 @@ class DeckValidator {
         let errors = [];
         let unreleasedCards = [];
         let rules = this.getRules(deck);
-        let plotCount = getDeckCount(deck.plotCards);
+        //let plotCount = getDeckCount(deck.plotCards);
         let drawCount = getDeckCount(deck.drawCards);
 
+        /*
         if(plotCount < rules.requiredPlots) {
             errors.push('Too few plot cards');
         } else if(plotCount > rules.requiredPlots) {
             errors.push('Too many plot cards');
-        }
+        }*/
 
         if(drawCount < rules.requiredDraw) {
             errors.push('Too few draw cards');
@@ -168,7 +169,7 @@ class DeckValidator {
             cardCountByName[cardQuantity.card.name].count += cardQuantity.count;
 
             /* -- No Outfit restrictions as of TCaR
-            
+
             if(!rules.mayInclude(cardQuantity.card) || rules.cannotInclude(cardQuantity.card)) {
                 errors.push(cardQuantity.card.title + ' is not allowed by outfit');
             }

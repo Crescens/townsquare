@@ -10,6 +10,7 @@ class SetupPhase extends Phase {
         super(game, 'setup');
         this.initialise([
             new SimpleStep(game, () => this.prepareDecks()),
+            new SimpleStep(game, () => this.drawStartingPosse()),
             new StartingPossePrompt(game),
             new SimpleStep(game, () => this.startGame()),
             new SetupCardsPrompt(game),
@@ -27,6 +28,12 @@ class SetupPhase extends Phase {
         });
         this.game.allCards.each(card => {
             card.applyAnyLocationPersistentEffects();
+        });
+    }
+
+    drawStartingPosse() {
+        _.each(this.game.getPlayers(), player => {
+            player.drawCardsToHand('hand', player.startingPosse);
         });
     }
 

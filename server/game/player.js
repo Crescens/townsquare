@@ -271,11 +271,13 @@ class Player extends Spectator {
 
     shuffleDiscardToDrawDeck() {
 
-        _.each(this.discardPile, card => {
-            this.moveCard(card, 'draw deck');
-        });
+        if(this.discardPile.size() > 0) {
+            _.each(this.discardPile, card => {
+                this.moveCard(card, 'draw deck');
+            });
 
-        this.shuffleDrawDeck();
+            this.shuffleDrawDeck();
+        }
     }
 
     discardFromDraw(number, callback = () => true) {
@@ -361,18 +363,18 @@ class Player extends Spectator {
         });
         this.hand = _([]);
         //Put Starting Posse in Hand Somewhere Here
-        this.shuffleDrawDeck();
-        this.drawCardsToHand(StartingHandSize); //change with starting posse
+        //this.shuffleDrawDeck();
     }
 
     prepareDecks() {
         var deck = new Deck(this.deck);
         var preparedDeck = deck.prepare(this);
-        //this.plotDeck = _(preparedDeck.plotCards);
+        //this.plotDeck = _( /"dDeck.plotCards);
         this.legend = preparedDeck.legend;
         this.outfit = preparedDeck.outfit;
         this.drawDeck = _(preparedDeck.drawCards);
         this.allCards = _(preparedDeck.allCards);
+        this.startingPosse = preparedDeck.starting;
     }
 
     initialise() {
@@ -752,7 +754,6 @@ class Player extends Spectator {
             if(!card) {
                 this.findCardByUuid(this.hand, cardId);
             }
-
 
             if(card.controller !== this) {
                 return false;
