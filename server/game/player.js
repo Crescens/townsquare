@@ -3,7 +3,6 @@ const _ = require('underscore');
 const Spectator = require('./spectator.js');
 const Deck = require('./deck.js');
 const HandRank = require('./handrank.js');
-const GameLocation = require('./gamelocation.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 //const BestowPrompt = require('./gamesteps/bestowprompt.js');
 //const ChallengeTracker = require('./challengetracker.js');
@@ -87,16 +86,6 @@ class Player extends Spectator {
         }));
     }
 
-    addLocation(location) {
-        this.locations.push(location);
-    }
-
-    findLocations(predicate) {
-        if(!predicate) {
-            return this.locations;
-        }
-    }
-
     findCardByName(list, name) {
         return this.findCard(list, card => card.name === name);
     }
@@ -144,6 +133,10 @@ class Player extends Spectator {
         return cardsToReturn;
     }
 
+    findCardsByList(list) {
+        return this.findCard(list, card => (card === card));
+    }
+
     anyCardsInPlay(predicate) {
         return this.allCards.any(card => card.location === 'play area' && predicate(card));
     }
@@ -177,7 +170,7 @@ class Player extends Spectator {
             (playCard.code === card.code || playCard.name === card.name) &&
             playCard.owner === this
         ));
-    }*/
+    }
 
     /*getNumberOfChallengesWon(challengeType) {
         return this.challenges.getWon(challengeType);
@@ -278,9 +271,9 @@ class Player extends Spectator {
             _.each(this.discardPile, card => {
                 this.moveCard(card, 'draw deck');
             });
-
-            this.shuffleDrawDeck();
         }
+
+        this.shuffleDrawDeck();
     }
 
     discardFromDraw(number, callback = () => true) {
@@ -364,38 +357,21 @@ class Player extends Spectator {
             card.moveTo('draw deck');
             this.drawDeck.push(card);
         });
-        this.hand = _([]);
-        //Put Starting Posse in Hand Somewhere Here
-        //this.shuffleDrawDeck();
     }
 
     prepareDecks() {
         var deck = new Deck(this.deck);
         var preparedDeck = deck.prepare(this);
-        //this.plotDeck = _( /"dDeck.plotCards);
+        //this.plotDeck = _(preparedDeck.plotCards);
         this.legend = preparedDeck.legend;
         this.outfit = preparedDeck.outfit;
         this.drawDeck = _(preparedDeck.drawCards);
         this.allCards = _(preparedDeck.allCards);
-        this.startingPosse = preparedDeck.starting;
-    }
-
-    addOutfitToTown() {
-        //Maybe we don't need to manage a TownSquare object, just treat
-        //it as abstract adjacency direction.
-        //this.game.townsquare.attach(this.outfit.uuid, this.name);
-
-        var outfit = new GameLocation(this.outfit.uuid, 0);
-        outfit.attach('townsquare', 'townsquare');
-        this.locations.push(outfit);
-        this.moveCard(this.outfit, 'play area');
     }
 
     initialise() {
         this.prepareDecks();
         this.initDrawDeck();
-
-        this.addOutfitToTown();
 
         this.ghostrock = 0;
         this.readyToStart = false;
@@ -931,12 +907,6 @@ class Player extends Spectator {
         this.deck.selected = false;
         this.deck = deck;
         this.deck.selected = true;
-
-        this.outfit.cardData = deck.outfit;
-        this.outfit.cardData.name = deck.outfit.name;
-        this.outfit.cardData.code = deck.outfit.code;
-        this.outfit.cardData.type_code = 'outfit';
-        //this.outfit.cardData.strength = 0;
     }
 
     moveCard(card, targetLocation, options = {}) {

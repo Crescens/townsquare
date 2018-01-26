@@ -8,3 +8,5 @@ coverage
 config.js
 nodeconfig.js
 server/events.txt
+.tags
+.tags_swap

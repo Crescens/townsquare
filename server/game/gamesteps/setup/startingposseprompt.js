@@ -20,7 +20,7 @@ class StartingPossePrompt extends AllPlayerPrompt {
 
     onMenuCommand(player) {
         player.startPosse();
-        this.game.addMessage('{0} has rustled up their starting posse', player);
+        this.game.addMessage('{0} has rounded up their starting posse', player);
     }
 }
 
