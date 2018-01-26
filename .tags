@@ -940,8 +940,6 @@ claim	.\test\client\decks\plotValidDuplicate.json	/^            "claim": 1,$/;"	
 claim	.\test\client\decks\plotValidDuplicate.json	/^            "claim": 2,$/;"	f
 claim	.\test\client\decks\plotWinter.json	/^            "claim": 1,$/;"	f
 claim	.\test\client\decks\plotWinter.json	/^            "claim": 2,$/;"	f
-claim.isApplying	.\server\game\game.js	/^            isApplying: false,$/;"	p
-claim.type	.\server\game\game.js	/^            type: undefined$/;"	p
 clap	.\package-lock.json	/^        "clap": "https:\/\/registry.npmjs.org\/clap\/-\/clap-1.2.3.tgz",$/;"	f
 clap	.\package-lock.json	/^    "clap": {$/;"	f
 class-utils	.\package-lock.json	/^        "class-utils": "0.3.6",$/;"	f
@@ -1396,7 +1394,6 @@ console-control-strings	.\package-lock.json	/^            "console-control-strin
 console-control-strings	.\package-lock.json	/^        "console-control-strings": "https:\/\/registry.npmjs.org\/console-control-strings\/-\/console-control-strings-1.1.0.tgz",$/;"	f
 console-control-strings	.\package-lock.json	/^        "console-control-strings": {$/;"	f
 console-control-strings	.\package-lock.json	/^    "console-control-strings": {$/;"	f
-const.agenda	.\server\game\basecard.js	/^            agenda: 'agenda',$/;"	p
 const.agenda	.\server\game\cardaction.js	/^            agenda: 'agenda',$/;"	p
 const.agenda	.\server\game\triggeredability.js	/^            agenda: 'agenda',$/;"	p
 const.all	.\server\game\costs.js	/^    all: function(...costs) {$/;"	m
@@ -1422,11 +1419,11 @@ const.getTitle	.\server\game\gamesteps\triggeredabilitywindowtitles.js	/^    get
 const.insight	.\server\game\gamekeywords.js	/^    'insight': new InsightKeyword(),$/;"	p
 const.interrupt	.\server\game\gamesteps\triggeredabilitywindowtitles.js	/^    interrupt: 'interrupt',$/;"	p
 const.isStateDependent	.\server\game\effects.js	/^            isStateDependent: (stateDependentEffects.length !== 0),$/;"	p
+const.legend	.\server\game\basecard.js	/^            legend: 'legend'$/;"	p
 const.limit	.\server\game\abilitydsl.js	/^    limit: AbilityLimit,$/;"	p
 const.onCardAbilityInitiated	.\server\game\gamesteps\triggeredabilitywindowtitles.js	/^    onCardAbilityInitiated: event => 'the effects of ' + event.source.name,$/;"	p
 const.pay	.\server\game\costs.js	/^            pay: function(context) {$/;"	m
 const.plot	.\server\api\account.js	/^    plot: false,$/;"	p
-const.plot	.\server\game\basecard.js	/^            plot: 'active plot'$/;"	p
 const.plot	.\server\game\cardaction.js	/^            plot: 'active plot'$/;"	p
 const.plot	.\server\game\triggeredability.js	/^            plot: 'active plot'$/;"	p
 const.plot	.\server\server.js	/^    plot: false,$/;"	p

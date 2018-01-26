@@ -1,9 +1,9 @@
 const _ = require('underscore');
 
 const Spectator = require('./spectator.js');
-const DrawCard = require('./drawcard.js');
 const Deck = require('./deck.js');
 const HandRank = require('./handrank.js');
+const GameLocation = require('./gamelocation.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 //const BestowPrompt = require('./gamesteps/bestowprompt.js');
 //const ChallengeTracker = require('./challengetracker.js');
@@ -14,8 +14,6 @@ const PlayerPromptState = require('./playerpromptstate.js');
 const StartingHandSize = 5;
 //const DrawPhaseCards = 2;
 
-const uuidmatch = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
 class Player extends Spectator {
     constructor(id, user, owner, game) {
         super(id, user);
@@ -25,13 +23,12 @@ class Player extends Spectator {
         //this.plotDiscard = _([]);
         this.hand = _([]);
         this.drawHand = _([]);
+        this.locations = [];
         this.handRank = 0;
         this.cardsInPlay = _([]);
         this.boothillPile = _([]);
         this.discardPile = _([]);
         this.additionalPiles = {};
-
-        this.outfit = new DrawCard(this, {});
 
         this.owner = owner;
         //this.takenMulligan = false;
@@ -90,6 +87,16 @@ class Player extends Spectator {
         }));
     }
 
+    addLocation(location) {
+        this.locations.push(location);
+    }
+
+    findLocations(predicate) {
+        if(!predicate) {
+            return this.locations;
+        }
+    }
+
     findCardByName(list, name) {
         return this.findCard(list, card => card.name === name);
     }
@@ -137,10 +144,6 @@ class Player extends Spectator {
         return cardsToReturn;
     }
 
-    findCardsByList(list) {
-        return this.findCard(list, card => (card === card));
-    }
-
     anyCardsInPlay(predicate) {
         return this.allCards.any(card => card.location === 'play area' && predicate(card));
     }
@@ -163,7 +166,7 @@ class Player extends Spectator {
         return _.any(this.playableLocations, location => location.playingType === playingType && location.contains(card));
     }
 
-    getDuplicateInPlay(card) {
+    /*getDuplicateInPlay(card) {
         if(!card.isUnique()) {
             return undefined;
         }
@@ -174,7 +177,7 @@ class Player extends Spectator {
             (playCard.code === card.code || playCard.name === card.name) &&
             playCard.owner === this
         ));
-    }
+    }*/
 
     /*getNumberOfChallengesWon(challengeType) {
         return this.challenges.getWon(challengeType);
@@ -377,9 +380,22 @@ class Player extends Spectator {
         this.startingPosse = preparedDeck.starting;
     }
 
+    addOutfitToTown() {
+        //Maybe we don't need to manage a TownSquare object, just treat
+        //it as abstract adjacency direction.
+        //this.game.townsquare.attach(this.outfit.uuid, this.name);
+
+        var outfit = new GameLocation(this.outfit.uuid, 0);
+        outfit.attach('townsquare', 'townsquare');
+        this.locations.push(outfit);
+        this.moveCard(this.outfit, 'play area');
+    }
+
     initialise() {
         this.prepareDecks();
         this.initDrawDeck();
+
+        this.addOutfitToTown();
 
         this.ghostrock = 0;
         this.readyToStart = false;
@@ -743,38 +759,6 @@ class Player extends Spectator {
         }
     }
 
-    toGameLocation(cardId, target) {
-
-        var ts = /^townsquare$/i;
-
-        if(uuidmatch.test(target) || ts.test(target)) {
-
-            var card = this.findCardByUuid(this.cardsInPlay, cardId);
-
-            if(!card) {
-                this.findCardByUuid(this.hand, cardId);
-            }
-
-            if(card.controller !== this) {
-                return false;
-            }
-
-            if(card.getType() !== 'dude') {
-                return false;
-            }
-
-            //let originalLocation = card.gamelocation;
-
-            card.gamelocation = target;
-
-            //this.game.raiseMergedEvent('onCardMovesGameLocation', { card: card, originalLocation: originalLocation, newLocation: target });
-
-            return true;
-        }
-
-        return false;
-    }
-
     drop(cardId, source, target) {
         if(!this.isValidDropCombination(source, target)) {
             return false;
@@ -811,11 +795,9 @@ class Player extends Spectator {
 
         //Moving between locations on the game board will update
         //by simply changing the gamelocation parameter on the cardId
-        if(this.toGameLocation(cardId, target)) {
-            card.setGameLocation(target);
-        }
+        card.updateGameLocation(target);
 
-        if(target === 'play area' || uuidmatch.test(target)) {
+        if(target === 'play area') {
             this.putIntoPlay(card);
         } else {
             /* Ace card
@@ -934,11 +916,11 @@ class Player extends Spectator {
 
 
     getTotalControl() {
-        var power = this.cardsInPlay.reduce((memo, card) => {
+        var control = this.cardsInPlay.reduce((memo, card) => {
             return memo + card.getControl();
-        }, this.outfit.power);
+        }, this.outfit.control);
 
-        return power;
+        return control;
     }
 
     removeAttachment(attachment) {
@@ -1159,6 +1141,7 @@ class Player extends Spectator {
             handrank: this.handRank,
             id: this.id,
             left: this.left,
+            locations: this.locations,
             numDrawCards: this.drawDeck.size(),
             name: this.name,
             phase: this.phase,

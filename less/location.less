@@ -1,10 +1,20 @@
 @import "variables";
 
 .location-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   margin: 0px 4px 0px 0px;
   vertical-align: middle;
   align-items: center;
   justify-content: center;
+  height: @card-height*3;
+  width: @card-width*3;
+  box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
+
+  .card-wrapper {
+    padding: 2px;
+  }
 }
 
 .location-frame {
@@ -17,11 +27,11 @@
   display: flex;
   position: relative;
   //border-radius: 4px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
+
+
   //overflow: hidden;
   z-index: @layer-locations;
-  height: @card-height*3;
-  width: @card-width*3;
+
   align-items: center;
   justify-content: center;
 

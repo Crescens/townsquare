@@ -5,6 +5,7 @@ const uuid = require('uuid');
 const Game = require('../../../server/game/game.js');
 const Player = require('../../../server/game/player.js');
 const Spectator = require('../../../server/game/spectator.js');
+const GameLocation = require('../../../server/game/gamelocation.js');
 
 describe('Game', function() {
     beforeEach(function() {
@@ -19,32 +20,29 @@ describe('Game', function() {
 
         this.game.initialise();
 
-        this.testCard1 = { key: uuid.v1(), title: 'test 1' };
+        this.testCard1 = { uuid: uuid.v1(), title: 'test 1' };
         //this.card2 = jasmine.createSpyObj('card', ['allowGameAction']);
         this.handler = jasmine.createSpy('handler');
     });
 
-    describe('getLocations()', function() {
+    describe('findLocations()', function() {
         describe('immediately after game creation', function() {
             it('should not be empty', function() {
-                expect(this.game.getLocations().length).not.toBe(0);
-            });
-            it('should contain an object that represents townsquare', function() {
-                expect(this.game.locations).toContain(jasmine.objectContaining({represents: 'townsquare'}));
+                expect(this.player1.findLocations().length).not.toBe(0);
             });
         });
 
         describe('after adding a location', function () {
             beforeEach(function () {
-                this.game.addGameLocation(this.testCard1.key);
+                this.player1.addLocation(new GameLocation(this.testCard1.uuid, 0));
             });
 
             it('should have two objects', function () {
-                expect(this.game.getLocations().length).toBe(2);
+                expect(this.player1.locations.length).toBe(2);
             });
 
             it('should contain the added card', function () {
-                expect(this.game.getLocations()).toContain(jasmine.objectContaining({represents: this.testCard1.key}));
+                expect(this.player1.findLocations()).toContain(jasmine.objectContaining({uuid: this.testCard1.uuid}));
             });
         });
     });
