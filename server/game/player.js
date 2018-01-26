@@ -386,6 +386,11 @@ class Player extends Spectator {
         //this.activePlot = undefined;
     }
 
+    startPosse() {
+        _.each(this.hand, card => this.putIntoPlay(card));
+        this.possewrangled = true;
+    }
+
     startGame() {
         if(!this.readyToStart) {
             return;

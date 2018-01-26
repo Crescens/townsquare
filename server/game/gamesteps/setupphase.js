@@ -1,8 +1,8 @@
 const _ = require('underscore');
 const Phase = require('./phase.js');
 const SimpleStep = require('./simplestep.js');
-const KeepOrMulliganPrompt = require('./setup/keepormulliganprompt.js');
 const SetupCardsPrompt = require('./setup/setupcardsprompt.js');
+const StartingPossePrompt = require('./setup/startingposseprompt.js');
 const CheckAttachmentsPrompt = require('./setup/checkattachmentsprompt.js');
 
 class SetupPhase extends Phase {
@@ -10,7 +10,7 @@ class SetupPhase extends Phase {
         super(game, 'setup');
         this.initialise([
             new SimpleStep(game, () => this.prepareDecks()),
-            new KeepOrMulliganPrompt(game),
+            new StartingPossePrompt(game),
             new SimpleStep(game, () => this.startGame()),
             new SetupCardsPrompt(game),
             new SimpleStep(game, () => this.setupDone()),
