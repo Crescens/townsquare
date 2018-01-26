@@ -165,7 +165,9 @@ class InnerDeckEditor extends React.Component {
             let cardName = line.replace(quantity, '').trim();
 
             let index = cardName.lastIndexOf('(');
-            cardName = cardName.slice(0, index).trim();
+            if (!(cardName.toLowerCase().endsWith('(black)') || cardName.toLowerCase().endsWith('(red)'))) {
+                cardName = cardName.slice(0, index).trim();
+            }
             
 
             starting = (cardName.match(/\*/g) || []).length;
