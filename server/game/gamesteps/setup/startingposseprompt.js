@@ -2,7 +2,7 @@ const AllPlayerPrompt = require('../allplayerprompt.js');
 
 class StartingPossePrompt extends AllPlayerPrompt {
     completionCondition(player) {
-        return player.possewrangled;
+        return player.posse;
     }
 
     activePrompt() {
@@ -20,7 +20,7 @@ class StartingPossePrompt extends AllPlayerPrompt {
 
     onMenuCommand(player) {
         player.startPosse();
-        this.game.addMessage('{0} has wrangled their starting posse', player);
+        this.game.addMessage('{0} has rustled up their starting posse', player);
     }
 }
 

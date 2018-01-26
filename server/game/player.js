@@ -46,7 +46,7 @@ class Player extends Spectator {
         //this.cannotGainGold = false;
         //this.cannotGainChallengeBonus = false;
         //this.cannotTriggerCardAbilities = false;
-        //this.cannotMarshalOrPutIntoPlayByTitle = [];
+        this.cannotPlayByTitle = [];
         //this.abilityMaxByTitle = {};
         //this.standPhaseRestrictions = [];
         //this.mustChooseAsClaim = [];
@@ -389,8 +389,8 @@ class Player extends Spectator {
     }
 
     startPosse() {
-        _.each(this.hand, card => this.putIntoPlay(card));
-        this.possewrangled = true;
+        _.each(this.hand.value(), card => this.drop(card.uuid, 'hand', this.outfit.uuid));
+        this.posse = true;
     }
 
     startGame() {
@@ -510,11 +510,11 @@ class Player extends Spectator {
             return true;
         }
 
-        if(this.cannotMarshalOrPutIntoPlayByTitle.includes(card.name)) {
+        if(this.cannotPlayByTitle.includes(card.name)) {
             return false;
         }
 
-        if(this.isCharacterDead(card) && !this.canResurrect(card)) {
+        if(this.isCharacterDead(card)) {
             return false;
         }
 
