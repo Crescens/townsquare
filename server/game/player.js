@@ -365,8 +365,6 @@ class Player extends Spectator {
             this.drawDeck.push(card);
         });
         this.hand = _([]);
-        //Put Starting Posse in Hand Somewhere Here
-        //this.shuffleDrawDeck();
     }
 
     prepareDecks() {
@@ -792,7 +790,7 @@ class Player extends Spectator {
         //by simply changing the gamelocation parameter on the cardId
         card.updateGameLocation(target);
 
-        if(target === 'play area') {
+        if(card.playableLocation(target)) {
             this.putIntoPlay(card);
         } else {
             /* Ace card
@@ -810,10 +808,6 @@ class Player extends Spectator {
         }
 
         return true;
-    }
-
-    moveDude(cardId) {
-
     }
 
     promptForAttachment(card, playingType) {
@@ -927,10 +921,10 @@ class Player extends Spectator {
         this.deck = deck;
         this.deck.selected = true;
 
-        this.outfit.cardData = deck.outfit;
+        /*this.outfit.cardData = deck.outfit;
         this.outfit.cardData.name = deck.outfit.name;
         this.outfit.cardData.code = deck.outfit.code;
-        this.outfit.cardData.type_code = 'outfit';
+        this.outfit.cardData.type_code = 'outfit';*/
         //this.outfit.cardData.strength = 0;
     }
 

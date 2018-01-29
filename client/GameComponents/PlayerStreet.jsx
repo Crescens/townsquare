@@ -37,16 +37,19 @@ class PlayerStreet extends React.Component {
                     if(card.uuid === location.uuid) {
                         onStreet.push(<GameLocation key={location.uuid}
                                     location={card}
-                                    onMouseOver={this.onMouseOver}
-                                    onMouseOut={this.onMouseOut}
-                                    onDragDrop={this.onDragDrop}
-                                    onClick={this.onCardClick}
-                                    otherPlayer={this.otherPlayer}
-                                    thisPlayer={this.thisPlayer}/>
+                                    onMouseOver={this.props.onMouseOver}
+                                    onMouseOut={this.props.onMouseOut}
+                                    onDragDrop={this.props.onDragDrop}
+                                    otherPlayer={this.props.otherPlayer}
+                                    thisPlayer={this.props.thisPlayer}/>
                                 );
                     }
                 });
             });
+        }
+
+        if(onStreet.length === 0) {
+            onStreet.push(<GameLocation key='empty' location={{facedown:true}}/>);
         }
 
         return <div className='in-town'>{onStreet}</div>;
@@ -65,6 +68,10 @@ class PlayerStreet extends React.Component {
 PlayerStreet.displayName = 'PlayerStreet';
 PlayerStreet.propTypes = {
     className: PropTypes.string,
+    onClick: PropTypes.func,
+    onDragDrop: PropTypes.func,
+    onMouseOut: PropTypes.func,
+    onMouseOver: PropTypes.func,
     otherPlayer: PropTypes.object,
     style: PropTypes.object,
     thisPlayer: PropTypes.object
