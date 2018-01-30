@@ -14,6 +14,9 @@ const PlayerPromptState = require('./playerpromptstate.js');
 const StartingHandSize = 5;
 //const DrawPhaseCards = 2;
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const TOWNSQUARE = /townsquare/i;
+
 class Player extends Spectator {
     constructor(id, user, owner, game) {
         super(id, user);
@@ -782,32 +785,25 @@ class Player extends Spectator {
             return false;
         }
 
-        if(source === 'hand' && (card.getType() === 'action' || card.getType() === 'joker')) {
-            return false;
+        if(target === 'discard pile') {
+            this.discardCard(card, false);
+            return true;
         }
 
-        //Moving between locations on the game board will update
-        //by simply changing the gamelocation parameter on the cardId
-        card.updateGameLocation(target);
-
-        if(card.playableLocation(target)) {
+        if(this.inPlayLocation(target)) {
+            card.updateGameLocation(target);
             this.putIntoPlay(card);
         } else {
-            /* Ace card
-            if(target === 'boothill pile' && card.location === 'play area') {
-                this.killCharacter(card, false);
-                return true;
-            } */
-
-            if(target === 'discard pile') {
-                this.discardCard(card, false);
-                return true;
-            }
-
             this.moveCard(card, target);
         }
 
         return true;
+    }
+
+    inPlayLocation(target) {
+        if(UUID.test(target) || TOWNSQUARE.test(target)) {
+            return true;
+        }
     }
 
     promptForAttachment(card, playingType) {

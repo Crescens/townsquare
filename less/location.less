@@ -1,5 +1,19 @@
 @import "variables";
 
+.player-street {
+    display: flex;
+}
+
+.street-left {
+    min-height: @card-height*3;
+    min-width: @card-width*3;
+}
+
+.street-right {
+    min-height: @card-height*3;
+    min-width: @card-width*3;
+}
+
 .location-wrapper {
   display: flex;
   flex-direction: column;
@@ -8,8 +22,8 @@
   vertical-align: middle;
   align-items: center;
   justify-content: center;
-  height: @card-height*3;
-  width: @card-width*3;
+  min-height: @card-height*3;
+  min-width: @card-width*3;
   box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
 
   .card-wrapper {
@@ -124,12 +138,4 @@
     height: 113px;
     margin: 0 auto;
     order: 0;
-}
-
-.this-outfit {
-    order: 1;
-}
-
-.other-outfit {
-    order: -1;
 }

@@ -10,8 +10,6 @@ const CardReaction = require('./cardreaction.js');
 const CustomPlayAction = require('./customplayaction.js');
 const EventRegistrar = require('./eventregistrar.js');
 
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const TOWNSQUARE = /townsquare/i;
 //const SpecialKeywords = [
 //  'Difficulty'
 /*  'ambush',
@@ -517,24 +515,8 @@ class BaseCard {
         }
     }
 
-    playableLocation(target) {
-        if(UUID.test(target) || TOWNSQUARE.test(target)) {
-            return true;
-        }
-    }
-
     updateGameLocation(target) {
-        if(this.playableLocation(target)) {
-            //let originalLocation = card.gamelocation;
-
-            this.gamelocation = target;
-
-            //this.game.raiseMergedEvent('onCardMovesGameLocation', { card: card, originalLocation: originalLocation, newLocation: target });
-
-            return true;
-        }
-
-        return false;
+        this.gamelocation = target;
     }
 
     onClick(player) {

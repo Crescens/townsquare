@@ -4,7 +4,7 @@
 const _ = require('underscore');
 const uuid = require('uuid');
 const Player = require('../../../server/game/player.js');
-const GameLocation = require ('../../../server/game/gamelocation.js')
+const GameLocation = require ('../../../server/game/gamelocation.js');
 
 describe('Player', () => {
     describe('drop()', function() {
@@ -19,7 +19,7 @@ describe('Player', () => {
             this.gameSpy.playersAndSpectators = [];
             this.gameSpy.playersAndSpectators[this.player.name] = this.player;
 
-            this.cardSpy = jasmine.createSpyObj('card', ['getType', 'leavesPlay', 'moveTo', 'updateGameLocation', 'playableLocation']);
+            this.cardSpy = jasmine.createSpyObj('card', ['getType', 'leavesPlay', 'moveTo', 'updateGameLocation', 'playableLocation', 'putIntoPlay']);
             this.cardSpy.uuid = uuid.v1();
             this.cardSpy.controller = this.cardSpy.owner = this.player;
             this.cardSpy.attachments = _([]);

@@ -86,7 +86,7 @@ export class InnerGameLocation extends React.Component {
             return <div className='card-row'/>;
         }
 
-        var  cardRow = _.map(player.cardsInPlay, (card) => {
+        var cardRow = _.map(player.cardsInPlay, (card) => {
             if(card.gamelocation === this.props.location.uuid) {
                 return (<Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.onMenuItemClick}
                               onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onDragDrop={this.onDragDrop} />);

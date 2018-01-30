@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import GameLocation from './GameLocation.jsx';
 import 'jquery-nearest';
+import {tryParseJSON} from '../util.js';
 
 class PlayerStreet extends React.Component {
     constructor() {
@@ -18,14 +19,6 @@ class PlayerStreet extends React.Component {
 
     onMouseOver() {
         //this.props.zoomCard(card);
-    }
-
-    getBestHand() {
-
-    }
-
-    getNextHand() {
-
     }
 
     buildStreet(player) {
@@ -57,7 +50,7 @@ class PlayerStreet extends React.Component {
 
     render() {
         return (
-            <div className='player-street' style={this.props.style} >
+            <div style={this.props.style} >
                 {this.buildStreet(this.props.thisPlayer)}
             </div>
         );
