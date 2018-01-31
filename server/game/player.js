@@ -1123,7 +1123,7 @@ class Player extends Spectator {
             firstPlayer: this.firstPlayer,
             ghostrock: this.ghostrock,
             hand: this.getSummaryForCardList(this.hand, activePlayer, true),
-            handrank: this.handRank,
+            handRank: this.handRank,
             id: this.id,
             left: this.left,
             locations: this.locations,
