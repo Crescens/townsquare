@@ -37,21 +37,9 @@ export class InnerPlayerStats extends React.Component {
                 </div>
                 <div className='state'>
                     <span><img src='/img/Control.png' title='Control' alt='Control' height='26' width='26' /> {this.props.control}</span>
-                    {this.props.isMe ?
-                        <div className='pull-right'>
-                            <span className='btn btn-stat' onClick={this.sendUpdate.bind(this, 'control', 'down')}><img src='/img/Minus.png' title='-' alt='-' /></span>
-                            <span className='btn btn-stat' onClick={this.sendUpdate.bind(this, 'control', 'up')}><img src='/img/Plus.png' title='+' alt='+' /></span>
-                        </div> :
-                        null}
                 </div>
                 <div className='state'>
                     <span><img src='/img/Influence.png' title='Influence' alt='Influence' height='26' width='26' /> {this.props.influence}</span>
-                    {this.props.isMe ?
-                        <div className='pull-right'>
-                            <span className='btn btn-stat' onClick={this.sendUpdate.bind(this, 'influence', 'down')}><img src='/img/Minus.png' title='-' alt='-' /></span>
-                            <span className='btn btn-stat' onClick={this.sendUpdate.bind(this, 'influence', 'up')}><img src='/img/Plus.png' title='+' alt='+' /></span>
-                        </div> :
-                        null}
                 </div>
             </div>
         );

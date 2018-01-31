@@ -382,8 +382,8 @@ class Game extends EventEmitter {
         this.router.gameWon(this, reason, winner);
     }
 
-    /* None of the stuff in here works, but this structure might be useful for
-       influence, control, bullet modifiers, etc...
+    // None of the stuff in here works, but this structure might be useful for
+    //   influence, control, bullet modifiers, etc...
 
     changeStat(playerName, stat, value) {
         let player = this.getPlayerByName(playerName);
@@ -392,29 +392,6 @@ class Game extends EventEmitter {
         }
 
         let target = player;
-
-        if(stat === 'power') {
-            target = player.outfit;
-        } else if(stat === 'reserve' || stat === 'claim') {
-            if(!player.activePlot) {
-                return;
-            }
-
-            target = player.activePlot.cardData;
-        }
-
-        if(stat === 'claim' && _.isNumber(player.activePlot.claimSet)) {
-            player.activePlot.claimSet += value;
-
-            this.raiseEvent('onStatChanged', player, stat, value);
-
-            if(player.activePlot.claimSet < 0) {
-                player.activePlot.claimSet = 0;
-            } else {
-                this.addMessage('{0} changes the set claim value to be {1} ({2})', player, player.activePlot.claimSet, (value > 0 ? '+' : '') + value);
-            }
-            return;
-        }
 
         target[stat] += value;
 
@@ -425,7 +402,7 @@ class Game extends EventEmitter {
         } else {
             this.addMessage('{0} sets {1} to {2} ({3})', player, stat, target[stat], (value > 0 ? '+' : '') + value);
         }
-    }*/
+    }
 
     chat(playerName, message) {
         var player = this.playersAndSpectators[playerName];
