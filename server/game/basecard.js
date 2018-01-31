@@ -34,6 +34,7 @@ class BaseCard {
         this.uuid = uuid.v1();
         this.code = cardData.code;
         this.name = cardData.name;
+        this.title = cardData.title;
         this.facedown = false;
         this.blankCount = 0;
         this.gamelocation = '';
@@ -309,9 +310,9 @@ class BaseCard {
         return !!this.factions[normalizedFaction];
     }
 
-    isLoyal() {
+    /*isLoyal() {
         return this.cardData.is_loyal;
-    }
+    }*/
 
     applyAnyLocationPersistentEffects() {
         _.each(this.abilities.persistentEffects, effect => {
@@ -565,11 +566,13 @@ class BaseCard {
             facedown: this.facedown,
             gamelocation: this.gamelocation,
             menu: this.getMenu(),
-            name: this.cardData.label,
             new: this.new,
+            suit: this.suit,
+            title: this.title,
             tokens: this.tokens,
             type: this.getType(),
-            uuid: this.uuid
+            uuid: this.uuid,
+            value: this.value,
         };
 
         return _.extend(state, selectionState);

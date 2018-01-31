@@ -2,39 +2,38 @@
 /*eslint camelcase: 0, no-invalid-this: 0 */
 //const _ = require('underscore');
 const uuid = require('uuid');
-const GameLocation = require('../../../../server/game/gamelocation.js');
+const {GameLocation} = require('../../../server/game/gamelocation.js');
 
 describe('GameLocation', function () {
     beforeEach(function () {
+        this.testLocation = { uuid: uuid.v1(), title: 'Location'};
         this.testCard1 = { uuid: uuid.v1(), title: 'test 1' };
         this.testCard2 = { uuid: uuid.v1(), title: 'test 2' };
         this.game = jasmine.createSpyObj('game', ['raiseMergedEvent']);
         this.owner = jasmine.createSpyObj('owner', ['getCardSelectionState']);
         this.owner.getCardSelectionState.and.returnValue({});
         this.owner.game = this.game;
-        this.location = new GameLocation('townsquare', 0);
+        this.location = new GameLocation(this.testLocation, 0);
+        //this.townsquare = new TownSquare();
     });
 
-    describe('when a location is created with a string', function () {
-        it('should have a bare string in its represents property', function() {
+    //No longer create locations with bare strings, TownSquare is a singleton
+    //GameLocation with its own UUID
+    /*describe('when a location is created with a string', function () {
+        it('should have a bare string in its uuid property', function() {
             this.location = new GameLocation('testlocation', 1);
             expect(this.location.getKey()).toEqual('testlocation');
             expect(this.location.isCardLocation()).toBe(false);
         });
-    });
+    });*/
 
-    describe('when a location is created with a uuid', function () {
+    describe('when a location is created', function () {
         beforeEach(function() {
-            this.location = new GameLocation(this.testCard1.uuid, -1);
+            this.location = new GameLocation(this.testLocation.uuid, -1);
         });
 
-        it('should have an uuid in its represents property', function() {
-            expect(this.location.represents).toEqual(this.testCard1.uuid);
-            expect(this.location.getKey()).toEqual(this.testCard1.uuid);
-        });
-
-        it('isCardLocation should return true', function() {
-            expect(this.location.isCardLocation()).toBe(true);
+        it('should have a uuid that matches its parent', function() {
+            expect(this.location.uuid).toEqual(this.testLocation.uuid);
         });
 
         it('should have an order parameter that matches what was passed', function () {
