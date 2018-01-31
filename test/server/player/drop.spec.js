@@ -47,7 +47,8 @@ describe('Player', () => {
             describe('when the card is a dude in hand', function() {
                 beforeEach(function() {
                     this.cardSpy.getType.and.returnValue('dude');
-                    this.location = new GameLocation(uuid.v1(), 0);
+                    this.outfit = uuid.v1();
+                    this.location = new GameLocation(this.outfit, 0);
                     this.player.addLocation(this.location);
 
                     this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', this.location.uuid);
@@ -65,7 +66,7 @@ describe('Player', () => {
                     this.cardsInPlay = this.player.cardsInPlay.size();
                     this.locationsInPlay = this.player.locations.length;
 
-                    this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', 'play area');
+                    this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', 'street-left');
                 });
 
                 it('should return true and add the card to the play area', function() {

@@ -516,7 +516,11 @@ class BaseCard {
     }
 
     updateGameLocation(target) {
-        this.gamelocation = target;
+        if(this.getType() === 'dude') {
+            this.gamelocation = target;
+        } else if(this.getType() === 'deed') {            
+            this.gamelocation = this.uuid;
+        }
     }
 
     onClick(player) {

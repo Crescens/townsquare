@@ -791,8 +791,14 @@ class Player extends Spectator {
         }
 
         if(this.inPlayLocation(target)) {
-            card.updateGameLocation(target);
-            this.putIntoPlay(card);
+            if(card.getType() === 'dude') {
+                card.updateGameLocation(target);
+                this.putIntoPlay(card);
+            }
+            if(card.getType() === 'deed') {
+                this.addDeedToStreet(card, target);
+                this.putIntoPlay(card);
+            }
         } else {
             this.moveCard(card, target);
         }
@@ -800,8 +806,29 @@ class Player extends Spectator {
         return true;
     }
 
+    leftDeedOrder() {
+        let sorted = _.sortBy(this.locations, 'order');
+        let leftmost = sorted.pop();
+        return leftmost;
+    }
+
+    rightDeedOrder() {
+        let sorted = _.sortBy(this.locations, 'order');
+        let rightmost = sorted.shift();
+        return rightmost;
+    }
+
+    addDeedToStreet(card, target) {
+        if(/left/.test(target)) {
+            this.locations.push(new GameLocation(card.uuid, this.leftDeedOrder() - 1));
+        } else if(/right/.test(target)) {
+            this.locations.push(new GameLocation(card.uuid, this.rightDeedOrder() + 1));
+        }
+    }
+
     inPlayLocation(target) {
-        if(UUID.test(target) || TOWNSQUARE.test(target)) {
+
+        if(UUID.test(target) || TOWNSQUARE.test(target) || /street/.test(target)) {
             return true;
         }
     }

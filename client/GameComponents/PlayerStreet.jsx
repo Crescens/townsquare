@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import GameLocation from './GameLocation.jsx';
 import 'jquery-nearest';
-import {tryParseJSON} from '../util.js';
 
 class PlayerStreet extends React.Component {
     constructor() {
@@ -25,7 +24,8 @@ class PlayerStreet extends React.Component {
         var onStreet = [];
 
         if(player) {
-            _.each(player.locations, (location) => {
+            let sortedLocations = _.sortBy(player.locations, 'order');
+            _.each(sortedLocations, (location) => {
                 _.map(player.cardsInPlay, (card) => {
                     if(card.uuid === location.uuid) {
                         onStreet.push(<GameLocation key={location.uuid}
