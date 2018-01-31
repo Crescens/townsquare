@@ -58,7 +58,6 @@ class BaseCard {
         this.events = new EventRegistrar(this.game, this);
 
         this.abilities = { actions: [], reactions: [], persistentEffects: [], playActions: [] };
-        //this.parseKeywords(cardData.keywords || '');
         this.parseKeywords(cardData.keywords || '');
         this.setupCardAbilities(AbilityDsl);
 
@@ -202,10 +201,9 @@ class BaseCard {
      * is both in play and not blank.
      */
     persistentEffect(properties) {
-        const allowedLocations = ['active plot', 'agenda', 'any', 'play area'];
+        const allowedLocations = ['legend', 'any', 'play area'];
         const defaultLocationForType = {
-            agenda: 'agenda',
-            plot: 'active plot'
+            legend: 'legend'
         };
 
         let location = properties.location || defaultLocationForType[this.getType()] || 'play area';
@@ -516,16 +514,12 @@ class BaseCard {
         }
     }
 
-    setGameLocation(location) {
-        if(!location) {
-            return;
+    updateGameLocation(target) {
+        if(this.getType() === 'dude') {
+            this.gamelocation = target;
+        } else if(this.getType() === 'deed') {
+            this.gamelocation = this.uuid;
         }
-
-        this.gamelocation = location;
-    }
-
-    getGameLocation() {
-        return this.gamelocation;
     }
 
     onClick(player) {
@@ -565,6 +559,7 @@ class BaseCard {
             controlled: this.owner !== this.controller,
             facedown: this.facedown,
             gamelocation: this.gamelocation,
+            keywords: this.keywords,
             menu: this.getMenu(),
             new: this.new,
             suit: this.suit,
@@ -572,7 +567,7 @@ class BaseCard {
             tokens: this.tokens,
             type: this.getType(),
             uuid: this.uuid,
-            value: this.value,
+            value: this.value
         };
 
         return _.extend(state, selectionState);

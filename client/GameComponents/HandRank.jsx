@@ -29,7 +29,7 @@ class HandRank extends React.Component {
     render() {
         return (
             <div className='hand-ranks' style={this.props.style} >
-                {this.props.handrank}
+                {this.props.handRank}
             </div>
         );
 
@@ -38,7 +38,9 @@ class HandRank extends React.Component {
 
 HandRank.displayName = 'HandRank';
 HandRank.propTypes = {
+    //Leaving unimplemented properties for extension thoughts
     className: PropTypes.string,
+    handRank: PropTypes.number,
     name: PropTypes.string,
     onClick: PropTypes.func,
     onMouseOut: PropTypes.func,

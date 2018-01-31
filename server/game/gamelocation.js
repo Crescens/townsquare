@@ -110,4 +110,4 @@ class TownSquare extends GameLocation {
 }
 
 
-module.exports = { GameLocation, TownSquare };
+module.exports = GameLocation;
