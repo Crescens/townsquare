@@ -5,7 +5,7 @@ const BaseCard = require('../../../server/game/basecard.js');
 
 describe('BaseCard', function () {
     beforeEach(function () {
-        this.testCard = { code: '111', label: 'test 1(some pack)', name: 'test 1' };
+        this.testCard = { code: '111', title: 'test 1' };
         this.limitedCard = { code: '1234', text: 'Limited.' };
         this.nonLimitedCard = { code: '2222', text: 'Stealth.' };
         this.game = jasmine.createSpyObj('game', ['raiseMergedEvent']);
@@ -61,7 +61,7 @@ describe('BaseCard', function () {
             describe('and card is faceup', function() {
                 it('should return card data', function() {
                     expect(this.summary.uuid).toEqual(this.card.uuid);
-                    expect(this.summary.name).toEqual(this.testCard.label);
+                    expect(this.summary.title).toEqual(this.testCard.title);
                     expect(this.summary.code).toEqual(this.testCard.code);
                 });
 
@@ -78,7 +78,7 @@ describe('BaseCard', function () {
 
                 it('should return card data', function() {
                     expect(this.summary.uuid).toEqual(this.card.uuid);
-                    expect(this.summary.name).toEqual(this.testCard.label);
+                    expect(this.summary.title).toEqual(this.testCard.title);
                     expect(this.summary.code).toEqual(this.testCard.code);
                 });
 
@@ -103,7 +103,7 @@ describe('BaseCard', function () {
 
                     it('should return no card data', function () {
                         expect(this.summary.uuid).toBeUndefined();
-                        expect(this.summary.name).toBeUndefined();
+                        expect(this.summary.title).toBeUndefined();
                         expect(this.summary.code).toBeUndefined();
                     });
 
@@ -114,7 +114,7 @@ describe('BaseCard', function () {
 
                 it('should return card data', function () {
                     expect(this.summary.uuid).toEqual(this.card.uuid);
-                    expect(this.summary.name).toEqual(this.testCard.label);
+                    expect(this.summary.title).toEqual(this.testCard.title);
                     expect(this.summary.code).toEqual(this.testCard.code);
                 });
 
@@ -131,7 +131,7 @@ describe('BaseCard', function () {
 
                 it('should return no card data', function() {
                     expect(this.summary.uuid).toBeUndefined();
-                    expect(this.summary.name).toBeUndefined();
+                    expect(this.summary.title).toBeUndefined();
                     expect(this.summary.code).toBeUndefined();
                 });
 

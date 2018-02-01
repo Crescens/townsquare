@@ -6,7 +6,7 @@ const GameChat = require('./gamechat.js');
 const EffectEngine = require('./effectengine.js');
 const Effect = require('./effect.js');
 const Player = require('./player.js');
-const GameLocation = require('./gamelocation.js');
+const { TownSquare } = require('./gamelocation.js');
 const Spectator = require('./spectator.js');
 const AnonymousSpectator = require('./anonymousspectator.js');
 const GamePipeline = require('./gamepipeline.js');
@@ -43,7 +43,6 @@ class Game extends EventEmitter {
         this.effectEngine = new EffectEngine(this);
         this.playersAndSpectators = {};
         this.playerCards = {};
-        this.locations = [];
         this.gameChat = new GameChat();
         this.chatCommands = new ChatCommands(this);
         this.pipeline = new GamePipeline();
@@ -59,10 +58,6 @@ class Game extends EventEmitter {
         this.abilityCardStack = [];
         this.abilityWindowStack = [];
         this.password = details.password;
-        this.claim = {
-            isApplying: false,
-            type: undefined
-        };
 
         _.each(details.players, player => {
             this.playersAndSpectators[player.user.username] = new Player(player.id, player.user, this.owner === player.user.username, this);
@@ -157,12 +152,14 @@ class Game extends EventEmitter {
         return foundCards;
     }
 
-    getLocations() {
-        return this.locations;
-    }
+    findAnyLocations(predicate) {
+        var foundLocations = [];
 
-    addGameLocation(location) {
-        this.locations.push(new GameLocation(location));
+        _.each(this.getPlayers(), player => {
+            foundLocations = foundLocations.concat(player.findLocations(predicate));
+        });
+
+        return foundLocations;
     }
 
     getLocationByID(id) {
@@ -549,13 +546,6 @@ class Game extends EventEmitter {
 
         this.playStarted = true;
         this.startedAt = new Date();
-
-        //Replace this with setting up all locations
-        this.addGameLocation('townsquare');
-
-        _.each(this.getPlayers(), player => {
-            //player.drawCardsToHand('hand', player.startingPosse);
-        });
 
         this.continue();
     }

@@ -34,6 +34,7 @@ class BaseCard {
         this.uuid = uuid.v1();
         this.code = cardData.code;
         this.name = cardData.name;
+        this.title = cardData.title;
         this.facedown = false;
         this.blankCount = 0;
         this.gamelocation = '';
@@ -201,10 +202,9 @@ class BaseCard {
      * is both in play and not blank.
      */
     persistentEffect(properties) {
-        const allowedLocations = ['active plot', 'agenda', 'any', 'play area'];
+        const allowedLocations = ['legend', 'any', 'play area'];
         const defaultLocationForType = {
-            agenda: 'agenda',
-            plot: 'active plot'
+            legend: 'legend'
         };
 
         let location = properties.location || defaultLocationForType[this.getType()] || 'play area';
@@ -309,9 +309,9 @@ class BaseCard {
         return !!this.factions[normalizedFaction];
     }
 
-    isLoyal() {
+    /*isLoyal() {
         return this.cardData.is_loyal;
-    }
+    }*/
 
     applyAnyLocationPersistentEffects() {
         _.each(this.abilities.persistentEffects, effect => {
@@ -515,16 +515,12 @@ class BaseCard {
         }
     }
 
-    setGameLocation(location) {
-        if(!location) {
-            return;
+    updateGameLocation(target) {
+        if(this.getType() === 'dude') {
+            this.gamelocation = target;
+        } else if(this.getType() === 'deed') {            
+            this.gamelocation = this.uuid;
         }
-
-        this.gamelocation = location;
-    }
-
-    getGameLocation() {
-        return this.gamelocation;
     }
 
     onClick(player) {
@@ -565,11 +561,13 @@ class BaseCard {
             facedown: this.facedown,
             gamelocation: this.gamelocation,
             menu: this.getMenu(),
-            name: this.cardData.label,
             new: this.new,
+            suit: this.suit,
+            title: this.title,
             tokens: this.tokens,
             type: this.getType(),
-            uuid: this.uuid
+            uuid: this.uuid,
+            value: this.value
         };
 
         return _.extend(state, selectionState);

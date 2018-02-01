@@ -10,6 +10,9 @@ describe('the Game', () => {
     var game = {};
     var player1 = new Player('1', { username: 'Player 1' }, true, game);
     var player2 = new Player('2', { username: 'Player 2' }, false, game);
+    var outfit = { code:'12345' };
+    player1.outfit = outfit;
+    player2.outfit = outfit;
     var spectator = new Spectator('3', 'Spectator 1');
 
     beforeEach(() => {

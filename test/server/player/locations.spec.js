@@ -5,7 +5,7 @@ const uuid = require('uuid');
 const Game = require('../../../server/game/game.js');
 const Player = require('../../../server/game/player.js');
 const Spectator = require('../../../server/game/spectator.js');
-const {GameLocation} = require('../../../server/game/gamelocation.js');
+const GameLocation = require('../../../server/game/gamelocation.js');
 
 describe('Game', function() {
     beforeEach(function() {

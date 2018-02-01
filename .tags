@@ -940,8 +940,6 @@ claim	.\test\client\decks\plotValidDuplicate.json	/^            "claim": 1,$/;"	
 claim	.\test\client\decks\plotValidDuplicate.json	/^            "claim": 2,$/;"	f
 claim	.\test\client\decks\plotWinter.json	/^            "claim": 1,$/;"	f
 claim	.\test\client\decks\plotWinter.json	/^            "claim": 2,$/;"	f
-claim.isApplying	.\server\game\game.js	/^            isApplying: false,$/;"	p
-claim.type	.\server\game\game.js	/^            type: undefined$/;"	p
 clap	.\package-lock.json	/^        "clap": "https:\/\/registry.npmjs.org\/clap\/-\/clap-1.2.3.tgz",$/;"	f
 clap	.\package-lock.json	/^    "clap": {$/;"	f
 class-utils	.\package-lock.json	/^        "class-utils": "0.3.6",$/;"	f
@@ -1396,7 +1394,6 @@ console-control-strings	.\package-lock.json	/^            "console-control-strin
 console-control-strings	.\package-lock.json	/^        "console-control-strings": "https:\/\/registry.npmjs.org\/console-control-strings\/-\/console-control-strings-1.1.0.tgz",$/;"	f
 console-control-strings	.\package-lock.json	/^        "console-control-strings": {$/;"	f
 console-control-strings	.\package-lock.json	/^    "console-control-strings": {$/;"	f
-const.agenda	.\server\game\basecard.js	/^            agenda: 'agenda',$/;"	p
 const.agenda	.\server\game\cardaction.js	/^            agenda: 'agenda',$/;"	p
 const.agenda	.\server\game\triggeredability.js	/^            agenda: 'agenda',$/;"	p
 const.all	.\server\game\costs.js	/^    all: function(...costs) {$/;"	m
@@ -1422,11 +1419,11 @@ const.getTitle	.\server\game\gamesteps\triggeredabilitywindowtitles.js	/^    get
 const.insight	.\server\game\gamekeywords.js	/^    'insight': new InsightKeyword(),$/;"	p
 const.interrupt	.\server\game\gamesteps\triggeredabilitywindowtitles.js	/^    interrupt: 'interrupt',$/;"	p
 const.isStateDependent	.\server\game\effects.js	/^            isStateDependent: (stateDependentEffects.length !== 0),$/;"	p
+const.legend	.\server\game\basecard.js	/^            legend: 'legend'$/;"	p
 const.limit	.\server\game\abilitydsl.js	/^    limit: AbilityLimit,$/;"	p
 const.onCardAbilityInitiated	.\server\game\gamesteps\triggeredabilitywindowtitles.js	/^    onCardAbilityInitiated: event => 'the effects of ' + event.source.name,$/;"	p
 const.pay	.\server\game\costs.js	/^            pay: function(context) {$/;"	m
 const.plot	.\server\api\account.js	/^    plot: false,$/;"	p
-const.plot	.\server\game\basecard.js	/^            plot: 'active plot'$/;"	p
 const.plot	.\server\game\cardaction.js	/^            plot: 'active plot'$/;"	p
 const.plot	.\server\game\triggeredability.js	/^            plot: 'active plot'$/;"	p
 const.plot	.\server\server.js	/^    plot: false,$/;"	p
@@ -1975,7 +1972,7 @@ evp_bytestokey	.\package-lock.json	/^        "evp_bytestokey": "1.0.3",$/;"	f
 evp_bytestokey	.\package-lock.json	/^    "evp_bytestokey": {$/;"	f
 execa	.\package-lock.json	/^            "execa": "0.7.0",$/;"	f
 execa	.\package-lock.json	/^    "execa": {$/;"	f
-exit	.\package-lock.json	/^        "exit": "https:\/\/registry.npmjs.org\/exit\/-\/exit-0.1.2.tgz",$/;"	f
+exit	.\package-lock.json	/^        "exit": "0.1.2",$/;"	f
 exit	.\package-lock.json	/^    "exit": {$/;"	f
 exit-hook	.\package-lock.json	/^        "exit-hook": "https:\/\/registry.npmjs.org\/exit-hook\/-\/exit-hook-1.1.1.tgz",$/;"	f
 exit-hook	.\package-lock.json	/^    "exit-hook": {$/;"	f
@@ -2007,7 +2004,7 @@ extend-shallow	.\package-lock.json	/^        "extend-shallow": "2.0.1",$/;"	f
 extend-shallow	.\package-lock.json	/^        "extend-shallow": "3.0.2"$/;"	f
 extend-shallow	.\package-lock.json	/^        "extend-shallow": {$/;"	f
 extend-shallow	.\package-lock.json	/^    "extend-shallow": {$/;"	f
-extglob	.\package-lock.json	/^            "extglob": "2.0.3",$/;"	f
+extglob	.\package-lock.json	/^            "extglob": "2.0.4",$/;"	f
 extglob	.\package-lock.json	/^        "extglob": "https:\/\/registry.npmjs.org\/extglob\/-\/extglob-0.3.2.tgz",$/;"	f
 extglob	.\package-lock.json	/^        "extglob": {$/;"	f
 extglob	.\package-lock.json	/^    "extglob": {$/;"	f
@@ -3402,6 +3399,7 @@ integrity	.\package-lock.json	/^          "integrity": "sha1-Oayqa+f9HzRx3ELHQW5
 integrity	.\package-lock.json	/^          "integrity": "sha1-OciRjO\/1eZ+D+UkqhI9iWt0Mdm8=",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-QMRT5n5uE8kB3ewxeviYbNqe\/4w=",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-Qmu52oQJDBg42BLIFQryCoMx4pY=",$/;"	f
+integrity	.\package-lock.json	/^          "integrity": "sha1-QrwpAKa1uL0XN2yOiCtlr8zyS\/I=",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-RdG35QbHF93UgndaK3eSCjwMV6c=",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-ReN\/s56No\/JbruP\/U2niu18iAXo=",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-RsP+yMGJKxKwgz25vHYiF226s0s=",$/;"	f
@@ -3478,6 +3476,7 @@ integrity	.\package-lock.json	/^          "integrity": "sha1-qEeQIusaw2iocTibY1J
 integrity	.\package-lock.json	/^          "integrity": "sha1-qIwCU1eR8C7TfHahueqXc8gz+MI=",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-qJS3XUvE9s1nnvMkSp\/Y9Gri1Cg=",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-qeEss66Nh2cn7u84Q\/igiXtcmNY=",$/;"	f
+integrity	.\package-lock.json	/^          "integrity": "sha1-qqR0A\/eyRakvvJfqCPJQ1gh+0IU="$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-r2fy3JIlgkFZUJJgkaQAXSnJu0Q=",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-rFvs8U+iG5nGySynp9fP1bF+dD4=",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-riXPJRKziFodldfwN4aNhDESR2U="$/;"	f
@@ -3502,13 +3501,11 @@ integrity	.\package-lock.json	/^          "integrity": "sha1-x6jTI2BoNiBZp+RlH8a
 integrity	.\package-lock.json	/^          "integrity": "sha1-xpKJRqDgbF+Nb4qTM0af\/aRimKA=",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-zcvAgYgmWtEZtqWnyKtw7s+10n0=",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha1-zg6+ql94yxiSXqfYENe1mwEP1RU="$/;"	f
-integrity	.\package-lock.json	/^          "integrity": "sha512-3sslG3zJbEYcaC4YVAvDorjGxc7tv6KVATnLPZONiljsUncvihe9BQoVCEs0RZ1kmf4Hk9OBqlZfJZWI4GanKA==",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-5teOsQWABXHHBFP9y3skS5P3d\/WfWXpv3FUpy+LorMrNYaT9pI4oLMQX7jzQ2KklNpGpWHzdCXTDT2Y3XGlZBw==",$/;"	f
-integrity	.\package-lock.json	/^          "integrity": "sha512-AyptZexgu7qppEPq59DtN\/XJGZDrLcVxSHai+4hdgMMS9EpF4GBvygcWWApno8lL9qSjVpYt7Raao28qzJX1ww==",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-Gp4oJOQOby5TpOJJuUtCrGE0KSJOUYVa\/I+\/3eD\/TRWEK8jqZuJPAK1t+VuG6jp0keudrqtxlH4MbYbmylun9g==",$/;"	f
-integrity	.\package-lock.json	/^          "integrity": "sha512-I2UmuJSRr\/T8jisiROLU3A3ltr+swpniSmNPI4Ml3ZCX6tVnDsuZzK7F2hl5jTqbZBWCEKlj5HRQiPExXLgE8A=="$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-LSas5vsuA6Q4nEdf9wokY5\/AJYXry98i0IzXsv49rYsgDGDNDPbqAYR1Pe23iFxygfbGZNR\/5VrHXBCh2BhvUQ==",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-NGEErnH6F2vUuXDh+OlbcKW7\/wOcfdRHaZ7VWtqCztfHri\/++YKmP51OdWeGPuqCOba6kk2OTe5d02VmTB80Pw==",$/;"	f
+integrity	.\package-lock.json	/^          "integrity": "sha512-Nmb6QXkELsuBr24CJSkilo6UHHgbekK5UiZgfE6UHD3Eb27YC6oD+bhcT+tJ6cl8dmsgdQxnWlcry8ksBIBLpw==",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-OX8XqP7\/1a9cqkxYw2yXss15f26NKWBpDXQd0\/uK\/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-OgXCNv2U6TnG04D3tth0gsvdbV4zdbxFG3sYUqcoQMoEFVd1j1pZR6TZ8iknC45o9IJ6PeQI\/J6wT\/+cHcniAw==",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-P4O8UQRdGiMLWSizsApmXVQDBS6KCt7dSexgLKBmH5Hr1CZq7vsnscFh8oR1sP1ab1Zj0uCHCEzZeV6SfUf3rA==",$/;"	f
@@ -3518,7 +3515,6 @@ integrity	.\package-lock.json	/^          "integrity": "sha512-UjgapumWlbMhkBgzT
 integrity	.\package-lock.json	/^          "integrity": "sha512-arnXMxT1hhoKo9k1LZdmlNyJdDDfy2v0fXjFlmok4+i8ul\/6WlbVge9bhM74OpNPQPMGUToDtz+KXa1PneJxOA==",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-avDYr0SB3DwO9zsMov0gKCESFYqCnE4hq\/4z3TdUlukEy5t9C0YRq7HLrsN52NAcqXKaepeCD0n+B0arnVG3Hg==",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-m+qzzcn7KUxEmd1gMbchF+Y2eIUbieUaxkWtptyHywrX0rE8QEYqPC07Vuy4Wm32\/xE16NcdBctb8S0Xe\/5IeQ==",$/;"	f
-integrity	.\package-lock.json	/^          "integrity": "sha512-nOqH59deCq9SRHlxq1Aw85Jnt4w6KvLKqWVik6oA9ZklXLNIOlqg4F2yrT1MVaTjAqvVwdfeZ7w7aCvJD7ugkw==",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-s5kLOcnH0XqDO+FvuaLX8DDjZ18CGFk7VygH40QoKPUQhW4e2rvM0rwUq0t8IQDOwYSeLK01U90OjzBTme2QqA==",$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg=="$/;"	f
 integrity	.\package-lock.json	/^          "integrity": "sha512-xAfGg1\/NTLBBKlHFmnd7PlmUW9KhVQIUuSrYem9xzFUZy13ScvtyGGejaae9iAVRiRq9+Cx7DPFaAAhCpyxyPw==",$/;"	f
@@ -3546,6 +3542,7 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-06ioOzGapneTZisT52HHkRQ
 integrity	.\package-lock.json	/^      "integrity": "sha1-0CJTc662Uq3BvILklFM5qEJ1R3M="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-0Jb5JqPe1WAPP9\/ZEZjLCIjC2GM=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-0Kwq1V63sL7JJqUmb2xmKqqD3KU="$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-0L2FU2iHtv58DYGMuWLZ2RxU5lY="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-0\/wRS6BplaRexok\/SEzrHXj19HY="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-0aIUg\/0iu0HlihL6NCGCMUCJfEU=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-0aitM\/qc4OcT1l\/dCsi3SNR4yEg=",$/;"	f
@@ -3676,6 +3673,7 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-8830cDhYA1sqKVHG7F7fbGL
 integrity	.\package-lock.json	/^      "integrity": "sha1-8CQcRXMKn8YyOyBtvzjtx0HQuxA=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-8FKijacOYYkX7wqKw0wa5aaChrM="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-8FyiM7SMBdVP\/wd2XfhQfpXAL\/g=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-8IA1HIZbDcViqEYpZtqlNUPHik0=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-8MaapQ78lbhmwYb0AKM3acsvEpE="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-8S4PPF13sLHN2RRpQuTpbB5N1SU="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-8luCz33BBDPFX3BZLVdGQArCLKo=",$/;"	f
@@ -3713,6 +3711,7 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-B4REvXwWQLD+VA0sm3PVlnj
 integrity	.\package-lock.json	/^      "integrity": "sha1-BB\/qDwaGtjPrjmeOLsI\/IZ+e+dc=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-BCHjOf1xQZs9oT0Smzl5BAIwR24=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-BF+XgtARrppoA93TgrJDkrPYkPc="$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-BNqxFVfSZlG\/NWKmfCKs5WxdOWc=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-BTfLedr1m1mhpRff9wbIbsA5Fi4="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-BjJjj42HfMghB9MKD\/8aF8uhzQw=",$/;"	f
@@ -3857,6 +3856,7 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-LElBFmldb7JUgJQ9P8hy5mK
 integrity	.\package-lock.json	/^      "integrity": "sha1-LGN\/53yJOv0qZj\/iGqkIAGjiBSo=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-LHS27kHZPKUbe1qu6PUDYx0lKnM="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-LMDWazHqIwNkWENuNiDYWVTGbDw=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-LN4J617jQfSEdGuwMJsyU7GxRC8="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-LRDAa9\/TEuqXd2laTShDlFa3WUI="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-LgPo5C7kULjLPc5lvhv4l04d\/ZU=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-Lhj\/PS9JqydlzskCPwEdqo2DSaE=",$/;"	f
@@ -3882,6 +3882,7 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-MzTceXdDaOkvAW5vvAqI9c1
 integrity	.\package-lock.json	/^      "integrity": "sha1-N5k3q8Z9eJWXCtxiHyhM2WbPIVM=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-N61zyO5Bf7PVgOeFMSMH0nSEfyI="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-N8T5t+06tlx0gXtfJICTf7+XxxI=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-NA3tvmKQGHFRweodd3o0SJNd+EY=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-NGYfRohjJ\/7SmRR5FSJS35LapUE=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-NHHenK7DiOXIUOWX5Yom3fN2ArI=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-NIxhrpzb4O3+BT2R\/0zFIdeQ7eg=",$/;"	f
@@ -3922,10 +3923,10 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-PTDHGLCaPZbyPqTMH0A8TTu
 integrity	.\package-lock.json	/^      "integrity": "sha1-PXz0Rk22RG6mRL9LOVB\/mFEAjo4="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac="$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha1-PdPT55Crwk17DToDT\/q6vijrvAQ="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-PpNdfd1zYxuXZZlW1VEo6HtQhKM=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-QIZrnhueC1W0gYlDEeaPr\/rrxSI=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-QIhDO0azsbolnXh4XY6W9zugJDk=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-QKBQ7I3DtTsz2ZCUFcAsC\/Gr+60=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-QQWWCP\/BVHV7cV2ZidGZ\/783LjU=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-QRyttXTFoUDTpLGRDUDYDMn0C0A="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-QVxEePK8wwEgwizhDtMib30+GOA="$/;"	f
@@ -3971,7 +3972,9 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-T9kss04OnbPInIYi7PUfm5e
 integrity	.\package-lock.json	/^      "integrity": "sha1-TDqyCiryaqIM0lmVw5jE63AxDI0=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-TEYTm986HwMt7ZHbSfOO7AFlkFA=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-TFUwMTwI4dWzu\/PSu8dH4njuonA=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-TFfVNASnYdjy58HooYpH2\/J4pxk=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-TK+tdrxi8C+gObL5Tpo906ORpyU=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-TPNaQkf2TKPfjC7yCMxJSxyo\/C4=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-TVDDGAeRIgAP5fFq8f+OGRe3fgY=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-TapNnbAPmBmIDHn6RXrlsJof04k="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-Tg1W1slmL9MeQwEcS5WqSZVUIdM=",$/;"	f
@@ -4027,7 +4030,6 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-Wv+LOc9plNwi3kyENix2ABt
 integrity	.\package-lock.json	/^      "integrity": "sha1-X0+HyPkeWuPzuoerTPXgOxoX8aM=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-X8A4KOJkzqP+kUVUdvejxWbLB1c=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-XB+x8RdHcRTwYyoOtLcbPLD9MXE=",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha1-XE2d5lKvbNCncBVKYxu6ErAVx4c="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-XHHDTLW61dzr4+oM0IIHulqhrqQ=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-XJZ93YN6m\/3KXy3oQlOr6KHAO4A=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-XQKkaFCt8bSjF5RqOSj8y1v9BCU=",$/;"	f
@@ -4101,7 +4103,6 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-aQgpoHyuNrIi5\/2bdcDQVz
 integrity	.\package-lock.json	/^      "integrity": "sha1-aYhLoUSsM\/5plzemCG3v+t0PicU="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-aatvR7ab+xtazuYbrCqrFDAv8Nw=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-ajhfuIU9lS1f8F0Oiq+UJ43GPc8=",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha1-awicChFXax8W3xG4AUbZHU6Lij4=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-ay6YIrGizgpgq2TWEOzK1TyyTQ8=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-b+Ko0WiV1WNPTNmZttNICjCBWbM=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-b+hA51oRYAydkehLM8RY4cRqNSk=",$/;"	f
@@ -4140,6 +4141,7 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-dWnKqKo\/jVk11i4fqW+fcC
 integrity	.\package-lock.json	/^      "integrity": "sha1-d\/UCHeBYtgWheD+hKD6ZgS5kVjg=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-db3FiioUls7EihKDW8VMjVYjNt0=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-dfFmQrSA8YenEcgUFh\/TpKdlWJg=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-dlcfklyHg0CefGFTVy5aY0HPk+s=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-dlhGpkgxvhByMagsrT+U08VO30E=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-dp66rz9KY6rTr56NMEybvnm\/sOY=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-e892WVU242B1Zkvk1ofkvdkQII8=",$/;"	f
@@ -4158,6 +4160,7 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-exyhnPdA9ISr+5NYQwco8TO
 integrity	.\package-lock.json	/^      "integrity": "sha1-f+3fLctu23fRHvHRF6tf\/fCrG2U="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-f5xCG36pHsRg9WUn1430hO51N9U=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-f8vbGY3HGVlDLv4ThCaE4FJaywI=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-fB0W1nmhu+WcoCys7PsBHiAfWh8="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-fIDBe53+vlmeJzZ+DU3VWQFB2zg=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-fL9Y3\/8mdg5eAOAX0KhbS8kLnTc=",$/;"	f
@@ -4184,6 +4187,7 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-gioNwmYpDOTNOhIoLKPn42R
 integrity	.\package-lock.json	/^      "integrity": "sha1-gtwzbSMrkGIXnQWrMpOmYFn9Q10="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-gv+wKynmYq5TvcIK8VlHcGc5xTY=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-gwtoCqflbzNFHUsEnzvYBESY7ic=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-h2Dk7MJy9MNjUy+SbYdKriwTl94=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-h2eKGdhLR9hZuDGZvVm84iKxBFQ=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-h3dMCUnlE\/QuhFdbPEVoH63ioLI=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-h6EKxMFpS9Lhy\/U1kaZhQftd10c=",$/;"	f
@@ -4273,6 +4277,7 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-liVqO8l1WV6zbYLpkp0GDYk
 integrity	.\package-lock.json	/^      "integrity": "sha1-llxwWGaOgrVde\/4E\/yM3vItWR\/4=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-lpGEQOMEGnpBT4xS48V06zw+HgU="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-lq6jmp5i8exdK2pbQqKdUoxwtD0=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-lspT9LeUpefA4b18yIo3Ipj6AeY=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-luO3DVd59q1JzQMmc9HDEnZ7pYE="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-lxnXjy2pz59TgQrrwj1GVhMKzrE=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-m3uIuwXOufoBahd4M8wt3jiPIbY="$/;"	f
@@ -4283,6 +4288,7 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-mBYmB7D86eJU1CfzOYelruc
 integrity	.\package-lock.json	/^      "integrity": "sha1-mGbfOVECEw449\/mWvOtlRDIJwls="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-mI3zP+qxke95mmE2nddsF635V+o=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-mMI9qxF1ZXuMBXPozszZGw\/xjIQ="$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-mPZIgEdLdPSji42p08Dy0QRjPn0=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-mSms32KPwsQQmN6rgqxYDPFJquQ=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-mTcqXJmb8t8WCvwNdL7U9HlIzSI="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-mXjOMXOIxkmth5MCjDR37wRKi1E="$/;"	f
@@ -4319,6 +4325,7 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-nsYfeQSYdXB9aUFFlv2Qek1
 integrity	.\package-lock.json	/^      "integrity": "sha1-nufoM3KQ2pUoggGmpX9BcDF4MN4=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-nxJLZ1lMk3\/3BpMuSmQsyo27\/uk=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-o09Zu+thdUrsQy3nLD\/iFSakTBo=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-o14TxkeZsGzhUyD0WcIw5o5zut4=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-o7Bz+Uq0nrb6Vc1lInozQ4BjJJc=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-oFUs4CIHQs1S4VN3SjKQXDDnVuU=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-oLhwcpquIUAFt9UDLsLLuw+0RRo="$/;"	f
@@ -4342,11 +4349,13 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-peZUwuWi3rXyAdls77yoDA7
 integrity	.\package-lock.json	/^      "integrity": "sha1-pfVtq0GiX5fstJjH66ypgZ+Vvl8=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-pfwpi4G54Nyi5FiCR4S2XFK6WI4="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-pqLzL\/0t+wT1yiXs0Pa4PPeYoeE="$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-pw4coh0TgsEdDZ9iMd6ygQgNerM=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-q343WfIJ7OmUN5c\/fQ8fZK4OZKs=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-qBFcVeSnAv5NFQq9OHKCKn4J\/Jg=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-qEs0UPfp+PH2g51taH2oS7EjbY0=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-qNiWjh2oMmb5hk8oUsVeIg8GQ0o=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-qPbq7KkGdMMz58Q5U\/J1tFFRBpU="$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-qRlH2h9KUW6jjltOwOw3c2deCIY="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-qe8VNmDWqGqL3sAomlxoTSF0Mv0=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-qg0yYptu6XIgBBHL1EYckHvCt60=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-qjiWs+abSH8X4x7SFD1pqOMMLYo=",$/;"	f
@@ -4396,9 +4405,9 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-tYNXOScM\/ias9jIJn97SoH
 integrity	.\package-lock.json	/^      "integrity": "sha1-tf1UIgqivFq1eqtxQMlAdUUDwac="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-thTJcgvmgW6u41+zpfqh26agXds=",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha1-trvB2OZSUNVvWIhGFwXr7uuI8i8=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-tt8YqmE7Zm4TPwittSGcJoSsEI0=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-ttj4E5yEk98J2ZKpOgBzSwj4RSg=",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha1-tuC4V27c9Y1\/QGlntE2z2nfjV\/A=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-u+Z0BseaqFxc\/sdm\/lc0VV36EnQ="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-u0P\/VZim6wXYm1n80SnJgzE2Br8="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-u13KOCu5TwXhUZQ3PRb9O6HKEQ0=",$/;"	f
@@ -4423,7 +4432,6 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-v22\/5Dk40XNpohPKiov3S2
 integrity	.\package-lock.json	/^      "integrity": "sha1-v4y3uDJWxFUeMTR8YxF3jbme7FI=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-vDh1qa\/Qp7LNIxpqfyGKXOFWsJM=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-vMbEmkKihA7Zl\/Mj6tpezRguC\/4="$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha1-vMl5rh+f0FcB5F5S5l06XWPxok4=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-vNYMd9Prk83gBQKVw\/N5OJvIj4k=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-vOMLLMWR\/8Y0Mitfs0ZLbZNPRDM=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha1-vPEwUspURj8w+fx+lbmkdjCpSSE="$/;"	f
@@ -4499,32 +4507,27 @@ integrity	.\package-lock.json	/^      "integrity": "sha1-zu78cXp2xDFvEm0LnbqlXX5
 integrity	.\package-lock.json	/^      "integrity": "sha1-zx7RXxKq1\/FO9fLf4F5sQvke8Co=",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-0KW2wvzfxm8NCTb30z0LMNyPqWCdDGE2viwzUaucqJdkTRXtZiSY3I+2A6nVAjmdOy0I4gU8DwnVVGsk9jvP2A==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-0UxfQkMhYAUaZI+xrNZOz\/as5KgDU0M\/fQ9b6SpkyLbk3GEswDi6PADJVaYJradtRVsRIlF1zLyOodbcTCDzUg==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-115fLhvZVqWwHPbClyntxEVfVDfl9DLLTuJvq3g2O\/Oxi8AiNouAHvDSzHS0viUJc+V5vm3eq91Xwqn9dp4jRA==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-1bnszJJXatcHJhLpxQ1XMkLDjCjPKvGKMtRQ73FOsoNln3UQjddEQmz6fAwM3aj0GtQ3dQX9qtMHPelz63GU7A=="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-2eis5WqQGV7peooDyLmNEPUrps9+SXX5c9pL3xEB+4e9HnGuDa7mB7kHxHw4CbqS9k1T2hOH3miL8n8WtiYVtg==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-4\/rOEg86jivtPTeOUUT61jJO1Ya1TrR\/OkqCSZDyq84WJh3LuuiphBYJN+fm5xufIk4XAFcEwte\/8WzC8If\/1g==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-5AzFzdoIMb89hBGMZglEegffzgRg+ZFoUmisQ8HI4j1KDdpx13J0taNp2y9xPbur6W61gepGDDotGBVQ7mfUCg==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-5T6P4xPgpp0YDFvSWwEZ4NoE3aM4QBQXDzmVbraCkFj8zHM+mba8SyqB5DbZWyR7mYHo6Y7BdQo3MoA4m0TeQg==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-AKcdTnFSWATd5\/GCPRxr2ChwIJ85CeyrEyjRHlKxQ56d4XJMGym0uAiKn0xbLOGOl3+yRpOTi484dVCEc5AUzQ==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-BvE\/TwpZX4FXExxOxZyRGQQv651MSwmWKZGqvmPcRIjDqWub67kTKuIMx43cZZrS\/cBBzwBcNDWoFxt2XEFIpQ=="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-CIQ5OFxf4Jou6uOKe9t1AOgqpeU5fd70A8NPdHSGeYXqXsPe6peOwI0cUl88RWZ6sP1vPMV3avd\/R6cZ5\/sP1A==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-CaV+wLqZ7\/\/Jdom5aUFCpGNoECd7BbNhjuwdsX\/LkXBrHl8eb1Wjw4HvWqcFvhr5KuNgAk8i\/myf\/MQ1YYeroA==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-DT1XbYAfmQP65M\/mE6OALxmXzZ\/z1+e5zk2TcSKe\/KiYbNGZxgtttzC0mR\/sjopbpOXcbniq7eIKmocJnUWlEw==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-E7Z2\/QMs0EPt\/o9wpYO\/J3hmMCDdr1aVDS3ttlur5D5JlZtxhfuOwi4e7S8zbYIxA5qOOYdxfqGj97XAfdNvkQ==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-ElCLJdJIKPk6ux\/Hocwhk7NFHpI3pVm\/IZOYWqUmoxcgeyM+MpxHHKhb8QmlJDX1pU6WrgaHBkVNm73Sv7uc2A==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-F1j3IG\/XhiMzcunAXbWXH95uizjzr3WdTzmVWlta8xqxcCtAu9FByCb4sccIMxaVFAefpgnUW9KlCo0oLvIX6A==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-FCrqPy1yy\/sN6U\/SaEZcHKRXGlqU0DUaEBL45jkUYoB8foVb6wCnbIJ1HKIx+qUFTW+3JpVcCJCxZ8VATL4e+A==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-G8zektVqbiPHrylgew9Zg1VRB1L\/DtXNUVAM6q4QLy8NE3qtHlFXTf8VLL4k1Yl6c7NMjtZUTdXV+X44nFaT6A==",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha512-IULbeRQH2us4qHZNIhc3Ra8P006hQ5\/cNS8VHtpcEZsObOaHpdynM0SM9uwUE\/QjA57d86umlvIdvSTz+3waFQ==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-IsORQDpaaSwcDP4ZZnHxgE85werpo34VYn1Ud3mq+eUsF593faR8oCZNXrROVkpFu2TsbrNhHin0aUrTsQ9vNw==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-ItfYfPLkWHUjckQCk8xC+LwxgK8NYcXywGigJgSwOP8Y2iyWT4f2vsZnoOXTTbo+o5yXmIUJ4gn5538SO5S3gA=="$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha512-Jd\/GpzPyHF4P2\/aNOVmS3lfMSWV9J7cOhCG1s08XCEAsPkB7lp6ddiU0J7XzyQRDUh8BqJ7PchfINjR8jyofRQ==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-KPdIJKWcEAb02TuJtaLrhue0krtRLoRoo7x6BNJIBelO00t\/CCdJQUnHW5V34OnHMWzIktSalJxRO+FvytQlCQ==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-Kkht5ye6ZGmwv40uUDZztayT2ThLQGfnj\/T71N\/XzeZeo3nf8foyW7zGTsPYkEya3m5f3cAypH+qe7YOrM1U2Q==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-NzNVhJDYpwceVVii8\/Hu6DKfD2G+NrQHlS\/V\/qgv763EYudVwEcMQNxd2lh+0VrUByXN\/oJkl5grOhYWvQUYiw==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-O27l4xaMYt\/RSQ5TR3vpWCAB5Kb\/czIcqUFOM\/C4fYcLnbZUc1PkjTAMjof2pBWaSTwOUd6qUHcFGVGj7aIwnw==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-OkVoI7GQOLl\/laR1qsSo1c87tS8kF2VXhQq2SrQCDdXufBAcm8FgXogWso96ciMYoDtTw1Dn70CVdwYzoYs6Pg==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-P6xiOLy10QlSVSO7GanU9PLxN6zLLQ7RG16MPTvmFwf2KUG7jMp6m+fmdgsR7xoaVVLA7OlX3YO6JjoZEKjCuA==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-R9iZOrbIIsP2mw2j172HVjf479Zb9kcG0chjzHRrE\/4M333NZ+3jOWRWJMGEQXwJzUtRNvVKzX2o27qM59TIhQ==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-UGnTYAnB2a3YuYKIRy1\/4FB2HdM866E0qC46JXvVTYKlBlZlnvfpSfY6OKfXZAkv70eJ2a1SqzpAo5CRhZGDFg==",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha512-Ubldcmxp5np52\/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd\/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg=="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-V48klKZl8T6MzatbLlzzRNhMepEys9Y4oGFpypBFFn1gLI\/QQ9HtLLyWJNbPlwGLelOVOEijUbTTJeLLI59jLw==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-W6VIyA6Ch9ePMI7VptNn2wBM6dbG0eSz25HEiL40nQXCsXGTGZSTZu1Iap+cj3Q0S5a7T9+529l\/5Bkvd+afNA==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-WIr7iDkdmdbxu\/Gh6eKEZJL6KPE74\/5MEsf2whTOFNxbIoIixogroLdKYqB6FDav4Wavh\/lZdzzd3b2KxIXC5Q==",$/;"	f
@@ -4532,35 +4535,28 @@ integrity	.\package-lock.json	/^      "integrity": "sha512-YL6GrhrWoic0Eq8rXVbMp
 integrity	.\package-lock.json	/^      "integrity": "sha512-Yh9y73JRljxW5QxN08Fner68eFLxM5ynNOAw2LbIB1YAGeQzZT8QFSUvkAz609Zf+IHhhaUxqZK8dG3W\/+HEvg=="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-Z942RysHXmJrhqk88FmKBVq\/v5tqmSkDz7p54G\/MGyjMnCFFnC79XWNbg+Vta8W6Wb2qtSZTSxIGkJrRpCFEiA==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-\/5ldsnyurvEw7wNpxLFgjVvBLMta43niEYOy0CJ4ntcYSbx6bugRUTQeFb4BR\/WanEL1o3aQgHuVLHQaB6tOqg==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-\/UETyP0W22QILqS+6HowevwhEFJ3MBJnwTf75Qob9Wz9t0DPuisL8kW8YZMK62dHAKE1c1p+gY1TtOLY+USEHA==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-\/f2Go4TognH\/KvCISP7OUsHn85hT9nUkxxA9BEWxFn+Oj9o8ZNLm\/40hdlgSLyuOimsrTKLUMEorQexp\/aPQeA==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-aqYp18kPphgoO5c\/+NaUvEeACtZjMESmDChuD3NBciVpah3XpMEU9VAAtIaB1BsfJWWTSdv8Vv1m3T0aRk2dUw==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-b\/OsSjvWEo8Pi8H0zsDd2P6Uqo2TK2pH8gNLSJtNLM2Db0v2QaAZ0pBQJXVjAn4gBuugeVDr7s63ZogpUIwWDg==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-c0yTD2rbQzXtSsFSVhtpvY\/vS6u066PcXOX9kBB3mSO76RiUQzL340uJkGBWnlBg4\/HZzqiUXtaVA7wcRcJgEw==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-cyKFD1bTE\/UgULXfaueIN1k5EPFzs+FRc\/rvCY5tIynefAPqopQEgjr0EzY+U3Dqrk\/G4m9tXSPuZ77v6dL\/Rw==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-d7nZf78irxoGN5PY4zd6CSgZiroOhvIWzRast3qwTn4sSnBwlt08kV8WMQ9mitmxEdlCTwZt+5ClrRSjxWguMQ==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-dgaCvoh6i1nosAUBKb0l0pfJ78K8+S9fluyIR2YvAeUD\/QuMahnFnF3xYty5eYXMjhGSsB0DsW6A0uAZyetoAg==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-dwVUVIXsBZXwTuwnXI9RK8sBmgq09NDHzyR9SAph9eqk76gKK2JSQmZARC2zRC81JC2QTtxD0ARU5qTS25gIGw=="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-fxxKXoicjdXNUMY7LIdY89tkJJJ0m1Oo8PQutZ5rLgWbV5QVKI15Cn7+\/IHnRTd3vfKfiwBx6SBqlorAuNA8LA==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-fz4spIh+znjO2VjL+IdhEpRJ3YN6sMzITSBijk6FK2UvTqruSQW+\/cCZTSNsMiZNvUeq0CqurF+dAbyiGOY6Wg==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-gjsZW9O34fm0R7PaLHRJmLLVfSoesxztjPjE9o6R+qtVJij90ltg1joIovN9GKrRW3t1PzhDDG3UMEMFfZ+1wA==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-hSMUZrsPa\/I09VYFJwa627JJkNs0NrfL1Uzuup+GqHfToR2KcsXFymXSV90hoyw3M+msjFuQly+YzIH\/q0MGlQ==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-hw0yxk9GT\/Hr5yJEYnHNKYXkIA8mVJgd9ditYZCe16ZczcaELYYcfvaXesNACk2O8O0nTiPQcQhGUQj8JLzeeg==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-iPNl7SyM8L30Rm1sjGdLLheyHVw5YXVfi3SKWJzBI7efxRwHojfRFjwE\/OLM6qp9xJYMgab8WicTU1cPoY+Hpg==",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha512-jZnMwlb9Iku\/O3smGWvZhauCf6cvvpKi4BKRiliS3cxnI+Gz9j5MEpTz2UFuXiKPJocb7gnsLHwiS05ige5BEA=="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-jbRXy1FmtAoCjQkVmIVYwuuqDFUbaOeDjmed1tOGPrsMhtJA4rD9tkgA0F1qJ3gRFRXcHYVkdeaP50Q5rE\/jLQ==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-jx44cconVqkCEEyLSKWwkvUXwO561jXMa3LPjTPsm5QR22PA0\/mhe33FT4Xb5y74JDvt\/Cq+5lm8S8rskLv9ZA==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-lQe48YPsMJAig+yngZ87Lus+NF+3mtu7DVOBu6b\/gHO1YpKwIj5AWjZ\/TOS7i46HD\/UixzWb1zeWDZfGZ3iYcg=="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-m5hnHTkcVsPfqx3AKlyttIPb7J+XykHvJP2B9bZDjlhLIoEq4XoK64Vg7boZlVWYK6LUY94dYPEE7Lh0ZkZKcQ==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-mbKkMdQKsjX4BAL4bRYTj21edOf8cN7XHdYUJEe+Zn99hVEYcMvKPct1IqNe7+AZPirn8BCDOQBHQZknqmKlZQ==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-mdxArOI3sF8K5Nay5NG+lv\/VW516TbXjjd4h1wcV1Iy4IMDQPnCayjoQXBAycAFSME4nyXRUXCjHxsw2rYpVRw==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-nqHUnMXmBzT0w570r2JpJxfiSD1IzoI+HGVdd3aZ0yNi3ngvQ4jv1dtHt5VGxfI2yj5yqImPhOK4vmIh2xMbGg==",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha512-ombhu5KsO\/85sVshIDTyQ5HF3xjZR3N0sf5Ao6h3vFwpNyzInEzA1GV3QPVjTMLTNckp8PjfG1PFGznzBwS5lg==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-qOhPa\/Fj7s6TY8H8esGu5QNpMMQxz79h+urzrNYN6mn+9BnxlDGf5QZ+XeCDsxSjPqsSR56XOZOJmpeurnLMeg==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-qhM\/y57enGWHAe3v\/NcwML6a3\/vfESLe\/sGM2dII+gEO0BpKRUkWZow\/tyloNqJyN6kXSl3RyyM8Ll5D\/sJP8g==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-r6zKACMNhjPJMTl8KcFH4li\/\/gkrXWfbD6feV8l6doRHlzljFWGJ2AP6iKaCJXyZmAUMOPtvbW7EXkbWO\/pLEA==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-uV3\/ckdsffHx9IrGQrx613mturMdMqQ06WTq+C09NsStJ9iNG6RcUWgPKs1Rfjy+idZT6tfQoXEusGNnEZhT3w==",$/;"	f
-integrity	.\package-lock.json	/^      "integrity": "sha512-uZYhyU3EX8O7HQP+J9fTVYwsq90Vr68xPEFo7yrVImIxYvHgukBEgOB\/SgGoorWVTzGM\/3Z+wUNnboA4M8jWrg==",$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha512-sstDxbCSPHDXrWRQhH++khr3yVU0CGvH2dCtAHOPQQ0lRR7xwq2txItEXckMpX481B\/cN+0akER2bfExh7Gu\/Q=="$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-vAaZHieK9qjGo58agRBg+bhHX3hoTZU\/Oa3GESWLz7t1U62fk63aHuDJJEteXoDeTCcPmUT+z38gkHPZkkmpmQ==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-xTCx2vohXC2EWWDqY\/zb4+5Mu28D+HYNSOuFzsyRDRvI\/e1ICb69afwaUwfjr+25ZXldbOLyp+iDUZHq8UnTag=="$/;"	f
+integrity	.\package-lock.json	/^      "integrity": "sha512-xTO41ApiRHMVDBYhNL9bEhx7kRf1hq3OqPOnOy8bpTi0JZSxVPDre7ZRpTHLDlxmhf6d\/FL+10E8VX1QRd+0DA==",$/;"	f
 integrity	.\package-lock.json	/^      "integrity": "sha512-yAXzoI0lpjv19CxVuw8RECeFWUVdyzayqnkX8ePZyeXV2ZgIk4T+rKx82Wk+REP1y3rl8o1\/oFDq4B7EobOqMg==",$/;"	f
 internal-ip	.\package-lock.json	/^        "internal-ip": "1.2.0",$/;"	f
 internal-ip	.\package-lock.json	/^    "internal-ip": {$/;"	f
@@ -4922,14 +4918,14 @@ istanbul-lib-instrument	.\package-lock.json	/^        "istanbul-lib-instrument":
 istanbul-lib-instrument	.\package-lock.json	/^    "istanbul-lib-instrument": {$/;"	f
 jasmine	.\package-lock.json	/^    "jasmine": {$/;"	f
 jasmine	.\package.json	/^    "jasmine": "^2.5.2",$/;"	f
-jasmine-core	.\package-lock.json	/^        "jasmine-core": "https:\/\/registry.npmjs.org\/jasmine-core\/-\/jasmine-core-2.8.0.tgz"$/;"	f
+jasmine-core	.\package-lock.json	/^        "jasmine-core": "2.9.1"$/;"	f
 jasmine-core	.\package-lock.json	/^    "jasmine-core": {$/;"	f
 jasmine-core	.\package.json	/^    "jasmine-core": "^2.5.1",$/;"	f
 jodid25519	.\package-lock.json	/^            "jodid25519": "1.0.2",$/;"	f
 jodid25519	.\package-lock.json	/^        "jodid25519": {$/;"	f
 joi	.\package-lock.json	/^        "joi": "https:\/\/registry.npmjs.org\/joi\/-\/joi-6.10.1.tgz",$/;"	f
 joi	.\package-lock.json	/^    "joi": {$/;"	f
-jquery	.\package-lock.json	/^        "jquery": "https:\/\/registry.npmjs.org\/jquery\/-\/jquery-3.2.1.tgz"$/;"	f
+jquery	.\package-lock.json	/^        "jquery": "3.3.1"$/;"	f
 jquery	.\package-lock.json	/^    "jquery": {$/;"	f
 jquery	.\package.json	/^    "jquery": "^3.1.0",$/;"	f
 jquery-migrate	.\package-lock.json	/^    "jquery-migrate": {$/;"	f
@@ -5640,7 +5636,7 @@ ms	.\package-lock.json	/^        "ms": "https:\/\/registry.npmjs.org\/ms\/-\/ms-
 ms	.\package-lock.json	/^        "ms": "https:\/\/registry.npmjs.org\/ms\/-\/ms-2.0.0.tgz",$/;"	f
 ms	.\package-lock.json	/^        "ms": {$/;"	f
 ms	.\package-lock.json	/^    "ms": {$/;"	f
-multicast-dns	.\package-lock.json	/^        "multicast-dns": "6.2.1",$/;"	f
+multicast-dns	.\package-lock.json	/^        "multicast-dns": "6.2.2",$/;"	f
 multicast-dns	.\package-lock.json	/^    "multicast-dns": {$/;"	f
 multicast-dns-service-types	.\package-lock.json	/^        "multicast-dns-service-types": "1.1.0"$/;"	f
 multicast-dns-service-types	.\package-lock.json	/^    "multicast-dns-service-types": {$/;"	f
@@ -6459,7 +6455,7 @@ once	.\package-lock.json	/^        "once": {$/;"	f
 once	.\package-lock.json	/^    "once": {$/;"	f
 onetime	.\package-lock.json	/^        "onetime": "https:\/\/registry.npmjs.org\/onetime\/-\/onetime-1.1.0.tgz"$/;"	f
 onetime	.\package-lock.json	/^    "onetime": {$/;"	f
-opn	.\package-lock.json	/^        "opn": "5.1.0",$/;"	f
+opn	.\package-lock.json	/^        "opn": "5.2.0",$/;"	f
 opn	.\package-lock.json	/^    "opn": {$/;"	f
 optimist	.\package-lock.json	/^        "optimist": "https:\/\/registry.npmjs.org\/optimist\/-\/optimist-0.6.1.tgz",$/;"	f
 optimist	.\package-lock.json	/^    "optimist": {$/;"	f
@@ -7726,7 +7722,7 @@ resolved	.\package-lock.json	/^          "resolved": "https:\/\/registry.npmjs.o
 resolved	.\package-lock.json	/^          "resolved": "https:\/\/registry.npmjs.org\/es6-promise\/-\/es6-promise-4.2.2.tgz",$/;"	f
 resolved	.\package-lock.json	/^          "resolved": "https:\/\/registry.npmjs.org\/expand-brackets\/-\/expand-brackets-2.1.4.tgz",$/;"	f
 resolved	.\package-lock.json	/^          "resolved": "https:\/\/registry.npmjs.org\/extend-shallow\/-\/extend-shallow-3.0.2.tgz",$/;"	f
-resolved	.\package-lock.json	/^          "resolved": "https:\/\/registry.npmjs.org\/extglob\/-\/extglob-2.0.3.tgz",$/;"	f
+resolved	.\package-lock.json	/^          "resolved": "https:\/\/registry.npmjs.org\/extglob\/-\/extglob-2.0.4.tgz",$/;"	f
 resolved	.\package-lock.json	/^          "resolved": "https:\/\/registry.npmjs.org\/faye-websocket\/-\/faye-websocket-0.11.1.tgz",$/;"	f
 resolved	.\package-lock.json	/^          "resolved": "https:\/\/registry.npmjs.org\/fill-range\/-\/fill-range-4.0.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^          "resolved": "https:\/\/registry.npmjs.org\/find-up\/-\/find-up-2.1.0.tgz",$/;"	f
@@ -7878,6 +7874,7 @@ resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/eventsource\/-\/eventsource-0.1.6.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/evp_bytestokey\/-\/evp_bytestokey-1.0.3.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/execa\/-\/execa-0.7.0.tgz",$/;"	f
+resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/exit\/-\/exit-0.1.2.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/express\/-\/express-4.16.2.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/extend-shallow\/-\/extend-shallow-2.0.1.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/fast-deep-equal\/-\/fast-deep-equal-1.0.0.tgz",$/;"	f
@@ -7926,6 +7923,9 @@ resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/is-odd\/-\/is-odd-1.0.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/is-wsl\/-\/is-wsl-1.1.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/is\/-\/is-3.2.1.tgz",$/;"	f
+resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/jasmine-core\/-\/jasmine-core-2.9.1.tgz",$/;"	f
+resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/jasmine\/-\/jasmine-2.9.0.tgz",$/;"	f
+resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/jquery\/-\/jquery-3.3.1.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/json-schema-traverse\/-\/json-schema-traverse-0.3.1.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/karma-jasmine\/-\/karma-jasmine-1.1.1.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/karma-webpack\/-\/karma-webpack-2.0.9.tgz",$/;"	f
@@ -7962,19 +7962,19 @@ resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/mongodb-core\/-\/mongodb-core-2.1.18.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/mongodb\/-\/mongodb-2.2.34.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/multicast-dns-service-types\/-\/multicast-dns-service-types-1.1.0.tgz",$/;"	f
-resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/multicast-dns\/-\/multicast-dns-6.2.1.tgz",$/;"	f
+resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/multicast-dns\/-\/multicast-dns-6.2.2.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/nanomatch\/-\/nanomatch-1.2.7.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/node-forge\/-\/node-forge-0.6.33.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/node-gyp\/-\/node-gyp-3.6.2.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/node-libs-browser\/-\/node-libs-browser-2.1.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/node-sass\/-\/node-sass-4.7.2.tgz",$/;"	f
-resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/nodemailer\/-\/nodemailer-4.4.1.tgz",$/;"	f
+resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/nodemailer\/-\/nodemailer-4.4.2.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/npm-run-path\/-\/npm-run-path-2.0.2.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/object-copy\/-\/object-copy-0.1.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/object-visit\/-\/object-visit-1.0.1.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/object.pick\/-\/object.pick-1.3.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/obuf\/-\/obuf-1.1.1.tgz",$/;"	f
-resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/opn\/-\/opn-5.1.0.tgz",$/;"	f
+resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/opn\/-\/opn-5.2.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/original\/-\/original-1.0.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/os-browserify\/-\/os-browserify-0.3.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/os-locale\/-\/os-locale-1.4.0.tgz",$/;"	f
@@ -7992,7 +7992,7 @@ resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/pbkdf2\/-\/pbkdf2-3.0.14.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/performance-now\/-\/performance-now-0.2.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/phantomjs-prebuilt\/-\/phantomjs-prebuilt-2.1.16.tgz",$/;"	f
-resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/pmx\/-\/pmx-1.5.5.tgz",$/;"	f
+resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/pmx\/-\/pmx-1.5.6.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/portfinder\/-\/portfinder-1.0.13.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/posix-character-classes\/-\/posix-character-classes-0.1.1.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/process\/-\/process-0.5.2.tgz",$/;"	f
@@ -8076,13 +8076,14 @@ resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/url\/-\/url-0.11.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/use\/-\/use-2.0.2.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/util\/-\/util-0.10.3.tgz",$/;"	f
+resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/uuid\/-\/uuid-3.2.1.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/vary\/-\/vary-1.1.2.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/vm-browserify\/-\/vm-browserify-0.0.4.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/vxx\/-\/vxx-1.2.2.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/watchpack\/-\/watchpack-1.4.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/wbuf\/-\/wbuf-1.7.2.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/webpack-dev-middleware\/-\/webpack-dev-middleware-1.12.2.tgz",$/;"	f
-resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/webpack-dev-server\/-\/webpack-dev-server-2.10.1.tgz",$/;"	f
+resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/webpack-dev-server\/-\/webpack-dev-server-2.11.1.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/webpack-hot-middleware\/-\/webpack-hot-middleware-2.21.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/webpack-sources\/-\/webpack-sources-1.1.0.tgz",$/;"	f
 resolved	.\package-lock.json	/^      "resolved": "https:\/\/registry.npmjs.org\/webpack\/-\/webpack-3.10.0.tgz",$/;"	f
@@ -8402,7 +8403,6 @@ strip-ansi	.\package-lock.json	/^            "strip-ansi": "3.0.1"$/;"	f
 strip-ansi	.\package-lock.json	/^            "strip-ansi": "3.0.1",$/;"	f
 strip-ansi	.\package-lock.json	/^            "strip-ansi": "4.0.0"$/;"	f
 strip-ansi	.\package-lock.json	/^            "strip-ansi": "https:\/\/registry.npmjs.org\/strip-ansi\/-\/strip-ansi-4.0.0.tgz"$/;"	f
-strip-ansi	.\package-lock.json	/^        "strip-ansi": "4.0.0",$/;"	f
 strip-ansi	.\package-lock.json	/^        "strip-ansi": "https:\/\/registry.npmjs.org\/strip-ansi\/-\/strip-ansi-3.0.1.tgz"$/;"	f
 strip-ansi	.\package-lock.json	/^        "strip-ansi": "https:\/\/registry.npmjs.org\/strip-ansi\/-\/strip-ansi-3.0.1.tgz",$/;"	f
 strip-ansi	.\package-lock.json	/^        "strip-ansi": {$/;"	f
@@ -9652,10 +9652,10 @@ utils-merge	.\package-lock.json	/^        "utils-merge": "https:\/\/registry.npm
 utils-merge	.\package-lock.json	/^        "utils-merge": "https:\/\/registry.npmjs.org\/utils-merge\/-\/utils-merge-1.0.1.tgz",$/;"	f
 utils-merge	.\package-lock.json	/^    "utils-merge": {$/;"	f
 uuid	.\package-lock.json	/^            "uuid": "3.0.1"$/;"	f
-uuid	.\package-lock.json	/^            "uuid": "https:\/\/registry.npmjs.org\/uuid\/-\/uuid-3.1.0.tgz"$/;"	f
+uuid	.\package-lock.json	/^            "uuid": "3.2.1"$/;"	f
+uuid	.\package-lock.json	/^        "uuid": "3.2.1"$/;"	f
 uuid	.\package-lock.json	/^        "uuid": "https:\/\/registry.npmjs.org\/uuid\/-\/uuid-2.0.3.tgz"$/;"	f
 uuid	.\package-lock.json	/^        "uuid": "https:\/\/registry.npmjs.org\/uuid\/-\/uuid-3.0.0.tgz"$/;"	f
-uuid	.\package-lock.json	/^        "uuid": "https:\/\/registry.npmjs.org\/uuid\/-\/uuid-3.1.0.tgz"$/;"	f
 uuid	.\package-lock.json	/^        "uuid": {$/;"	f
 uuid	.\package-lock.json	/^    "uuid": {$/;"	f
 uuid	.\package.json	/^    "uuid": "^3.0.1",$/;"	f
@@ -9744,6 +9744,7 @@ version	.\package-lock.json	/^          "version": "2.0.0",$/;"	f
 version	.\package-lock.json	/^          "version": "2.0.1",$/;"	f
 version	.\package-lock.json	/^          "version": "2.0.2",$/;"	f
 version	.\package-lock.json	/^          "version": "2.0.3",$/;"	f
+version	.\package-lock.json	/^          "version": "2.0.4",$/;"	f
 version	.\package-lock.json	/^          "version": "2.0.5",$/;"	f
 version	.\package-lock.json	/^          "version": "2.0.6",$/;"	f
 version	.\package-lock.json	/^          "version": "2.1.0",$/;"	f
@@ -9983,7 +9984,7 @@ version	.\package-lock.json	/^      "version": "1.4.0",$/;"	f
 version	.\package-lock.json	/^      "version": "1.4.1",$/;"	f
 version	.\package-lock.json	/^      "version": "1.5.0",$/;"	f
 version	.\package-lock.json	/^      "version": "1.5.2",$/;"	f
-version	.\package-lock.json	/^      "version": "1.5.5",$/;"	f
+version	.\package-lock.json	/^      "version": "1.5.6",$/;"	f
 version	.\package-lock.json	/^      "version": "1.6.1",$/;"	f
 version	.\package-lock.json	/^      "version": "1.7.1",$/;"	f
 version	.\package-lock.json	/^      "version": "1.7.2",$/;"	f
@@ -10007,6 +10008,7 @@ version	.\package-lock.json	/^      "version": "2.1.18",$/;"	f
 version	.\package-lock.json	/^      "version": "2.1.4",$/;"	f
 version	.\package-lock.json	/^      "version": "2.1.6",$/;"	f
 version	.\package-lock.json	/^      "version": "2.10.1",$/;"	f
+version	.\package-lock.json	/^      "version": "2.11.1",$/;"	f
 version	.\package-lock.json	/^      "version": "2.19.0",$/;"	f
 version	.\package-lock.json	/^      "version": "2.2.1",$/;"	f
 version	.\package-lock.json	/^      "version": "2.2.34",$/;"	f
@@ -10018,6 +10020,8 @@ version	.\package-lock.json	/^      "version": "2.4.9",$/;"	f
 version	.\package-lock.json	/^      "version": "2.7.2",$/;"	f
 version	.\package-lock.json	/^      "version": "2.7.3",$/;"	f
 version	.\package-lock.json	/^      "version": "2.81.0",$/;"	f
+version	.\package-lock.json	/^      "version": "2.9.0",$/;"	f
+version	.\package-lock.json	/^      "version": "2.9.1",$/;"	f
 version	.\package-lock.json	/^      "version": "3.0.0",$/;"	f
 version	.\package-lock.json	/^      "version": "3.0.0-alpha.1",$/;"	f
 version	.\package-lock.json	/^      "version": "3.0.1",$/;"	f
@@ -10030,6 +10034,7 @@ version	.\package-lock.json	/^      "version": "3.10.0",$/;"	f
 version	.\package-lock.json	/^      "version": "3.12.0",$/;"	f
 version	.\package-lock.json	/^      "version": "3.2.0",$/;"	f
 version	.\package-lock.json	/^      "version": "3.2.1",$/;"	f
+version	.\package-lock.json	/^      "version": "3.3.1",$/;"	f
 version	.\package-lock.json	/^      "version": "3.4.1",$/;"	f
 version	.\package-lock.json	/^      "version": "3.4.7",$/;"	f
 version	.\package-lock.json	/^      "version": "3.5.0",$/;"	f
@@ -10045,7 +10050,7 @@ version	.\package-lock.json	/^      "version": "4.17.4",$/;"	f
 version	.\package-lock.json	/^      "version": "4.2.0",$/;"	f
 version	.\package-lock.json	/^      "version": "4.2.1",$/;"	f
 version	.\package-lock.json	/^      "version": "4.3.2",$/;"	f
-version	.\package-lock.json	/^      "version": "4.4.1",$/;"	f
+version	.\package-lock.json	/^      "version": "4.4.2",$/;"	f
 version	.\package-lock.json	/^      "version": "4.5.0",$/;"	f
 version	.\package-lock.json	/^      "version": "4.6.0",$/;"	f
 version	.\package-lock.json	/^      "version": "4.7.2",$/;"	f
@@ -10054,8 +10059,9 @@ version	.\package-lock.json	/^      "version": "4.9.2",$/;"	f
 version	.\package-lock.json	/^      "version": "5.0.0",$/;"	f
 version	.\package-lock.json	/^      "version": "5.0.2",$/;"	f
 version	.\package-lock.json	/^      "version": "5.1.0",$/;"	f
+version	.\package-lock.json	/^      "version": "5.2.0",$/;"	f
 version	.\package-lock.json	/^      "version": "6.13.0",$/;"	f
-version	.\package-lock.json	/^      "version": "6.2.1",$/;"	f
+version	.\package-lock.json	/^      "version": "6.2.2",$/;"	f
 version	.\package-lock.json	/^      "version": "6.22.0",$/;"	f
 version	.\package-lock.json	/^      "version": "6.24.1",$/;"	f
 version	.\package-lock.json	/^      "version": "6.4.0",$/;"	f
@@ -10306,7 +10312,6 @@ version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/es
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/event-emitter\/-\/event-emitter-0.3.5.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/eventemitter3\/-\/eventemitter3-1.2.0.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/exit-hook\/-\/exit-hook-1.1.1.tgz",$/;"	f
-version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/exit\/-\/exit-0.1.2.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/expand-braces\/-\/expand-braces-0.1.2.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/expand-brackets\/-\/expand-brackets-0.1.5.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/expand-range\/-\/expand-range-1.8.2.tgz",$/;"	f
@@ -10427,12 +10432,9 @@ version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/is
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/istanbul-lib-coverage\/-\/istanbul-lib-coverage-1.1.1.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/istanbul-lib-instrument\/-\/istanbul-lib-instrument-1.8.0.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/istanbul\/-\/istanbul-0.4.5.tgz",$/;"	f
-version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/jasmine-core\/-\/jasmine-core-2.8.0.tgz",$/;"	f
-version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/jasmine\/-\/jasmine-2.8.0.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/joi\/-\/joi-6.10.1.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/jquery-migrate\/-\/jquery-migrate-3.0.1.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/jquery-nearest\/-\/jquery-nearest-1.4.0.tgz",$/;"	f
-version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/jquery\/-\/jquery-3.2.1.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/js-base64\/-\/js-base64-2.3.2.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/js-stringify\/-\/js-stringify-1.0.2.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/js-tokens\/-\/js-tokens-3.0.2.tgz",$/;"	f
@@ -10769,7 +10771,6 @@ version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/us
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/util-deprecate\/-\/util-deprecate-1.0.2.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/utila\/-\/utila-0.4.0.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/utils-merge\/-\/utils-merge-1.0.1.tgz",$/;"	f
-version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/uuid\/-\/uuid-3.1.0.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/validate-npm-package-license\/-\/validate-npm-package-license-3.0.1.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/vendors\/-\/vendors-1.0.1.tgz",$/;"	f
 version	.\package-lock.json	/^      "version": "https:\/\/registry.npmjs.org\/verror\/-\/verror-1.10.0.tgz",$/;"	f
