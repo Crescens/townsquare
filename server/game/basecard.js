@@ -58,7 +58,6 @@ class BaseCard {
         this.events = new EventRegistrar(this.game, this);
 
         this.abilities = { actions: [], reactions: [], persistentEffects: [], playActions: [] };
-        //this.parseKeywords(cardData.keywords || '');
         this.parseKeywords(cardData.keywords || '');
         this.setupCardAbilities(AbilityDsl);
 
@@ -518,7 +517,7 @@ class BaseCard {
     updateGameLocation(target) {
         if(this.getType() === 'dude') {
             this.gamelocation = target;
-        } else if(this.getType() === 'deed') {            
+        } else if(this.getType() === 'deed') {
             this.gamelocation = this.uuid;
         }
     }
@@ -560,6 +559,7 @@ class BaseCard {
             controlled: this.owner !== this.controller,
             facedown: this.facedown,
             gamelocation: this.gamelocation,
+            keywords: this.keywords,
             menu: this.getMenu(),
             new: this.new,
             suit: this.suit,

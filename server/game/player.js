@@ -559,7 +559,7 @@ class Player extends Spectator {
         }
 
         //Replace this with a bool on card that tells whether it is an attachment among types
-        if(card.isAttachment() && playingType !== 'setup') {
+        if(card.isAttachment()) {
             this.promptForAttachment(card, playingType);
             return;
         }
@@ -814,14 +814,14 @@ class Player extends Spectator {
 
     leftDeedOrder() {
         let sorted = _.sortBy(this.locations, 'order');
-        let leftmost = sorted.pop();
-        return leftmost;
+        let leftmost = sorted.shift();
+        return leftmost.order;
     }
 
     rightDeedOrder() {
         let sorted = _.sortBy(this.locations, 'order');
-        let rightmost = sorted.shift();
-        return rightmost;
+        let rightmost = sorted.pop();
+        return rightmost.order;
     }
 
     addDeedToStreet(card, target) {
