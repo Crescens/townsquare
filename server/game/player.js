@@ -200,7 +200,7 @@ class Player extends Spectator {
     modifyClaim(winner, challengeType, claim) {
         claim = this.activePlot.modifyClaim(winner, challengeType, claim);
         this.cardsInPlay.each(card => {
-            claim = card.modifyClaim(winner, challengeType, claim);
+            claim = card.modifyClaim(winner, challengeType, claim);Not to
         });
 
         return claim;
@@ -365,8 +365,10 @@ class Player extends Spectator {
         //this.plotDeck = _(preparedDeck.plotCards);
         this.legend = preparedDeck.legend;
         this.outfit = preparedDeck.outfit;
+        this.startingPosse = preparedDeck.starting;
         this.drawDeck = _(preparedDeck.drawCards);
         this.allCards = _(preparedDeck.allCards);
+
     }
 
     initialise() {
