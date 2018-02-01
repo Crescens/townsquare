@@ -1,4 +1,4 @@
-//const _ = require('underscore');
+const _ = require('underscore');
 const Phase = require('./phase.js');
 const SimpleStep = require('./simplestep.js');
 const ReadyPrompt = require('./readyprompt.js');
@@ -7,14 +7,16 @@ class SundownPhase extends Phase {
     constructor(game) {
         super(game, 'sundown');
         this.initialise([
-            new SimpleStep(game, () => this.receiveProduction()),
+            new SimpleStep(game, () => this.resetPlayerStatus()),
             new SimpleStep(game, () => this.payUpkeep()),
             new ReadyPrompt(game, 'sundown')
         ]);
     }
 
-    receiveProduction() {
-
+    resetPlayerStatus() {
+        _.each(this.game.getPlayers(), player => {
+            player.resetForRound();
+        });
     }
 
     payUpkeep() {

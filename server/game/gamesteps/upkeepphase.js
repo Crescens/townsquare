@@ -1,24 +1,21 @@
-//const _ = require('underscore');
+const _ = require('underscore');
 const Phase = require('./phase.js');
 const SimpleStep = require('./simplestep.js');
-const ReadyPrompt = require('./readyprompt.js');
+const UpkeepPrompt = require('./upkeep/upkeepprompt.js');
 
 class UpkeepPhase extends Phase {
     constructor(game) {
         super(game, 'upkeep');
         this.initialise([
             new SimpleStep(game, () => this.receiveProduction()),
-            new SimpleStep(game, () => this.payUpkeep()),
-            new ReadyPrompt(game, 'upkeep')
+            new UpkeepPrompt(game)
         ]);
     }
 
     receiveProduction() {
-
-    }
-
-    payUpkeep() {
-
+        _.each(this.game.getPlayers(), player => {
+            player.receiveProduction();
+        });
     }
 
     /*

@@ -38,9 +38,16 @@ class BaseCard {
         this.facedown = false;
         this.blankCount = 0;
         this.gamelocation = '';
+
         this.value = cardData.rank;
         this.suit = cardData.suit;
         this.type = cardData.type_code;
+        this.production = cardData.production;
+        this.influence = cardData.influence;
+        this.bullets = cardData.bullets;
+        this.shooter = cardData.shooter;
+        this.wealth = cardData.wealth;
+        this.upkeep = cardData.upkeep;
 
         this.tokens = {};
         /*this.plotModifierValues = {
@@ -555,19 +562,25 @@ class BaseCard {
 
         let selectionState = activePlayer.getCardSelectionState(this);
         let state = {
+            bullets: this.bullets,
             code: this.cardData.code,
             controlled: this.owner !== this.controller,
             facedown: this.facedown,
             gamelocation: this.gamelocation,
+            influence: this.influence,
             keywords: this.keywords,
             menu: this.getMenu(),
             new: this.new,
+            production: this.production,
+            shooter: this.shooter,
             suit: this.suit,
             title: this.title,
             tokens: this.tokens,
             type: this.getType(),
+            upkeep: this.upkeep,
             uuid: this.uuid,
-            value: this.value
+            value: this.value,
+            wealth: this.wealth
         };
 
         return _.extend(state, selectionState);
