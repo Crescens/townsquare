@@ -4,6 +4,7 @@
 const _ = require('underscore');
 const uuid = require('uuid');
 const Player = require('../../../server/game/player.js');
+const GameLocation = require ('../../../server/game/gamelocation.js');
 
 describe('Player', () => {
     describe('drop()', function() {
@@ -18,8 +19,8 @@ describe('Player', () => {
             this.gameSpy.playersAndSpectators = [];
             this.gameSpy.playersAndSpectators[this.player.name] = this.player;
 
-            this.cardSpy = jasmine.createSpyObj('card', ['getType', 'leavesPlay', 'moveTo', 'updateGameLocation']);
-            this.cardSpy.uuid = '1111';
+            this.cardSpy = jasmine.createSpyObj('card', ['getType', 'leavesPlay', 'moveTo', 'updateGameLocation', 'playableLocation', 'putIntoPlay']);
+            this.cardSpy.uuid = uuid.v1();
             this.cardSpy.controller = this.cardSpy.owner = this.player;
             this.cardSpy.attachments = _([]);
         });
@@ -43,11 +44,14 @@ describe('Player', () => {
                 });
             });
 
-            describe('when the card is in hand and a dude', function() {
+            describe('when the card is a dude in hand', function() {
                 beforeEach(function() {
                     this.cardSpy.getType.and.returnValue('dude');
+                    this.outfit = uuid.v1();
+                    this.location = new GameLocation(this.outfit, 0);
+                    this.player.addLocation(this.location);
 
-                    this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', 'play area');
+                    this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', this.location.uuid);
                 });
 
                 it('should return true and add the card to the play area', function() {
@@ -62,7 +66,7 @@ describe('Player', () => {
                     this.cardsInPlay = this.player.cardsInPlay.size();
                     this.locationsInPlay = this.player.locations.length;
 
-                    this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', 'play area');
+                    this.dropSucceeded = this.player.drop(this.cardSpy.uuid, 'hand', 'street-left');
                 });
 
                 it('should return true and add the card to the play area', function() {
@@ -318,7 +322,7 @@ describe('Player', () => {
 
             describe('when two cards are dragged to the draw deck', function() {
                 beforeEach(function() {
-                    this.cardSpy2 = jasmine.createSpyObj('card', ['getType', 'moveTo', 'updateGameLocation']);
+                    this.cardSpy2 = jasmine.createSpyObj('card', ['getType', 'moveTo', 'updateGameLocation', 'playableLocation']);
                     this.cardSpy2.uuid = '2222';
                     this.cardSpy2.controller = this.player;
                     this.player.hand.push(this.cardSpy2);

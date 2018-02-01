@@ -3,6 +3,7 @@ const _ = require('underscore');
 const Spectator = require('./spectator.js');
 const Deck = require('./deck.js');
 const HandRank = require('./handrank.js');
+const GameLocation = require('./gamelocation.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 //const BestowPrompt = require('./gamesteps/bestowprompt.js');
 //const ChallengeTracker = require('./challengetracker.js');
@@ -12,6 +13,9 @@ const PlayerPromptState = require('./playerpromptstate.js');
 
 const StartingHandSize = 5;
 //const DrawPhaseCards = 2;
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const TOWNSQUARE = /townsquare/i;
 
 class Player extends Spectator {
     constructor(id, user, owner, game) {
@@ -42,7 +46,7 @@ class Player extends Spectator {
         //this.cannotGainGold = false;
         //this.cannotGainChallengeBonus = false;
         //this.cannotTriggerCardAbilities = false;
-        this.cannotPlayByTitle = [];
+        //this.cannotMarshalOrPutIntoPlayByTitle = [];
         //this.abilityMaxByTitle = {};
         //this.standPhaseRestrictions = [];
         //this.mustChooseAsClaim = [];
@@ -84,6 +88,16 @@ class Player extends Spectator {
         return _(list.reject(card => {
             return card.uuid === uuid;
         }));
+    }
+
+    addLocation(location) {
+        this.locations.push(location);
+    }
+
+    findLocations(predicate) {
+        if(!predicate) {
+            return this.locations;
+        }
     }
 
     findCardByName(list, name) {
@@ -133,10 +147,6 @@ class Player extends Spectator {
         return cardsToReturn;
     }
 
-    findCardsByList(list) {
-        return this.findCard(list, card => (card === card));
-    }
-
     anyCardsInPlay(predicate) {
         return this.allCards.any(card => card.location === 'play area' && predicate(card));
     }
@@ -170,7 +180,7 @@ class Player extends Spectator {
             (playCard.code === card.code || playCard.name === card.name) &&
             playCard.owner === this
         ));
-    }
+    }*/
 
     /*getNumberOfChallengesWon(challengeType) {
         return this.challenges.getWon(challengeType);
@@ -200,7 +210,7 @@ class Player extends Spectator {
     modifyClaim(winner, challengeType, claim) {
         claim = this.activePlot.modifyClaim(winner, challengeType, claim);
         this.cardsInPlay.each(card => {
-            claim = card.modifyClaim(winner, challengeType, claim);Not to
+            claim = card.modifyClaim(winner, challengeType, claim);
         });
 
         return claim;
@@ -271,9 +281,9 @@ class Player extends Spectator {
             _.each(this.discardPile, card => {
                 this.moveCard(card, 'draw deck');
             });
-        }
 
-        this.shuffleDrawDeck();
+            this.shuffleDrawDeck();
+        }
     }
 
     discardFromDraw(number, callback = () => true) {
@@ -357,34 +367,42 @@ class Player extends Spectator {
             card.moveTo('draw deck');
             this.drawDeck.push(card);
         });
+        this.hand = _([]);
     }
 
     prepareDecks() {
         var deck = new Deck(this.deck);
         var preparedDeck = deck.prepare(this);
-        //this.plotDeck = _(preparedDeck.plotCards);
+        //this.plotDeck = _( /"dDeck.plotCards);
         this.legend = preparedDeck.legend;
         this.outfit = preparedDeck.outfit;
-        this.startingPosse = preparedDeck.starting;
         this.drawDeck = _(preparedDeck.drawCards);
         this.allCards = _(preparedDeck.allCards);
+        this.startingPosse = preparedDeck.starting;
+    }
 
+    addOutfitToTown() {
+        //Maybe we don't need to manage a TownSquare object, just treat
+        //it as abstract adjacency direction.
+        //this.game.townsquare.attach(this.outfit.uuid, this.name);
+
+        var outfit = new GameLocation(this.outfit.uuid, 0);
+        outfit.attach('townsquare', 'townsquare');
+        this.locations.push(outfit);
+        this.moveCard(this.outfit, 'play area');
     }
 
     initialise() {
         this.prepareDecks();
         this.initDrawDeck();
 
+        this.addOutfitToTown();
+
         this.ghostrock = 0;
         this.readyToStart = false;
         //this.limitedPlayed = 0;
         //this.maxLimited = 1;
         //this.activePlot = undefined;
-    }
-
-    startPosse() {
-        _.each(this.hand.value(), card => this.drop(card.uuid, 'hand', this.outfit.uuid));
-        this.posse = true;
     }
 
     startGame() {
@@ -504,11 +522,11 @@ class Player extends Spectator {
             return true;
         }
 
-        if(this.cannotPlayByTitle.includes(card.name)) {
+        if(this.cannotMarshalOrPutIntoPlayByTitle.includes(card.name)) {
             return false;
         }
 
-        if(this.isCharacterDead(card)) {
+        if(this.isCharacterDead(card) && !this.canResurrect(card)) {
             return false;
         }
 
@@ -767,36 +785,52 @@ class Player extends Spectator {
             return false;
         }
 
-        if(source === 'hand' && (card.getType() === 'action' || card.getType() === 'joker')) {
-            return false;
+        if(target === 'discard pile') {
+            this.discardCard(card, false);
+            return true;
         }
 
-        //Moving between locations on the game board will update
-        //by simply changing the gamelocation parameter on the cardId
-        card.updateGameLocation(target);
-
-        if(target === 'play area') {
-            this.putIntoPlay(card);
-        } else {
-            /* Ace card
-            if(target === 'boothill pile' && card.location === 'play area') {
-                this.killCharacter(card, false);
-                return true;
-            } */
-
-            if(target === 'discard pile') {
-                this.discardCard(card, false);
-                return true;
+        if(this.inPlayLocation(target)) {
+            if(card.getType() === 'dude') {
+                card.updateGameLocation(target);
+                this.putIntoPlay(card);
             }
-
+            if(card.getType() === 'deed') {
+                this.addDeedToStreet(card, target);
+                this.putIntoPlay(card);
+            }
+        } else {
             this.moveCard(card, target);
         }
 
         return true;
     }
 
-    moveDude(cardId) {
+    leftDeedOrder() {
+        let sorted = _.sortBy(this.locations, 'order');
+        let leftmost = sorted.pop();
+        return leftmost;
+    }
 
+    rightDeedOrder() {
+        let sorted = _.sortBy(this.locations, 'order');
+        let rightmost = sorted.shift();
+        return rightmost;
+    }
+
+    addDeedToStreet(card, target) {
+        if(/left/.test(target)) {
+            this.locations.push(new GameLocation(card.uuid, this.leftDeedOrder() - 1));
+        } else if(/right/.test(target)) {
+            this.locations.push(new GameLocation(card.uuid, this.rightDeedOrder() + 1));
+        }
+    }
+
+    inPlayLocation(target) {
+
+        if(UUID.test(target) || TOWNSQUARE.test(target) || /street/.test(target)) {
+            return true;
+        }
     }
 
     promptForAttachment(card, playingType) {
@@ -909,6 +943,12 @@ class Player extends Spectator {
         this.deck.selected = false;
         this.deck = deck;
         this.deck.selected = true;
+
+        /*this.outfit.cardData = deck.outfit;
+        this.outfit.cardData.name = deck.outfit.name;
+        this.outfit.cardData.code = deck.outfit.code;
+        this.outfit.cardData.type_code = 'outfit';*/
+        //this.outfit.cardData.strength = 0;
     }
 
     moveCard(card, targetLocation, options = {}) {
@@ -1110,7 +1150,7 @@ class Player extends Spectator {
             firstPlayer: this.firstPlayer,
             ghostrock: this.ghostrock,
             hand: this.getSummaryForCardList(this.hand, activePlayer, true),
-            handrank: this.handRank,
+            handRank: this.handRank,
             id: this.id,
             left: this.left,
             locations: this.locations,

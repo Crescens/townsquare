@@ -13,6 +13,7 @@ import Messages from './GameComponents/Messages.jsx';
 import CardCollection from './GameComponents/CardCollection.jsx';
 import PlayerStreet from './GameComponents/PlayerStreet.jsx';
 import GameLocation from './GameComponents/GameLocation.jsx';
+import DropZone from './GameComponents/DropZone.jsx';
 import ActionWindowsMenu from './GameComponents/ActionWindowsMenu.jsx';
 import {tryParseJSON} from './util.js';
 
@@ -414,7 +415,7 @@ export class InnerGameBoard extends React.Component {
                             />
                         <div className='play-area' onDragOver={this.onDragOver} >
 
-                                <GameLocation location={{key:'townsquare', name:'Town Square'}}
+                                <GameLocation location={{uuid:'townsquare', name:'Town Square'}}
                                     cardLocation='townsquare' className='townsquare'
                                     onMouseOver={this.onMouseOver}
                                     onMouseOut={this.onMouseOut}
@@ -423,8 +424,13 @@ export class InnerGameBoard extends React.Component {
                                     otherPlayer={otherPlayer}
                                     thisPlayer={thisPlayer}/>
 
-                                    <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick}
-                                        otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
+                                    <div className='player-street'>
+                                        <DropZone zone='street-left' onDragDrop={this.onDragDrop} onDragDropEvent={this.onDragDropEvent}/>
+                                        <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick}
+                                            otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
+                                        <DropZone zone='street-right' onDragDrop={this.onDragDrop} onDragDropEvent={this.onDragDropEvent}/>
+                                    </div>
+
                         </div>
                         <PlayerRow isMe={!this.state.spectating}
                             additionalPiles={thisPlayer.additionalPiles}
