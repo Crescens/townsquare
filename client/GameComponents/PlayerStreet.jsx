@@ -51,7 +51,7 @@ class PlayerStreet extends React.Component {
     render() {
         return (
             <div style={this.props.style} >
-                {this.buildStreet(this.props.thisPlayer)}
+                {this.buildStreet(this.props.owner)}
             </div>
         );
 
@@ -66,6 +66,7 @@ PlayerStreet.propTypes = {
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,
     otherPlayer: PropTypes.object,
+    owner: PropTypes.object,
     style: PropTypes.object,
     thisPlayer: PropTypes.object
 };

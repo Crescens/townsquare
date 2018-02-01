@@ -138,8 +138,16 @@ export class InnerGameLocation extends React.Component {
 
     render() {
 
+        let className = '';
+
+        if(this.props.className === 'townsquare') {
+            className = 'townsquare-wrapper';
+        } else {
+            className = 'location-wrapper';
+        }
+
         return (
-            <div className='location-wrapper' style={this.props.style} onDrop={event => this.onDragDropEvent(event, this.props.location.uuid)}>
+            <div className={className} style={this.props.style} onDrop={event => this.onDragDropEvent(event, this.props.location.uuid)}>
                 {this.cardsHereByPlayer(this.props.otherPlayer)}
                 {this.getLocation()}
                 {this.cardsHereByPlayer(this.props.thisPlayer)}

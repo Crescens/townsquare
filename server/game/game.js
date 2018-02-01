@@ -6,11 +6,15 @@ const GameChat = require('./gamechat.js');
 const EffectEngine = require('./effectengine.js');
 const Effect = require('./effect.js');
 const Player = require('./player.js');
-const { TownSquare } = require('./gamelocation.js');
+//const { TownSquare } = require('./gamelocation.js');
 const Spectator = require('./spectator.js');
 const AnonymousSpectator = require('./anonymousspectator.js');
-const GamePipeline = require('./gamepipeline.js');
+
 const SetupPhase = require('./gamesteps/setupphase.js');
+const GamblingPhase = require('./gamesteps/gamblingphase.js');
+const UpkeepPhase = require('./gamesteps/upkeepphase.js');
+const HighNoonPhase = require('./gamesteps/highnoonphase.js');
+const SundownPhase = require('./gamesteps/sundownphase.js');
 
 /*
 const PlotPhase = require('./gamesteps/plotphase.js');
@@ -22,8 +26,9 @@ const StandingPhase = require('./gamesteps/standingphase.js');
 const TaxationPhase = require('./gamesteps/taxationphase.js');
 */
 
-
+const GamePipeline = require('./gamepipeline.js');
 const SimpleStep = require('./gamesteps/simplestep.js');
+
 const DeckSearchPrompt = require('./gamesteps/decksearchprompt.js');
 const MenuPrompt = require('./gamesteps/menuprompt.js');
 //const IconPrompt = require('./gamesteps/iconprompt.js');
@@ -529,12 +534,12 @@ class Game extends EventEmitter {
 
     beginRound() {
         this.raiseEvent('onBeginRound');
-        /* -- Implement turn structure
+
         this.queueStep(new GamblingPhase(this));
         this.queueStep(new UpkeepPhase(this));
         this.queueStep(new HighNoonPhase(this));
         this.queueStep(new SundownPhase(this));
-        */
+
         this.queueStep(new SimpleStep(this, () => this.beginRound()));
     }
 

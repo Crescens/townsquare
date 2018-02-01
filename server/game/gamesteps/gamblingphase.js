@@ -1,18 +1,15 @@
 const _ = require('underscore');
 const Phase = require('./phase.js');
 const SimpleStep = require('./simplestep.js');
-const StartingPossePrompt = require('./setup/startingposseprompt.js');
+const CheatingResolutionPrompt = require('./gambling/cheatingresolutionprompt.js');
 
-class SetupPhase extends Phase {
+class GamblingPhase extends Phase {
     constructor(game) {
-        super(game, 'setup');
+        super(game, 'gambling');
         this.initialise([
-            new SimpleStep(game, () => this.prepareDecks()),
-            new SimpleStep(game, () => this.drawStartingPosse()),
-            new StartingPossePrompt(game),
-            new SimpleStep(game, () => this.startGame()),
-            //Grift Prompt
-            new SimpleStep(game, () => this.setupDone())
+            //new SimpleStep(game, () => this.ante()),
+            //new SimpleStep(game, () => this.drawAndCompareHands()),
+            new CheatingResolutionPrompt(game)
         ]);
     }
 
@@ -47,4 +44,4 @@ class SetupPhase extends Phase {
     }
 }
 
-module.exports = SetupPhase;
+module.exports = GamblingPhase;

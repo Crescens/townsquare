@@ -398,7 +398,7 @@ class Player extends Spectator {
 
         this.addOutfitToTown();
 
-        this.ghostrock = 0;
+        this.ghostrock = this.outfit.wealth || 0;
         this.readyToStart = false;
         //this.limitedPlayed = 0;
         //this.maxLimited = 1;
@@ -410,7 +410,8 @@ class Player extends Spectator {
             return;
         }
 
-        this.ghostrock = this.outfit.wealth;
+        this.drawDeck.shuffle();
+        this.drawCardsToHand('hand', StartingHandSize);
     }
 
     /*
@@ -759,6 +760,8 @@ class Player extends Spectator {
         _.each(this.hand.value(), (card) => {
             this.drop(card.uuid, 'hand', this.outfit.uuid);
         });
+
+        this.posse = true;
     }
 
     drop(cardId, source, target) {

@@ -1,21 +1,27 @@
-const _ = require('underscore');
+//const _ = require('underscore');
 const Phase = require('./phase.js');
 const SimpleStep = require('./simplestep.js');
-const StartingPossePrompt = require('./setup/startingposseprompt.js');
+const ReadyPrompt = require('./readyprompt.js');
 
-class SetupPhase extends Phase {
+class UpkeepPhase extends Phase {
     constructor(game) {
-        super(game, 'setup');
+        super(game, 'upkeep');
         this.initialise([
-            new SimpleStep(game, () => this.prepareDecks()),
-            new SimpleStep(game, () => this.drawStartingPosse()),
-            new StartingPossePrompt(game),
-            new SimpleStep(game, () => this.startGame()),
-            //Grift Prompt
-            new SimpleStep(game, () => this.setupDone())
+            new SimpleStep(game, () => this.receiveProduction()),
+            new SimpleStep(game, () => this.payUpkeep()),
+            new ReadyPrompt(game, 'upkeep')
         ]);
     }
 
+    receiveProduction() {
+
+    }
+
+    payUpkeep() {
+
+    }
+
+    /*
     prepareDecks() {
         this.game.raiseEvent('onDecksPrepared');
         _.each(this.game.getPlayers(), player => {
@@ -44,7 +50,7 @@ class SetupPhase extends Phase {
         _.each(this.game.getPlayers(), p => {
             p.setupDone();
         });
-    }
+    }*/
 }
 
-module.exports = SetupPhase;
+module.exports = UpkeepPhase;

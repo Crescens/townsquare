@@ -2344,8 +2344,8 @@ fstream-ignore	.\package-lock.json	/^        "fstream-ignore": {$/;"	f
 function-bind	.\package-lock.json	/^        "function-bind": "https:\/\/registry.npmjs.org\/function-bind\/-\/function-bind-1.1.1.tgz"$/;"	f
 function-bind	.\package-lock.json	/^        "function-bind": "https:\/\/registry.npmjs.org\/function-bind\/-\/function-bind-1.1.1.tgz",$/;"	f
 function-bind	.\package-lock.json	/^    "function-bind": {$/;"	f
-game.claim.isApplying	.\server\game\gamesteps\challenge\applyclaim.js	/^            isApplying: true,$/;"	p
-game.claim.type	.\server\game\gamesteps\challenge\applyclaim.js	/^            type: this.challenge.challengeType$/;"	p
+game.claim.isApplying	.\retired\server\game\gamesteps\challenge\applyclaim.js	/^            isApplying: true,$/;"	p
+game.claim.type	.\retired\server\game\gamesteps\challenge\applyclaim.js	/^            type: this.challenge.challengeType$/;"	p
 games	.\client\reducers\games.js	/^function games(state = {$/;"	f
 gauge	.\package-lock.json	/^            "gauge": "2.7.4",$/;"	f
 gauge	.\package-lock.json	/^        "gauge": "https:\/\/registry.npmjs.org\/gauge\/-\/gauge-2.7.4.tgz",$/;"	f
@@ -5522,7 +5522,7 @@ matchingReducers	.\server\game\player.js	/^        var matchingReducers = _.filt
 math-expression-evaluator	.\package-lock.json	/^        "math-expression-evaluator": "https:\/\/registry.npmjs.org\/math-expression-evaluator\/-\/math-expression-evaluator-1.2.17.tgz",$/;"	f
 math-expression-evaluator	.\package-lock.json	/^    "math-expression-evaluator": {$/;"	f
 max	.\server\game\effects.js	/^        let restriction = { max: max, match: match };$/;"	p
-maxAppliedClaim	.\server\game\gamesteps\challenge\fulfillmilitaryclaim.js	/^        var maxAppliedClaim = Math.min(this.claim, charactersAvailable);$/;"	v
+maxAppliedClaim	.\retired\server\game\gamesteps\challenge\fulfillmilitaryclaim.js	/^        var maxAppliedClaim = Math.min(this.claim, charactersAvailable);$/;"	v
 md5.js	.\package-lock.json	/^        "md5.js": "1.3.4",$/;"	f
 md5.js	.\package-lock.json	/^    "md5.js": {$/;"	f
 media-typer	.\package-lock.json	/^        "media-typer": "https:\/\/registry.npmjs.org\/media-typer\/-\/media-typer-0.3.0.tgz",$/;"	f

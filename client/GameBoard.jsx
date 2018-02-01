@@ -405,7 +405,7 @@ export class InnerGameBoard extends React.Component {
                         <PlayerRow
                             additionalPiles={otherPlayer ? otherPlayer.additionalPiles : {}}
                             hand={otherPlayer ? otherPlayer.hand : []} isMe={false}
-                            drawHand={otherPlayer ? otherPlayer.hand : []} isMe={false}
+                            drawHand={otherPlayer ? otherPlayer.drawHand : []} isMe={false}
                             numDrawCards={otherPlayer ? otherPlayer.numDrawCards : 0}
                             discardPile={otherPlayer ? otherPlayer.discardPile : []}
                             boothillPile={otherPlayer ? otherPlayer.boothillPile : []}
@@ -415,21 +415,26 @@ export class InnerGameBoard extends React.Component {
                             />
                         <div className='play-area' onDragOver={this.onDragOver} >
 
-                                <GameLocation location={{uuid:'townsquare', name:'Town Square'}}
-                                    cardLocation='townsquare' className='townsquare'
-                                    onMouseOver={this.onMouseOver}
-                                    onMouseOut={this.onMouseOut}
-                                    onDragDrop={this.onDragDrop}
-                                    onClick={this.onCardClick}
-                                    otherPlayer={otherPlayer}
-                                    thisPlayer={thisPlayer}/>
+                            <div className='player-street'>
+                                <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick}
+                                    owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
+                            </div>
 
-                                    <div className='player-street'>
-                                        <DropZone zone='street-left' onDragDrop={this.onDragDrop} onDragDropEvent={this.onDragDropEvent}/>
-                                        <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick}
-                                            otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
-                                        <DropZone zone='street-right' onDragDrop={this.onDragDrop} onDragDropEvent={this.onDragDropEvent}/>
-                                    </div>
+                            <GameLocation location={{uuid:'townsquare', name:'Town Square'}}
+                                cardLocation='townsquare' className='townsquare'
+                                onMouseOver={this.onMouseOver}
+                                onMouseOut={this.onMouseOut}
+                                onDragDrop={this.onDragDrop}
+                                onClick={this.onCardClick}
+                                otherPlayer={otherPlayer}
+                                thisPlayer={thisPlayer}/>
+
+                            <div className='player-street'>
+                                <DropZone zone='street-left' onDragDrop={this.onDragDrop} onDragDropEvent={this.onDragDropEvent}/>
+                                <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick}
+                                    owner={thisPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
+                                <DropZone zone='street-right' onDragDrop={this.onDragDrop} onDragDropEvent={this.onDragDropEvent}/>
+                            </div>
 
                         </div>
                         <PlayerRow isMe={!this.state.spectating}
