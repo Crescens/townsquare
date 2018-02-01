@@ -399,7 +399,6 @@ class Player extends Spectator {
         this.addOutfitToTown();
 
         this.ghostrock = this.outfit.wealth || 0;
-        this.readyToStart = false;
         //this.limitedPlayed = 0;
         //this.maxLimited = 1;
         //this.activePlot = undefined;
@@ -410,7 +409,7 @@ class Player extends Spectator {
             return;
         }
 
-        this.drawDeck.shuffle();
+        this.shuffleDrawDeck();
         this.drawCardsToHand('hand', StartingHandSize);
     }
 
@@ -762,6 +761,25 @@ class Player extends Spectator {
         });
 
         this.posse = true;
+        this.readyToStart = true;
+    }
+
+    receiveProduction() {
+        let memo = 0;
+        let producers = this.findCards(this.cardsInPlay, (card) => (card.production > 0));
+        let production = _.reduce(producers, (card) => {
+            return memo += card.production;
+        }, memo);
+
+        this.ghostrock += production;
+    }
+
+    payUpkeep() {
+        this.upkeepPaid = true;
+    }
+
+    resetForRound() {
+        this.upkeepPaid = false;
     }
 
     drop(cardId, source, target) {

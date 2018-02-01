@@ -5,11 +5,11 @@ const ReadyPrompt = require('./readyprompt.js');
 
 class HighNoonPhase extends Phase {
     constructor(game) {
-        super(game, 'noon');
+        super(game, 'high noon');
         this.initialise([
             new SimpleStep(game, () => this.receiveProduction()),
             new SimpleStep(game, () => this.payUpkeep()),
-            new ReadyPrompt(game, 'noon')
+            new ReadyPrompt(game, 'high noon')
         ]);
     }
 
