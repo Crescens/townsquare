@@ -755,6 +755,12 @@ class Player extends Spectator {
         }
     }
 
+    startPosse() {
+        _.each(this.hand.value(), (card) => {
+            this.drop(card.uuid, 'hand', this.outfit.uuid);
+        });
+    }
+
     drop(cardId, source, target) {
         if(!this.isValidDropCombination(source, target)) {
             return false;
