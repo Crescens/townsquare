@@ -13,7 +13,7 @@ const api = require('./api');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const http = require('http');
-//const Raven = require('raven');
+const Raven = require('raven');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpack = require('webpack');
@@ -21,7 +21,7 @@ const webpackConfig = require('../webpack.config.js');
 const pug = require('pug');
 
 const UserService = require('./repositories/UserService.js');
-//const version = require('../version.js');
+const version = require('../version.js');
 
 const defaultWindows = {
     plot: false,
@@ -43,10 +43,10 @@ class Server {
 
     init() {
         if(!this.isDeveloping) {
-            //Raven.config(config.sentryDsn, { release: version }).install();
+            Raven.config(config.sentryDsn, { release: version }).install();
 
-            //app.use(Raven.requestHandler());
-            //app.use(Raven.errorHandler());
+            app.use(Raven.requestHandler());
+            app.use(Raven.errorHandler());
         }
 
         app.use(session({

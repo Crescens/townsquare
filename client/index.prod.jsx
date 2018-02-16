@@ -10,7 +10,7 @@ import Application from './Application.jsx';
 
 import version from '../version.js';
 
-Raven.config('https://f5286cd580bf46898e7180c7a46de2f6@sentry.io/123019', {
+Raven.config('https://23afae0ec2cf4b288fb0b26161ae00c3@sentry.io/289686', {
     ignoreErrors: ['/recaptcha/api2'],
     release: version
 }).install();
