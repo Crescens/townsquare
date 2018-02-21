@@ -541,19 +541,9 @@ const Costs = {
     payPrintedGhostRockCost: function() {
         return {
             canPay: function(context) {
-                var hasDupe = context.player.getDuplicateInPlay(context.source);
-                if(hasDupe) {
-                    return true;
-                }
-
                 return context.player.ghostrock >= context.source.getCost();
             },
             pay: function(context) {
-                var hasDupe = context.player.getDuplicateInPlay(context.source);
-                if(hasDupe) {
-                    return;
-                }
-
                 context.player.ghostrock -= context.source.getCost();
             }
         };
@@ -566,23 +556,17 @@ const Costs = {
     payReduceableGhostRockCost: function(playingType) {
         return {
             canPay: function(context) {
-                var hasDupe = context.player.getDuplicateInPlay(context.source);
-                if(hasDupe && playingType === 'marshal') {
+                if(playingType === 'marshal') {
                     return true;
                 }
 
                 return context.player.ghostrock >= context.player.getReducedCost(playingType, context.source);
             },
             pay: function(context) {
-                var hasDupe = context.player.getDuplicateInPlay(context.source);
-                context.costs.isDupe = !!hasDupe;
-                if(hasDupe && playingType === 'marshal') {
-                    context.costs.ghostrock = 0;
-                } else {
-                    context.costs.ghostrock = context.player.getReducedCost(playingType, context.source);
-                    context.player.ghostrock -= context.costs.ghostrock;
-                    context.player.markUsedReducers(playingType, context.source);
-                }
+                context.costs.ghostrock = context.player.getReducedCost(playingType, context.source);
+                context.player.ghostrock -= context.costs.ghostrock;
+                context.player.markUsedReducers(playingType, context.source);
+
             }
         };
     },
