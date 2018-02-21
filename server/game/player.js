@@ -1046,29 +1046,27 @@ class Player extends Spectator {
         }
     }
 
-    // Must change onCardKneeled and onCardStood events before changing these functions
-
-    kneelCard(card) {
+    bootCard(card) {
         if(card.booted) {
             return;
         }
 
-        this.game.applyGameAction('kneel', card, card => {
+        this.game.applyGameAction('boot', card, card => {
             card.booted = true;
 
-            this.game.raiseEvent('onCardKneeled', this, card);
+            this.game.raiseEvent('onCardBooted', this, card);
         });
     }
 
-    standCard(card) {
+    unbootCard(card) {
         if(!card.booted) {
             return;
         }
 
-        this.game.applyGameAction('stand', card, card => {
+        this.game.applyGameAction('unboot', card, card => {
             card.booted = false;
 
-            this.game.raiseEvent('onCardStood', this, card);
+            this.game.raiseEvent('onCardUnbooted', this, card);
         });
     }
 
