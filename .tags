@@ -5399,9 +5399,9 @@ less-loader	.\package-lock.json	/^    "less-loader": {$/;"	f
 less-loader	.\package.json	/^    "less-loader": "^2.2.3",$/;"	f
 let.activePlot	.\server\game\player.js	/^            activePlot: this.activePlot ? this.activePlot.getSummary(activePlayer) : undefined,$/;"	p
 let.automatic	.\server\game\gamesteps\standingphase.js	/^        let cardsToStand = { automatic: kneelingCards, selected: [] };$/;"	p
+let.bullets	.\server\game\basecard.js	/^            bullets: this.bullets,$/;"	p
 let.challengeType	.\retired\server\game\cards\characters\07\maesteraemon.js	/^            challengeType: claimType,$/;"	p
 let.claim	.\retired\server\game\cards\characters\07\maesteraemon.js	/^            claim: player.getClaim()$/;"	p
-let.code	.\server\game\basecard.js	/^            code: this.cardData.code,$/;"	p
 let.loser	.\retired\server\game\cards\characters\07\maesteraemon.js	/^            loser: otherPlayer,$/;"	p
 let.mayInclude	.\client\deck-validator.js	/^            mayInclude: card => _.any(mayIncludeFuncs, func => func(card)),$/;"	p
 let.name	.\server\game\baseability.js	/^        let result = { resolved: false, name: name, value: null };$/;"	p
