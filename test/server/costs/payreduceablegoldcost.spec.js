@@ -82,17 +82,13 @@ describe('Costs.payReduceableGhostRockCost', function() {
             this.playerSpy.getReducedCost.and.returnValue(3);
         });
 
-        describe('when there is no duplicate in play', function() {
+        describe('', function() {
             beforeEach(function() {
                 this.cost.pay(this.context);
             });
 
             it('should mark the ghostrock cost as the reduced cost', function() {
                 expect(this.context.costs.ghostrock).toBe(3);
-            });
-
-            it('should mark the cost as not a duplicate', function() {
-                expect(this.context.costs.isDupe).toBe(false);
             });
 
             it('should spend the players ghostrock', function() {
@@ -104,56 +100,5 @@ describe('Costs.payReduceableGhostRockCost', function() {
             });
         });
 
-        describe('when there is a duplicate in play', function() {
-            beforeEach(function() {
-                this.playerSpy.getDuplicateInPlay.and.returnValue({});
-            });
-
-            describe('and the play type is marshal', function() {
-                beforeEach(function() {
-                    this.cost = Costs.payReduceableGhostRockCost('marshal');
-                    this.cost.pay(this.context);
-                });
-
-                it('should mark the ghostrock cost as 0', function() {
-                    expect(this.context.costs.ghostrock).toBe(0);
-                });
-
-                it('should mark the cost as a duplicate', function() {
-                    expect(this.context.costs.isDupe).toBe(true);
-                });
-
-                it('should not spend the players ghostrock', function() {
-                    expect(this.playerSpy.ghostrock).toBe(4);
-                });
-
-                it('should not mark any reducers as used', function() {
-                    expect(this.playerSpy.markUsedReducers).not.toHaveBeenCalled();
-                });
-            });
-
-            describe('and the play type is not marshal', function() {
-                beforeEach(function() {
-                    this.cost = Costs.payReduceableGhostRockCost('ambush');
-                    this.cost.pay(this.context);
-                });
-
-                it('should mark the ghostrock cost as the reduced cost', function() {
-                    expect(this.context.costs.ghostrock).toBe(3);
-                });
-
-                it('should mark the cost as a duplicate', function() {
-                    expect(this.context.costs.isDupe).toBe(true);
-                });
-
-                it('should spend the players ghostrock', function() {
-                    expect(this.playerSpy.ghostrock).toBe(1);
-                });
-
-                it('should mark any reducers as used', function() {
-                    expect(this.playerSpy.markUsedReducers).toHaveBeenCalledWith('ambush', this.cardSpy);
-                });
-            });
-        });
     });
 });

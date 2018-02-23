@@ -16,12 +16,12 @@ class SetupCardAction extends BaseAbility {
         return (
             context.game.currentPhase === 'setup' &&
             context.player.hand.contains(context.source) &&
-            context.source.getType() !== 'event'
+            context.source.getType() === 'dude' //&& other starting posse requirements
         );
     }
 
     executeHandler(context) {
-        context.player.putIntoPlay(context.source, 'setup');
+        context.player.putIntoPlay(context.source, 'setup', context.player.outfit.uuid);
     }
 }
 

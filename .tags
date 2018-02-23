@@ -1451,7 +1451,8 @@ context.source	.\server\game\effect.js	/^        this.context = { game: game, so
 context.takeControl.originalController	.\server\game\effects.js	/^                context.takeControl[card.uuid] = { originalController: card.controller };$/;"	p
 continuation-local-storage	.\package-lock.json	/^        "continuation-local-storage": "3.2.1",$/;"	f
 continuation-local-storage	.\package-lock.json	/^    "continuation-local-storage": {$/;"	f
-continue.plots	.\server\game\gamesteps\revealplots.js	/^            plots: this.plots$/;"	p
+continue.drawhand	.\server\game\gamesteps\gambling\revealplots.js	/^            drawhand: this.drawhand$/;"	p
+continue.plots	.\retired\server\game\gamesteps\revealplots.js	/^            plots: this.plots$/;"	p
 convert-source-map	.\package-lock.json	/^        "convert-source-map": "https:\/\/registry.npmjs.org\/convert-source-map\/-\/convert-source-map-1.5.0.tgz",$/;"	f
 convert-source-map	.\package-lock.json	/^    "convert-source-map": {$/;"	f
 cookie	.\package-lock.json	/^            "cookie": "https:\/\/registry.npmjs.org\/cookie\/-\/cookie-0.3.1.tgz",$/;"	f
@@ -2372,9 +2373,9 @@ getDebugSessionKey	.\client\configureStore.dev.js	/^function getDebugSessionKey(
 getDeckCount	.\client\deck-validator.js	/^function getDeckCount(deck) {$/;"	f
 getDirectories	.\server\game\cards\index.js	/^function getDirectories(srcpath) {$/;"	f
 getDirectories	.\server\game\loader.js	/^function getDirectories(srcpath) {$/;"	f
-getInitiativeResult.initiativeTied	.\server\game\gamesteps\revealplots.js	/^        let result = { initiativeTied: false, powerTied: false, player: undefined };$/;"	p
-getInitiativeResult.player	.\server\game\gamesteps\revealplots.js	/^        let result = { initiativeTied: false, powerTied: false, player: undefined };$/;"	p
-getInitiativeResult.powerTied	.\server\game\gamesteps\revealplots.js	/^        let result = { initiativeTied: false, powerTied: false, player: undefined };$/;"	p
+getInitiativeResult.initiativeTied	.\retired\server\game\gamesteps\revealplots.js	/^        let result = { initiativeTied: false, powerTied: false, player: undefined };$/;"	p
+getInitiativeResult.player	.\retired\server\game\gamesteps\revealplots.js	/^        let result = { initiativeTied: false, powerTied: false, player: undefined };$/;"	p
+getInitiativeResult.powerTied	.\retired\server\game\gamesteps\revealplots.js	/^        let result = { initiativeTied: false, powerTied: false, player: undefined };$/;"	p
 getRules.requiredDraw	.\client\deck-validator.js	/^            requiredDraw: 52$/;"	p
 getpass	.\package-lock.json	/^            "getpass": "0.1.7",$/;"	f
 getpass	.\package-lock.json	/^        "getpass": "https:\/\/registry.npmjs.org\/getpass\/-\/getpass-0.1.7.tgz",$/;"	f
@@ -9662,8 +9663,8 @@ uuid	.\package.json	/^    "uuid": "^3.0.1",$/;"	f
 validate-npm-package-license	.\package-lock.json	/^        "validate-npm-package-license": "https:\/\/registry.npmjs.org\/validate-npm-package-license\/-\/validate-npm-package-license-3.0.1.tgz"$/;"	f
 validate-npm-package-license	.\package-lock.json	/^    "validate-npm-package-license": {$/;"	f
 validateDeck	.\client\deck-validator.js	/^module.exports = function validateDeck(deck, packs) {$/;"	f
-var.params.card	.\server\game\player.js	/^                card: card$/;"	p
-var.params.player	.\server\game\player.js	/^                player: this,$/;"	p
+var.params.card	.\server\game\player.js	/^                    card: card$/;"	p
+var.params.player	.\server\game\player.js	/^                    player: this,$/;"	p
 vary	.\package-lock.json	/^        "vary": "1.1.2"$/;"	f
 vary	.\package-lock.json	/^    "vary": {$/;"	f
 vendors	.\package-lock.json	/^        "vendors": "https:\/\/registry.npmjs.org\/vendors\/-\/vendors-1.0.1.tgz"$/;"	f

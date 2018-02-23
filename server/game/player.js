@@ -553,12 +553,11 @@ class Player extends Spectator {
         return this.boothillPile.includes(card) && (!card.isUnique() || this.boothillPile.filter(c => c.name === card.name).length === 1);
     }
 
-    putIntoPlay(card, playingType = 'play') {
+    putIntoPlay(card, playingType = 'play', target = '') {
         if(!this.canPutIntoPlay(card)) {
             return;
         }
 
-        //Replace this with a bool on card that tells whether it is an attachment among types
         if(card.isAttachment()) {
             this.promptForAttachment(card, playingType);
             return;
@@ -568,7 +567,20 @@ class Player extends Spectator {
 
         card.facedown = this.game.currentPhase === 'setup';
         card.new = true;
+
+        switch(card.type) {
+            case 'dude':
+                card.updateGameLocation(target);
+                break;
+            case 'deed':
+                this.addDeedToStreet(card, target);
+                break;
+            default:
+                //empty
+        }
+
         this.moveCard(card, 'play area');
+
         if(card.controller !== this) {
             card.controller.allCards = _(card.controller.allCards.reject(c => c === card));
             this.allCards.push(card);
@@ -606,7 +618,6 @@ class Player extends Spectator {
         });
 
         this.cardsInPlay = processedCards;
-        this.ghostrock = 0;
     }
 
     drawPhase() {
@@ -818,14 +829,7 @@ class Player extends Spectator {
         }
 
         if(this.inPlayLocation(target)) {
-            if(card.getType() === 'dude') {
-                card.updateGameLocation(target);
-                this.putIntoPlay(card);
-            }
-            if(card.getType() === 'deed') {
-                this.addDeedToStreet(card, target);
-                this.putIntoPlay(card);
-            }
+            this.putIntoPlay(card, 'play', target);
         } else {
             this.moveCard(card, target);
         }
@@ -898,12 +902,6 @@ class Player extends Spectator {
     }
 
     discardCard(card, allowSave = true) {
-        if(!card.dupes.isEmpty() && allowSave) {
-            if(this.removeDuplicate(card)) {
-                this.game.addMessage('{0} discards a duplicate to save {1}', this, card);
-                return;
-            }
-        }
 
         this.discardCards([card], allowSave);
     }
@@ -939,17 +937,9 @@ class Player extends Spectator {
         });
     }
 
-    returnCardToHand(card, allowSave = true) {
+    returnCardToHand(card) {
         this.game.applyGameAction('returnToHand', card, card => {
-            if(!card.dupes.isEmpty() && allowSave) {
-                if(!this.removeDuplicate(card)) {
-                    this.moveCard(card, 'hand');
-                } else {
-                    this.game.addMessage('{0} discards a duplicate to save {1}', this, card);
-                }
-            } else {
-                this.moveCard(card, 'hand');
-            }
+            this.moveCard(card, 'hand');
         });
     }
 
@@ -997,26 +987,27 @@ class Player extends Spectator {
                 return;
             }
 
-            var params = {
-                player: this,
-                card: card
-            };
+            if(targetLocation !== 'play area') {
 
-            //Assumes that a card being moved from play area is leaving play,
-            //incorrect for DTR
-            this.game.raiseMergedEvent('onCardLeftPlay', params, event => {
-                card.attachments.each(attachment => {
-                    this.removeAttachment(attachment, false);
+                var params = {
+                    player: this,
+                    card: card
+                };
+
+                this.game.raiseMergedEvent('onCardLeftPlay', params, event => {
+                    card.attachments.each(attachment => {
+                        this.removeAttachment(attachment, false);
+                    });
+
+                    event.card.leavesPlay();
+
+                    if(event.card.parent) {
+                        event.card.parent.removeAttachment(event.card);
+                    }
+
+                    card.moveTo(targetLocation);
                 });
-
-                event.card.leavesPlay();
-
-                if(event.card.parent) {
-                    event.card.parent.removeAttachment(event.card);
-                }
-
-                card.moveTo(targetLocation);
-            });
+            }
         }
 
         if(card.location === 'hand') {

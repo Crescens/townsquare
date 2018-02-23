@@ -22,7 +22,7 @@ describe('SetupCardAction', function () {
         beforeEach(function() {
             this.gameSpy.currentPhase = 'setup';
             this.playerSpy.hand = _([this.cardSpy]);
-            this.cardSpy.getType.and.returnValue('character');
+            this.cardSpy.getType.and.returnValue('dude');
         });
 
         describe('when all conditions are met', function() {
