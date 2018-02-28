@@ -7,17 +7,17 @@ class TheRainsOfCastamere extends AgendaCard {
     constructor(owner, cardData) {
         super(owner, cardData);
 
-        this.registerEvents(['onDecksPrepared', 'onPlotDiscarded']);
+        this.registerEvents(['onDecksPrepared', 'onPlotDiscarded', 'onPlotsRecycled']);
     }
 
     setupCardAbilities(ability) {
         this.reaction({
             when: {
-                afterChallenge: (event, challenge) => (
+                afterChallenge: event => (
                     !this.owner.faction.kneeled &&
-                    challenge.challengeType === 'intrigue' &&
-                    challenge.winner === this.owner &&
-                    challenge.strengthDifference >= 5
+                    event.challenge.challengeType === 'intrigue' &&
+                    event.challenge.winner === this.owner &&
+                    event.challenge.strengthDifference >= 5
                 )
             },
             handler: this.trigger.bind(this)
@@ -25,8 +25,8 @@ class TheRainsOfCastamere extends AgendaCard {
 
         this.action({
             title: 'Manually trigger',
-            method: 'trigger',
-            cost: ability.costs.kneelFactionCard()
+            cost: ability.costs.kneelFactionCard(),
+            handler: this.trigger.bind(this)
         });
     }
 
@@ -41,23 +41,32 @@ class TheRainsOfCastamere extends AgendaCard {
     }
 
     onDecksPrepared() {
-        this.owner.createAdditionalPile('scheme plots', { isPrivate: true });
-        var schemePartition = this.owner.plotDeck.partition(card => card.hasTrait('Scheme'));
-        this.schemes = schemePartition[0];
+        this.separateSchemePlots();
+    }
+
+    onPlotsRecycled(event) {
+        if(event.player === this.controller) {
+            this.separateSchemePlots();
+        }
+    }
+
+    separateSchemePlots() {
+        let schemePartition = this.owner.plotDeck.partition(card => card.hasTrait('Scheme'));
+        let schemes = schemePartition[0];
         this.owner.plotDeck = _(schemePartition[1]);
-        _.each(this.schemes, scheme => {
+        for(let scheme of schemes) {
             this.owner.moveCard(scheme, 'scheme plots');
-        });
+        }
     }
 
     onPlotDiscarded(event) {
-        if(event.card.hasTrait('Scheme')) {
+        if(event.card.controller === this.controller && event.card.hasTrait('Scheme')) {
             this.owner.moveCard(event.card, 'out of game');
         }
     }
 
     menuButtons() {
-        var buttons = _.map(this.schemes, scheme => {
+        let buttons = this.owner.schemePlots.map(scheme => {
             return { method: 'revealScheme', card: scheme };
         });
 
@@ -66,7 +75,7 @@ class TheRainsOfCastamere extends AgendaCard {
     }
 
     revealScheme(player, schemeId) {
-        var scheme = _.find(this.schemes, card => card.uuid === schemeId);
+        let scheme = this.owner.schemePlots.find(card => card.uuid === schemeId);
 
         if(!scheme) {
             return false;

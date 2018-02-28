@@ -6,14 +6,13 @@ class TheConclave extends AgendaCard {
     constructor(owner, cardData) {
         super(owner, cardData);
 
-        this.owner.createAdditionalPile('conclave', { isPrivate: true });
         this.registerEvents(['onPlayerKeepHandOrMulligan']);
     }
 
     setupCardAbilities() {
         this.reaction({
             when : {
-                afterChallenge: (event, challenge) => challenge.winner === this.controller && this.hasParticipatingMaester(challenge)
+                afterChallenge: event => event.challenge.winner === this.controller && this.hasParticipatingMaester(event.challenge)
             },
             target: {
                 activePromptTitle: 'Choose Conclave card to swap with top of deck',

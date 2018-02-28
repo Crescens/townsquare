@@ -6,12 +6,12 @@ class TheBrotherhoodWithoutBanners extends AgendaCard {
     setupCardAbilities(ability) {
         this.reaction({
             when: {
-                onPhaseStarted: (event, phase) => phase === 'challenge'
+                onPhaseStarted: event => event.phase === 'challenge'
             },
             cost: ability.costs.kneelFactionCard(),
             target: {
-                activePromptTitle: 'Select a character',
-                cardCondition: card => card.location === 'play area' && card.controller === this.controller && card.isFaction('neutral')
+                cardCondition: card => card.location === 'play area' && card.controller === this.controller &&
+                                       card.getType() === 'character' && card.isFaction('neutral')
             },
             handler: context => {
                 this.target = context.target;
@@ -40,7 +40,7 @@ class TheBrotherhoodWithoutBanners extends AgendaCard {
         }));
 
         this.game.addMessage('{0} uses {1} and kneels their faction card to have {2} gain {3} until the end of the phase', 
-                              this.controller, this, this.target, keyword);
+            this.controller, this, this.target, keyword);
 
         return true;
     }
