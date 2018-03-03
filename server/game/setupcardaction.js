@@ -12,8 +12,13 @@ class SetupCardAction extends BaseAbility {
         this.title = 'Setup';
     }
 
+    isCardAbility() {
+        return false;
+    }
+
     meetsRequirements(context) {
         return (
+            context.player.readyToStart &&
             context.game.currentPhase === 'setup' &&
             context.player.hand.contains(context.source) &&
             context.source.getType() === 'dude' //&& other starting posse requirements

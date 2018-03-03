@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import NewGame from './NewGame.jsx';
-import GameList from './GameList.jsx';
-import PendingGame from './PendingGame.jsx';
-import PasswordGame from './PasswordGame.jsx';
-import AlertPanel from './SiteComponents/AlertPanel.jsx';
+import NewGame from './NewGame';
+import GameList from './GameList';
+import PendingGame from './PendingGame';
+import PasswordGame from './PasswordGame';
+import AlertPanel from './SiteComponents/AlertPanel';
+import Panel from './SiteComponents/Panel';
 
 import * as actions from './actions';
 
@@ -15,11 +16,9 @@ class InnerGameLobby extends React.Component {
         super();
 
         this.onNewGameClick = this.onNewGameClick.bind(this);
-        this.onShowNodesChecked = this.onShowNodesChecked.bind(this);
 
         this.state = {
-            newGame: false,
-            showNodes: false
+            newGame: false
         };
     }
 
@@ -45,10 +44,6 @@ class InnerGameLobby extends React.Component {
         this.props.startNewGame();
     }
 
-    onShowNodesChecked() {
-        this.setState({ showNodes: !this.state.showNodes });
-    }
-
     render() {
         var rightside = null;
 
@@ -59,14 +54,15 @@ class InnerGameLobby extends React.Component {
         }
 
         return (
-            <div>
+            <div className='full-height'>
                 { this.props.bannerNotice ? <AlertPanel type='error' message={ this.props.bannerNotice } /> : null }
                 { this.state.errorMessage ? <AlertPanel type='error' message={ this.state.errorMessage } /> : null }
 
-                <div className='col-sm-7'>
-                    <button className='btn btn-primary' onClick={ this.onNewGameClick } disabled={ !!this.props.currentGame }>New Game</button>
-                    { this.props.isAdmin ? <span className='pull-right'><input type='checkbox' checked={ this.state.showNodes } onChange={ this.onShowNodesChecked } />Show Nodes</span> : null }
-                    { this.props.games.length === 0 ? <h4>No games are currently in progress</h4> : <GameList games={ this.props.games } showNodes={ this.state.showNodes } /> }
+                <div className='col-sm-7 full-height'>
+                    <Panel title='Current Games'>
+                        <button className='btn btn-primary' onClick={ this.onNewGameClick } disabled={ !!this.props.currentGame }>New Game</button>
+                        { this.props.games.length === 0 ? <h4>No games are currently in progress</h4> : <GameList games={ this.props.games } /> }
+                    </Panel>
                 </div>
                 <div className='col-sm-5'>
                     { (!this.props.currentGame && this.props.newGame) ? <NewGame defaultGameName={ this.props.username + '\'s game' } /> : null }
@@ -91,13 +87,13 @@ InnerGameLobby.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        bannerNotice: state.chat.notice,
-        currentGame: state.games.currentGame,
+        bannerNotice: state.lobby.notice,
+        currentGame: state.lobby.currentGame,
         isAdmin: state.auth.isAdmin,
-        games: state.games.games,
+        games: state.lobby.games,
         newGame: state.games.newGame,
-        passwordGame: state.games.passwordGame,
-        socket: state.socket.socket,
+        passwordGame: state.lobby.passwordGame,
+        socket: state.lobby.socket,
         username: state.auth.username
     };
 }

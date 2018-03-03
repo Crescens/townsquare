@@ -1,12 +1,9 @@
-/*global describe, it, beforeEach, expect, jasmine*/
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const Player = require('../../../server/game/player.js');
 
 describe('Player', function() {
     beforeEach(function() {
-        this.gameSpy = jasmine.createSpyObj('game', ['getOtherPlayer', 'playerDecked', 'raiseMergedEvent']);
-        this.player = new Player('1', 'Player 1', true, this.gameSpy);
+        this.gameSpy = jasmine.createSpyObj('game', ['playerDecked', 'raiseEvent']);
+        this.player = new Player('1', { username: 'Player 1', settings: {} }, true, this.gameSpy);
         this.player.initialise();
 
         this.cardSpy = jasmine.createSpyObj('card', ['allowAttachment']);

@@ -1,18 +1,15 @@
-/*global describe, it, beforeEach, expect, jasmine*/
-/* eslint camelcase: 0 */
-
 const _ = require('underscore');
 const Player = require('../../../server/game/player.js');
 
 describe('the Player', () => {
-    var game = jasmine.createSpyObj('game', ['getOtherPlayer', 'playerDecked', 'raiseMergedEvent']);
+    var game = jasmine.createSpyObj('game', ['playerDecked', 'raiseEvent']);
 
-    var player = new Player('1', 'Player 1', true, game);
+    var player = new Player('1', {username: 'Player 1', settings: {}}, true, game);
     var drawDeck = _([
-      { name: 'foo' },
-      { name: 'bar' },
-      { name: 'baz' },
-      { name: 'ball' }
+        { name: 'foo' },
+        { name: 'bar' },
+        { name: 'baz' },
+        { name: 'ball' }
     ]);
 
     beforeEach(() => {

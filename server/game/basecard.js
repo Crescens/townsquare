@@ -20,9 +20,26 @@ const EventRegistrar = require('./eventregistrar.js');
     'stealth',
     'terminal',
     'limited'
+<<<<<<< HEAD
 */
 //];
 const LocationsWithEventHandling = ['play area', 'outfit', 'legend'];
+=======
+];
+
+const ValidFactions = [
+    'stark',
+    'lannister',
+    'thenightswatch',
+    'tyrell',
+    'baratheon',
+    'targaryen',
+    'martell',
+    'greyjoy'
+];
+
+const LocationsWithEventHandling = ['play area', 'active plot', 'faction', 'agenda', 'title'];
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
 class BaseCard {
     constructor(owner, cardData) {
@@ -70,6 +87,7 @@ class BaseCard {
 
         /*
         this.factions = {};
+        this.cardTypeSet = undefined;
         this.addFaction(cardData.faction_code);
         */
     }
@@ -208,9 +226,17 @@ class BaseCard {
      * is both in play and not blank.
      */
     persistentEffect(properties) {
+<<<<<<< HEAD
         const allowedLocations = ['legend', 'any', 'play area'];
         const defaultLocationForType = {
             legend: 'legend'
+=======
+        const allowedLocations = ['active plot', 'agenda', 'any', 'play area', 'title'];
+        const defaultLocationForType = {
+            agenda: 'agenda',
+            plot: 'active plot',
+            title: 'title'
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         };
 
         let location = properties.location || defaultLocationForType[this.getType()] || 'play area';
@@ -234,8 +260,7 @@ class BaseCard {
             condition: properties.condition,
             match: (card, context) => card === this.parent && (!properties.match || properties.match(card, context)),
             targetController: 'any',
-            effect: properties.effect,
-            recalculateWhen: properties.recalculateWhen
+            effect: properties.effect
         });
     }
 
@@ -301,6 +326,10 @@ class BaseCard {
         return this.printedKeywords.includes(keyword.toLowerCase());
     }
 
+    getPrintedKeywords() {
+        return _.filter(ValidKeywords, keyword => this.hasPrintedKeyword(keyword));
+    }
+
     hasTrait(trait) {
         return !!this.traits[trait.toLowerCase()];
     }
@@ -315,7 +344,25 @@ class BaseCard {
         return !!this.factions[normalizedFaction];
     }
 
+<<<<<<< HEAD
     /*isLoyal() {
+=======
+    isOutOfFaction() {
+        return !this.isFaction(this.controller.getFaction()) && !this.isFaction('neutral');
+    }
+
+    getFactions() {
+        let factions = _.filter(ValidFactions, faction => this.isFaction(faction));
+
+        if(_.isEmpty(factions)) {
+            factions.push('neutral');
+        }
+
+        return factions;
+    }
+
+    isLoyal() {
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         return this.cardData.is_loyal;
     }*/
 
@@ -327,15 +374,18 @@ class BaseCard {
         });
     }
 
+    getPersistentEffects() {
+        return this.abilities.persistentEffects.filter(effect => effect.location !== 'any');
+    }
+
     applyPersistentEffects() {
-        _.each(this.abilities.persistentEffects, effect => {
-            if(effect.location !== 'any') {
-                this.game.addEffect(this, effect);
-            }
-        });
+        for(let effect of this.getPersistentEffects()) {
+            this.game.addEffect(this, effect);
+        }
     }
 
     leavesPlay() {
+        this.cardTypeSet = undefined;
         this.tokens = {};
     }
 
@@ -373,7 +423,7 @@ class BaseCard {
         }
 
         if(originalLocation !== targetLocation || originalParent !== parent) {
-            this.game.raiseMergedEvent('onCardMoved', { card: this, originalLocation: originalLocation, newLocation: targetLocation, parentChanged: originalParent !== parent });
+            this.game.raiseEvent('onCardMoved', { card: this, originalLocation: originalLocation, newLocation: targetLocation, parentChanged: originalParent !== parent });
         }
     }
 
@@ -398,7 +448,15 @@ class BaseCard {
         return this.blankCount > 0;
     }
 
+    setCardType(cardType) {
+        this.cardTypeSet = cardType;
+    }
+
     getType() {
+        return this.cardTypeSet || this.getPrintedType();
+    }
+
+    getPrintedType() {
         return this.cardData.type_code;
     }
 
@@ -408,16 +466,12 @@ class BaseCard {
         return this.cardData.faction_code;
     }
 
-    modifyClaim(player, type, claim) {
-        return claim;
-    }
-
     setBlank() {
         var before = this.isBlank();
         this.blankCount++;
         var after = this.isBlank();
         if(!before && after) {
-            this.game.raiseEvent('onCardBlankToggled', this, after);
+            this.game.raiseEvent('onCardBlankToggled', { card: this, isBlank: after });
         }
     }
 
@@ -447,8 +501,13 @@ class BaseCard {
     }
     */
 
+<<<<<<< HEAD
     addKeyword(keyword) {
         var lowerCaseKeyword = keyword.toLowerCase();
+=======
+    addTrait(trait) {
+        let lowerCaseTrait = trait.toLowerCase();
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
         if(!lowerCaseKeyword || lowerCaseKeyword === '') {
             return;
@@ -459,6 +518,12 @@ class BaseCard {
         } else {
             this.keywords[lowerCaseKeyword]++;
         }
+
+        this.game.raiseEvent('onCardTraitChanged', { card: this });
+    }
+
+    getTraits() {
+        return _.keys(_.omit(this.traits, trait => trait < 1));
     }
 
     addFaction(faction) {
@@ -470,7 +535,7 @@ class BaseCard {
         this.factions[lowerCaseFaction] = this.factions[lowerCaseFaction] || 0;
         this.factions[lowerCaseFaction]++;
 
-        this.game.raiseMergedEvent('onCardFactionChanged', { card: this });
+        this.game.raiseEvent('onCardFactionChanged', { card: this });
     }
 
     removeKeyword(keyword) {
@@ -481,11 +546,12 @@ class BaseCard {
 
     removeTrait(trait) {
         this.traits[trait.toLowerCase()]--;
+        this.game.raiseEvent('onCardTraitChanged', { card: this });
     }
 
     removeFaction(faction) {
         this.factions[faction.toLowerCase()]--;
-        this.game.raiseMergedEvent('onCardFactionChanged', { card: this });
+        this.game.raiseEvent('onCardFactionChanged', { card: this });
     }
 
     clearBlank() {
@@ -493,24 +559,20 @@ class BaseCard {
         this.blankCount--;
         var after = this.isBlank();
         if(before && !after) {
-            this.game.raiseEvent('onCardBlankToggled', this, after);
+            this.game.raiseEvent('onCardBlankToggled', { card: this, isBlank: after });
         }
-    }
-
-    addToken(type, number) {
-        if(_.isUndefined(this.tokens[type])) {
-            this.tokens[type] = 0;
-        }
-
-        this.tokens[type] += number;
     }
 
     hasToken(type) {
         return !!this.tokens[type];
     }
 
-    removeToken(type, number) {
-        this.tokens[type] -= number;
+    modifyToken(type, number) {
+        if(_.isUndefined(this.tokens[type])) {
+            this.tokens[type] = 0;
+        }
+
+        this.tokens[type] += number;
 
         if(this.tokens[type] < 0) {
             this.tokens[type] = 0;
@@ -536,6 +598,10 @@ class BaseCard {
         }
 
         return false;
+    }
+
+    getGameElementType() {
+        return 'card';
     }
 
     getShortSummary() {
@@ -564,7 +630,7 @@ class BaseCard {
         let state = {
             bullets: this.bullets,
             code: this.cardData.code,
-            controlled: this.owner !== this.controller,
+            controlled: this.owner !== this.controller && this.getType() !== 'title',
             facedown: this.facedown,
             gamelocation: this.gamelocation,
             influence: this.influence,

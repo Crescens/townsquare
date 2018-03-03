@@ -1,23 +1,24 @@
-/*global describe, it, beforeEach, expect, jasmine*/
-/* eslint no-invalid-this: 0 */
-
 const _ = require('underscore');
 
 const TriggeredAbilityWindow = require('../../../server/game/gamesteps/triggeredabilitywindow.js');
 
 describe('TriggeredAbilityWindow', function() {
     beforeEach(function() {
-        this.player1Spy = jasmine.createSpyObj('player', ['setPrompt', 'cancelPrompt']);
-        this.player2Spy = jasmine.createSpyObj('player', ['setPrompt', 'cancelPrompt']);
+        this.player1Spy = jasmine.createSpyObj('player', ['setPrompt', 'cancelPrompt', 'user']);
+        this.player2Spy = jasmine.createSpyObj('player', ['setPrompt', 'cancelPrompt', 'user']);
+
+        this.player1Spy.noTimer = true;
+        this.player2Spy.noTimer = true;
 
         this.gameSpy = jasmine.createSpyObj('game', ['getPlayersInFirstPlayerOrder', 'promptWithMenu', 'resolveAbility']);
         this.gameSpy.getPlayersInFirstPlayerOrder.and.returnValue([this.player1Spy, this.player2Spy]);
 
-        this.event = { name: 'onFoo', params: [] };
-
+        this.eventSpy = jasmine.createSpyObj('event', ['getConcurrentEvents', 'getPrimaryEvent']);
+        this.eventSpy.getConcurrentEvents.and.returnValue([this.eventSpy]);
+        this.eventSpy.getPrimaryEvent.and.returnValue(this.eventSpy);
 
         this.window = new TriggeredAbilityWindow(this.gameSpy, {
-            event: this.event,
+            event: this.eventSpy,
             abilityType: 'interrupt'
         });
 
@@ -34,20 +35,20 @@ describe('TriggeredAbilityWindow', function() {
             this.context1 = { context: 1 };
 
             this.abilityCard2 = createCard({ card: 2, name: 'The Card 2', controller: this.player1Spy });
-            this.ability2Spy = jasmine.createSpyObj('ability', ['hasMax','meetsRequirements']);
+            this.ability2Spy = jasmine.createSpyObj('ability', ['hasMax', 'meetsRequirements']);
             this.ability2Spy.meetsRequirements.and.returnValue(true);
             this.context2 = { context: 2 };
 
             this.abilityCard3 = createCard({ card: 3, name: 'Their Card', controller: this.player2Spy });
-            this.ability3Spy = jasmine.createSpyObj('ability', ['hasMax','meetsRequirements']);
+            this.ability3Spy = jasmine.createSpyObj('ability', ['hasMax', 'meetsRequirements']);
             this.ability3Spy.meetsRequirements.and.returnValue(true);
             this.context3 = { context: 3 };
 
             this.window.abilityChoices = [
-                { id: '1', ability: this.ability1Spy, card: this.abilityCard1, choice: 'choice1', context: this.context1, player: this.player1Spy, text: 'My Choice 1' },
-                { id: '2', ability: this.ability1Spy, card: this.abilityCard1, choice: 'choice2', context: this.context1, player: this.player1Spy, text: 'My Choice 2' },
-                { id: '3', ability: this.ability2Spy, card: this.abilityCard2, choice: 'default', context: this.context2, player: this.player1Spy, text: 'default' },
-                { id: '4', ability: this.ability3Spy, card: this.abilityCard3, choice: 'default', context: this.context3, player: this.player2Spy, text: 'default' }
+                { id: '1', abilityGroupId: 1, ability: this.ability1Spy, card: this.abilityCard1, choice: 'choice1', context: this.context1, player: this.player1Spy, text: 'My Choice 1' },
+                { id: '2', abilityGroupId: 1, ability: this.ability1Spy, card: this.abilityCard1, choice: 'choice2', context: this.context1, player: this.player1Spy, text: 'My Choice 2' },
+                { id: '3', abilityGroupId: 2, ability: this.ability2Spy, card: this.abilityCard2, choice: 'default', context: this.context2, player: this.player1Spy, text: 'default' },
+                { id: '4', abilityGroupId: 3, ability: this.ability3Spy, card: this.abilityCard3, choice: 'default', context: this.context3, player: this.player2Spy, text: 'default' }
             ];
         };
 
@@ -138,7 +139,7 @@ describe('TriggeredAbilityWindow', function() {
 
                 it('should prompt the first player', function() {
                     expect(this.gameSpy.promptWithMenu).toHaveBeenCalledWith(this.player1Spy, this.window, jasmine.objectContaining({
-                        activePrompt: {
+                        activePrompt: jasmine.objectContaining({
                             menuTitle: jasmine.any(String),
                             buttons: [
                                 jasmine.objectContaining({ text: 'The Card - My Choice 1', arg: '1', method: 'chooseAbility' }),
@@ -146,7 +147,7 @@ describe('TriggeredAbilityWindow', function() {
                                 jasmine.objectContaining({ text: 'The Card 2', arg: '3', method: 'chooseAbility' }),
                                 jasmine.objectContaining({ text: 'Pass', method: 'pass' })
                             ]
-                        }
+                        })
                     }));
                 });
 
@@ -170,14 +171,14 @@ describe('TriggeredAbilityWindow', function() {
                     it('should display buttons as normal', function() {
                         this.window.continue();
                         expect(this.gameSpy.promptWithMenu).toHaveBeenCalledWith(this.player1Spy, this.window, jasmine.objectContaining({
-                            activePrompt: {
+                            activePrompt: jasmine.objectContaining({
                                 menuTitle: jasmine.any(String),
                                 buttons: [
                                     jasmine.objectContaining({ text: 'The Card', arg: '1', method: 'chooseAbility' }),
                                     jasmine.objectContaining({ text: 'The Card 2', arg: '2', method: 'chooseAbility' }),
                                     jasmine.objectContaining({ text: 'Pass', method: 'pass' })
                                 ]
-                            }
+                            })
                         }));
                     });
                 });
@@ -190,13 +191,13 @@ describe('TriggeredAbilityWindow', function() {
 
                     it('should only display the first copy', function() {
                         expect(this.gameSpy.promptWithMenu).toHaveBeenCalledWith(this.player1Spy, this.window, jasmine.objectContaining({
-                            activePrompt: {
+                            activePrompt: jasmine.objectContaining({
                                 menuTitle: jasmine.any(String),
                                 buttons: [
                                     jasmine.objectContaining({ text: 'The Card', arg: '1', method: 'chooseAbility' }),
                                     jasmine.objectContaining({ text: 'Pass', method: 'pass' })
                                 ]
-                            }
+                            })
                         }));
                     });
                 });
@@ -210,13 +211,13 @@ describe('TriggeredAbilityWindow', function() {
 
                 it('should filter out choices for that ability', function() {
                     expect(this.gameSpy.promptWithMenu).toHaveBeenCalledWith(this.player1Spy, this.window, jasmine.objectContaining({
-                        activePrompt: {
+                        activePrompt: jasmine.objectContaining({
                             menuTitle: jasmine.any(String),
                             buttons: [
                                 jasmine.objectContaining({ text: 'The Card 2', arg: '3', method: 'chooseAbility' }),
                                 jasmine.objectContaining({ text: 'Pass', method: 'pass' })
                             ]
-                        }
+                        })
                     }));
                 });
             });
@@ -230,13 +231,13 @@ describe('TriggeredAbilityWindow', function() {
 
                 it('should prompt the next player', function() {
                     expect(this.gameSpy.promptWithMenu).toHaveBeenCalledWith(this.player2Spy, this.window, jasmine.objectContaining({
-                        activePrompt: {
+                        activePrompt: jasmine.objectContaining({
                             menuTitle: jasmine.any(String),
                             buttons: [
                                 jasmine.objectContaining({ text: 'Their Card', arg: '4', method: 'chooseAbility' }),
                                 jasmine.objectContaining({ text: 'Pass', method: 'pass' })
                             ]
-                        }
+                        })
                     }));
                 });
             });
@@ -299,7 +300,7 @@ describe('TriggeredAbilityWindow', function() {
                 expect(this.gameSpy.resolveAbility).toHaveBeenCalledWith(this.ability1Spy, this.context1);
             });
 
-            it('should remove all choices for that card', function() {
+            it('should remove all choices for that ability grouping', function() {
                 let remainingIds = _.pluck(this.window.abilityChoices, 'id');
                 expect(remainingIds).toEqual(['3', '4']);
             });

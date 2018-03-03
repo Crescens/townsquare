@@ -18,6 +18,7 @@ export function loadPacks() {
         },
         callAPI: () => $.ajax('/api/packs', { cache: false })
     };
+<<<<<<< HEAD
 }
 
 export function loadOutfits() {
@@ -28,13 +29,19 @@ export function loadOutfits() {
         },
         callAPI: () => $.ajax('/api/outfit', { cache: false })
     };
+=======
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 }
 
 export function loadLegends() {
     return {
         types: ['REQUEST_LEGENDS', 'RECEIVE_LEGENDS'],
         shouldCallAPI: (state) => {
+<<<<<<< HEAD
             return !state.cards.legends;
+=======
+            return !state.cards.factions;
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         },
         callAPI: () => $.ajax('/api/legend', { cache: false })
     };

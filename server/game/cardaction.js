@@ -1,5 +1,6 @@
 const _ = require('underscore');
 
+const AbilityContext = require('./AbilityContext.js');
 const BaseAbility = require('./baseability.js');
 const Costs = require('./costs.js');
 const EventRegistrar = require('./eventregistrar.js');
@@ -16,10 +17,6 @@ const EventRegistrar = require('./eventregistrar.js');
  *                resolution in the rules).
  * cost         - object or array of objects representing the cost required to
  *                be paid before the action will activate. See Costs.
- * method       - string indicating the method on card that should be called
- *                when the action is executed. If this method returns an
- *                explicit `false` value then that execution of the action does
- *                not count toward the limit amount.
  * phase        - string representing which phases the action may be executed.
  *                Defaults to 'any' which allows the action to be executed in
  *                any phase.
@@ -48,7 +45,6 @@ class CardAction extends BaseAbility {
         this.game = game;
         this.card = card;
         this.title = properties.title;
-        this.limit = properties.limit;
         this.max = properties.max;
         this.phase = properties.phase || 'any';
         this.anyPlayer = properties.anyPlayer || false;
@@ -70,34 +66,23 @@ class CardAction extends BaseAbility {
     }
 
     buildHandler(card, properties) {
-        if(!properties.handler && !card[properties.method]) {
-            throw new Error('Actions must have either a `handler` or `method` property.');
+        if(!properties.handler) {
+            throw new Error('Actions must have a `handler` property.');
         }
 
-        if(properties.handler) {
-            return properties.handler;
-        }
-
-        return function(context) {
-            // TODO: Method-based handlers need to have player and arg sent for
-            //       backwards compatibility. These actions should either be
-            //       converted to use the handler property, or rewritten to use
-            //       the context object directly.
-            return card[properties.method].call(card, context.player, context.arg, context);
-        };
+        return properties.handler;
     }
 
     allowMenu() {
         return ['play area', 'agenda', 'active plot'].includes(this.location);
     }
 
-    createContext(player, arg) {
-        return {
-            arg: arg,
+    createContext(player) {
+        return new AbilityContext({
             game: this.game,
             player: player,
             source: this.card
-        };
+        });
     }
 
     meetsRequirements(context) {
@@ -105,7 +90,7 @@ class CardAction extends BaseAbility {
             return false;
         }
 
-        if(context.player.cannotTriggerCardAbilities) {
+        if(!context.player.canTrigger(this.card)) {
             return false;
         }
 
@@ -151,14 +136,15 @@ class CardAction extends BaseAbility {
     }
 
     executeHandler(context) {
-        var success = this.handler(context);
-        if(success !== false && this.limit) {
-            this.limit.increment();
-        }
+        this.handler(context);
     }
 
     getMenuItem(arg) {
         return { text: this.title, method: 'doAction', anyPlayer: !!this.anyPlayer, arg: arg };
+    }
+
+    isAction() {
+        return true;
     }
 
     isClickToActivate() {
@@ -166,7 +152,7 @@ class CardAction extends BaseAbility {
     }
 
     isPlayableEventAbility() {
-        return this.card.getType() === 'event' && this.location === 'hand';
+        return this.card.getPrintedType() === 'event' && this.location === 'hand';
     }
 
     hasMax() {

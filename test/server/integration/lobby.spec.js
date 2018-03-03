@@ -1,6 +1,3 @@
-/* global describe, it, expect, beforeEach, jasmine */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const Lobby = require('../../../server/lobby.js');
 const _ = require('underscore');
 
@@ -13,7 +10,11 @@ describe('lobby', function() {
         this.socketSpy.user = { username: 'test'};
         this.socketSpy.id = 'socket1';
 
-        this.lobby = new Lobby({}, { io: this.ioSpy, messageRepository: {}, cardService: {}, deckRepository: {}, router: this.routerSpy, config: {} });
+        this.cardService = jasmine.createSpyObj('cardService', ['getTitleCards', 'getAllCards']);
+        this.cardService.getTitleCards.and.returnValue(Promise.resolve([]));
+        this.cardService.getAllCards.and.returnValue(Promise.resolve([]));
+
+        this.lobby = new Lobby({}, { io: this.ioSpy, messageService: {}, cardService: this.cardService, deckService: {}, userService: {}, router: this.routerSpy, config: {} });
         this.lobby.sockets[this.socketSpy.id] = this.socketSpy;
     });
 

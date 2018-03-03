@@ -43,7 +43,7 @@ class ForcedTriggeredAbilityWindow extends BaseAbilityWindow {
 
         this.game.promptWithMenu(this.game.getFirstPlayer(), this, {
             activePrompt: {
-                menuTitle: TriggeredAbilityWindowTitles.getTitle(this.abilityType, this.events[0]),
+                menuTitle: TriggeredAbilityWindowTitles.getTitle(this.abilityType, this.event.getPrimaryEvent()),
                 buttons: buttons
             },
             waitingPromptTitle: 'Waiting for opponents to resolve forced abilities'
@@ -58,7 +58,7 @@ class ForcedTriggeredAbilityWindow extends BaseAbilityWindow {
         }
         if(this.abilityType === 'whenrevealed') {
             this.game.addMessage('{0} has chosen to resolve first the when revealed ability of {1}\'s {2}',
-                                 player, choice.player.name, choice.card.name);
+                player, choice.player.name, choice.card);
         }
 
         this.game.resolveAbility(choice.ability, choice.context);

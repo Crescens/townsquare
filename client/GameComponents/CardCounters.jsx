@@ -10,8 +10,9 @@ class CardCounters extends React.Component {
             return null;
         }
 
-        var countersClass = 'counters ignore-mouse-events';
+        let countersClass = 'counters ignore-mouse-events';
 
+<<<<<<< HEAD
         var counterDivs = _.map(this.props.counters, (counter, key) => {
             return (<Counter key={ key }
                             name={ key }
@@ -19,6 +20,15 @@ class CardCounters extends React.Component {
                             fade={ counter.fade }
                             cancel={ counter.cancel }
                             shortName={ counter.shortName } />);
+=======
+        let counterDivs = _.map(this.props.counters, (counter, key) => {
+            return (<Counter key={ key }
+                name={ counter.name }
+                value={ counter.count }
+                fade={ counter.fade }
+                cancel={ counter.cancel }
+                shortName={ counter.shortName } />);
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         });
 
         if(_.size(this.props.counters) > 3) {
@@ -27,7 +37,7 @@ class CardCounters extends React.Component {
 
         return (
             <div className={ countersClass }>
-                {counterDivs}
+                { counterDivs }
             </div>
         );
     }
@@ -35,7 +45,11 @@ class CardCounters extends React.Component {
 
 CardCounters.displayName = 'CardCounters';
 CardCounters.propTypes = {
+<<<<<<< HEAD
     counters: PropTypes.object.isRequired
+=======
+    counters: PropTypes.array.isRequired
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 };
 
 export default CardCounters;

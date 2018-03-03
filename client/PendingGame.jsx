@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import { findDOMNode } from 'react-dom';
+=======
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import _ from 'underscore';
 
-import AlertPanel from './SiteComponents/AlertPanel.jsx';
-import DeckRow from './DeckRow.jsx';
+import Panel from './SiteComponents/Panel';
 import Messages from './GameComponents/Messages.jsx';
 import Avatar from './Avatar.jsx';
+import SelectDeckModal from './PendingGameComponents/SelectDeckModal.jsx';
 
 import * as actions from './actions';
 
@@ -68,13 +71,13 @@ class InnerPendingGame extends React.Component {
     }
 
     onSelectDeckClick() {
-        $(findDOMNode(this.refs.modal)).modal('show');
+        $('#decks-modal').modal('show');
     }
 
-    selectDeck(index) {
-        $(findDOMNode(this.refs.modal)).modal('hide');
+    selectDeck(deck) {
+        $('#decks-modal').modal('hide');
 
-        this.props.socket.emit('selectdeck', this.props.currentGame.id, this.props.decks[index]);
+        this.props.socket.emit('selectdeck', this.props.currentGame.id, deck);
     }
 
     getPlayerStatus(player, username) {
@@ -86,8 +89,7 @@ class InnerPendingGame extends React.Component {
 
         if(player && player.deck && player.deck.selected) {
             if(playerIsMe) {
-                deck = <span className='deck-selection'>{ player.deck.name }</span>;
-                selectLink = <span className='deck-link' data-toggle='modal' data-target='#decks-modal'>Select deck...</span>;
+                deck = <span className='deck-selection clickable' onClick={ this.onSelectDeckClick }>{ player.deck.name }</span>;
             } else {
                 deck = <span className='deck-selection'>Deck Selected</span>;
             }
@@ -103,7 +105,7 @@ class InnerPendingGame extends React.Component {
 
             status = <span className={ statusClass }>{ player.deck.status }</span>;
         } else if(player && playerIsMe) {
-            selectLink = <span className='deck-link' data-toggle='modal' data-target='#decks-modal'>Select deck...</span>;
+            selectLink = <span className='card-link' onClick={ this.onSelectDeckClick }>Select deck...</span>;
         }
 
         return (
@@ -147,7 +149,7 @@ class InnerPendingGame extends React.Component {
 
         this.setState({ waiting: true });
 
-        this.props.socket.emit('startgame', this.props.currentGame.id);
+        this.props.startGame(this.props.currentGame.id);
     }
 
     sendMessage() {
@@ -187,83 +189,49 @@ class InnerPendingGame extends React.Component {
             return <div>Loading game in progress, please wait...</div>;
         }
 
-        let index = 0;
-        let decks = null;
-
-        if(this.props.loading) {
-            decks = <div>Loading decks from the server...</div>;
-        } else if(this.props.apiError) {
-            decks = <AlertPanel type='error' message={ this.props.apiError } />;
-        } else {
-            decks = _.size(this.props.decks) > 0 ? _.map(this.props.decks, deck => {
-                let row = <DeckRow key={ deck.name + index.toString() } deck={ deck } onClick={ this.selectDeck.bind(this, index) } active={ index === this.state.selectedDeck } />;
-
-                index++;
-
-                return row;
-            }) : <div>You have no decks, please add one</div>;
-        }
-
-        let popup = (
-            <div id='decks-modal' ref='modal' className='modal fade' tabIndex='-1' role='dialog'>
-                <div className='modal-dialog' role='document'>
-                    <div className='modal-content deck-popup'>
-                        <div className='modal-header'>
-                            <button type='button' className='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>×</span></button>
-                            <h4 className='modal-title'>Select Deck</h4>
-                        </div>
-                        <div className='modal-body'>
-                            <div className='deck-list'>
-                                { decks }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>);
-
         return (
             <div>
                 <audio ref='notification'>
                     <source src='/sound/charge.mp3' type='audio/mpeg' />
                     <source src='/sound/charge.ogg' type='audio/ogg' />
                 </audio>
-                <div className='btn-group'>
-                    <button className='btn btn-primary' disabled={!this.isGameReady() || this.props.connecting || this.state.waiting } onClick={this.onStartClick}>Start</button>
-                    <button className='btn btn-primary' onClick={this.onLeaveClick}>Leave</button>
-                </div>
-                <h3>{this.props.currentGame.name}</h3>
-                <div>{this.getGameStatus()}</div>
-                <div className='players'>
-                    <h3>Players</h3>
+                <Panel title={ this.props.currentGame.name }>
+                    <div className='btn-group'>
+                        <button className='btn btn-primary' disabled={ !this.isGameReady() || this.props.connecting || this.state.waiting } onClick={ this.onStartClick }>Start</button>
+                        <button className='btn btn-primary' onClick={ this.onLeaveClick }>Leave</button>
+                    </div>
+                    <div className='game-status'>{ this.getGameStatus() }</div>
+                </Panel>
+                <Panel title='Players'>
                     {
                         _.map(this.props.currentGame.players, player => {
                             return this.getPlayerStatus(player, this.props.username);
                         })
                     }
-                </div>
-                <div className='spectators'>
-                    <h3>Spectators({this.props.currentGame.spectators.length})</h3>
-                    {_.map(this.props.currentGame.spectators, spectator => {
-                        return <div key={spectator.name}>{spectator.name}</div>;
-                    })}
-                </div>
-                <div className='chat-box'>
-                    <h3>Chat</h3>
+                </Panel>
+                <Panel title={ `Spectators(${ this.props.currentGame.spectators.length })` }>
+                    { _.map(this.props.currentGame.spectators, spectator => {
+                        return <div key={ spectator.name }>{ spectator.name }</div>;
+                    }) }
+                </Panel>
+                <Panel title='Chat'>
                     <div className='message-list'>
-                        <Messages messages={this.props.currentGame.messages} onCardMouseOver={this.onMouseOver} onCardMouseOut={this.onMouseOut} />
+                        <Messages messages={ this.props.currentGame.messages } onCardMouseOver={ this.onMouseOver } onCardMouseOut={ this.onMouseOut } />
                     </div>
-                        <form className='form form-hozitontal'>
-                            <div className='form-group'>
-                                <div className='col-sm-10'>
-                                    <input className='form-control' type='text' placeholder='Chat...' value={this.state.message}
-                                        onKeyPress={this.onKeyPress} onChange={this.onChange} />
-                                </div>
-                                <button type='button' className='btn btn-primary col-sm-2' onClick={this.onSendClick}>Send</button>
-                            </div>
-                        </form>
-                </div>
-                {popup}
-            </div>);
+                    <form className='form form-hozitontal'>
+                        <div className='form-group'>
+                            <input className='form-control' type='text' placeholder='Enter a message...' value={ this.state.message }
+                                onKeyPress={ this.onKeyPress } onChange={ this.onChange } />
+                        </div>
+                    </form>
+                </Panel>
+                <SelectDeckModal
+                    apiError={ this.props.apiError }
+                    decks={ this.props.decks }
+                    id='decks-modal'
+                    loading={ this.props.loading }
+                    onDeckSelected={ this.selectDeck.bind(this) } />
+            </div >);
     }
 }
 
@@ -279,6 +247,10 @@ InnerPendingGame.propTypes = {
     loading: PropTypes.bool,
     sendSocketMessage: PropTypes.func,
     socket: PropTypes.object,
+<<<<<<< HEAD
+=======
+    startGame: PropTypes.func,
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     username: PropTypes.string,
     zoomCard: PropTypes.func
 };
@@ -286,13 +258,12 @@ InnerPendingGame.propTypes = {
 function mapStateToProps(state) {
     return {
         apiError: state.api.message,
-        connecting: state.socket.gameConnecting,
-        currentGame: state.games.currentGame,
+        connecting: state.games.connecting,
+        currentGame: state.lobby.currentGame,
         decks: state.cards.decks,
-
-        host: state.socket.gameHost,
+        host: state.games.gameHost,
         loading: state.api.loading,
-        socket: state.socket.socket,
+        socket: state.lobby.socket,
         username: state.auth.username
     };
 }

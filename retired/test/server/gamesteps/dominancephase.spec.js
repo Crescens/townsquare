@@ -1,5 +1,3 @@
-/*global describe, it, beforeEach, expect, spyOn, jasmine*/
-
 const DominancePhase = require('../../../server/game/gamesteps/dominancephase.js');
 const Game = require('../../../server/game/game.js');
 const Player = require('../../../server/game/player.js');
@@ -11,10 +9,10 @@ describe('the DominancePhase', () => {
     var player2;
 
     beforeEach(() => {
-        var gameRepository = jasmine.createSpyObj('gameRepository', ['save']);
-        game = new Game('1', 'Test Game', { gameRepository: gameRepository });
-        player1 = new Player('1', { username: 'Player 1' }, true, game);
-        player2 = new Player('2', { username: 'Player 2' }, false, game);
+        let gameService = jasmine.createSpyObj('gameService', ['save']);
+        game = new Game({ owner: {} }, { gameService: gameService });
+        player1 = new Player('1', { username: 'Player 1', settings: {} }, true, game);
+        player2 = new Player('2', { username: 'Player 2', settings: {} }, false, game);
         player2.firstPlayer = true;
         game.playersAndSpectators['Player 1'] = player1;
         game.playersAndSpectators['Player 2'] = player2;

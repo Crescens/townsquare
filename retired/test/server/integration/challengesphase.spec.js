@@ -1,6 +1,3 @@
-/* global describe, it, expect, beforeEach, integration */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 describe('challenges phase', function() {
     integration(function() {
         describe('when a character has stealth', function() {
@@ -148,6 +145,129 @@ describe('challenges phase', function() {
 
                 expect(this.player1).toHavePromptButton('Marya Seaworth - Kneel Hedge Knight');
                 expect(this.player1).toHavePromptButton('Marya Seaworth - Kneel Lannisport Merchant');
+            });
+
+            it('should allow multiple reactions from the same card to be triggered', function() {
+                this.initiateChallenge();
+                this.player1.clickPrompt('Marya Seaworth - Kneel Hedge Knight');
+                this.player1.clickPrompt('Marya Seaworth - Kneel Lannisport Merchant');
+
+                expect(this.knight.kneeled).toBe(true);
+                expect(this.merchant.kneeled).toBe(true);
+            });
+        });
+
+        describe('when cards have keywords', function() {
+            beforeEach(function() {
+                const deck = this.buildDeck('tyrell', [
+                    'Sneak Attack',
+                    'Renly Baratheon (FFH)', 'Brienne of Tarth (GoH)', 'Ser Garlan Tyrell (OR)', 'Garden Caretaker'
+                ]);
+                this.player1.selectDeck(deck);
+                this.player2.selectDeck(deck);
+                this.startGame();
+                this.keepStartingHands();
+
+                this.renly = this.player1.findCardByName('Renly Baratheon', 'hand');
+                this.brienne = this.player1.findCardByName('Brienne of Tarth', 'hand');
+                this.garlan = this.player1.findCardByName('Ser Garlan Tyrell', 'hand');
+                this.chud = this.player1.findCardByName('Garden Caretaker', 'hand');
+
+                this.player1.dragCard(this.renly, 'play area');
+                this.player1.dragCard(this.brienne, 'play area');
+                this.player1.dragCard(this.garlan, 'play area');
+
+                this.completeSetup();
+
+                this.player1.selectPlot('Sneak Attack');
+                this.player2.selectPlot('Sneak Attack');
+                this.selectFirstPlayer(this.player2);
+
+                // Put the remaining card back in draw deck for insight
+                this.player1.dragCard(this.chud, 'draw deck');
+
+                this.completeMarshalPhase();
+
+                // Skip player 2's challenges
+                this.player2.clickPrompt('Done');
+
+                this.player1.clickPrompt('Power');
+                this.player1.clickCard(this.renly);
+                this.player1.clickCard(this.brienne);
+                this.player1.clickCard(this.garlan);
+                this.player1.clickPrompt('Done');
+
+                this.skipActionWindow();
+
+                // No defenders
+                this.player2.clickPrompt('Done');
+
+                this.skipActionWindow();
+            });
+
+            describe('when no settings are set', function() {
+                beforeEach(function() {
+                    this.player1.clickPrompt('Apply Claim');
+                });
+
+                it('should apply all keywords automatically', function() {
+                    expect(this.chud.location).toBe('hand');
+                    expect(this.renly.power).toBe(1);
+                    expect(this.brienne.power).toBe(1);
+                    expect(this.garlan.power).toBe(1);
+                });
+            });
+
+            describe('and the first player wants to choose keyword order', function() {
+                beforeEach(function() {
+                    this.player2.toggleKeywordSettings('chooseOrder', true);
+
+                    this.player1.clickPrompt('Apply Claim');
+                });
+
+                it('should allow the first player to choose the order', function() {
+                    this.player2.clickPrompt('Insight');
+
+                    expect(this.chud.location).toBe('hand');
+                    // No Renown power yet
+                    expect(this.player2).toHavePromptButton('Renown');
+                    expect(this.renly.power).toBe(0);
+                    expect(this.brienne.power).toBe(0);
+                    expect(this.garlan.power).toBe(0);
+                });
+
+                it('should allow the first player to process all keywords automatically', function() {
+                    this.player2.clickPrompt('Automatic');
+
+                    expect(this.chud.location).toBe('hand');
+                    expect(this.renly.power).toBe(1);
+                    expect(this.brienne.power).toBe(1);
+                    expect(this.garlan.power).toBe(1);
+                });
+            });
+
+            describe('and the winner wants to choose which cards', function() {
+                beforeEach(function() {
+                    this.player1.toggleKeywordSettings('chooseCards', true);
+
+                    this.player1.clickPrompt('Apply Claim');
+                });
+
+                it('should allow the winner to choose cards', function() {
+                    expect(this.player1).toHavePrompt('Select insight cards');
+                    this.player1.clickPrompt('Done');
+
+                    expect(this.chud.location).toBe('draw deck');
+
+                    expect(this.player1).toHavePrompt('Select renown cards');
+                    this.player1.clickCard(this.renly);
+                    this.player1.clickCard(this.garlan);
+                    this.player1.clickPrompt('Done');
+
+                    expect(this.renly.power).toBe(1);
+                    expect(this.brienne.power).toBe(0);
+                    expect(this.garlan.power).toBe(1);
+                });
             });
         });
     });

@@ -1,11 +1,8 @@
-/*global describe, it, beforeEach, expect, jasmine*/
-/* eslint no-invalid-this: 0 */
-
 const KeepOrMulliganPrompt = require('../../../../server/game/gamesteps/setup/keepormulliganprompt.js');
 
 describe('the KeepOrMulliganPrompt', function() {
     beforeEach(function() {
-        this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'raiseMergedEvent']);
+        this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'raiseEvent']);
         this.playerSpy = jasmine.createSpyObj('player', ['keep', 'mulligan']);
         this.prompt = new KeepOrMulliganPrompt(this.gameSpy);
     });
@@ -22,7 +19,7 @@ describe('the KeepOrMulliganPrompt', function() {
             });
 
             it('should raise the onPlayerKeepHandOrMerged event', function() {
-                expect(this.gameSpy.raiseMergedEvent).toHaveBeenCalledWith('onPlayerKeepHandOrMulligan', jasmine.objectContaining({ player: this.playerSpy, choice: 'keep' }));
+                expect(this.gameSpy.raiseEvent).toHaveBeenCalledWith('onPlayerKeepHandOrMulligan', jasmine.objectContaining({ player: this.playerSpy, choice: 'keep' }));
             });
         });
 
@@ -37,7 +34,7 @@ describe('the KeepOrMulliganPrompt', function() {
             });
 
             it('should raise the onPlayerKeepHandOrMerged event', function() {
-                expect(this.gameSpy.raiseMergedEvent).toHaveBeenCalledWith('onPlayerKeepHandOrMulligan', jasmine.objectContaining({ player: this.playerSpy, choice: 'mulligan' }));
+                expect(this.gameSpy.raiseEvent).toHaveBeenCalledWith('onPlayerKeepHandOrMulligan', jasmine.objectContaining({ player: this.playerSpy, choice: 'mulligan' }));
             });
         });
     });

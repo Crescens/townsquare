@@ -4,6 +4,7 @@ import _ from 'underscore';
 import { connect } from 'react-redux';
 
 import Link from './Link.jsx';
+import Avatar from './Avatar.jsx';
 
 import * as actions from './actions';
 
@@ -43,7 +44,7 @@ class InnerNavBar extends React.Component {
 
             return (
                 <li key={ menuItem.name } className={ className }>
-                    <a href='#' className='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>{ menuItem.name }<span className='caret' /></a>
+                    <a href='#' className='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>{ menuItem.avatar ? <Avatar emailHash={ menuItem.emailHash } forceDefault={ menuItem.disableGravatar } /> : null }{ menuItem.name }<span className='caret' /></a>
                     <ul className='dropdown-menu'>
                         { childItems }
                     </ul>
@@ -64,12 +65,12 @@ class InnerNavBar extends React.Component {
 
         let contextMenu = _.map(this.props.context, menuItem => {
             return (
-                <li key={menuItem.text}><a href='javascript:void(0)' onMouseOver={ this.onMenuItemMouseOver.bind(this, menuItem) }
-                                           onMouseOut={ this.onMenuItemMouseOut.bind(this) }
-                                           onClick={ menuItem.onClick ? event => {
-                                               event.preventDefault();
-                                               menuItem.onClick();
-                                           } : null }>{ menuItem.text }</a>{ (this.state.showPopup === menuItem) ? this.state.showPopup.popup : null }</li>
+                <li key={ menuItem.text }><a href='javascript:void(0)' onMouseOver={ this.onMenuItemMouseOver.bind(this, menuItem) }
+                    onMouseOut={ this.onMenuItemMouseOut.bind(this) }
+                    onClick={ menuItem.onClick ? event => {
+                        event.preventDefault();
+                        menuItem.onClick();
+                    } : null }>{ menuItem.text }</a>{ (this.state.showPopup === menuItem) ? this.state.showPopup.popup : null }</li>
             );
         });
 
@@ -83,7 +84,7 @@ class InnerNavBar extends React.Component {
                             <span className='icon-bar' />
                             <span className='icon-bar' />
                         </button>
-                        <Link href='/' className='navbar-brand'>{this.props.title}</Link>
+                        <Link href='/' className='navbar-brand'>{ this.props.title }</Link>
                     </div>
                     <div id='navbar' className='collapse navbar-collapse'>
                         <ul className='nav navbar-nav'>

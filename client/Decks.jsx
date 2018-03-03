@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-import AlertPanel from './SiteComponents/AlertPanel.jsx';
-import DeckSummary from './DeckSummary.jsx';
-import Link from './Link.jsx';
-import DeckRow from './DeckRow.jsx';
+import AlertPanel from './SiteComponents/AlertPanel';
+import Panel from './SiteComponents/Panel';
+import DeckSummary from './DeckSummary';
+import Link from './Link';
+import DeckRow from './DeckRow';
 
 import * as actions from './actions';
 
@@ -52,8 +53,8 @@ class InnerDecks extends React.Component {
 
         var decks = _.map(this.props.decks, deck => {
             var row = (<DeckRow key={ deck.name + index.toString() } deck={ deck }
-                                onClick={ () => this.props.selectDeck(deck) }
-                                active={ this.props.selectedDeck && deck._id === this.props.selectedDeck._id } />);
+                onClick={ () => this.props.selectDeck(deck) }
+                active={ this.props.selectedDeck && deck._id === this.props.selectedDeck._id } />);
 
             index++;
 
@@ -69,15 +70,17 @@ class InnerDecks extends React.Component {
         var deckInfo = null;
 
         if(this.props.selectedDeck) {
-            deckInfo = (<div className='col-sm-6'>
-                <div className='btn-group'>
-                    <button className='btn btn-primary' onClick={ this.onEditClick.bind(this) }>Edit</button>
-                    <button className='btn btn-primary' onClick={ this.onDeleteClick }>Delete</button>
-                    {this.state.showDelete ?
-                        <button className='btn btn-danger' onClick={ this.onConfirmDeleteClick }>Delete</button> :
-                        null}
-                </div>
-                <DeckSummary deck={ this.props.selectedDeck } cards={ this.props.cards } />
+            deckInfo = (<div className='col-sm-7'>
+                <Panel title={ this.props.selectedDeck.name }>
+                    <div className='btn-group col-xs-12'>
+                        <button className='btn btn-primary' onClick={ this.onEditClick.bind(this) }>Edit</button>
+                        <button className='btn btn-primary' onClick={ this.onDeleteClick }>Delete</button>
+                        { this.state.showDelete ?
+                            <button className='btn btn-danger' onClick={ this.onConfirmDeleteClick }>Delete</button> :
+                            null }
+                    </div>
+                    <DeckSummary deck={ this.props.selectedDeck } cards={ this.props.cards } />
+                </Panel>
             </div>);
         }
 
@@ -94,17 +97,21 @@ class InnerDecks extends React.Component {
             );
         }
 
-        if(this.props.loading) {
+        if(this.props.apiLoading) {
             content = <div>Loading decks from the server...</div>;
-        } else if(this.props.apiError) {
-            content = <AlertPanel type='error' message={ this.props.apiError } />;
+        } else if(!this.props.apiSuccess) {
+            content = <AlertPanel type='error' message={ this.props.apiMessage } />;
         } else {
             content = (
-                <div>
-                    { successPanel }
-                    <div className='col-sm-6'>
-                        <Link className='btn btn-primary' href='/decks/add'>Add new deck</Link>
-                        <div className='deck-list'>{ !this.props.decks || this.props.decks.length === 0 ? 'You have no decks, try adding one.' : deckList }</div>
+                <div className='full-height'>
+                    <div className='col-xs-12'>
+                        { successPanel }
+                    </div>
+                    <div className='col-sm-5 full-height'>
+                        <Panel title='Your decks'>
+                            <Link className='btn btn-primary' href='/decks/add'>New Deck</Link>
+                            <div className='deck-list'>{ !this.props.decks || this.props.decks.length === 0 ? 'You have no decks, try adding one.' : deckList }</div>
+                        </Panel>
                     </div>
                     { deckInfo }
                 </div>);
@@ -116,7 +123,13 @@ class InnerDecks extends React.Component {
 
 InnerDecks.displayName = 'Decks';
 InnerDecks.propTypes = {
+<<<<<<< HEAD
     apiError: PropTypes.string,
+=======
+    apiLoading: PropTypes.bool,
+    apiMessage: PropTypes.string,
+    apiSuccess: PropTypes.bool,
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     cards: PropTypes.object,
     clearDeckStatus: PropTypes.func,
     deckDeleted: PropTypes.bool,
@@ -131,7 +144,9 @@ InnerDecks.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        apiError: state.api.message,
+        apiLoading: state.api.REQUEST_DECKS ? state.api.REQUEST_DECKS.loading : undefined,
+        apiMessage: state.api.REQUEST_DECKS ? state.api.REQUEST_DECKS.message : undefined,
+        apiSuccess: state.api.REQUEST_DECKS ? state.api.REQUEST_DECKS.success : undefined,
         cards: state.cards.cards,
         deckDeleted: state.cards.deckDeleted,
         decks: state.cards.decks,

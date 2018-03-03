@@ -1,13 +1,10 @@
-/*global describe, it, beforeEach, expect, jasmine */
-/*eslint camelcase: 0, no-invalid-this: 0 */
-
 const CardForcedReaction = require('../../../server/game/cardforcedreaction.js');
 const Event = require('../../../server/game/event.js');
 
 describe('CardForcedReaction', function () {
     beforeEach(function () {
         this.gameSpy = jasmine.createSpyObj('game', ['on', 'removeListener', 'registerAbility']);
-        this.cardSpy = jasmine.createSpyObj('card', ['getType', 'isBlank']);
+        this.cardSpy = jasmine.createSpyObj('card', ['getPrintedType', 'getType', 'isBlank']);
         this.cardSpy.location = 'play area';
         this.limitSpy = jasmine.createSpyObj('limit', ['increment', 'isAtMax', 'registerEvents', 'unregisterEvents']);
 
@@ -27,7 +24,7 @@ describe('CardForcedReaction', function () {
 
     describe('eventHandler()', function() {
         beforeEach(function() {
-            this.executeEventHandler = (...args) => {
+            this.executeEventHandler = (args = {}) => {
                 this.event = new Event('onSomething', args);
                 this.reaction = new CardForcedReaction(this.gameSpy, this.cardSpy, this.properties);
                 this.reaction.eventHandler(this.event);
@@ -35,14 +32,14 @@ describe('CardForcedReaction', function () {
         });
 
         it('should call the when handler with the appropriate arguments', function() {
-            this.executeEventHandler(1, 2, 3);
-            expect(this.properties.when.onSomething).toHaveBeenCalledWith(this.event, 1, 2, 3);
+            this.executeEventHandler();
+            expect(this.properties.when.onSomething).toHaveBeenCalledWith(this.event);
         });
 
         describe('when the when condition returns false', function() {
             beforeEach(function() {
                 this.properties.when.onSomething.and.returnValue(false);
-                this.executeEventHandler(1, 2, 3);
+                this.executeEventHandler();
             });
 
             it('should not register the ability', function() {
@@ -53,7 +50,7 @@ describe('CardForcedReaction', function () {
         describe('when the when condition returns true', function() {
             beforeEach(function() {
                 this.properties.when.onSomething.and.returnValue(true);
-                this.executeEventHandler(1, 2, 3);
+                this.executeEventHandler();
             });
 
             it('should register the ability', function() {
@@ -65,7 +62,7 @@ describe('CardForcedReaction', function () {
     describe('meetsRequirements()', function() {
         beforeEach(function() {
             this.meetsRequirements = () => {
-                this.event = new Event('onSomething', [1, 2, 3]);
+                this.event = new Event('onSomething', {});
                 this.reaction = new CardForcedReaction(this.gameSpy, this.cardSpy, this.properties);
                 this.context = this.reaction.createContext(this.event);
                 return this.reaction.meetsRequirements(this.context);
@@ -74,7 +71,7 @@ describe('CardForcedReaction', function () {
 
         it('should call the when handler with the appropriate arguments', function() {
             this.meetsRequirements();
-            expect(this.properties.when.onSomething).toHaveBeenCalledWith(this.event, 1, 2, 3);
+            expect(this.properties.when.onSomething).toHaveBeenCalledWith(this.event);
         });
 
         describe('when in the setup phase', function() {
@@ -153,34 +150,6 @@ describe('CardForcedReaction', function () {
         it('should execute the handler', function() {
             this.reaction.executeHandler(this.context);
             expect(this.properties.handler).toHaveBeenCalledWith(this.context);
-        });
-
-        describe('when there is a limit', function() {
-            beforeEach(function() {
-                this.reaction.limit = this.limitSpy;
-            });
-
-            describe('and the handler returns non-false', function() {
-                beforeEach(function() {
-                    this.properties.handler.and.returnValue(undefined);
-                    this.reaction.executeHandler(this.context);
-                });
-
-                it('should increment the limit', function() {
-                    expect(this.limitSpy.increment).toHaveBeenCalled();
-                });
-            });
-
-            describe('and the handler returns explicitly false', function() {
-                beforeEach(function() {
-                    this.properties.handler.and.returnValue(false);
-                    this.reaction.executeHandler(this.context);
-                });
-
-                it('should not increment the limit', function() {
-                    expect(this.limitSpy.increment).not.toHaveBeenCalled();
-                });
-            });
         });
     });
 

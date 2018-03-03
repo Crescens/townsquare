@@ -1,6 +1,7 @@
 const _ = require('underscore');
 
 const BaseCard = require('./basecard.js');
+const CardMatcher = require('./CardMatcher.js');
 const SetupCardAction = require('./setupcardaction.js');
 //const MarshalCardAction = require('./marshalcardaction.js');
 //const AmbushCardAction = require('./ambushcardaction.js');
@@ -10,6 +11,8 @@ const StandardPlayActions = [
     //new MarshalCardAction(),
     //new AmbushCardAction()
 ];
+
+const Icons = ['military', 'intrigue', 'power'];
 
 class DrawCard extends BaseCard {
     constructor(owner, cardData) {
@@ -42,6 +45,11 @@ class DrawCard extends BaseCard {
             this.icons.power++;
         }
 
+<<<<<<< HEAD
+=======
+        this.power = 0;
+        this.burnValue = 0;
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         this.strengthModifier = 0;
         this.strengthMultiplier = 1;
         this.strengthSet = undefined;
@@ -60,7 +68,39 @@ class DrawCard extends BaseCard {
             mustBeDeclaredAsDefender: false
         };
         this.stealthLimit = 1;
+<<<<<<< HEAD
         */
+=======
+        this.minCost = 0;
+        this.eventPlacementLocation = 'discard pile';
+
+        // If setupCardAbilities did not set an attachment restriction, default
+        // to allowing attaching on any character.
+        if(this.getType() === 'attachment' && !this.attachmentRestrictions) {
+            this.attachmentRestriction({ type: 'character' });
+        }
+    }
+
+    createSnapshot() {
+        let clone = new DrawCard(this.owner, this.cardData);
+
+        clone.attachments = _(this.attachments.map(attachment => attachment.createSnapshot()));
+        clone.blankCount = this.blankCount;
+        clone.controller = this.controller;
+        clone.dupes = _(this.dupes.map(dupe => dupe.createSnapshot()));
+        clone.factions = Object.assign({}, this.factions);
+        clone.icons = Object.assign({}, this.icons);
+        clone.keywords = Object.assign({}, this.keywords);
+        clone.kneeled = this.kneeled;
+        clone.parent = this.parent;
+        clone.power = this.power;
+        clone.strengthModifier = this.strengthModifier;
+        clone.strengthMultiplier = this.strengthMultiplier;
+        clone.strengthSet = this.strengthSet;
+        clone.tokens = Object.assign({}, this.tokens);
+        clone.traits = Object.assign({}, this.traits);
+        return clone;
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     }
 
     /*
@@ -74,7 +114,7 @@ class DrawCard extends BaseCard {
         }
 
         this.dupes.push(card);
-        card.moveTo('duplicate');
+        card.moveTo('duplicate', this);
     }
 
     removeDuplicate(force = false) {
@@ -96,7 +136,7 @@ class DrawCard extends BaseCard {
     }
 
     isLimited() {
-        return this.hasKeyword('Limited') || this.hasPrintedKeyword('Limited');
+        return this.hasKeyword('limited') || (!this.isBlank() && this.hasPrintedKeyword('limited'));
     }
 
     isStealth() {
@@ -112,7 +152,7 @@ class DrawCard extends BaseCard {
     }
 
     isBestow() {
-        return !_.isUndefined(this.bestowMax);
+        return !this.isBlank() && !_.isUndefined(this.bestowMax);
     }
 
     isRenown() {
@@ -147,8 +187,18 @@ class DrawCard extends BaseCard {
 
     /*
     modifyStrength(amount, applying = true) {
+        if(this.isBurning && this.burnValue === 0 && this.getBoostedStrength(amount) <= 0) {
+            this.burnValue = amount;
+            this.game.killCharacter(this, { allowSave: false, isBurn: true });
+            this.game.queueSimpleStep(() => {
+                this.strengthModifier += amount;
+                this.burnValue = 0;
+            });
+            return;
+        }
+
         this.strengthModifier += amount;
-        this.game.raiseMergedEvent('onCardStrengthChanged', {
+        this.game.raiseEvent('onCardStrengthChanged', {
             card: this,
             amount: amount,
             applying: applying
@@ -159,7 +209,7 @@ class DrawCard extends BaseCard {
         let strengthBefore = this.getStrength();
 
         this.strengthMultiplier *= amount;
-        this.game.raiseMergedEvent('onCardStrengthChanged', {
+        this.game.raiseEvent('onCardStrengthChanged', {
             card: this,
             amount: this.getStrength() - strengthBefore,
             applying: applying
@@ -171,6 +221,10 @@ class DrawCard extends BaseCard {
     }
 
     getStrength() {
+        return this.getBoostedStrength(0);
+    }
+
+    getBoostedStrength(boostValue) {
         let baseStrength = this.getPrintedStrength();
 
         if(this.controller.phase === 'setup') {
@@ -181,7 +235,7 @@ class DrawCard extends BaseCard {
             return this.strengthSet;
         }
 
-        let modifiedStrength = this.strengthModifier + baseStrength;
+        let modifiedStrength = this.strengthModifier + baseStrength + boostValue;
         let multipliedStrength = Math.round(this.strengthMultiplier * modifiedStrength);
         return Math.max(0, multipliedStrength);
     }
@@ -194,6 +248,10 @@ class DrawCard extends BaseCard {
         let baseStrength = !this.booted && this.getType() === 'character' && this.contributesToDominance ? this.getStrength() : 0;
 
         return Math.max(0, baseStrength + this.dominanceStrengthModifier);
+    }
+
+    getIcons() {
+        return _.filter(Icons, icon => this.hasIcon(icon));
     }
 
     getIconsAdded() {
@@ -249,11 +307,11 @@ class DrawCard extends BaseCard {
     }
 
     addIcon(icon) {
-        this.icons[icon]++;
+        this.icons[icon.toLowerCase()]++;
     }
 
     removeIcon(icon) {
-        this.icons[icon]--;
+        this.icons[icon.toLowerCase()]--;
     }
     */
 
@@ -267,7 +325,13 @@ class DrawCard extends BaseCard {
                 card.control = 0;
             }
 
+<<<<<<< HEAD
             this.game.raiseEvent('onCardControlChanged', this, card.control - oldControl);
+=======
+            if(power > 0) {
+                this.game.raiseEvent('onCardPowerGained', { card: this, power: card.power - oldPower });
+            }
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
             this.game.checkWinCondition(this.controller);
         });
@@ -294,12 +358,16 @@ class DrawCard extends BaseCard {
     }
     */
 
-    clearBlank() {
-        super.clearBlank();
-        this.attachments.each(attachment => {
-            if(!this.allowAttachment(attachment)) {
-                this.controller.discardCard(attachment, false);
+    /**
+     * Defines restrictions on what cards this attachment can be placed on.
+     */
+    attachmentRestriction(...restrictions) {
+        this.attachmentRestrictions = restrictions.map(restriction => {
+            if(_.isFunction(restriction)) {
+                return restriction;
             }
+
+            return CardMatcher.createAttachmentMatcher(restriction);
         });
     }
 
@@ -320,16 +388,22 @@ class DrawCard extends BaseCard {
      * Opponent cards only, specific factions, etc) for this card.
      */
     canAttach(player, card) {
-        return card && this.getType() === 'attachment';
+        if(this.getType() !== 'attachment' || !card) {
+            return false;
+        }
+
+        let context = { player: player };
+
+        return this.attachmentRestrictions.some(restriction => restriction(card, context));
     }
 
-    removeAttachment(attachment) {
-        if(!attachment || !this.attachments.includes(attachment)) {
+    removeChildCard(card) {
+        if(!card) {
             return;
         }
 
-        this.attachments = _(this.attachments.reject(a => a === attachment));
-        attachment.parent = undefined;
+        this.attachments = _(this.attachments.reject(a => a === card));
+        this.dupes = _(this.dupes.reject(a => a === card));
     }
 
     getPlayActions() {
@@ -339,10 +413,19 @@ class DrawCard extends BaseCard {
     }
 
     leavesPlay() {
+<<<<<<< HEAD
         this.booted = false;
         this.control = 0;
         //this.wasAmbush = false;
         //this.inChallenge = false;
+=======
+        this.kneeled = false;
+        this.power = 0;
+        this.wasAmbush = false;
+        this.new = false;
+        this.clearDanger();
+        this.resetForChallenge();
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
         super.leavesPlay();
     }
@@ -385,13 +468,13 @@ class DrawCard extends BaseCard {
         return this.allowGameAction('kill');
     }
 
-    canBeMarshaled() {
-        return this.allowGameAction('marshal');
+    canBeDiscarded() {
+        return this.allowGameAction('discard');
     }
     */
 
-    canBePlayed() {
-        return this.allowGameAction('play');
+    canBeSaved() {
+        return this.allowGameAction('save');
     }
 
     /*

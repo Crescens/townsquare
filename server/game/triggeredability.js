@@ -2,23 +2,7 @@ const _ = require('underscore');
 
 const BaseAbility = require('./baseability.js');
 const Costs = require('./costs.js');
-
-class TriggeredAbilityContext {
-    constructor(event, game, source, player) {
-        this.event = event;
-        this.game = game;
-        this.source = source;
-        this.player = player;
-    }
-
-    cancel() {
-        this.event.cancel();
-    }
-
-    skipHandler() {
-        this.event.skipHandler();
-    }
-}
+const TriggeredAbilityContext = require('./TriggeredAbilityContext.js');
 
 class TriggeredAbility extends BaseAbility {
     constructor(game, card, eventType, properties) {
@@ -32,7 +16,6 @@ class TriggeredAbility extends BaseAbility {
 
         this.game = game;
         this.card = card;
-        this.limit = properties.limit;
         this.max = properties.max;
         this.when = properties.when;
         this.playerFunc = properties.player || (() => this.card.controller);
@@ -57,17 +40,21 @@ class TriggeredAbility extends BaseAbility {
     }
 
     createContext(event) {
-        return new TriggeredAbilityContext(event, this.game, this.card, this.playerFunc());
+        return new TriggeredAbilityContext({ event: event, game: this.game, source: this.card, player: this.playerFunc() });
     }
 
     isTriggeredByEvent(event) {
         let listener = this.when[event.name];
 
-        if(!listener) {
+        if(!listener || event.cancelled) {
             return false;
         }
 
-        return listener(...event.params);
+        if(event.cannotBeCanceled && this.eventType === 'cancelinterrupt') {
+            return;
+        }
+
+        return listener(event);
     }
 
     meetsRequirements(context) {
@@ -77,7 +64,7 @@ class TriggeredAbility extends BaseAbility {
             return false;
         }
 
-        if(!this.isForcedAbility() && context.player && context.player.cannotTriggerCardAbilities) {
+        if(!this.isForcedAbility() && context.player && !context.player.canTrigger(this.card)) {
             return false;
         }
 
@@ -101,7 +88,7 @@ class TriggeredAbility extends BaseAbility {
             return false;
         }
 
-        if(!this.canPayCosts(context) || !this.canResolveTargets(context)) {
+        if(!this.canResolveOpponents(context) || !this.canPayCosts(context) || !this.canResolveTargets(context)) {
             return false;
         }
 
@@ -120,16 +107,8 @@ class TriggeredAbility extends BaseAbility {
         return this.location === location;
     }
 
-    isAction() {
-        return false;
-    }
-
     isPlayableEventAbility() {
-        return this.card.getType() === 'event' && this.location === 'hand';
-    }
-
-    isForcedAbility() {
-        return false;
+        return this.card.getPrintedType() === 'event' && this.location === 'hand';
     }
 
     hasMax() {

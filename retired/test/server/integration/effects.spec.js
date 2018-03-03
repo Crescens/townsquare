@@ -1,6 +1,3 @@
-/* global describe, it, expect, beforeEach, integration */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 describe('effects', function() {
     integration(function() {
         describe('when blanking / unblanking a dynamically calculated conditional effect', function() {
@@ -36,18 +33,17 @@ describe('effects', function() {
 
                 expect(this.jhogo.getStrength()).toBe(4);
 
-                this.player1.clickPrompt('Done');
+                this.player1.clickPrompt('Pass');
                 this.player2.clickCard('Nightmares', 'hand');
                 this.player2.clickCard(this.jhogo);
-                this.player1.clickPrompt('Done');
-                this.player2.clickPrompt('Done');
+                this.player1.clickPrompt('Pass');
+                this.player2.clickPrompt('Pass');
 
                 expect(this.jhogo.getStrength()).toBe(3);
 
                 // Declare no defenders
                 this.player2.clickPrompt('Done');
 
-                this.skipActionWindow();
                 this.skipActionWindow();
                 this.player1.clickPrompt('Apply Claim');
             });
@@ -65,7 +61,7 @@ describe('effects', function() {
             beforeEach(function() {
                 const deck = this.buildDeck('stark', [
                     'Sneak Attack', 'Winter Festival',
-                    'Eddard Stark (WotN)', 'Tyene Sand',
+                    'Eddard Stark (WotN)', 'Tyene Sand (TS)',
                     // Add enough cards to prevent being decked to make the
                     // winner assertion in the test reliable.
                     'Hedge Knight', 'Hedge Knight', 'Hedge Knight', 'Hedge Knight',
@@ -79,11 +75,11 @@ describe('effects', function() {
 
                 this.character = this.player1.findCardByName('Eddard Stark');
                 this.player1Object.moveCard(this.character, 'hand');
-                let tyene = this.player2.findCardByName('Tyene Sand');
+                let tyene = this.player2.findCardByName('Tyene Sand (TS)');
                 this.player2Object.moveCard(tyene, 'hand');
 
                 this.player1.clickCard(this.character);
-                this.player2.clickCard('Tyene Sand', 'hand');
+                this.player2.clickCard('Tyene Sand (TS)', 'hand');
                 this.completeSetup();
 
                 this.player1.selectPlot('Winter Festival');
@@ -98,7 +94,7 @@ describe('effects', function() {
                 this.player1.clickPrompt('Done');
 
                 this.player2.clickPrompt('Intrigue');
-                this.player2.clickCard('Tyene Sand');
+                this.player2.clickCard('Tyene Sand (TS)');
                 this.player2.clickPrompt('Done');
 
                 this.skipActionWindow();
@@ -111,8 +107,6 @@ describe('effects', function() {
                 this.player2.clickCard(this.character);
 
                 expect(this.character.tokens['poison']).toBeTruthy();
-
-                this.skipActionWindow();
 
                 this.player2.clickPrompt('Apply Claim');
 
@@ -135,7 +129,7 @@ describe('effects', function() {
             beforeEach(function() {
                 const deck = this.buildDeck('stark', [
                     'Sneak Attack', 'Famine',
-                    'Eddard Stark (WotN)', 'Tyene Sand', 'Winterfell Steward', 'Winterfell Steward'
+                    'Eddard Stark (WotN)', 'Tyene Sand (TS)', 'Winterfell Steward', 'Winterfell Steward'
                 ]);
                 this.player1.selectDeck(deck);
                 this.player2.selectDeck(deck);
@@ -145,7 +139,7 @@ describe('effects', function() {
                 this.character = this.player1.findCardByName('Eddard Stark', 'hand');
 
                 this.player1.clickCard(this.character);
-                this.player2.clickCard('Tyene Sand', 'hand');
+                this.player2.clickCard('Tyene Sand (TS)', 'hand');
                 this.completeSetup();
 
                 this.player1.selectPlot('Famine');
@@ -165,7 +159,6 @@ describe('effects', function() {
                 beforeEach(function() {
                     this.completeMarshalPhase();
                     this.completeChallengesPhase();
-                    this.completeTaxationPhase();
 
                     this.player2.selectPlot('Famine');
                     this.player1.selectPlot('Sneak Attack');
@@ -176,7 +169,7 @@ describe('effects', function() {
 
                 it('should not apply the effect', function() {
                     expect(this.player2.player.gold).toBe(1);
-                });                
+                });
             });
         });
     });

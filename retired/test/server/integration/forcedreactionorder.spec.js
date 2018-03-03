@@ -1,12 +1,9 @@
-/* global describe, it, expect, beforeEach, integration */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 describe('forced reaction order', function() {
     integration(function() {
         beforeEach(function() {
             const deck1 = this.buildDeck('lannister', [
                 'Trading with the Pentoshi',
-                'The Hound', 'The Hound'
+                'The Hound (TtB)', 'The Hound (TtB)'
             ]);
             const deck2 = this.buildDeck('thenightswatch', [
                 'Trading with the Pentoshi',

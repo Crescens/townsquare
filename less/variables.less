@@ -1,6 +1,15 @@
-@brand-primary: green;
-@background-color: #1E1E1E;
+@brand-primary: #41658A;
+@background-color: #0E0B10;
 @foreground-color: #C1C2C3;
+@brand-secondary: #79B473;
+@brand-tertiary: #414073;
+
+@navbar-inverse-bg: rgba(34, 34, 34, 0.75);
+
+@header-background: fade(@brand-tertiary, 90%);
+@header-border: rgba(71, 58, 56, 0.95);
+
+@table-bg-accent: fade(@brand-primary, 45%);
 
 @power-icon-color: #2A2E5E;
 @military-icon-color: #C72229;
@@ -11,13 +20,28 @@
 @strength-color: rgba(128,0,0,0.85);
 @venom-color: rgba(29, 145, 163, 0.85);
 
-@card-width: 64px;
-@card-height: 84px;
+@card-width: 65px;
+@card-height: 91px;
+
+@card-lg-width: @card-width * 1.4;
+@card-lg-height: @card-height * 1.4;
+
+@card-xl-width: @card-width * 2;
+@card-xl-height: @card-height * 2;
+
+@card-sm-width: @card-width * 0.8;
+@card-sm-height: @card-height * 0.8;
 
 @location-width: @card-width*2;
 @location-height: @card-width*2;
 
 @attachment-offset: 10px;
+@attachment-offset-lg: @attachment-offset * 1.4;
+@attachment-offset-xl: @attachment-offset * 2;
+
+@btn-default-bg: @brand-primary;
+@btn-default-border: darken(@btn-default-bg, 5%);
+@btn-default-color: white;
 
 // Z-index layers
 @layer-locations: 10;
@@ -27,3 +51,5 @@
 @layer-prompt: 110;
 @layer-card-menu: 120;
 @layer-top: 9999;
+
+@scrollbar-width: 20px;

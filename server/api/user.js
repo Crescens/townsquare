@@ -1,8 +1,10 @@
-const UserService = require('../repositories/UserService.js');
+const monk = require('monk');
+const UserService = require('../services/UserService.js');
 const logger = require('../log.js');
 const config = require('../config.js');
 
-let userService = new UserService({ dbPath: config.dbPath });
+let db = monk(config.dbPath);
+let userService = new UserService(db);
 
 module.exports.init = function(server) {
     server.get('/api/user/:username', function(req, res) {
@@ -17,7 +19,7 @@ module.exports.init = function(server) {
         userService.getUserByUsername(req.params.username)
             .then(user => {
                 if(!user) {
-                    res.status(404).send({ message: 'Not found'});
+                    res.status(404).send({ message: 'Not found' });
 
                     return Promise.reject('User not found');
                 }
@@ -43,10 +45,12 @@ module.exports.init = function(server) {
         userService.getUserByUsername(req.params.username)
             .then(user => {
                 if(!user) {
-                    return res.status(404).send({ message: 'Not found'});
+                    return res.status(404).send({ message: 'Not found' });
                 }
 
                 user.permissions = userToSet.permissions;
+                user.verified = userToSet.verified;
+                user.disabled = userToSet.disabled;
 
                 return userService.update(user);
             })

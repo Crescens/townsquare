@@ -1,5 +1,3 @@
-/*global describe, it, beforeEach, expect, jasmine*/
-
 const _ = require('underscore');
 
 const Game = require('../../../server/game/game.js');
@@ -8,16 +6,21 @@ const Spectator = require('../../../server/game/spectator.js');
 
 describe('the Game', () => {
     var game = {};
+<<<<<<< HEAD
     var player1 = new Player('1', { username: 'Player 1' }, true, game);
     var player2 = new Player('2', { username: 'Player 2' }, false, game);
     var outfit = { code:'12345' };
     player1.outfit = outfit;
     player2.outfit = outfit;
+=======
+    var player1 = new Player('1', { username: 'Player 1', settings: {} }, true, game);
+    var player2 = new Player('2', { username: 'Player 2', settings: {} }, false, game);
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     var spectator = new Spectator('3', 'Spectator 1');
 
     beforeEach(() => {
-        var gameRepository = jasmine.createSpyObj('gameRepository', ['save']);
-        game = new Game({ name: 'Test Game' }, { gameRepository: gameRepository });
+        var gameService = jasmine.createSpyObj('gameService', ['save']);
+        game = new Game({ name: 'Test Game', owner: {} }, { gameService: gameService });
     });
 
     describe('getSummary function', () => {
@@ -62,7 +65,7 @@ describe('the Game', () => {
 
         describe('when a player has a deck selected', () => {
             beforeEach(() => {
-                player1.deck = { name: 'Test Deck'};
+                player1.deck = { name: 'Test Deck' };
                 game.playersAndSpectators[player1.name] = player1;
                 game.playersAndSpectators[player2.name] = player2;
             });

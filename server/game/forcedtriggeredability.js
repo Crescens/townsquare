@@ -9,7 +9,7 @@ const TriggeredAbility = require('./triggeredability.js');
  *           trigger the reaction when that event is fired. For example, to
  *           trigger only at the end of the challenge phase, you would do:
  *           when: {
- *               onPhaseEnded: (event, phase) => phase === 'challenge'
+ *               onPhaseEnded: event => event.phase === 'challenge'
  *           }
  *           Multiple events may be specified for cards that have multiple
  *           possible triggers for the same reaction.
@@ -33,9 +33,7 @@ class ForcedTriggeredAbility extends TriggeredAbility {
     }
 
     executeHandler(context) {
-        if(this.handler(context) !== false && this.limit) {
-            this.limit.increment();
-        }
+        this.handler(context);
     }
 }
 

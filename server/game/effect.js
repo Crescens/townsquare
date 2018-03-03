@@ -1,7 +1,6 @@
 const _ = require('underscore');
 
 const Effects = require('./effects.js');
-const Player = require('./player.js');
 
 const PlayAreaLocations = ['play area', 'active plot'];
 
@@ -39,8 +38,6 @@ const PlayAreaLocations = ['play area', 'active plot'];
  *                    the card to apply the effect.
  * effect.unapply   - function that takes a card and a context object and modifies
  *                    the card to remove the previously applied effect.
- * recalculateWhen  - optional array of event names that indicate when an effect
- *                    should be recalculated by the engine.
  */
 class Effect {
     constructor(game, source, properties) {
@@ -57,10 +54,9 @@ class Effect {
         this.effect = this.buildEffect(properties.effect);
         this.targets = [];
         this.context = { game: game, source: source };
-        this.active = true;
-        this.recalculateWhen = properties.recalculateWhen || [];
-        this.isConditional = !!properties.condition;
-        this.isStateDependent = properties.condition || this.effect.isStateDependent;
+        this.active = !source.facedown;
+        this.isConditional = !!properties.condition || this.targetType === 'player' && _.isFunction(properties.match);
+        this.isStateDependent = this.isConditional || this.effect.isStateDependent;
     }
 
     buildEffect(effect) {
@@ -91,12 +87,12 @@ class Effect {
     }
 
     isValidTarget(target) {
-        if(this.targetType === 'card') {
+        if(this.targetType === 'card' && target.getGameElementType() === 'card') {
             if(this.targetLocation === 'play area' && !PlayAreaLocations.includes(target.location)) {
                 return false;
             }
 
-            if(this.targetLocation === 'hand' && target.location !== 'hand') {
+            if(!['any', 'play area'].includes(this.targetLocation) && target.location !== this.targetLocation) {
                 return false;
             }
 
@@ -109,7 +105,7 @@ class Effect {
             return target === this.match;
         }
 
-        if(this.targetType === 'card' && (target instanceof Player) || this.targetType === 'player' && !(target instanceof Player)) {
+        if(this.targetType !== target.getGameElementType()) {
             return false;
         }
 
@@ -132,6 +128,10 @@ class Effect {
 
             if(this.targetController === 'opponent') {
                 return target !== this.source.controller;
+            }
+
+            if(this.targetController !== 'any') {
+                return target === this.targetController;
             }
         }
 

@@ -7,10 +7,17 @@ To implement a card, follow these steps:
 
 ##### 1. Create a file named after the card.
 
-Cards are organized under the `/server/game/cards` directory by grouping them by type (characters, events, etc), then by pack number.
+Cards are organized under the `/server/game/cards` directory by grouping them by "\<cycle number>-\<pack code>". Each word in the file name should be capitalized.
 
 ```
-/server/game/cards/attachments/01/noblelineage.js
+/server/game/cards/01-Core/NobleLineage.js
+/server/game/cards/02.2-TRtW/UnswornApprentice.js
+```
+
+Because there are so few agenda cards and they generally do special things, they should be grouped together under the agendas sub-directory instead of with their pack.
+
+```
+/server/game/cards/agendas/TheHouseWithTheRedDoor.js
 ```
 
 #### 2. Create a class for the card and export it.
@@ -24,7 +31,7 @@ Agenda cards should be derived from the `AgendaCard` class.
 The card class should have its `code` property set to the unique card identifier for that card. You can find these combining the 2-digit pack number (01) and 3-digit card number (036), or on [thronesdb.com](https://thronesdb.com/) by looking at the URL for the specific card.
 
 ```javascript
-const DrawCard = require('../../../drawcard.js');
+const DrawCard = require('../../drawcard.js');
 
 class NobleLineage extends DrawCard {
     // Card definition
@@ -66,6 +73,40 @@ this.plotModifiers({
     reserve: 1,
     gold: 1
 });
+```
+
+### Attachment restrictions
+
+Attachments often have restrictions on what cards they can be used on. For example, Bodyguard can only be attached to a character with a **Lord** or **Lady** trait. These restrictions can be defined using the `attachmentRestriction` method and passing the appropriate target specification object. By default, it's assumed that the attachment target is a character. Some examples:
+
+```javascript
+// Bodyguard - has either a 'Lord' or 'Lady' trait.
+this.attachmentRestriction({ trait: ['Lord', 'Lady'] });
+// Attainted - opponent character only
+this.attachmentRestriction({ controller: 'opponent' });
+// Breaker of Chains - unique Targaryen characters
+this.attachmentRestriction({ faction: 'targaryen', unique: true });
+// Improved Foritifications - locations instead of characters
+this.attachmentRestriction({ type: 'location' });
+```
+
+If an attachment has two mutually exclusive restrictions, you can pass multiple objects into the method.
+
+```javascript
+// The Silver Steed
+this.attachmentRestriction(
+    // Has trait 'Dothraki'
+    { trait: 'Dothraki' },
+    // OR is named Daenerys Targaryen
+    { name: 'Daenerys Targaryen' }
+);
+```
+
+For more complicated restrictions or restrictions that can't be checked with the target specification object, you can pass a function into `attachmentRestriction` instead. **Note** - if you do this, you need to explicitly check card type:
+
+```javascript
+// Ward - character with cost 4 or less
+this.attachmentRestriction(card => card.getType() === 'character' && card.getCost() <= 4);
 ```
 
 ### Persistent effects
@@ -146,18 +187,6 @@ A few cards provide strength bonuses based on game state. For example, Core Tywi
 this.persistentEffect({
     match: this,
     effect: ability.effects.dynamicStrength(() => this.controller.gold)
-});
-```
-
-Certain cards may apply effects that need to be recalculated mid-challenge. For example, Robert Baratheon's strength is based on how many other characters are kneeling, so declaring him in a challenge along with other characters will change his strength. For such scenarios, pass the optional `recalculateWhen` property as an array of event names for which the effect should be recalculated. **Note:** this mechanism should be used sparingly if possible and only with problematic cards.
-
-```javascript
-// Robert Baratheon gets +1 STR for each other kneeling character in play.
-this.persistentEffect({
-    match: this,
-    // Recalculate the effect whenever a card stands or kneels.
-    recalculateWhen: ['onCardStood', 'onCardKneeled'],
-    effect: ability.effects.dynamicStrength(() => this.calculateStrength())
 });
 ```
 
@@ -288,12 +317,6 @@ class SealOfTheHand extends DrawCard {
 }
 ```
 
-#### DEPRECATED - Specifying handler using `method` property.
-
-**Note:** This syntax is being phased out. Prefer using `handler` instead.
-
-You can specify a method on the card to call instead of a specific handler function by using the `method` property. The method is a string that references a method on the card object to be called when the player chooses to trigger the action. The player executing the action is passed into the method.
-
 #### Checking ability restrictions
 
 Card abilities can only be triggered if they have the potential to modify game state (outside of paying costs). To ensure that the action's play restrictions are met, pass a `condition` function that returns `true` when the restrictions are met, and `false` otherwise. If the condition returns `false`, the action will not be executed and costs will not be paid.
@@ -344,7 +367,7 @@ Cards that specify to 'choose' or otherwise target a specific card can be implem
 this.action({
     title: 'Stand a Bloodrider (if a Summer plot is revealed)',
     target: {
-        activePromptTitle: 'Select a character',
+        // activePromptTitle: 'Select a character',  // <- default prompt message, overridable
         cardCondition: card => card.location === 'play area' && card.getType() === 'character' && card.hasTrait('Bloodrider')
     },
     // ...
@@ -397,6 +420,21 @@ this.action({
             effect: ability.effects.modifyStrength(1)
         }));
     }
+});
+```
+
+#### Non-targeting card choices
+
+Some abilities such as Tears of Lys require selecting a target but do not count as targeting because the ability does not use the word 'choose'. These abilities can be implemented using the target API but should specify the `type` property as `'select'`. This will prevent immunity from being checked as well as properly interact with cards that modify targeting.
+
+```javascript
+this.action({
+    // ...
+    target: {
+        type: 'select',
+        // ...
+    },
+    // ...
 });
 ```
 
@@ -538,7 +576,7 @@ this.interrupt({
 });
 ```
 
-In other cases, abilities contain the word 'instead' to indicate that the event will not be cancelled, but the normal effect will be replaced. In these case, `context.skipHandler()` can be called to replace the effect.
+In other cases, abilities contain the word 'instead' to indicate that the event will not be cancelled, but the normal effect will be replaced. In these cases, the `context.replaceHandler` method can be used to replace the effect. It must be passed a function that will execute instead of the normal handler.
 
 ```javascript
 this.interrupt({
@@ -546,8 +584,9 @@ this.interrupt({
         // claim is applied and Mirri is attacking alone
     },
     handler: context => {
-        context.skipHandler();
-        // prompt the player to select a character to kill
+        context.replaceHandler(() => {
+            // kill the chosen character
+        });
     }
 });
 ```
@@ -702,3 +741,50 @@ To limit an ability per phase, use `ability.limit.perPhase(x)`.
 To limit an ability per challenge, use `ability.limit.perRound(x)`.
 
 In each case, `x` should be the number of times the ability is allowed to be used.
+
+### Language
+
+#### Game messages should begin with the player doing the action
+
+Game messages should begin with the name of the player to ensure a uniform format and make it easy to see who triggered an ability.
+
+* **Bad**: Tyrion Lannister triggers to gain 2 gold for Player1
+* **Good**: Player1 uses Tyrion Lannister to gain 2 gold
+
+#### Game messages should not end in punctuation
+
+No game messages should end in a period, exclaimation point or question mark.
+
+* **Bad**: Player1 draws 2 cards.
+* **Good**: Player1 draws 2 cards
+
+#### Game messages should use present tense.
+
+All game messages should use present tense.
+
+* **Bad**: Player1 has used Ser Gregor Clegane to kill The Red Viper
+* **Bad**: Player1 killed The Red Viper
+* **Good**: Player1 uses Ser Gregor Clegane to kill The Red Viper
+* **Good**: Player1 kills The Red Viper
+
+#### Targeting prompts should use the format "Select a \<card type\>" where possible.
+
+Targeting prompts should ask the player to select a card or a card of particular type to keep prompt titles relatively short, without specifying the final goal of card selection.
+
+* **Bad**: Select a character to return to hand
+* **Good**: Select a character
+
+**Exception:** If a card requires the player to select multiple cards, such as Renly's Pavillion, you can add context about which one they should be selecting. Just keep it as short as reasonably possible.
+
+As valid selections are already presented to the user via visual clues, targeting prompts should not repeat selection rules in excessive details. Specifying nothing more and nothing less than the eligible card type (if any) is the good middle ground.
+
+* **Bad**: Select a Knight
+* **Good**: Select a character
+
+* **Bad**: Select a defending Night's Watch character
+* **Good**: Select a character
+
+* **Bad**: Select a card from your discard pile
+* **Good**: Select a card
+
+* **Good**: Select an attachment or location

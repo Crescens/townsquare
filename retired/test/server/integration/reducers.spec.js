@@ -1,12 +1,9 @@
-/* global describe, it, expect, beforeEach, integration */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 describe('reducer cards', function() {
     integration(function() {
         beforeEach(function() {
             const deck = this.buildDeck('stark', [
                 'Power Behind the Throne',
-                'Winterfell Steward', 'Heart Tree Grove', 'Bran Stark'
+                'Winterfell Steward', 'Heart Tree Grove', 'Bran Stark (Core)'
             ]);
             this.player1.selectDeck(deck);
             this.player2.selectDeck(deck);

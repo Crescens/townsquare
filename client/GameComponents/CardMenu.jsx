@@ -17,7 +17,7 @@ class CardMenu extends React.Component {
 
         return (
             <div className='panel menu'>
-                {menuItems}
+                { menuItems }
             </div>
         );
     }

@@ -1,6 +1,3 @@
-/*global describe, it, beforeEach, expect, jasmine*/
-/*eslint camelcase: 0, no-invalid-this: 0 */
-
 const BaseCard = require('../../../server/game/basecard.js');
 
 describe('BaseCard', function () {
@@ -8,7 +5,7 @@ describe('BaseCard', function () {
         this.testCard = { code: '111', title: 'test 1' };
         this.limitedCard = { code: '1234', text: 'Limited.' };
         this.nonLimitedCard = { code: '2222', text: 'Stealth.' };
-        this.game = jasmine.createSpyObj('game', ['raiseMergedEvent']);
+        this.game = jasmine.createSpyObj('game', ['raiseEvent']);
         this.owner = jasmine.createSpyObj('owner', ['getCardSelectionState']);
         this.owner.getCardSelectionState.and.returnValue({});
         this.owner.game = this.game;
@@ -213,6 +210,46 @@ describe('BaseCard', function () {
             it('should return false if it gains a faction affiliation (e.g. Ward)', function() {
                 this.card.addFaction('stark');
                 expect(this.card.isFaction('neutral')).toBe(false);
+            });
+        });
+    });
+
+    describe('tokens', function() {
+        it('should not have tokens by default', function() {
+            expect(this.card.hasToken('foo')).toBe(false);
+        });
+
+        describe('adding a token', function() {
+            it('should increase the tokens by the given amount', function() {
+                this.card.modifyToken('foo', 1);
+
+                expect(this.card.tokens.foo).toBe(1);
+                expect(this.card.hasToken('foo')).toBe(true);
+            });
+        });
+
+        describe('removing an existing tokens', function() {
+            beforeEach(function() {
+                this.card.modifyToken('foo', 2);
+            });
+
+            it('should reduce the tokens by the given amount', function() {
+                this.card.modifyToken('foo', -1);
+
+                expect(this.card.tokens.foo).toBe(1);
+                expect(this.card.hasToken('foo')).toBe(true);
+
+                this.card.modifyToken('foo', -1);
+                expect(this.card.hasToken('foo')).toBe(false);
+            });
+        });
+
+        describe('remove a missing token', function() {
+            it('should not set the token value', function() {
+                this.card.modifyToken('foo', -1);
+
+                expect(this.card.tokens.foo).toBeUndefined();
+                expect(this.card.hasToken('foo')).toBe(false);
             });
         });
     });

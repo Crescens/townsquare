@@ -24,12 +24,26 @@ function processDecks(decks, state) {
             deck.legend = state.legends[deck.legend.code];
         }
 
+<<<<<<< HEAD
         deck.drawCards = _.map(deck.drawCards, card => {
             return { count: card.count, card: state.cards[card.card.code], starting: card.starting };
         });
+=======
+        deck.plotCards = processCardCounts(deck.plotCards, state.cards);
+        deck.drawCards = processCardCounts(deck.drawCards, state.cards);
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
         deck.validation = validateDeck(deck, state.packs);
     });
+}
+
+function processCardCounts(cardCounts, cardData) {
+    let cardCountsWithData = cardCounts.map(cardCount => {
+        return { count: cardCount.count, card: cardCount.card.custom ? cardCount.card : cardData[cardCount.card.code] };
+    });
+
+    // Filter out any cards that aren't available in the card data.
+    return cardCountsWithData.filter(cardCount => !!cardCount.card);
 }
 
 export default function(state = {}, action) {
@@ -39,15 +53,33 @@ export default function(state = {}, action) {
             var legends = {};
 
             _.each(action.response.cards, card => {
+<<<<<<< HEAD
                 if(card.type_code === 'legend') {
                     legends[card.code] = card;
                 }
             });
 
             return Object.assign({}, state, {
+=======
+                if(card.type_code === 'agenda') {
+                    agendas[card.code] = card;
+                }
+            });
+
+            var banners = _.filter(agendas, card => {
+                return card.label.startsWith('Banner of the');
+            });
+
+            newState = Object.assign({}, state, {
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
                 cards: action.response.cards,
                 legends: legends
             });
+
+            // In case the card list is received after the decks, updated the decks now
+            processDecks(newState.decks, newState);
+
+            return newState;
         case 'RECEIVE_PACKS':
             return Object.assign({}, state, {
                 packs: action.response.packs
@@ -141,7 +173,11 @@ export default function(state = {}, action) {
 
             return newState;
         case 'ADD_DECK':
+<<<<<<< HEAD
             var newDeck = { name: 'New Deck' };
+=======
+            var newDeck = { name: 'New Deck', drawCards: [], plotCards: [] };
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
             newState = Object.assign({}, state, {
                 selectedDeck: newDeck,

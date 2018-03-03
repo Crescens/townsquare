@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'underscore';
 import $ from 'jquery';
-import {toastr} from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
+import { bindActionCreators } from 'redux';
 
 import PlayerStats from './GameComponents/PlayerStats.jsx';
 import PlayerRow from './GameComponents/PlayerRow.jsx';
-import MenuPane from './GameComponents/MenuPane.jsx';
+import ActivePlayerPrompt from './GameComponents/ActivePlayerPrompt.jsx';
 import CardZoom from './GameComponents/CardZoom.jsx';
+<<<<<<< HEAD
 import Messages from './GameComponents/Messages.jsx';
 import CardCollection from './GameComponents/CardCollection.jsx';
 import PlayerStreet from './GameComponents/PlayerStreet.jsx';
@@ -16,8 +18,37 @@ import GameLocation from './GameComponents/GameLocation.jsx';
 import DropZone from './GameComponents/DropZone.jsx';
 import ActionWindowsMenu from './GameComponents/ActionWindowsMenu.jsx';
 import {tryParseJSON} from './util.js';
+=======
+import PlayerBoard from './GameComponents/PlayerBoard.jsx';
+import GameChat from './GameComponents/GameChat.jsx';
+import PlayerPlots from './GameComponents/PlayerPlots.jsx';
+import GameConfigurationModal from './GameComponents/GameConfigurationModal.jsx';
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
 import * as actions from './actions';
+
+const placeholderPlayer = {
+    activePlot: null,
+    agenda: null,
+    cardPiles: {
+        bannerCards: [],
+        cardsInPlay: [],
+        conclavePile: [],
+        deadPile: [],
+        discardPile: [],
+        hand: [],
+        outOfGamePile: [],
+        plotDeck: [],
+        plotDiscard: []
+    },
+    faction: null,
+    firstPlayer: false,
+    numDrawCards: 0,
+    plotSelected: false,
+    stats: null,
+    title: null,
+    user: null
+};
 
 export class InnerGameBoard extends React.Component {
     constructor() {
@@ -32,19 +63,17 @@ export class InnerGameBoard extends React.Component {
         this.onConcedeClick = this.onConcedeClick.bind(this);
         this.onLeaveClick = this.onLeaveClick.bind(this);
         this.onShuffleClick = this.onShuffleClick.bind(this);
-        this.onKeyPress = this.onKeyPress.bind(this);
-        this.onSendClick = this.onSendClick.bind(this);
-        this.onChange = this.onChange.bind(this);
-        this.onScroll = this.onScroll.bind(this);
         this.onMenuItemClick = this.onMenuItemClick.bind(this);
+<<<<<<< HEAD
         this.onOutfitCardClick = this.onOutfitCardClick.bind(this);
+=======
+        this.sendChatMessage = this.sendChatMessage.bind(this);
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
         this.state = {
-            canScroll: true,
             cardToZoom: undefined,
             showDrawDeck: false,
             spectating: true,
-            message: '',
             showActionWindowsMenu: false,
             showCardMenu: {}
         };
@@ -58,18 +87,12 @@ export class InnerGameBoard extends React.Component {
         this.updateContextMenu(props);
     }
 
-    componentDidUpdate() {
-        if(this.state.canScroll) {
-            $(this.refs.messagePanel).scrollTop(999999);
-        }
-    }
-
     updateContextMenu(props) {
         if(!props.currentGame) {
             return;
         }
 
-        var thisPlayer = props.currentGame.players[props.username];
+        let thisPlayer = props.currentGame.players[props.username];
 
         if(thisPlayer) {
             this.setState({ spectating: false });
@@ -83,7 +106,7 @@ export class InnerGameBoard extends React.Component {
             $('body').removeClass('select-cursor');
         }
 
-        var menuOptions = [
+        let menuOptions = [
             { text: 'Leave Game', onClick: this.onLeaveClick }
         ];
 
@@ -95,12 +118,12 @@ export class InnerGameBoard extends React.Component {
             }
 
             let spectators = _.map(props.currentGame.spectators, spectator => {
-                return <li key={spectator.id}>{spectator.name}</li>;
+                return <li key={ spectator.id }>{ spectator.name }</li>;
             });
 
             let spectatorPopup = (
                 <ul className='spectators-popup absolute-panel'>
-                    {spectators}
+                    { spectators }
                 </ul>
             );
 
@@ -118,18 +141,6 @@ export class InnerGameBoard extends React.Component {
         }
     }
 
-    onScroll() {
-        var messages = this.refs.messagePanel;
-
-        setTimeout(() => {
-            if(messages.scrollTop >= messages.scrollHeight - messages.offsetHeight - 20) {
-                this.setState({ canScroll: true });
-            } else {
-                this.setState({ canScroll: false });
-            }
-        }, 500);
-    }
-
     onConcedeClick() {
         this.props.sendGameMessage('concede');
     }
@@ -143,12 +154,12 @@ export class InnerGameBoard extends React.Component {
             return false;
         }
 
-        var thisPlayer = this.props.currentGame.players[this.props.username];
+        let thisPlayer = this.props.currentGame.players[this.props.username];
         if(!thisPlayer) {
             thisPlayer = _.toArray(this.props.currentGame.players)[0];
         }
 
-        var otherPlayer = _.find(this.props.currentGame.players, player => {
+        let otherPlayer = _.find(this.props.currentGame.players, player => {
             return player.name !== thisPlayer.name;
         });
 
@@ -156,7 +167,7 @@ export class InnerGameBoard extends React.Component {
             return false;
         }
 
-        if(otherPlayer.disconnected) {
+        if(otherPlayer.disconnected || otherPlayer.left) {
             return false;
         }
 
@@ -191,42 +202,21 @@ export class InnerGameBoard extends React.Component {
         this.props.sendGameMessage('cardClicked', card.uuid);
     }
 
+<<<<<<< HEAD
     onOutfitCardClick() {
         this.props.sendGameMessage('outfitCardClicked');
     }
 
+=======
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     onDrawClick() {
         this.props.sendGameMessage('showDrawDeck');
 
         this.setState({ showDrawDeck: !this.state.showDrawDeck });
     }
 
-    sendMessage() {
-        if(this.state.message === '') {
-            return;
-        }
-
-        this.props.sendGameMessage('chat', this.state.message);
-
-        this.setState({ message: '' });
-    }
-
-    onChange(event) {
-        this.setState({ message: event.target.value });
-    }
-
-    onKeyPress(event) {
-        if(event.key === 'Enter') {
-            this.sendMessage();
-
-            event.preventDefault();
-        }
-    }
-
-    onSendClick(event) {
-        event.preventDefault();
-
-        this.sendMessage();
+    sendChatMessage(message) {
+        this.props.sendGameMessage('chat', message);
     }
 
     onShuffleClick() {
@@ -237,6 +227,7 @@ export class InnerGameBoard extends React.Component {
         this.props.sendGameMessage('drop', card.uuid, source, target);
     }
 
+<<<<<<< HEAD
     onCardDragStart(event, card, source) {
         var dragData = { card: card, source: source };
         event.dataTransfer.setData('Text', JSON.stringify(dragData));
@@ -298,45 +289,69 @@ export class InnerGameBoard extends React.Component {
                 title='Schemes' />
         );
     }*/
+=======
+    getPlots(thisPlayer, otherPlayer) {
+        let commonProps = {
+            cardSize: this.props.user.settings.cardSize,
+            onCardClick: this.onCardClick,
+            onCardMouseOut: this.onMouseOut,
+            onCardMouseOver: this.onMouseOver,
+            onDragDrop: this.onDragDrop,
+            onMenuItemClick: this.onMenuItemClick
+        };
+        return (<div className='plots-pane'>
+            <PlayerPlots
+                { ...commonProps }
+                activePlot={ otherPlayer.activePlot }
+                agenda={ otherPlayer.agenda }
+                direction='reverse'
+                isMe={ false }
+                plotDeck={ otherPlayer.cardPiles.plotDeck }
+                plotDiscard={ otherPlayer.cardPiles.plotDiscard }
+                plotSelected={ otherPlayer.plotSelected }
+                schemePlots={ otherPlayer.cardPiles.schemePlots } />
+            <PlayerPlots
+                { ...commonProps }
+                activePlot={ thisPlayer.activePlot }
+                agenda={ thisPlayer.agenda }
+                direction='default'
+                isMe
+                plotDeck={ thisPlayer.cardPiles.plotDeck }
+                plotDiscard={ thisPlayer.cardPiles.plotDiscard }
+                plotSelected={ thisPlayer.plotSelected }
+                schemePlots={ thisPlayer.cardPiles.schemePlots } />
+        </div>);
+    }
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
     onCommand(command, arg, method) {
-        var commandArg = arg;
+        let commandArg = arg;
 
         this.props.sendGameMessage(command, commandArg, method);
-    }
-
-    onDragOver(event) {
-        event.preventDefault();
-    }
-
-    onDragDropEvent(event, target) {
-        event.stopPropagation();
-        event.preventDefault();
-
-        var card = event.dataTransfer.getData('Text');
-        if(!card) {
-            return;
-        }
-
-        var dragData = tryParseJSON(card);
-
-        if(!dragData) {
-            return;
-        }
-
-        this.onDragDrop(dragData.card, dragData.source, target);
     }
 
     onMenuItemClick(card, menuItem) {
         this.props.sendGameMessage('menuItemClick', card.uuid, menuItem);
     }
 
-    onMenuTitleClick() {
-        this.setState({ showActionWindowsMenu: !this.state.showActionWindowsMenu });
-    }
-
     onPromptedActionWindowToggle(option, value) {
         this.props.sendGameMessage('togglePromptedActionWindow', option, value);
+    }
+
+    onTimerSettingToggle(option, value) {
+        this.props.sendGameMessage('toggleTimerSetting', option, value);
+    }
+
+    onKeywordSettingToggle(option, value) {
+        this.props.sendGameMessage('toggleKeywordSetting', option, value);
+    }
+
+    onTimerExpired() {
+        this.props.sendGameMessage('menuButton', null, 'pass');
+    }
+
+    onSettingsClick() {
+        $('#settings-modal').modal('show');
     }
 
     render() {
@@ -344,7 +359,7 @@ export class InnerGameBoard extends React.Component {
             return <div>Waiting for server...</div>;
         }
 
-        var thisPlayer = this.props.currentGame.players[this.props.username];
+        let thisPlayer = this.props.currentGame.players[this.props.username];
         if(!thisPlayer) {
             thisPlayer = _.toArray(this.props.currentGame.players)[0];
         }
@@ -353,13 +368,32 @@ export class InnerGameBoard extends React.Component {
             return <div>Waiting for game to have players or close...</div>;
         }
 
-        var otherPlayer = _.find(this.props.currentGame.players, player => {
+        let otherPlayer = _.find(this.props.currentGame.players, player => {
             return player.name !== thisPlayer.name;
+<<<<<<< HEAD
         });
+=======
+        }) || placeholderPlayer;
+
+        let boundActionCreators = bindActionCreators(actions, this.props.dispatch);
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
         return (
             <div className='game-board'>
+                <GameConfigurationModal
+                    id='settings-modal'
+                    keywordSettings={ thisPlayer.keywordSettings }
+                    onKeywordSettingToggle={ this.onKeywordSettingToggle.bind(this) }
+                    onPromptedActionWindowToggle={ this.onPromptedActionWindowToggle.bind(this) }
+                    onTimerSettingToggle={ this.onTimerSettingToggle.bind(this) }
+                    promptedActionWindows={ thisPlayer.promptedActionWindows }
+                    timerSettings={ thisPlayer.timerSettings } />
+                <div className='player-stats-row'>
+                    <PlayerStats stats={ otherPlayer.stats }
+                        user={ otherPlayer.user } firstPlayer={ otherPlayer.firstPlayer } />
+                </div>
                 <div className='main-window'>
+<<<<<<< HEAD
                     <div className='left-side'>
                         <div className='player-info'>
                             <PlayerStats ghostrock={otherPlayer ? otherPlayer.ghostrock : 0}
@@ -375,19 +409,46 @@ export class InnerGameBoard extends React.Component {
                         </div>
                         <div className='middle'>
                             <div className='middle-right'>
+=======
+                    { this.getPlots(thisPlayer, otherPlayer) }
+                    <div className='board-middle'>
+                        <div className='player-home-row'>
+                            <PlayerRow
+                                agenda={ otherPlayer.agenda }
+                                bannerCards={ otherPlayer.cardPiles.bannerCards }
+                                conclavePile={ otherPlayer.cardPiles.conclavePile }
+                                faction={ otherPlayer.faction }
+                                hand={ otherPlayer.cardPiles.hand } isMe={ false }
+                                isMelee={ this.props.currentGame.isMelee }
+                                numDrawCards={ otherPlayer.numDrawCards }
+                                discardPile={ otherPlayer.cardPiles.discardPile }
+                                deadPile={ otherPlayer.cardPiles.deadPile }
+                                onCardClick={ this.onCardClick }
+                                onMouseOver={ this.onMouseOver }
+                                onMouseOut={ this.onMouseOut }
+                                outOfGamePile={ otherPlayer.cardPiles.outOfGamePile }
+                                showHand={ this.props.currentGame.showHand }
+                                spectating={ this.state.spectating }
+                                title={ otherPlayer.title }
+                                cardSize={ this.props.user.settings.cardSize } />
+                        </div>
+                        <div className='board-inner'>
+                            <div className='prompt-area'>
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
                                 <div className='inset-pane'>
-                                    { !this.state.spectating && this.state.showActionWindowsMenu ?
-                                        <ActionWindowsMenu options={ thisPlayer.promptedActionWindows }
-                                            onToggle={ this.onPromptedActionWindowToggle.bind(this) } />
-                                        : null }
-                                    <div className={ 'phase-indicator ' + thisPlayer.phase } onClick={ this.onMenuTitleClick.bind(this) }>
-                                        { <span className={ this.state.spectating ? '' : this.state.showActionWindowsMenu ? 'down-arrow' : 'up-arrow' } /> }
-                                        { thisPlayer.phase } phase
-                                    </div>
-                                    <MenuPane title={ thisPlayer.menuTitle } buttons={ thisPlayer.buttons } promptTitle={ thisPlayer.promptTitle } onButtonClick={ this.onCommand }
-                                                onMouseOver={ this.onMouseOver } onMouseOut={ this.onMouseOut } onTitleClick={ this.onMenuTitleClick.bind(this) } />
+                                    <ActivePlayerPrompt title={ thisPlayer.menuTitle }
+                                        buttons={ thisPlayer.buttons }
+                                        controls={ thisPlayer.controls }
+                                        promptTitle={ thisPlayer.promptTitle }
+                                        onButtonClick={ this.onCommand }
+                                        onMouseOver={ this.onMouseOver }
+                                        onMouseOut={ this.onMouseOut }
+                                        user={ this.props.user }
+                                        onTimerExpired={ this.onTimerExpired.bind(this) }
+                                        phase={ thisPlayer.phase } />
                                 </div>
                             </div>
+<<<<<<< HEAD
                         </div>
                         <div className='player-info our-side'>
                             <PlayerStats ghostrock={thisPlayer.ghostrock || 0} influence={thisPlayer.influence || 0}
@@ -469,7 +530,69 @@ export class InnerGameBoard extends React.Component {
                             <input className='form-control' placeholder='Chat...' onKeyPress={this.onKeyPress} onChange={this.onChange}
                                 value={this.state.message} />
                         </form>
+=======
+                            <div className='play-area'>
+                                <PlayerBoard
+                                    cardsInPlay={ otherPlayer.cardPiles.cardsInPlay }
+                                    onCardClick={ this.onCardClick }
+                                    onMenuItemClick={ this.onMenuItemClick }
+                                    onMouseOut={ this.onMouseOut }
+                                    onMouseOver={ this.onMouseOver }
+                                    rowDirection='reverse'
+                                    user={ this.props.user } />
+                                <PlayerBoard
+                                    cardsInPlay={ thisPlayer.cardPiles.cardsInPlay }
+                                    onCardClick={ this.onCardClick }
+                                    onDragDrop={ this.onDragDrop }
+                                    onMenuItemClick={ this.onMenuItemClick }
+                                    onMouseOut={ this.onMouseOut }
+                                    onMouseOver={ this.onMouseOver }
+                                    rowDirection='default'
+                                    user={ this.props.user } />
+                            </div>
+                        </div>
+                        <div className='player-home-row our-side'>
+                            <PlayerRow isMe={ !this.state.spectating }
+                                agenda={ thisPlayer.agenda }
+                                bannerCards={ thisPlayer.cardPiles.bannerCards }
+                                conclavePile={ thisPlayer.cardPiles.conclavePile }
+                                faction={ thisPlayer.faction }
+                                hand={ thisPlayer.cardPiles.hand }
+                                isMelee={ this.props.currentGame.isMelee }
+                                onCardClick={ this.onCardClick }
+                                onMouseOver={ this.onMouseOver }
+                                onMouseOut={ this.onMouseOut }
+                                numDrawCards={ thisPlayer.numDrawCards }
+                                onDrawClick={ this.onDrawClick }
+                                onShuffleClick={ this.onShuffleClick }
+                                outOfGamePile={ thisPlayer.cardPiles.outOfGamePile }
+                                showDrawDeck={ this.state.showDrawDeck }
+                                drawDeck={ thisPlayer.cardPiles.drawDeck }
+                                onDragDrop={ this.onDragDrop }
+                                discardPile={ thisPlayer.cardPiles.discardPile }
+                                deadPile={ thisPlayer.cardPiles.deadPile }
+                                showHand={ this.props.currentGame.showHand }
+                                spectating={ this.state.spectating }
+                                title={ thisPlayer.title }
+                                onMenuItemClick={ this.onMenuItemClick }
+                                cardSize={ this.props.user.settings.cardSize } />
+                        </div>
                     </div>
+                    <div className='right-side'>
+                        <CardZoom imageUrl={ this.props.cardToZoom ? '/img/cards/' + this.props.cardToZoom.code + '.png' : '' }
+                            orientation={ this.props.cardToZoom ? this.props.cardToZoom.type === 'plot' ? 'horizontal' : 'vertical' : 'vertical' }
+                            show={ !!this.props.cardToZoom } cardName={ this.props.cardToZoom ? this.props.cardToZoom.name : null } />
+                        <GameChat
+                            messages={ this.props.currentGame.messages }
+                            onCardMouseOut={ this.onMouseOut }
+                            onCardMouseOver={ this.onMouseOver }
+                            onSendChat={ this.sendChatMessage } />
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
+                    </div>
+                </div>
+                <div className='player-stats-row'>
+                    <PlayerStats { ...boundActionCreators } stats={ thisPlayer.stats } showControls={ !this.state.spectating } user={ thisPlayer.user }
+                        firstPlayer={ thisPlayer.firstPlayer } onSettingsClick={ this.onSettingsClick.bind(this) } />
                 </div>
             </div>);
     }
@@ -481,9 +604,17 @@ InnerGameBoard.propTypes = {
     clearZoom: PropTypes.func,
     closeGameSocket: PropTypes.func,
     currentGame: PropTypes.object,
+<<<<<<< HEAD
     sendGameMessage: PropTypes.func,
     setContextMenu: PropTypes.func,
     socket: PropTypes.object,
+=======
+    dispatch: PropTypes.func,
+    sendGameMessage: PropTypes.func,
+    setContextMenu: PropTypes.func,
+    socket: PropTypes.object,
+    user: PropTypes.object,
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     username: PropTypes.string,
     zoomCard: PropTypes.func
 };
@@ -491,12 +622,20 @@ InnerGameBoard.propTypes = {
 function mapStateToProps(state) {
     return {
         cardToZoom: state.cards.zoomCard,
-        currentGame: state.games.currentGame,
-        socket: state.socket.socket,
+        currentGame: state.lobby.currentGame,
+        socket: state.lobby.socket,
+        user: state.auth.user,
         username: state.auth.username
     };
 }
 
-const GameBoard = connect(mapStateToProps, actions, null, { withRef: true })(InnerGameBoard);
+function mapDispatchToProps(dispatch) {
+    let boundActions = bindActionCreators(actions, dispatch);
+    boundActions.dispatch = dispatch;
+
+    return boundActions;
+}
+
+const GameBoard = connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(InnerGameBoard);
 
 export default GameBoard;

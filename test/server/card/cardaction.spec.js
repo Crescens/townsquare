@@ -1,20 +1,22 @@
-/*global describe, it, beforeEach, expect, jasmine, spyOn */
-/*eslint camelcase: 0, no-invalid-this: 0 */
-
 const CardAction = require('../../../server/game/cardaction.js');
 
 describe('CardAction', function () {
     beforeEach(function () {
-        this.gameSpy = jasmine.createSpyObj('game', ['on', 'removeListener', 'raiseEvent', 'raiseMergedEvent', 'resolveAbility']);
+        this.gameSpy = jasmine.createSpyObj('game', ['on', 'removeListener', 'raiseEvent', 'resolveAbility']);
         this.gameSpy.currentPhase = 'marshal';
 
+        this.playerSpy = jasmine.createSpyObj('player', ['canTrigger']);
+        this.playerSpy.canTrigger.and.returnValue(true);
+
+        this.otherPlayerSpy = jasmine.createSpyObj('player', ['canTrigger']);
+        this.otherPlayerSpy.canTrigger.and.returnValue(true);
+
         this.cardSpy = jasmine.createSpyObj('card', ['getType', 'isBlank']);
-        this.cardSpy.handler = function() {};
-        spyOn(this.cardSpy, 'handler').and.returnValue(true);
+        this.handlerSpy = jasmine.createSpy('handler');
 
         this.limitSpy = jasmine.createSpyObj('limit', ['increment', 'isAtMax', 'registerEvents', 'unregisterEvents']);
 
-        this.gameSpy.raiseMergedEvent.and.callFake((name, params, handler) => {
+        this.gameSpy.raiseEvent.and.callFake((name, params, handler) => {
             if(handler) {
                 handler(params);
             }
@@ -22,7 +24,7 @@ describe('CardAction', function () {
 
         this.properties = {
             title: 'Do the thing',
-            method: 'handler'
+            handler: this.handlerSpy
         };
     });
 
@@ -36,18 +38,17 @@ describe('CardAction', function () {
                 };
             });
 
-            describe('when passed a method reference', function() {
+            describe('when handler is missing', function() {
                 beforeEach(function() {
                     this.properties = {
-                        title: 'Do the thing',
-                        method: 'handler'
+                        title: 'Do the thing'
                     };
-                    this.action = new CardAction(this.gameSpy, this.cardSpy, this.properties);
                 });
 
-                it('should use the specified method on the card object', function() {
-                    this.action.handler(this.context);
-                    expect(this.cardSpy.handler).toHaveBeenCalledWith('player', 'arg', this.context);
+                it('should throw an error', function() {
+                    expect(() => {
+                        new CardAction(this.gameSpy, this.cardSpy, this.properties);
+                    }).toThrow();
                 });
             });
 
@@ -115,7 +116,7 @@ describe('CardAction', function () {
 
     describe('execute()', function() {
         beforeEach(function() {
-            this.player = {};
+            this.player = this.playerSpy;
             this.cardSpy.controller = this.player;
             this.cardSpy.location = 'play area';
         });
@@ -151,7 +152,7 @@ describe('CardAction', function () {
 
         describe('when executed with a player other than the card controller', function() {
             beforeEach(function() {
-                this.otherPlayer = {};
+                this.otherPlayer = this.otherPlayerSpy;
             });
 
             describe('and the anyPlayer property is not set', function() {
@@ -452,56 +453,12 @@ describe('CardAction', function () {
             };
             this.handler = jasmine.createSpy('handler');
             this.properties.handler = this.handler;
+            this.action = new CardAction(this.gameSpy, this.cardSpy, this.properties);
+            this.action.executeHandler(this.context);
         });
 
-        describe('when the action has no limit', function() {
-            beforeEach(function() {
-                this.action = new CardAction(this.gameSpy, this.cardSpy, this.properties);
-                this.action.executeHandler(this.context);
-            });
-
-            it('should call the handler', function() {
-                expect(this.handler).toHaveBeenCalledWith(this.context);
-            });
-        });
-
-        describe('when the action has limited uses', function() {
-            beforeEach(function() {
-                this.properties.limit = this.limitSpy;
-                this.action = new CardAction(this.gameSpy, this.cardSpy, this.properties);
-            });
-
-            describe('and the handler returns false', function() {
-                beforeEach(function() {
-                    this.handler.and.returnValue(false);
-
-                    this.action.executeHandler(this.context);
-                });
-
-                it('should call the handler', function() {
-                    expect(this.handler).toHaveBeenCalledWith(this.context);
-                });
-
-                it('should not count towards the limit', function() {
-                    expect(this.limitSpy.increment).not.toHaveBeenCalled();
-                });
-            });
-
-            describe('and the handler returns undefined or a non-false value', function() {
-                beforeEach(function() {
-                    this.handler.and.returnValue(undefined);
-
-                    this.action.executeHandler(this.context);
-                });
-
-                it('should call the handler', function() {
-                    expect(this.handler).toHaveBeenCalledWith(this.context);
-                });
-
-                it('should count towards the limit', function() {
-                    expect(this.limitSpy.increment).toHaveBeenCalled();
-                });
-            });
+        it('should call the handler', function() {
+            expect(this.handler).toHaveBeenCalledWith(this.context);
         });
     });
 });

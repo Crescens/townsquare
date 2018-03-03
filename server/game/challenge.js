@@ -1,27 +1,29 @@
 const _ = require('underscore');
 const Player = require('./player.js');
 const EventRegistrar = require('./eventregistrar.js');
+const Settings = require('../settings.js');
 
 class Challenge {
-    constructor(game, attackingPlayer, defendingPlayer, challengeType) {
+    constructor(game, properties) {
         this.game = game;
-        this.attackingPlayer = attackingPlayer;
-        this.isSinglePlayer = !defendingPlayer;
-        this.defendingPlayer = defendingPlayer || this.singlePlayerDefender();
-        this.challengeType = challengeType;
+        this.attackingPlayer = properties.attackingPlayer;
+        this.isSinglePlayer = !properties.defendingPlayer;
+        this.defendingPlayer = properties.defendingPlayer || this.singlePlayerDefender();
+        this.challengeType = properties.challengeType;
+        this.number = properties.number;
         this.attackers = [];
         this.attackerStrength = 0;
         this.attackerStrengthModifier = 0;
         this.defenders = [];
         this.defenderStrength = 0;
         this.defenderStrengthModifier = 0;
-        this.stealthData = [],
+        this.stealthData = [];
         this.events = new EventRegistrar(game, this);
         this.registerEvents(['onCardLeftPlay']);
     }
 
     singlePlayerDefender() {
-        var dummyPlayer = new Player('', { name: 'Dummy Player' }, false, this.game);
+        let dummyPlayer = new Player('', Settings.getUserWithDefaultsSet({ name: 'Dummy Player' }), false, this.game);
         dummyPlayer.initialise();
         dummyPlayer.startPlotPhase();
         return dummyPlayer;
@@ -33,34 +35,39 @@ class Challenge {
     }
 
     initiateChallenge() {
-        this.attackingPlayer.initiateChallenge(this.challengeType);
+        this.attackingPlayer.trackChallenge(this);
+        this.defendingPlayer.trackChallenge(this);
     }
 
-    addAttackers(attackers, kneel = true) {
+    addAttackers(attackers) {
         this.attackers = this.attackers.concat(attackers);
-        this.markAsParticipating(attackers, 'attacker', kneel);
+        this.markAsParticipating(attackers);
         this.calculateStrength();
     }
 
-    addAttacker(attacker, kneel = true) {
+    addAttacker(attacker) {
         this.attackers.push(attacker);
-        this.markAsParticipating([attacker], 'attacker', kneel);
+        this.markAsParticipating([attacker]);
         this.calculateStrength();
     }
 
-    addDefenders(defenders, kneel = true) {
+    addDefenders(defenders) {
         this.defenders = this.defenders.concat(defenders);
-        this.markAsParticipating(defenders, 'defender', kneel);
+        this.markAsParticipating(defenders);
         this.calculateStrength();
     }
 
-    addDefender(defender, kneel = true) {
+    addDefender(defender) {
         this.defenders.push(defender);
-        this.markAsParticipating([defender], 'defender', kneel);
+        this.markAsParticipating([defender]);
         this.calculateStrength();
     }
 
     removeFromChallenge(card) {
+        if(!this.isParticipating(card)) {
+            return;
+        }
+
         this.attackers = _.reject(this.attackers, c => c === card);
         this.defenders = _.reject(this.defenders, c => c === card);
 
@@ -68,15 +75,18 @@ class Challenge {
 
         this.calculateStrength();
 
-        this.game.raiseMergedEvent('onRemovedFromChallenge', { card: card });
+        this.game.raiseEvent('onRemovedFromChallenge', { card: card });
     }
 
-    markAsParticipating(cards, participantType, kneel) {
+    markAsParticipating(cards) {
         _.each(cards, card => {
+<<<<<<< HEAD
             if(kneel && !card.booted && !card.challengeOptions.doesNotKneelAs[participantType]) {
                 card.controller.kneelCard(card);
             }
 
+=======
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
             card.inChallenge = true;
         });
     }
@@ -98,7 +108,15 @@ class Challenge {
         return _.any(participants, predicate);
     }
 
-    getNumberOfParticipants(predicate) {
+    hasSingleParticipant(player) {
+        if(this.attackingPlayer === player) {
+            return this.attackers.length === 1;
+        }
+
+        return this.defenders.length === 1;
+    }
+
+    getNumberOfParticipants(predicate = () => true) {
         let participants = this.attackers.concat(this.defenders);
         return _.reduce(participants, (count, card) => {
             if(predicate(card)) {
@@ -174,8 +192,6 @@ class Challenge {
             this.winnerStrength = this.defenderStrength;
         }
 
-        this.winner.winChallenge(this.challengeType, this.attackingPlayer === this.winner);
-        this.loser.loseChallenge(this.challengeType, this.attackingPlayer === this.loser);
         this.strengthDifference = this.winnerStrength - this.loserStrength;
     }
 
@@ -218,14 +234,7 @@ class Challenge {
     }
 
     getClaim() {
-        var claim = this.winner.getClaim();
-        claim = this.winner.modifyClaim(this.winner, this.challengeType, claim);
-
-        if(!this.isSinglePlayer) {
-            claim = this.loser.modifyClaim(this.winner, this.challengeType, claim);
-        }
-
-        return claim;
+        return this.winner.getClaim();
     }
 
     getWinnerCards() {
@@ -243,9 +252,7 @@ class Challenge {
     }
 
     onCardLeftPlay(event) {
-        if(!this.winnerDetermined) {
-            this.removeFromChallenge(event.card);
-        }
+        this.removeFromChallenge(event.card);
     }
 
     registerEvents(events) {

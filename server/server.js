@@ -17,28 +17,25 @@ const Raven = require('raven');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpack = require('webpack');
-const webpackConfig = require('../webpack.config.js');
-const pug = require('pug');
+const webpackConfig = require('../webpack.config.js')();
+const monk = require('monk');
+const _ = require('underscore');
 
-const UserService = require('./repositories/UserService.js');
+const UserService = require('./services/UserService.js');
 const version = require('../version.js');
-
-const defaultWindows = {
-    plot: false,
-    draw: false,
-    challengeBegin: false,
-    attackersDeclared: true,
-    defendersDeclared: true,
-    winnerDetermined: false,
-    dominance: false,
-    standing: false
-};
+const Settings = require('./settings.js');
 
 class Server {
     constructor(isDeveloping) {
-        this.userService = new UserService({ dbPath: config.dbPath });
+        let db = monk(config.dbPath);
+        this.userService = new UserService(db);
         this.isDeveloping = isDeveloping;
         this.server = http.Server(app);
+
+        this.vendorAssets = require('../vendor-assets.json');
+        if(!this.isDeveloping) {
+            this.assets = require('../assets.json');
+        }
     }
 
     init() {
@@ -97,43 +94,41 @@ class Server {
                 path: '/__webpack_hmr',
                 heartbeat: 2000
             }));
-
-            app.get('*', function response(req, res) {
-                var token = undefined;
-
-                if(req.user) {
-                    token = jwt.sign(req.user, config.secret);
-                }
-
-                var html = pug.renderFile('views/index.pug', { basedir: path.join(__dirname, '..', 'views'), user: req.user, token: token });
-                middleware.fileSystem.writeFileSync(path.join(__dirname, '..', 'public/index.html'), html);
-                res.write(middleware.fileSystem.readFileSync(path.join(__dirname, '..', 'public/index.html')));
-                res.end();
-            });
-        } else {
-            app.get('*', (req, res) => {
-                var token = undefined;
-
-                if(req.user) {
-                    token = jwt.sign(req.user, config.secret);
-                }
-
-                res.render('index', { basedir: path.join(__dirname, '..', 'views'), user: req.user, token: token, production: !this.isDeveloping });
-            });
         }
+
+        app.get('*', (req, res) => {
+            let token = undefined;
+
+            if(req.user) {
+                token = jwt.sign(req.user, config.secret);
+                req.user = _.omit(req.user, 'blockList');
+            }
+
+            res.render('index', { basedir: path.join(__dirname, '..', 'views'), user: Settings.getUserWithDefaultsSet(req.user),
+                token: token, vendorAssets: this.vendorAssets, assets: this.assets });
+        });
+
+        // Define error middleware last
+        app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
+            if(!res.headersSent) {
+                res.status(500).send({ success: false });
+            }
+
+            logger.error(err);
+        });
 
         return this.server;
     }
 
     run() {
-        var port = this.isDeveloping ? 4000 : process.env.PORT;
+        let port = process.env.PORT || config.port || 4000;
 
         this.server.listen(port, '0.0.0.0', function onStart(err) {
             if(err) {
                 logger.error(err);
             }
 
-            logger.info('==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port);
+            logger.info('==> ?? Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port);
         });
     }
 
@@ -141,9 +136,7 @@ class Server {
         this.userService.getUserByUsername(username)
             .then(user => {
                 if(!user) {
-                    done(null, false, { message: 'Invalid username/password' });
-
-                    return Promise.reject('Failed auth');
+                    return done(null, false, { message: 'Invalid username/password' });
                 }
 
                 bcrypt.compare(password, user.password, function(err, valid) {
@@ -157,22 +150,32 @@ class Server {
                         return done(null, false, { message: 'Invalid username/password' });
                     }
 
-                    return done(null, {
+                    if(user.disabled) {
+                        return done(null, false, { message: 'Invalid username/password' });
+                    }
+
+                    let userObj = {
                         username: user.username,
                         email: user.email,
                         emailHash: user.emailHash,
                         _id: user._id,
                         admin: user.admin,
-                        settings: user.settings || {},
-                        promptedActionWindows: user.promptedActionWindows || defaultWindows,
-                        permissions: user.permissions || {}
-                    });
+                        settings: user.settings,
+                        promptedActionWindows: user.promptedActionWindows,
+                        permissions: user.permissions,
+                        blockList: user.blockList,
+                        verified: user.verified
+                    };
+
+                    userObj = Settings.getUserWithDefaultsSet(userObj);
+
+                    return done(null, userObj);
                 });
             })
             .catch(err => {
                 done(err);
 
-                logger.info(err);
+                logger.error(err);
             });
     }
 
@@ -189,16 +192,20 @@ class Server {
                     return done(new Error('user not found'));
                 }
 
-                done(null, {
+                let userObj = {
                     username: user.username,
                     email: user.email,
                     emailHash: user.emailHash,
                     _id: user._id,
                     admin: user.admin,
-                    settings: user.settings || {},
-                    promptedActionWindows: user.promptedActionWindows || defaultWindows,
-                    permissions: user.permissions || {}
-                });
+                    settings: user.settings,
+                    promptedActionWindows: user.promptedActionWindows,
+                    permissions: user.permissions,
+                    blockList: user.blockList,
+                    verified: user.verified
+                };
+
+                done(null, userObj);
             });
     }
 }

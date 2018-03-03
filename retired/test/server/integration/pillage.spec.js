@@ -1,6 +1,3 @@
-/* global describe, it, expect, beforeEach, integration */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 describe('pillage', function() {
     integration(function() {
         beforeEach(function() {
@@ -41,9 +38,13 @@ describe('pillage', function() {
                 this.skipActionWindow();
                 this.player2.clickPrompt('Done');
                 this.skipActionWindow();
-                this.skipActionWindow();
 
                 this.player1.clickPrompt('Apply Claim');
+
+                // Choose order for pillage
+                this.player1.clickCard(this.wildlingHorde1);
+                this.player1.clickCard(this.wildlingHorde2);
+                this.player1.clickPrompt('Done');
             });
 
             it('should discard two cards', function() {

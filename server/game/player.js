@@ -2,14 +2,21 @@ const _ = require('underscore');
 
 const Spectator = require('./spectator.js');
 const Deck = require('./deck.js');
+<<<<<<< HEAD
 const HandRank = require('./handrank.js');
 const GameLocation = require('./gamelocation.js');
+=======
+const AbilityContext = require('./AbilityContext.js');
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
 //const BestowPrompt = require('./gamesteps/bestowprompt.js');
 //const ChallengeTracker = require('./challengetracker.js');
 //const PlayableLocation = require('./playablelocation.js');
 const PlayActionPrompt = require('./gamesteps/playactionprompt.js');
 const PlayerPromptState = require('./playerpromptstate.js');
+const MinMaxProperty = require('./MinMaxProperty.js');
+
+const logger = require('../log.js');
 
 const StartingHandSize = 5;
 //const DrawPhaseCards = 2;
@@ -21,6 +28,7 @@ class Player extends Spectator {
     constructor(id, user, owner, game) {
         super(id, user);
 
+        this.beingPlayed = _([]);
         this.drawDeck = _([]);
         //this.plotDeck = _([]);
         //this.plotDiscard = _([]);
@@ -31,13 +39,20 @@ class Player extends Spectator {
         this.cardsInPlay = _([]);
         this.boothillPile = _([]);
         this.discardPile = _([]);
-        this.additionalPiles = {};
+        this.outOfGamePile = _([]);
+
+        // Agenda specific piles
+        this.schemePlots = _([]);
+        this.conclavePile = _([]);
 
         this.owner = owner;
         //this.takenMulligan = false;
         this.game = game;
 
+        this.setupGold = 8;
+        this.cardsInPlayBeforeSetup = [];
         this.deck = {};
+<<<<<<< HEAD
         //this.challenges = new ChallengeTracker();
         this.minReserve = 0;
         this.costReducers = [];
@@ -62,6 +77,28 @@ class Player extends Spectator {
         };
 
         this.createAdditionalPile('out of game');
+=======
+        this.challenges = new ChallengeTracker(this);
+        this.minReserve = 0;
+        this.costReducers = [];
+        this.playableLocations = _.map(['marshal', 'play', 'ambush'], playingType => new PlayableLocation(playingType, card => card.controller === this && card.location === 'hand'));
+        this.usedPlotsModifier = 0;
+        this.attackerLimits = new MinMaxProperty({ defaultMin: 0, defaultMax: 0 });
+        this.defenderLimits = new MinMaxProperty({ defaultMin: 0, defaultMax: 0 });
+        this.cannotGainGold = false;
+        this.doesNotReturnUnspentGold = false;
+        this.cannotGainChallengeBonus = false;
+        this.triggerRestrictions = [];
+        this.playCardRestrictions = [];
+        this.abilityMaxByTitle = {};
+        this.standPhaseRestrictions = [];
+        this.mustChooseAsClaim = [];
+        this.mustRevealPlot = undefined;
+        this.promptedActionWindows = user.promptedActionWindows;
+        this.timerSettings = user.settings.timerSettings || {};
+        this.timerSettings.windowTimer = user.settings.windowTimer;
+        this.keywordSettings = user.settings.keywordSettings;
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
         this.promptState = new PlayerPromptState();
     }
@@ -104,10 +141,6 @@ class Player extends Spectator {
         return this.findCard(list, card => card.name === name);
     }
 
-    findCardByUuidInAnyList(uuid) {
-        return this.findCardByUuid(this.allCards, uuid);
-    }
-
     findCardByUuid(list, uuid) {
         return this.findCard(list, card => card.uuid === uuid);
     }
@@ -148,16 +181,16 @@ class Player extends Spectator {
     }
 
     anyCardsInPlay(predicate) {
-        return this.allCards.any(card => card.location === 'play area' && predicate(card));
+        return this.game.allCards.any(card => card.controller === this && card.location === 'play area' && predicate(card));
     }
 
     filterCardsInPlay(predicate) {
-        return this.allCards.filter(card => card.location === 'play area' && predicate(card));
+        return this.game.allCards.filter(card => card.controller === this && card.location === 'play area' && predicate(card));
     }
 
     getNumberOfCardsInPlay(predicate) {
-        return this.allCards.reduce((num, card) => {
-            if(card.location === 'play area' && predicate(card)) {
+        return this.game.allCards.reduce((num, card) => {
+            if(card.controller === this && card.location === 'play area' && predicate(card)) {
                 return num + 1;
             }
 
@@ -174,7 +207,8 @@ class Player extends Spectator {
             return undefined;
         }
 
-        return this.allCards.find(playCard => (
+        return this.game.allCards.find(playCard => (
+            playCard.controller === this &&
             playCard.location === 'play area' &&
             playCard !== card &&
             (playCard.code === card.code || playCard.name === card.name) &&
@@ -182,7 +216,15 @@ class Player extends Spectator {
         ));
     }*/
 
+<<<<<<< HEAD
     /*getNumberOfChallengesWon(challengeType) {
+=======
+    getFaction() {
+        return this.faction.getPrintedFaction();
+    }
+
+    getNumberOfChallengesWon(challengeType) {
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         return this.challenges.getWon(challengeType);
     }
 
@@ -195,7 +237,7 @@ class Player extends Spectator {
     }
 
     getNumberOfChallengesInitiated() {
-        return this.challenges.complete;
+        return this.challenges.getPerformed();
     }
 
     getNumberOfUsedPlots() {
@@ -204,6 +246,7 @@ class Player extends Spectator {
 
     modifyUsedPlots(value) {
         this.usedPlotsModifier += value;
+<<<<<<< HEAD
         this.game.raiseEvent('onUsedPlotsModified', this);
     }
 
@@ -223,16 +266,25 @@ class Player extends Spectator {
         }
 
         var remainder = 0;
+=======
+        this.game.raiseEvent('onUsedPlotsModified', { player: this });
+    }
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
         if(numCards > this.drawDeck.size()) {
             remainder = numCards - this.drawDeck.size();
             numCards = this.drawDeck.size();
         }
 
-        var cards = this.drawDeck.first(numCards);
+        let cards = this.drawDeck.first(numCards);
+
         _.each(cards, card => {
             this.moveCard(card, target);
         });
+
+        if(this.game.currentPhase !== 'setup') {
+            this.game.raiseEvent('onCardsDrawn', { cards: cards, player: this });
+        }
 
         if(this.drawDeck.size() === 0) {
             this.shuffleDiscardToDrawDeck();
@@ -292,6 +344,7 @@ class Player extends Spectator {
         var cards = this.drawDeck.first(number);
         this.discardCards(cards, false, discarded => {
             callback(discarded);
+<<<<<<< HEAD
             /*if(this.drawDeck.size() === 0) {
 
                 var otherPlayer = this.game.getOtherPlayer(this);
@@ -302,6 +355,11 @@ class Player extends Spectator {
                 }
 
             }*/
+=======
+            if(this.drawDeck.size() === 0) {
+                this.game.playerDecked(this);
+            }
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         });
     }
 
@@ -332,9 +390,14 @@ class Player extends Spectator {
         });
     }
 
+<<<<<<< HEAD
     /*
     canInitiateChallenge(challengeType) {
         return !this.challenges.isAtMax(challengeType);
+=======
+    canInitiateChallenge(challengeType, opponent) {
+        return this.challenges.canInitiate(challengeType, opponent);
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     }
 
     canSelectAsFirstPlayer(player) {
@@ -357,17 +420,48 @@ class Player extends Spectator {
         this.challenges.clearMax();
     }
 
-    setCannotInitiateChallengeForType(type, value) {
-        this.challenges.setCannotInitiateForType(type, value);
+    addChallengeRestriction(restriction) {
+        this.challenges.addRestriction(restriction);
     }
     */
 
-    initDrawDeck() {
-        this.hand.each(card => {
-            card.moveTo('draw deck');
-            this.drawDeck.push(card);
+    removeChallengeRestriction(restriction) {
+        this.challenges.removeRestriction(restriction);
+    }
+
+    resetCardPile(pile) {
+        pile.each(card => {
+            if(pile !== this.cardsInPlay || !this.cardsInPlayBeforeSetup.includes(card)) {
+                card.moveTo('draw deck');
+                this.drawDeck.push(card);
+            }
         });
+    }
+
+    resetDrawDeck() {
+        this.resetCardPile(this.hand);
         this.hand = _([]);
+<<<<<<< HEAD
+=======
+
+        this.resetCardPile(this.cardsInPlay);
+        this.cardsInPlay = _(this.cardsInPlay.filter(card => this.cardsInPlayBeforeSetup.includes(card)));
+
+        this.resetCardPile(this.discardPile);
+        this.discardPile = _([]);
+
+        this.resetCardPile(this.deadPile);
+        this.deadPile = _([]);
+    }
+
+    initDrawDeck() {
+        this.resetDrawDeck();
+        this.shuffleDrawDeck();
+    }
+
+    drawSetupHand() {
+        this.drawCardsToHand(StartingHandSize);
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     }
 
     prepareDecks() {
@@ -377,6 +471,7 @@ class Player extends Spectator {
         this.legend = preparedDeck.legend;
         this.outfit = preparedDeck.outfit;
         this.drawDeck = _(preparedDeck.drawCards);
+<<<<<<< HEAD
         this.allCards = _(preparedDeck.allCards);
         this.startingPosse = preparedDeck.starting;
     }
@@ -390,6 +485,10 @@ class Player extends Spectator {
         outfit.attach('townsquare', 'townsquare');
         this.locations.push(outfit);
         this.moveCard(this.outfit, 'play area');
+=======
+        this.bannerCards = _(preparedDeck.bannerCards);
+        this.preparedDeck = preparedDeck;
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     }
 
     initialise() {
@@ -409,8 +508,12 @@ class Player extends Spectator {
             return;
         }
 
+<<<<<<< HEAD
         this.shuffleDrawDeck();
         this.drawCardsToHand('hand', StartingHandSize);
+=======
+        this.gold = this.setupGold;
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     }
 
     /*
@@ -420,6 +523,7 @@ class Player extends Spectator {
         }
 
         this.initDrawDeck();
+        this.drawSetupHand();
         this.takenMulligan = true;
         this.readyToStart = true;
 
@@ -442,10 +546,15 @@ class Player extends Spectator {
         }
     }
 
+    getCostReduction(playingType, card) {
+        let matchingReducers = _.filter(this.costReducers, reducer => reducer.canReduce(playingType, card));
+        let reduction = _.reduce(matchingReducers, (memo, reducer) => reducer.getAmount(card) + memo, 0);
+        return reduction;
+    }
+
     getReducedCost(playingType, card) {
-        var baseCost = playingType === 'ambush' ? card.getAmbushCost() : card.getCost();
-        var matchingReducers = _.filter(this.costReducers, reducer => reducer.canReduce(playingType, card));
-        var reducedCost = _.reduce(matchingReducers, (cost, reducer) => cost - reducer.getAmount(card), baseCost);
+        let baseCost = playingType === 'ambush' ? card.getAmbushCost() : card.getCost();
+        let reducedCost = baseCost - this.getCostReduction(playingType, card);
         return Math.max(reducedCost, card.getMinCost());
     }
 
@@ -495,11 +604,11 @@ class Player extends Spectator {
             return false;
         }
 
-        var context = {
+        let context = new AbilityContext({
             game: this.game,
             player: this,
             source: card
-        };
+        });
         var playActions = _.filter(card.getPlayActions(), action => action.meetsRequirements(context) && action.canPayCosts(context) && action.canResolveTargets(context));
 
         if(playActions.length === 0) {
@@ -515,15 +624,27 @@ class Player extends Spectator {
         return true;
     }
 
-    canPutIntoPlay(card) {
+    canTrigger(card) {
+        return !_.any(this.triggerRestrictions, restriction => restriction(card));
+    }
+
+    canPlay(card, playingType = 'play') {
+        return !_.any(this.playCardRestrictions, restriction => restriction(card, playingType));
+    }
+
+    canPutIntoPlay(card, playingType = 'play', options = {}) {
+        if(!options.isEffectExpiration && !this.canPlay(card, playingType)) {
+            return false;
+        }
+
+        return this.canControl(card);
+    }
+
+    canControl(card) {
         let owner = card.owner;
 
         if(!card.isUnique()) {
             return true;
-        }
-
-        if(this.cannotMarshalOrPutIntoPlayByTitle.includes(card.name)) {
-            return false;
         }
 
         if(this.isCharacterDead(card) && !this.canResurrect(card)) {
@@ -553,8 +674,13 @@ class Player extends Spectator {
         return this.boothillPile.includes(card) && (!card.isUnique() || this.boothillPile.filter(c => c.name === card.name).length === 1);
     }
 
+<<<<<<< HEAD
     putIntoPlay(card, playingType = 'play', target = '') {
         if(!this.canPutIntoPlay(card)) {
+=======
+    putIntoPlay(card, playingType = 'play', options = {}) {
+        if(!this.canPutIntoPlay(card, playingType, options)) {
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
             return;
         }
 
@@ -563,11 +689,31 @@ class Player extends Spectator {
             return;
         }
 
+<<<<<<< HEAD
         let originalLocation = card.location;
+=======
+        if(dupeCard && playingType !== 'setup') {
+            this.removeCardFromPile(card);
+            dupeCard.addDuplicate(card);
+        } else {
+            // Attachments placed in setup should not be considered to be 'played',
+            // as it will cause then to double their effects when attached later.
+            let isSetupAttachment = playingType === 'setup' && card.getType() === 'attachment';
+
+            let originalLocation = card.location;
+
+            card.facedown = this.game.currentPhase === 'setup';
+            card.new = true;
+            this.moveCard(card, 'play area', { isDupe: !!dupeCard });
+            card.controller = this;
+            card.kneeled = playingType !== 'setup' && !!card.entersPlayKneeled || !!options.kneeled;
+            card.wasAmbush = (playingType === 'ambush');
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
         card.facedown = this.game.currentPhase === 'setup';
         card.new = true;
 
+<<<<<<< HEAD
         switch(card.type) {
             case 'dude':
                 card.updateGameLocation(target);
@@ -584,6 +730,15 @@ class Player extends Spectator {
         if(card.controller !== this) {
             card.controller.allCards = _(card.controller.allCards.reject(c => c === card));
             this.allCards.push(card);
+=======
+            this.game.queueSimpleStep(() => {
+                if(this.game.currentPhase !== 'setup' && card.isBestow()) {
+                    this.game.queueStep(new BestowPrompt(this.game, this, card));
+                }
+            });
+
+            this.game.raiseEvent('onCardEntersPlay', { card: card, playingType: playingType, originalLocation: originalLocation });
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         }
         card.controller = this;
 
@@ -618,6 +773,50 @@ class Player extends Spectator {
         });
 
         this.cardsInPlay = processedCards;
+<<<<<<< HEAD
+=======
+        this.gold = 0;
+    }
+
+    startPlotPhase() {
+        this.firstPlayer = false;
+        this.selectedPlot = undefined;
+        this.roundDone = false;
+
+        if(this.resetTimerAtEndOfRound) {
+            this.noTimer = false;
+        }
+
+        this.challenges.reset();
+
+        this.drawPhaseCards = DrawPhaseCards;
+    }
+
+    flipPlotFaceup() {
+        this.selectedPlot.flipFaceup();
+        this.moveCard(this.selectedPlot, 'active plot');
+        this.selectedPlot = undefined;
+    }
+
+    recyclePlots() {
+        if(this.plotDeck.isEmpty()) {
+            this.plotDiscard.each(plot => {
+                this.moveCard(plot, 'plot deck');
+            });
+
+            this.game.raiseEvent('onPlotsRecycled', { player: this });
+        }
+    }
+
+    removeActivePlot() {
+        if(this.activePlot) {
+            let plot = this.activePlot;
+            this.moveCard(this.activePlot, 'revealed plots');
+            this.game.raiseEvent('onPlotDiscarded', { player: this, card: plot });
+            this.activePlot = undefined;
+            return plot;
+        }
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     }
 
     drawPhase() {
@@ -627,8 +826,9 @@ class Player extends Spectator {
 
     beginMarshal() {
         this.game.addGold(this, this.getTotalIncome());
+        this.game.addMessage('{0} collects {1} gold', this, this.getTotalIncome());
 
-        this.game.raiseMergedEvent('onIncomeCollected', { player: this });
+        this.game.raiseEvent('onIncomeCollected', { player: this });
 
         this.limitedPlayed = 0;
     }
@@ -652,40 +852,44 @@ class Player extends Spectator {
         );
     }
 
-    attach(player, attachment, card, playingType) {
+    attach(controller, attachment, card, playingType) {
         if(!card || !attachment) {
             return;
         }
 
-        if(!this.canAttach(attachment, card)) {
+        if(!controller.canAttach(attachment, card)) {
             return;
         }
 
         let originalLocation = attachment.location;
-        let originalParent = attachment.parent;
 
         attachment.owner.removeCardFromPile(attachment);
-        if(originalParent) {
-            originalParent.removeAttachment(attachment);
-        }
         attachment.moveTo('play area', card);
+        attachment.controller = controller;
         card.attachments.push(attachment);
 
         this.game.queueSimpleStep(() => {
             attachment.applyPersistentEffects();
         });
 
+        this.game.queueSimpleStep(() => {
+            if(this.game.currentPhase !== 'setup' && attachment.isBestow()) {
+                this.game.queueStep(new BestowPrompt(this.game, controller, attachment));
+            }
+        });
+
         if(originalLocation !== 'play area') {
-            this.game.raiseMergedEvent('onCardEntersPlay', { card: attachment, playingType: playingType, originalLocation: originalLocation });
+            this.game.raiseEvent('onCardEntersPlay', { card: attachment, playingType: playingType, originalLocation: originalLocation });
         }
 
-        this.game.raiseMergedEvent('onCardAttached', { card: attachment, parent: card });
+        this.game.raiseEvent('onCardAttached', { card: attachment, parent: card });
     }
 
     showDrawDeck() {
         this.showDeck = true;
     }
 
+<<<<<<< HEAD
     isValidDropCombination(source, target) {
         /*
         if(source === 'plot deck' && target !== 'revealed plots') {
@@ -695,19 +899,45 @@ class Player extends Spectator {
         if(source === 'revealed plots' && target !== 'plot deck') {
             return false;
         }
+=======
+    isValidDropCombination(card, target) {
+        const PlotCardTypes = ['plot'];
+        const DrawDeckCardTypes = ['attachment', 'character', 'event', 'location'];
+        const AllowedTypesForPile = {
+            'active plot': PlotCardTypes,
+            'being played': ['event'],
+            'dead pile': ['character'],
+            'discard pile': DrawDeckCardTypes,
+            'draw deck': DrawDeckCardTypes,
+            'hand': DrawDeckCardTypes,
+            'out of game': DrawDeckCardTypes.concat(PlotCardTypes),
+            'play area': ['attachment', 'character', 'location'],
+            'plot deck': PlotCardTypes,
+            'revealed plots': PlotCardTypes,
+            // Agenda specific piles
+            'scheme plots': PlotCardTypes,
+            'conclave': DrawDeckCardTypes
+        };
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
-        if(target === 'plot deck' && source !== 'revealed plots') {
-            return false;
-        }
+        let allowedTypes = AllowedTypesForPile[target];
 
-        if(target === 'revealed plots' && source !== 'plot deck') {
+        if(!allowedTypes) {
             return false;
+<<<<<<< HEAD
         }*/
         return source !== target;
+=======
+        }
+
+        return allowedTypes.includes(card.getType());
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     }
 
     getSourceList(source) {
         switch(source) {
+            case 'being played':
+                return this.beingPlayed;
             case 'hand':
                 return this.hand;
             case 'draw hand':
@@ -720,6 +950,7 @@ class Player extends Spectator {
                 return this.boothillPile;
             case 'play area':
                 return this.cardsInPlay;
+<<<<<<< HEAD
                 //return this.game.getLocations();
             default:
                 if(this.additionalPiles[source]) {
@@ -733,8 +964,29 @@ class Player extends Spectator {
     }
 
     //play area wraps the main board and the out of town boards
+=======
+            case 'active plot':
+                return _([]);
+            case 'plot deck':
+                return this.plotDeck;
+            case 'revealed plots':
+                return this.plotDiscard;
+            case 'out of game':
+                return this.outOfGamePile;
+            // Agenda specific piles
+            case 'scheme plots':
+                return this.schemePlots;
+            case 'conclave':
+                return this.conclavePile;
+        }
+    }
+
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     updateSourceList(source, targetList) {
         switch(source) {
+            case 'being played':
+                this.beingPlayed = targetList;
+                return;
             case 'hand':
                 this.hand = targetList;
                 break;
@@ -759,13 +1011,19 @@ class Player extends Spectator {
             case 'revealed plots':
                 this.plotDiscard = targetList;
                 break;
-            default:
-                if(this.additionalPiles[source]) {
-                    this.additionalPiles[source].cards = targetList;
-                }
+            case 'out of game':
+                this.outOfGamePile = targetList;
+                break;
+            // Agenda specific piles
+            case 'scheme plots':
+                this.schemePlots = targetList;
+                break;
+            case 'conclave':
+                this.conclavePile = targetList;
         }
     }
 
+<<<<<<< HEAD
     startPosse() {
         _.each(this.hand.value(), (card) => {
             this.drop(card.uuid, 'hand', this.outfit.uuid);
@@ -801,28 +1059,18 @@ class Player extends Spectator {
         var sourceList = this.getSourceList(source);
         var card = this.findCardByUuid(sourceList, cardId);
 
+=======
+    drop(card, source, target) {
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         if(!card) {
-            if(source === 'play area') {
-                var otherPlayer = this.game.getOtherPlayer(this);
-
-                if(!otherPlayer) {
-                    return false;
-                }
-
-                card = otherPlayer.findCardInPlayByUuid(cardId);
-
-                if(!card) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
-
-        if(card.controller !== this) {
             return false;
         }
 
+        if(!this.isValidDropCombination(card, target)) {
+            return false;
+        }
+
+<<<<<<< HEAD
         if(target === 'discard pile') {
             this.discardCard(card, false);
             return true;
@@ -832,6 +1080,14 @@ class Player extends Spectator {
             this.putIntoPlay(card, 'play', target);
         } else {
             this.moveCard(card, target);
+=======
+        if(source === target) {
+            return false;
+        }
+
+        if(card.controller !== this) {
+            return false;
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         }
 
         return true;
@@ -875,16 +1131,12 @@ class Player extends Spectator {
         });
     }
 
-    initiateChallenge(challengeType) {
-        this.challenges.perform(challengeType);
+    trackChallenge(challenge) {
+        this.challenges.track(challenge);
     }
 
-    winChallenge(challengeType, wasAttacker) {
-        this.challenges.won(challengeType, wasAttacker);
-    }
-
-    loseChallenge(challengeType, wasAttacker) {
-        this.challenges.lost(challengeType, wasAttacker);
+    getParticipatedChallenges() {
+        return this.challenges.getChallenges();
     }
 
     resetForChallenge() {
@@ -895,14 +1147,18 @@ class Player extends Spectator {
 
     sacrificeCard(card) {
         this.game.applyGameAction('sacrifice', card, card => {
-            this.game.raiseEvent('onSacrificed', this, card, () => {
+            this.game.raiseEvent('onSacrificed', { player: this, card: card }, event => {
+                event.cardStateWhenSacrificed = card.createSnapshot();
                 this.moveCard(card, 'discard pile');
             });
         });
     }
 
     discardCard(card, allowSave = true) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         this.discardCards([card], allowSave);
     }
 
@@ -910,33 +1166,32 @@ class Player extends Spectator {
         this.game.applyGameAction('discard', cards, cards => {
             var params = {
                 player: this,
-                cards: cards,
                 allowSave: allowSave,
+                automaticSaveWithDupe: true,
                 originalLocation: cards[0].location
             };
-            this.game.raiseMergedEvent('onCardsDiscarded', params, event => {
-                _.each(event.cards, card => {
-                    this.doSingleCardDiscard(card, allowSave);
-                });
-                this.game.queueSimpleStep(() => {
+            this.game.raiseSimultaneousEvent(cards, {
+                eventName: 'onCardsDiscarded',
+                params: params,
+                handler: () => true,
+                perCardEventName: 'onCardDiscarded',
+                perCardHandler: event => {
+                    this.moveCard(event.card, 'discard pile');
+                },
+                postHandler: event => {
                     callback(event.cards);
-                });
+                }
             });
         });
     }
 
-    doSingleCardDiscard(card, allowSave = true) {
-        var params = {
-            player: this,
-            card: card,
-            allowSave: allowSave,
-            originalLocation: card.location
-        };
-        this.game.raiseMergedEvent('onCardDiscarded', params, event => {
-            this.moveCard(event.card, 'discard pile');
+    returnCardToHand(card, allowSave = true) {
+        this.game.applyGameAction('returnToHand', card, card => {
+            this.moveCard(card, 'hand', { allowSave: allowSave });
         });
     }
 
+<<<<<<< HEAD
     returnCardToHand(card) {
         this.game.applyGameAction('returnToHand', card, card => {
             this.moveCard(card, 'hand');
@@ -948,12 +1203,74 @@ class Player extends Spectator {
         var control = this.cardsInPlay.reduce((memo, card) => {
             return memo + card.getControl();
         }, this.outfit.control);
+=======
+    moveCardToTopOfDeck(card, allowSave = true) {
+        this.game.applyGameAction('moveToTopOfDeck', card, card => {
+            this.moveCard(card, 'draw deck', { allowSave: allowSave });
+        });
+    }
+
+    moveCardToBottomOfDeck(card, allowSave = true) {
+        this.game.applyGameAction('moveToBottomOfDeck', card, card => {
+            this.moveCard(card, 'draw deck', { bottom: true, allowSave: allowSave });
+        });
+    }
+
+    shuffleCardIntoDeck(card, allowSave = true) {
+        this.game.applyGameAction('shuffleIntoDeck', card, card => {
+            this.moveCard(card, 'draw deck', { allowSave: allowSave }, () => {
+                this.shuffleDrawDeck();
+            });
+        });
+    }
+
+    /**
+     * @deprecated Use `Game.killCharacter` instead.
+     */
+    killCharacter(card, allowSave = true) {
+        this.game.killCharacter(card, { allowSave: allowSave });
+    }
+
+    getDominance() {
+        let cardStrength = this.cardsInPlay.reduce((memo, card) => {
+            return memo + card.getDominanceStrength();
+        }, 0);
+
+        if(this.title) {
+            cardStrength += this.title.getDominanceStrength();
+        }
+
+        return cardStrength + this.gold;
+    }
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
         return control;
     }
 
+<<<<<<< HEAD
     removeAttachment(attachment) {
         return attachment.owner.moveCard(attachment, 'discard pile');
+=======
+    getTotalPower() {
+        var power = this.cardsInPlay.reduce((memo, card) => {
+            return memo + card.getPower();
+        }, this.faction.power);
+
+        return power;
+    }
+
+    removeAttachment(attachment, allowSave = true) {
+        attachment.isBeingRemoved = true;
+        if(attachment.isTerminal()) {
+            attachment.owner.moveCard(attachment, 'discard pile', { allowSave: allowSave }, () => {
+                attachment.isBeingRemoved = false;
+            });
+        } else {
+            attachment.owner.moveCard(attachment, 'hand', { allowSave: allowSave }, () => {
+                attachment.isBeingRemoved = false;
+            });
+        }
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     }
 
     selectDeck(deck) {
@@ -968,25 +1285,28 @@ class Player extends Spectator {
         //this.outfit.cardData.strength = 0;
     }
 
-    moveCard(card, targetLocation, options = {}) {
-        this.removeCardFromPile(card);
+    moveCard(card, targetLocation, options = {}, callback) {
+        let targetPile = this.getSourceList(targetLocation);
 
-        var targetPile = this.getSourceList(targetLocation);
+        options = _.extend({ allowSave: false, bottom: false, isDupe: false }, options);
 
         if(!targetPile) {
+<<<<<<< HEAD
             return;
         }
 
         if(targetPile.contains(card) && card.location !== 'play area') {
+=======
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
             return;
         }
 
-        if(card.location === 'play area') {
-            if(card.owner !== this) {
-                card.owner.moveCard(card, targetLocation);
-                return;
-            }
+        if(card.owner !== this && targetLocation !== 'play area') {
+            card.owner.moveCard(card, targetLocation, options, callback);
+            return;
+        }
 
+<<<<<<< HEAD
             if(targetLocation !== 'play area') {
 
                 var params = {
@@ -1008,22 +1328,78 @@ class Player extends Spectator {
                     card.moveTo(targetLocation);
                 });
             }
+=======
+        if(card.location === 'play area') {
+            var params = {
+                player: this,
+                card: card,
+                allowSave: options.allowSave,
+                automaticSaveWithDupe: true
+            };
+
+            this.game.raiseEvent('onCardLeftPlay', params, () => {
+                this.synchronousMoveCard(card, targetLocation, options);
+
+                if(callback) {
+                    callback();
+                }
+            });
+            return;
         }
 
-        if(card.location === 'hand') {
-            this.game.raiseEvent('onCardLeftHand', card);
+        this.synchronousMoveCard(card, targetLocation, options);
+        if(callback) {
+            callback();
+        }
+    }
+
+    synchronousMoveCard(card, targetLocation, options = {}) {
+        this.removeCardFromPile(card);
+
+        let targetPile = this.getSourceList(targetLocation);
+
+        if(!targetPile || targetPile.contains(card)) {
+            return;
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         }
 
+        if(card.location === 'play area') {
+            card.attachments.each(attachment => {
+                this.removeAttachment(attachment, false);
+            });
+
+            if(!card.dupes.isEmpty()) {
+                this.discardCards(card.dupes.toArray(), false);
+            }
+        }
+
+<<<<<<< HEAD
         if(card.location !== 'play area') {
             card.moveTo(targetLocation);
         }
 
         if(targetLocation === 'draw deck' && !options.bottom) {
+=======
+        if(['play area', 'active plot'].includes(card.location)) {
+            card.leavesPlay();
+        }
+
+        if(card.location === 'active plot') {
+            this.game.raiseEvent('onCardLeftPlay', { player: this, card: card });
+        }
+
+        card.moveTo(targetLocation);
+
+        if(targetLocation === 'active plot') {
+            this.activePlot = card;
+        } else if(targetLocation === 'draw deck' && !options.bottom) {
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
             targetPile.unshift(card);
         } else {
             targetPile.push(card);
         }
 
+<<<<<<< HEAD
         if(targetLocation === 'hand') {
             this.game.raiseEvent('onCardEntersHand', card);
         }
@@ -1034,6 +1410,10 @@ class Player extends Spectator {
 
         if(['boothill pile', 'discard pile'].includes(targetLocation)) {
             this.game.raiseMergedEvent('onCardPlaced', { card: card, location: targetLocation, player: this });
+=======
+        if(['dead pile', 'discard pile', 'revealed plots'].includes(targetLocation)) {
+            this.game.raiseEvent('onCardPlaced', { card: card, location: targetLocation, player: this });
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         }
     }
 
@@ -1045,7 +1425,11 @@ class Player extends Spectator {
         this.game.applyGameAction('boot', card, card => {
             card.booted = true;
 
+<<<<<<< HEAD
             this.game.raiseEvent('onCardBooted', this, card);
+=======
+            this.game.raiseEvent('onCardKneeled', { player: this, card: card });
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         });
     }
 
@@ -1057,17 +1441,24 @@ class Player extends Spectator {
         this.game.applyGameAction('unboot', card, card => {
             card.booted = false;
 
+<<<<<<< HEAD
             this.game.raiseEvent('onCardUnbooted', this, card);
+=======
+            this.game.raiseEvent('onCardStood', { player: this, card: card });
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         });
     }
 
     removeCardFromPile(card) {
         if(card.controller !== this) {
             card.controller.removeCardFromPile(card);
-
             card.controller = card.owner;
-
             return;
+        }
+
+        if(card.parent) {
+            card.parent.removeChildCard(card);
+            card.parent = undefined;
         }
 
         var originalLocation = card.location;
@@ -1094,6 +1485,17 @@ class Player extends Spectator {
             return 0;
         }
 
+        let totalReserve = Math.max(this.activePlot.getReserve(), this.minReserve);
+        if(_.isNaN(totalReserve) || _.isUndefined(totalReserve)) {
+            let payload = {
+                minReserve: this.minReserve,
+                baseReserve: this.activePlot.cardData.reserve,
+                reserveModifier: this.activePlot.reserveModifier
+            };
+
+            logger.error('RESERVE BUG: ', payload);
+        }
+
         return Math.max(this.activePlot.getReserve(), this.minReserve);
     }
 
@@ -1106,6 +1508,22 @@ class Player extends Spectator {
     isBelowReserve() {
         return this.hand.size() <= this.getTotalReserve();
     }*/
+
+    isRival(opponent) {
+        if(!this.title) {
+            return false;
+        }
+
+        return this.title.isRival(opponent.title);
+    }
+
+    isSupporter(opponent) {
+        if(!this.title) {
+            return false;
+        }
+
+        return this.title.isSupporter(opponent.title);
+    }
 
     setSelectedCards(cards) {
         this.promptState.setSelectedCards(cards);
@@ -1145,11 +1563,30 @@ class Player extends Spectator {
         this.promptState.cancelPrompt();
     }
 
+    getGameElementType() {
+        return 'player';
+    }
+
+    getStats(isActivePlayer) {
+        return {
+            claim: this.getClaim(),
+            gold: !isActivePlayer && this.phase === 'setup' ? 0 : this.gold,
+            reserve: this.getTotalReserve(),
+            totalPower: this.getTotalPower()
+        };
+    }
+
+    showHandtoSpectators(player) {
+        return this.game.isSpectator(player) && this.game.showHand;
+    }
+
     getState(activePlayer) {
         let isActivePlayer = activePlayer === this;
         let promptState = isActivePlayer ? this.promptState.getState() : {};
+        let fullDiscardPile = this.discardPile.toArray().concat(this.beingPlayed.toArray());
         let state = {
             activePlot: this.activePlot ? this.activePlot.getSummary(activePlayer) : undefined,
+<<<<<<< HEAD
             additionalPiles: _.mapObject(this.additionalPiles, pile => ({
                 isPrivate: pile.isPrivate,
                 cards: this.getSummaryForCardList(pile.cards, activePlayer, pile.isPrivate)
@@ -1160,28 +1597,55 @@ class Player extends Spectator {
             //claim: this.getClaim(),
             boothillPile: this.getSummaryForCardList(this.boothillPile, activePlayer),
             discardPile: this.getSummaryForCardList(this.discardPile, activePlayer),
+=======
+            agenda: this.agenda ? this.agenda.getSummary(activePlayer) : undefined,
+            cardPiles: {
+                bannerCards: this.getSummaryForCardList(this.bannerCards, activePlayer),
+                cardsInPlay: this.getSummaryForCardList(this.cardsInPlay, activePlayer),
+                conclavePile: this.getSummaryForCardList(this.conclavePile, activePlayer, true),
+                deadPile: this.getSummaryForCardList(this.deadPile, activePlayer).reverse(),
+                discardPile: this.getSummaryForCardList(fullDiscardPile, activePlayer).reverse(),
+                hand: this.getSummaryForCardList(this.hand, activePlayer, !this.showHandtoSpectators(activePlayer)),
+                outOfGamePile: this.getSummaryForCardList(this.outOfGamePile, activePlayer, false),
+                plotDeck: this.getSummaryForCardList(this.plotDeck, activePlayer, true),
+                plotDiscard: this.getSummaryForCardList(this.plotDiscard, activePlayer),
+                schemePlots: this.getSummaryForCardList(this.schemePlots, activePlayer, true)
+            },
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
             disconnected: this.disconnected,
             drawHand: this.getSummaryForCardList(this.drawHand, activePlayer, true),
             outfit: this.outfit.getSummary(activePlayer),
             firstPlayer: this.firstPlayer,
+<<<<<<< HEAD
             ghostrock: this.ghostrock,
             hand: this.getSummaryForCardList(this.hand, activePlayer, true),
             handRank: this.handRank,
+=======
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
             id: this.id,
+            keywordSettings: this.keywordSettings,
             left: this.left,
             locations: this.locations,
             numDrawCards: this.drawDeck.size(),
             name: this.name,
             phase: this.phase,
+<<<<<<< HEAD
             promptedActionWindows: this.promptedActionWindows,
             //reserve: this.getTotalReserve(),
             totalControl: this.getTotalControl(),
+=======
+            plotSelected: !!this.selectedPlot,
+            promptedActionWindows: this.promptedActionWindows,
+            stats: this.getStats(isActivePlayer),
+            timerSettings: this.timerSettings,
+            title: this.title ? this.title.getSummary(activePlayer) : undefined,
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
             user: _.omit(this.user, ['password', 'email'])
         };
 
         if(this.showDeck) {
             state.showDeck = true;
-            state.drawDeck = this.getSummaryForCardList(this.drawDeck, activePlayer);
+            state.cardPiles.drawDeck = this.getSummaryForCardList(this.drawDeck, activePlayer);
         }
 
         return _.extend(state, promptState);

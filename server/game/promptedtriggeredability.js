@@ -11,7 +11,7 @@ const TriggeredAbility = require('./triggeredability.js');
  *           trigger the reaction when that event is fired. For example, to
  *           trigger only at the end of the challenge phase, you would do:
  *           when: {
- *               onPhaseEnded: (event, phase) => phase === 'challenge'
+ *               onPhaseEnded: event => event.phase === 'challenge'
  *           }
  *           Multiple events may be specified for cards that have multiple
  *           possible triggers for the same reaction.
@@ -35,6 +35,8 @@ const TriggeredAbility = require('./triggeredability.js');
  *            ability. By default, the player that controls the card will be
  *            prompted. Used for reactions / interrupts that any player can
  *            trigger such as The Red Wedding.
+ * cannotBeCanceled - optional boolean that determines whether an ability can
+ *                    be canceled using a cancel interrupt.
  */
 class PromptedTriggeredAbility extends TriggeredAbility {
     constructor(game, card, type, properties) {
@@ -64,10 +66,10 @@ class PromptedTriggeredAbility extends TriggeredAbility {
     }
 
     executeHandler(context) {
-        var handler = this.choices[context.choice];
+        let handler = this.choices[context.choice];
 
-        if(handler && handler(context) !== false && this.limit) {
-            this.limit.increment();
+        if(handler) {
+            handler(context);
         }
     }
 }

@@ -7,13 +7,15 @@ const GameChat = require('./game/gamechat.js');
 
 class PendingGame {
     constructor(owner, details) {
-        this.owner = owner.username;
+        this.owner = owner;
         this.players = {};
         this.spectators = {};
         this.id = uuid.v1();
         this.name = details.name;
         this.allowSpectators = details.spectators;
+        this.showHand = details.showHand;
         this.gameType = details.gameType;
+        this.isMelee = details.isMelee;
         this.createdAt = new Date();
         this.gameChat = new GameChat();
     }
@@ -81,14 +83,14 @@ class PendingGame {
             name: user.username,
             user: user,
             emailHash: user.emailHash,
-            owner: this.owner === user.username
+            owner: this.owner.username === user.username
         };
     }
 
     addSpectator(id, user) {
         this.spectators[user.username] = {
             id: id,
-            name: user.userame,
+            name: user.username,
             user: user,
             emailHash: user.emailHash
         };
@@ -117,9 +119,17 @@ class PendingGame {
         }
     }
 
+    isUserBlocked(user) {
+        return _.contains(this.owner.blockList, user.username.toLowerCase());
+    }
+
     join(id, user, password, callback) {
-        if(_.size(this.players) === 2) {
-            callback(new Error('Too many players'), 'Too many players');
+        if(_.size(this.players) === 2 || this.started) {
+            return;
+        }
+
+        if(this.isUserBlocked(user)) {
+            return;
         }
 
         if(this.password) {
@@ -144,8 +154,14 @@ class PendingGame {
     }
 
     watch(id, user, password, callback) {
-        if(!this.allowSpectators || this.started) {
+        if(!this.allowSpectators) {
             callback(new Error('Join not permitted'));
+
+            return;
+        }
+
+        if(this.isUserBlocked(user)) {
+            return;
         }
 
         if(this.password) {
@@ -276,8 +292,13 @@ class PendingGame {
             }
 
             playerSummaries[player.name] = {
+<<<<<<< HEAD
                 legend: this.started && player.legend ? player.legend.cardData.code : undefined,
                 deck: activePlayer ? deck : undefined,
+=======
+                agenda: this.started && player.agenda ? player.agenda.cardData.code : undefined,
+                deck: activePlayer ? deck : {},
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
                 emailHash: player.emailHash,
                 outfit: this.started && player.outfit ? player.outfit.cardData.code : undefined,
                 id: player.id,
@@ -297,8 +318,9 @@ class PendingGame {
             name: this.name,
             needsPassword: !!this.password,
             node: this.node ? this.node.identity : undefined,
-            owner: this.owner,
+            owner: this.owner.username,
             players: playerSummaries,
+            showHand: this.showHand,
             started: this.started,
             spectators: _.map(this.spectators, spectator => {
                 return {

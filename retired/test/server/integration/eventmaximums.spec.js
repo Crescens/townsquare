@@ -1,6 +1,3 @@
-/* global describe, it, expect, beforeEach, integration */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const _ = require('underscore');
 
 describe('event maximums', function() {
@@ -50,7 +47,6 @@ describe('event maximums', function() {
                 this.player1.clickPrompt('Done');
 
                 this.completeChallengesPhase();
-                this.completeTaxationPhase();
 
                 this.player1.selectPlot('A Game of Thrones');
                 this.player2.selectPlot('A Game of Thrones');

@@ -1,14 +1,10 @@
-/* global describe, it, beforeEach, expect, jasmine */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const MarshalCardAction = require('../../server/game/marshalcardaction.js');
 
 describe('MarshalCardAction', function () {
     beforeEach(function() {
         this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'on', 'removeListener']);
         this.playerSpy = jasmine.createSpyObj('player', ['canPutIntoPlay', 'isCardInPlayableLocation', 'putIntoPlay']);
-        this.cardSpy = jasmine.createSpyObj('card', ['canBeMarshaled', 'getType']);
-        this.cardSpy.canBeMarshaled.and.returnValue(true);
+        this.cardSpy = jasmine.createSpyObj('card', ['getType']);
         this.cardSpy.controller = this.playerSpy;
         this.cardSpy.owner = this.playerSpy;
         this.context = {
@@ -57,16 +53,6 @@ describe('MarshalCardAction', function () {
         describe('when the card is an event', function() {
             beforeEach(function() {
                 this.cardSpy.getType.and.returnValue('event');
-            });
-
-            it('should return false', function() {
-                expect(this.action.meetsRequirements(this.context)).toBe(false);
-            });
-        });
-
-        describe('when the card is forbidden from being marshalled', function() {
-            beforeEach(function() {
-                this.cardSpy.canBeMarshaled.and.returnValue(false);
             });
 
             it('should return false', function() {

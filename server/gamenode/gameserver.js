@@ -38,6 +38,7 @@ class GameServer {
         this.zmqSocket.on('onGameSync', this.onGameSync.bind(this));
         this.zmqSocket.on('onFailedConnect', this.onFailedConnect.bind(this));
         this.zmqSocket.on('onCloseGame', this.onCloseGame.bind(this));
+        this.zmqSocket.on('onCardData', this.onCardData.bind(this));
 
         var server = undefined;
 
@@ -66,6 +67,8 @@ class GameServer {
         }
 
         this.io.on('connection', this.onConnection.bind(this));
+
+        setInterval(() => this.clearStaleFinishedGames(), 60 * 1000);
     }
 
     debugDump() {
@@ -98,18 +101,72 @@ class GameServer {
     handleError(game, e) {
         logger.error(e);
 
-        var debugData = {};
+        let gameState = game.getState();
+        let debugData = {};
 
-        debugData.game = game.getState();
+        if(e.message.includes('Maximum call stack')) {
+            debugData.badSerializaton = this.detectBinary(gameState);
+        } else {
+            debugData.game = gameState;
+            debugData.game.players = undefined;
 
-        _.each(game.getPlayers(), player => {
-            debugData[player.name] = player.getState(player);
-        });
+            debugData.messages = game.messages;
+            debugData.game.messages = undefined;
+
+            _.each(game.getPlayers(), player => {
+                debugData[player.name] = player.getState(player);
+            });
+        }
 
         Raven.captureException(e, { extra: debugData });
 
         if(game) {
             game.addMessage('A Server error has occured processing your game state, apologies.  Your game may now be in an inconsistent state, or you may be able to continue.  The error has been logged.');
+        }
+    }
+
+    detectBinary(state, path = '', results = []) {
+        const allowedTypes = ['Array', 'Boolean', 'Date', 'Number', 'Object', 'String'];
+
+        if(!state) {
+            return results;
+        }
+
+        let type = state.constructor.name;
+
+        if(!allowedTypes.includes(type)) {
+            results.push({ path: path, type: type });
+        }
+
+        if(type === 'Object') {
+            for(let key in state) {
+                this.detectBinary(state[key], `${path}.${key}`, results);
+            }
+        } else if(type === 'Array') {
+            for(let i = 0; i < state.length; ++i) {
+                this.detectBinary(state[i], `${path}[${i}]`, results);
+            }
+        }
+
+        return results;
+    }
+
+    clearStaleFinishedGames() {
+        const timeout = 20 * 60 * 1000;
+
+        let staleGames = _.filter(this.games, game => game.finishedAt && (Date.now() - game.finishedAt > timeout));
+
+        for(let game of staleGames) {
+            logger.info('closed finished game', game.id, 'due to inactivity');
+            for(let player of Object.values(game.getPlayersAndSpectators())) {
+                if(player.socket) {
+                    player.socket.tIsClosing = true;
+                    player.socket.disconnect();
+                }
+            }
+
+            delete this.games[game.id];
+            this.zmqSocket.send('GAMECLOSED', { game: game.id });
         }
     }
 
@@ -165,7 +222,7 @@ class GameServer {
     }
 
     onStartGame(pendingGame) {
-        var game = new Game(pendingGame, { router: this });
+        let game = new Game(pendingGame, { router: this, titleCardData: this.titleCardData, shortCardData: this.shortCardData });
         this.games[pendingGame.id] = game;
 
         game.started = true;
@@ -227,6 +284,11 @@ class GameServer {
         this.zmqSocket.send('GAMECLOSED', { game: game.id });
     }
 
+    onCardData(cardData) {
+        this.titleCardData = cardData.titleCardData;
+        this.shortCardData = cardData.shortCardData;
+    }
+
     onConnection(ioSocket) {
         if(!ioSocket.request.user) {
             logger.info('socket connected with no user, disconnecting');
@@ -281,12 +343,14 @@ class GameServer {
 
         game.disconnect(socket.user.username);
 
-        if(game.isEmpty()) {
-            delete this.games[game.id];
+        if(!socket.tIsClosing) {
+            if(game.isEmpty()) {
+                delete this.games[game.id];
 
-            this.zmqSocket.send('GAMECLOSED', { game: game.id });
-        } else if(isSpectator) {
-            this.zmqSocket.send('PLAYERLEFT', { gameId: game.id, game: game.getSaveState(), player: socket.user.username, spectator: true });
+                this.zmqSocket.send('GAMECLOSED', { game: game.id });
+            } else if(isSpectator) {
+                this.zmqSocket.send('PLAYERLEFT', { gameId: game.id, game: game.getSaveState(), player: socket.user.username, spectator: true });
+            }
         }
 
         this.sendGameState(game);

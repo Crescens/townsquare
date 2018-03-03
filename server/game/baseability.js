@@ -1,5 +1,7 @@
 const _ = require('underscore');
 
+const AbilityTarget = require('./AbilityTarget.js');
+
 /**
  * Base class representing an ability that can be done by the player. This
  * includes card actions, reactions, interrupts, playing a card, marshaling a
@@ -22,6 +24,9 @@ class BaseAbility {
     constructor(properties) {
         this.cost = this.buildCost(properties.cost);
         this.targets = this.buildTargets(properties);
+        this.limit = properties.limit;
+        this.cannotBeCanceled = !!properties.cannotBeCanceled;
+        this.chooseOpponentFunc = properties.chooseOpponent;
     }
 
     buildCost(cost) {
@@ -38,16 +43,15 @@ class BaseAbility {
 
     buildTargets(properties) {
         if(properties.target) {
-            return {
-                target: properties.target
-            };
+            return [new AbilityTarget('target', properties.target)];
         }
 
         if(properties.targets) {
-            return properties.targets;
+            let targetPairs = Object.entries(properties.targets);
+            return targetPairs.map(([name, properties]) => new AbilityTarget(name, properties));
         }
 
-        return {};
+        return [];
     }
 
     /**
@@ -106,21 +110,44 @@ class BaseAbility {
     }
 
     /**
+     * Returns whether the ability requires an opponent to be chosen.
+     */
+    needsChooseOpponent() {
+        return !!this.chooseOpponentFunc;
+    }
+
+    /**
+     * Returns whether there are opponents that can be chosen, if the ability
+     * requires that an opponent be chosen.
+     */
+    canResolveOpponents(context) {
+        if(!this.needsChooseOpponent()) {
+            return true;
+        }
+
+        return _.any(context.game.getPlayers(), player => {
+            return player !== context.player && this.canChooseOpponent(player);
+        });
+    }
+
+    /**
+     * Returns whether a specific player can be chosen as an opponent.
+     */
+    canChooseOpponent(opponent) {
+        if(_.isFunction(this.chooseOpponentFunc)) {
+            return this.chooseOpponentFunc(opponent);
+        }
+
+        return this.chooseOpponentFunc === true;
+    }
+
+    /**
      * Returns whether there are eligible cards available to fulfill targets.
      *
      * @returns {Boolean}
      */
     canResolveTargets(context) {
-        const ValidTypes = ['character', 'attachment', 'location', 'event'];
-        return _.all(this.targets, target => {
-            return context.game.allCards.any(card => {
-                if(!ValidTypes.includes(card.getType())) {
-                    return false;
-                }
-
-                return target.cardCondition(card, context);
-            });
-        });
+        return this.targets.every(target => target.canResolve(context));
     }
 
     /**
@@ -129,30 +156,16 @@ class BaseAbility {
      * @returns {Array} An array of target resolution objects.
      */
     resolveTargets(context) {
-        return _.map(this.targets, (targetProperties, name) => {
-            return this.resolveTarget(context, name, targetProperties);
-        });
+        return this.targets.map(target => target.resolve(context));
     }
 
-    resolveTarget(context, name, targetProperties) {
-        let cardCondition = targetProperties.cardCondition;
-        let otherProperties = _.omit(targetProperties, 'cardCondition');
-        let result = { resolved: false, name: name, value: null };
-        let promptProperties = {
-            source: context.source,
-            cardCondition: card => cardCondition(card, context),
-            onSelect: (player, card) => {
-                result.resolved = true;
-                result.value = card;
-                return true;
-            },
-            onCancel: () => {
-                result.resolved = true;
-                return true;
-            }
-        };
-        context.game.promptForSelect(context.player, _.extend(promptProperties, otherProperties));
-        return result;
+    /**
+     * Increments the usage of the ability toward its limit, if it has one.
+     */
+    incrementLimit() {
+        if(this.limit) {
+            this.limit.increment();
+        }
     }
 
     /**
@@ -164,7 +177,7 @@ class BaseAbility {
     }
 
     isAction() {
-        return true;
+        return false;
     }
 
     isPlayableEventAbility() {
@@ -173,6 +186,10 @@ class BaseAbility {
 
     isCardAbility() {
         return true;
+    }
+
+    isForcedAbility() {
+        return false;
     }
 
     hasMax() {

@@ -1,6 +1,3 @@
-/* global describe, it, beforeEach, expect, jasmine */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const _ = require('underscore');
 
 const SetupCardAction = require('../../server/game/setupcardaction');
@@ -21,6 +18,7 @@ describe('SetupCardAction', function () {
     describe('meetsRequirements()', function() {
         beforeEach(function() {
             this.gameSpy.currentPhase = 'setup';
+            this.playerSpy.readyToStart = true;
             this.playerSpy.hand = _([this.cardSpy]);
             this.cardSpy.getType.and.returnValue('dude');
         });

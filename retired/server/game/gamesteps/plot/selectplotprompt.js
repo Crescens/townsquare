@@ -2,6 +2,10 @@ const AllPlayerPrompt = require('../allplayerprompt.js');
 
 class SelectPlotPrompt extends AllPlayerPrompt {
     completionCondition(player) {
+        if(player.mustRevealPlot) {
+            player.selectedPlot = player.mustRevealPlot;
+        }
+
         return !!player.selectedPlot;
     }
 
@@ -14,11 +18,29 @@ class SelectPlotPrompt extends AllPlayerPrompt {
         };
     }
 
-    waitingPrompt() {
-        return { menuTitle: 'Waiting for opponent to select plot' };
+    waitingPrompt(player) {
+        if(player.mustRevealPlot) {
+            return {
+                menuTitle: 'Waiting for opponent to select plot'
+            };
+        }
+
+        return {
+            menuTitle: 'Waiting for opponent to select plot',
+            buttons: [
+                { arg: 'changeplot', text: 'Change Plot' }
+            ]
+        };
     }
 
-    onMenuCommand(player) {
+    onMenuCommand(player, arg) {
+        if(arg === 'changeplot') {
+            player.selectedPlot = undefined;
+            this.game.addMessage('{0} has cancelled their plot selection', player);
+
+            return;
+        }
+
         var plot = player.findCard(player.plotDeck, card => {
             return card.selected;
         });
@@ -27,8 +49,6 @@ class SelectPlotPrompt extends AllPlayerPrompt {
             return;
         }
 
-        plot.facedown = true;
-        plot.selected = false;
         player.selectedPlot = plot;
 
         this.game.addMessage('{0} has selected a plot', player);

@@ -1,19 +1,18 @@
-/* global describe, it, beforeEach, expect, spyOn, jasmine */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const _ = require('underscore');
 
 const Player = require('../../../server/game/player.js');
 
 describe('Player', function() {
     beforeEach(function() {
-        this.gameSpy = jasmine.createSpyObj('game', ['queueStep', 'raiseEvent', 'raiseMergedEvent', 'playerDecked']);
-        this.player = new Player('1', 'Player 1', true, this.gameSpy);
+        this.gameSpy = jasmine.createSpyObj('game', ['queueSimpleStep', 'queueStep', 'raiseEvent', 'playerDecked']);
+        this.player = new Player('1', {username: 'Player 1', settings: {}}, true, this.gameSpy);
         this.player.initialise();
 
         spyOn(this.player, 'getDuplicateInPlay');
         spyOn(this.player, 'isCharacterDead');
         spyOn(this.player, 'canResurrect');
+
+        this.gameSpy.queueSimpleStep.and.callFake(func => func());
 
         this.cardSpy = jasmine.createSpyObj('card', ['getType', 'getCost', 'isBestow', 'isUnique', 'applyPersistentEffects', 'moveTo']);
         this.cardSpy.controller = this.player;
@@ -48,7 +47,7 @@ describe('Player', function() {
                 });
 
                 it('should raise the onCardEntersPlay event', function() {
-                    expect(this.gameSpy.raiseMergedEvent).toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy, playingType: 'marshal' }));
+                    expect(this.gameSpy.raiseEvent).toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy, playingType: 'marshal' }));
                 });
 
                 describe('when it has the Bestow keyword', function() {
@@ -79,7 +78,7 @@ describe('Player', function() {
                 });
 
                 it('should not raise the onCardEntersPlay event', function() {
-                    expect(this.gameSpy.raiseMergedEvent).not.toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy }));
+                    expect(this.gameSpy.raiseEvent).not.toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy }));
                 });
 
                 it('should add as a duplicate', function() {
@@ -170,7 +169,7 @@ describe('Player', function() {
                 });
 
                 it('should raise the onCardEntersPlay event', function() {
-                    expect(this.gameSpy.raiseMergedEvent).toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy, playingType: 'setup' }));
+                    expect(this.gameSpy.raiseEvent).toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy, playingType: 'setup' }));
                 });
 
                 describe('when it has the Bestow keyword', function() {
@@ -209,7 +208,7 @@ describe('Player', function() {
                 });
 
                 it('should raise the onCardEntersPlay event', function() {
-                    expect(this.gameSpy.raiseMergedEvent).toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy, playingType: 'setup' }));
+                    expect(this.gameSpy.raiseEvent).toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy, playingType: 'setup' }));
                 });
 
                 it('should not add as a duplicate', function() {
@@ -246,7 +245,7 @@ describe('Player', function() {
                 });
 
                 it('should raise the onCardEntersPlay event', function() {
-                    expect(this.gameSpy.raiseMergedEvent).toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy, playingType: 'ambush' }));
+                    expect(this.gameSpy.raiseEvent).toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy, playingType: 'ambush' }));
                 });
             });
 
@@ -265,7 +264,7 @@ describe('Player', function() {
                 });
 
                 it('should not raise the onCardEntersPlay event', function() {
-                    expect(this.gameSpy.raiseMergedEvent).not.toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy }));
+                    expect(this.gameSpy.raiseEvent).not.toHaveBeenCalledWith('onCardEntersPlay', jasmine.objectContaining({ card: this.cardSpy }));
                 });
 
                 it('should add as a duplicate', function() {
@@ -276,7 +275,7 @@ describe('Player', function() {
 
         describe('when the card is not controlled by the player', function() {
             beforeEach(function() {
-                this.opponent = new Player('2', 'Player 2', true, this.gameSpy);
+                this.opponent = new Player('2', {username: 'Player 2', settings: {}}, true, this.gameSpy);
                 this.opponent.initialise();
                 spyOn(this.opponent, 'getDuplicateInPlay');
                 spyOn(this.opponent, 'isCharacterDead');

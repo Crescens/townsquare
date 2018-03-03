@@ -1,6 +1,3 @@
-/* global describe, it, expect, beforeEach, integration */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 describe('nested ability sequences', function() {
     integration(function() {
         describe('abilities already in play', function() {
@@ -51,8 +48,6 @@ describe('nested ability sequences', function() {
 
                 this.player1.clickCard(this.robb);
                 this.player1.clickPrompt('Done');
-                this.skipActionWindow();
-
                 this.skipActionWindow();
 
                 this.player2.clickPrompt('Apply Claim');

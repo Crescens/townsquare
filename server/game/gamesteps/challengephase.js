@@ -1,4 +1,3 @@
-const _ = require('underscore');
 const Phase = require('./phase.js');
 const SimpleStep = require('./simplestep.js');
 const Challenge = require('../challenge.js');
@@ -17,9 +16,6 @@ class ChallengePhase extends Phase {
 
     beginPhase() {
         this.remainingPlayers = this.game.getPlayersInFirstPlayerOrder();
-        _.each(this.remainingPlayers, player => {
-            player.activePlot.onBeginChallengePhase();
-        });
     }
 
     promptForChallenge() {
@@ -32,9 +28,9 @@ class ChallengePhase extends Phase {
             activePrompt: {
                 menuTitle: '',
                 buttons: [
-                    { text: 'Military', method: 'initiateChallenge', arg: 'military' },
-                    { text: 'Intrigue', method: 'initiateChallenge', arg: 'intrigue' },
-                    { text: 'Power', method: 'initiateChallenge', arg: 'power' },
+                    { text: 'Military', method: 'chooseChallengeType', arg: 'military' },
+                    { text: 'Intrigue', method: 'chooseChallengeType', arg: 'intrigue' },
+                    { text: 'Power', method: 'chooseChallengeType', arg: 'power' },
                     { text: 'Done', method: 'completeChallenges' }
                 ]
             },
@@ -44,23 +40,32 @@ class ChallengePhase extends Phase {
         return false;
     }
 
-    initiateChallenge(attackingPlayer, challengeType) {
-        if(!attackingPlayer.canInitiateChallenge(challengeType)) {
+    chooseChallengeType(attackingPlayer, challengeType) {
+        let opponents = this.game.getOpponents(attackingPlayer);
+
+        if(opponents.length === 0) {
+            this.initiateChallenge(attackingPlayer, null, challengeType);
             return;
         }
 
-        attackingPlayer.challengeType = challengeType;
+        this.game.promptForOpponentChoice(attackingPlayer, {
+            onSelect: opponent => {
+                this.initiateChallenge(attackingPlayer, opponent, challengeType);
+            }
+        });
+    }
 
-        if(!attackingPlayer.activePlot.canChallenge(attackingPlayer, challengeType)) {
+    initiateChallenge(attackingPlayer, defendingPlayer, challengeType) {
+        if(!attackingPlayer.canInitiateChallenge(challengeType, defendingPlayer)) {
             return;
         }
 
-        var defendingPlayer = this.chooseOpponent(attackingPlayer);
-        if(defendingPlayer && !defendingPlayer.activePlot.canChallenge(attackingPlayer, challengeType)) {
-            return;
-        }
-
-        var challenge = new Challenge(this.game, attackingPlayer, defendingPlayer, challengeType);
+        let challenge = new Challenge(this.game, {
+            attackingPlayer: attackingPlayer,
+            defendingPlayer: defendingPlayer,
+            challengeType: challengeType,
+            number: attackingPlayer.getNumberOfChallengesInitiated() + 1
+        });
         this.game.currentChallenge = challenge;
         this.game.queueStep(new ChallengeFlow(this.game, challenge));
         this.game.queueStep(new SimpleStep(this.game, () => this.cleanupChallenge()));
@@ -68,12 +73,12 @@ class ChallengePhase extends Phase {
     }
 
     cleanupChallenge() {
-        this.game.currentChallenge.unregisterEvents();
+        let challenge = this.game.currentChallenge;
+        challenge.resetCards();
+        challenge.finish();
+        challenge.unregisterEvents();
         this.game.currentChallenge = null;
-    }
-
-    chooseOpponent(attackingPlayer) {
-        return this.game.getOtherPlayer(attackingPlayer);
+        this.game.raiseEvent('onChallengeFinished', { challenge: challenge });
     }
 
     completeChallenges(player) {

@@ -1,14 +1,11 @@
-/* global describe, it, beforeEach, expect, jasmine */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const Player = require('../../../server/game/player.js');
 
 const PlayActionPrompt = require('../../../server/game/gamesteps/playactionprompt.js');
 
 describe('Player', function() {
     beforeEach(function() {
-        this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'raiseEvent', 'getOtherPlayer', 'playerDecked', 'resolveAbility', 'queueStep', 'raiseMergedEvent']);
-        this.player = new Player('1', 'Player 1', true, this.gameSpy);
+        this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'playerDecked', 'resolveAbility', 'queueStep', 'raiseEvent']);
+        this.player = new Player('1', {username: 'Player 1', settings: {}}, true, this.gameSpy);
         this.player.initialise();
     });
 
@@ -51,7 +48,7 @@ describe('Player', function() {
 
                 it('should resolve the play action', function() {
                     this.player.playCard(this.cardSpy);
-                    expect(this.gameSpy.resolveAbility).toHaveBeenCalledWith(this.playActionSpy, { game: this.gameSpy, player: this.player, source: this.cardSpy });
+                    expect(this.gameSpy.resolveAbility).toHaveBeenCalledWith(this.playActionSpy, jasmine.objectContaining({ game: this.gameSpy, player: this.player, source: this.cardSpy }));
                 });
 
                 it('should return true', function() {

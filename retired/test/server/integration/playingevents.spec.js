@@ -1,16 +1,13 @@
-/* global describe, it, expect, beforeEach, integration */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 describe('playing events', function() {
     integration(function() {
         beforeEach(function() {
             const deck1 = this.buildDeck('baratheon', [
                 'Trading with the Pentoshi',
-                'Melisandre (Core)', 'Seen In Flames'
+                'Melisandre (Core)', 'Seen In Flames', 'Theon Greyjoy (Core)', 'Risen from the Sea'
             ]);
             const deck2 = this.buildDeck('martell', [
                 'Trading with the Pentoshi',
-                'The Hand\'s Judgment', 'Hedge Knight', 'Tower of the Sun', 'The Prince\'s Plan'
+                'The Hand\'s Judgment', 'The Hand\'s Judgment', 'Hedge Knight', 'Tower of the Sun', 'The Prince\'s Plan'
             ]);
             this.player1.selectDeck(deck1);
             this.player2.selectDeck(deck2);
@@ -62,6 +59,12 @@ describe('playing events', function() {
                 this.player2.clickPrompt('Pass');
             });
 
+            it('should not prompt to cancel the event again', function() {
+                // The second copy of Hand's Judgment should not prompt for the
+                // already cancelled event.
+                expect(this.player2).not.toHavePromptButton('The Hand\'s Judgment');
+            });
+
             it('should still count as having played the event', function() {
                 expect(this.player1).toHavePromptButton('Melisandre');
 
@@ -91,6 +94,26 @@ describe('playing events', function() {
 
             it('should not count as playing an event', function() {
                 expect(this.player2).not.toHavePromptButton('Tower of the Sun');
+            });
+        });
+
+        describe('when an event becomes an attachment', function() {
+            beforeEach(function() {
+                let character = this.player1.findCardByName('Theon Greyjoy', 'hand');
+                this.player1.dragCard(character, 'play area');
+
+                this.game.killCharacter(character, { allowSave: true });
+                this.game.continue();
+
+                this.player1.clickPrompt('Risen from the Sea');
+                this.player1.clickCard(character);
+
+                // Pass on Hand's Judgment to allow the save
+                this.player2.clickPrompt('Pass');
+            });
+
+            it('should count as playing an event', function() {
+                expect(this.player2).toHavePromptButton('Tower of the Sun');
             });
         });
     });

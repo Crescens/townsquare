@@ -1,4 +1,4 @@
 {
-  "presets": ["react", ["env",{"targets":{browsers:'>2%'}}]],
+  "presets": ["react", "env"],
   "plugins": [ "istanbul", "react-hot-loader/babel", "transform-object-assign" ]
 }

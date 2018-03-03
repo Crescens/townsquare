@@ -11,17 +11,33 @@ class RevealPlots extends BaseStep {
     }
 
     continue() {
+        this.game.addSimultaneousEffects(this.getPlotEffects());
+
+        for(let plot of this.plots) {
+            this.game.raiseEvent('onCardEntersPlay', { card: plot, playingType: 'plot' });
+        }
+
         let params = {
             plots: this.plots
         };
-        this.game.raiseMergedEvent('onPlotsRevealed', params, () => {
+        this.game.raiseEvent('onPlotsRevealed', params, () => {
             if(this.needsFirstPlayerChoice()) {
-                this.game.raiseMergedEvent('onCompareInitiative', {});
+                this.game.raiseEvent('onCompareInitiative', {});
                 this.game.queueStep(new SimpleStep(this.game, () => this.determineInitiative()));
                 this.game.queueStep(() => new FirstPlayerPrompt(this.game, this.initiativeWinner));
             }
-            this.game.raiseMergedEvent('onPlotsWhenRevealed', params);
+            this.game.raiseEvent('onPlotsWhenRevealed', params);
         });
+    }
+
+    getPlotEffects() {
+        return this.plots
+            .reduce((memo, plot) => {
+                let effectProperties = plot.getPersistentEffects();
+                let results = effectProperties.map(properties => ({ source: plot, properties: properties }));
+
+                return memo.concat(results);
+            }, []);
     }
 
     needsFirstPlayerChoice() {
@@ -45,7 +61,7 @@ class RevealPlots extends BaseStep {
         }
 
         this.initiativeWinner = initiativeWinner;
-        this.game.raiseMergedEvent('onInitiativeDetermined', { winner: initiativeWinner });
+        this.game.raiseEvent('onInitiativeDetermined', { winner: initiativeWinner });
     }
 
     getInitiativeResult(sampleFunc = _.sample) {

@@ -34,7 +34,7 @@ class InnerMessages extends React.Component {
     getMessage() {
         var index = 0;
         var messages = _.map(this.props.messages, message => {
-            return <div key={'message' + index++} className='message'>{this.formatMessageText(message.message)}</div>;
+            return <div key={ 'message' + index++ } className='message'>{ this.formatMessageText(message.message) }</div>;
         });
 
         return messages;
@@ -42,34 +42,68 @@ class InnerMessages extends React.Component {
 
     formatMessageText(message) {
         var index = 0;
-        return _.map(message, fragment => {
+        return _.map(message, (fragment, key) => {
             if(_.isNull(fragment) || _.isUndefined(fragment)) {
                 return '';
             }
 
-            if(fragment.message) {
+            if(key === 'alert') {
+                let message = this.formatMessageText(fragment.message);
+
+                switch(fragment.type) {
+                    case 'endofround':
+                        return (
+                            <div className='seperator'>
+                                <hr />
+                                { message }
+                                <hr />
+                            </div>
+                        );
+                    case 'success':
+                        return (<div className='alert alert-success'>
+                            <span className='glyphicon glyphicon-ok-sign' />&nbsp;
+                            { message }
+                        </div>);
+                    case 'info':
+                        return (<div className='alert alert-info'>
+                            <span className='glyphicon glyphicon-info-sign' />&nbsp;
+                            { message }
+                        </div>);
+                    case 'danger':
+                        return (<div className='alert alert-danger'>
+                            <span className='glyphicon glyphicon-exclamation-sign' />&nbsp;
+                            { message }
+                        </div>);
+                    case 'warning':
+                        return (<div className='alert alert-warning'>
+                            <span className='glyphicon glyphicon-warning-sign' />&nbsp;
+                            { message }
+                        </div>);
+                }
+                return message;
+            } else if(fragment.message) {
                 return this.formatMessageText(fragment.message);
             } else if(fragment.code && fragment.label) {
                 return (
-                    <span key={index++}
+                    <span key={ index++ }
                         className='card-link'
-                        onMouseOver={this.props.onCardMouseOver.bind(this, fragment)}
-                        onMouseOut={this.props.onCardMouseOut.bind(this)}>
-                        {fragment.label}
+                        onMouseOver={ this.props.onCardMouseOver.bind(this, fragment) }
+                        onMouseOut={ this.props.onCardMouseOut.bind(this) }>
+                        { fragment.label }
                     </span>
                 );
             } else if(fragment.name) {
                 return (
-                    <div key={index++}>
+                    <div key={ index++ }>
                         <Avatar emailHash={ fragment.emailHash } forceDefault={ fragment.noAvatar } float />
-                        <span key={index++}>
-                            <b>{fragment.name}</b>
+                        <span key={ index++ }>
+                            <b>{ fragment.name }</b>
                         </span>
                     </div>
                 );
             } else if(_.contains(this.icons, fragment)) {
                 return (
-                    <span className={'icon-' + fragment} key={index++} />
+                    <span className={ 'icon-' + fragment } key={ index++ } />
                 );
             }
 
@@ -78,7 +112,7 @@ class InnerMessages extends React.Component {
     }
 
     render() {
-        return <div>{this.getMessage()}</div>;
+        return <div>{ this.getMessage() }</div>;
     }
 }
 
@@ -92,7 +126,7 @@ InnerMessages.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        socket: state.socket.socket
+        socket: state.lobby.socket
     };
 }
 

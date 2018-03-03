@@ -1,6 +1,3 @@
-/* global describe, it, expect, beforeEach, integration */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 describe('intimidate', function() {
     integration(function() {
         beforeEach(function() {
@@ -53,8 +50,6 @@ describe('intimidate', function() {
 
                 this.skipActionWindow();
 
-                this.skipActionWindow();
-
                 this.player1.clickPrompt('Apply Claim');
             });
 
@@ -88,8 +83,6 @@ describe('intimidate', function() {
 
                 this.skipActionWindow();
 
-                this.skipActionWindow();
-
                 this.player1.clickPrompt('Apply Claim');
 
                 // Skip military claim for simplicity.
@@ -118,8 +111,6 @@ describe('intimidate', function() {
 
                 this.player1.clickCard('Robert Baratheon', 'play area');
                 this.player1.clickPrompt('Done');
-
-                this.skipActionWindow();
 
                 this.skipActionWindow();
             });

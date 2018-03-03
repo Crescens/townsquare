@@ -1,24 +1,23 @@
-/* global describe, it, beforeEach, expect, jasmine */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const _ = require('underscore');
 const Player = require('../../../server/game/player.js');
 
 describe('Player', function() {
     beforeEach(function() {
-        this.gameSpy = jasmine.createSpyObj('game', ['on', 'getOtherPlayer', 'raiseEvent', 'raiseMergedEvent', 'playerDecked']);
+        this.gameSpy = jasmine.createSpyObj('game', ['on', 'raiseEvent', 'playerDecked']);
 
-        this.player = new Player('1', 'Player 1', true, this.gameSpy);
+        this.player = new Player('1', { username: 'Player 1', settings: {} }, true, this.gameSpy);
         this.player.initialise();
 
         this.selectedPlotSpy = jasmine.createSpyObj('plot', ['flipFaceup', 'moveTo', 'applyPersistentEffects']);
         this.selectedPlotSpy.uuid = '111';
         this.selectedPlotSpy.location = 'plot deck';
         this.selectedPlotSpy.controller = this.player;
+        this.selectedPlotSpy.owner = this.player;
         this.anotherPlotSpy = jasmine.createSpyObj('plot', ['flipFaceup', 'moveTo', 'applyPersistentEffects']);
         this.anotherPlotSpy.uuid = '222';
         this.anotherPlotSpy.location = 'plot deck';
         this.anotherPlotSpy.controller = this.player;
+        this.anotherPlotSpy.owner = this.player;
 
         this.player.selectedPlot = this.selectedPlotSpy;
         this.player.plotDeck = _([this.selectedPlotSpy, this.anotherPlotSpy]);
@@ -32,10 +31,6 @@ describe('Player', function() {
 
             it('should flip the selected plot face up', function() {
                 expect(this.selectedPlotSpy.flipFaceup).toHaveBeenCalled();
-            });
-
-            it('should apply effects for the selected plot', function() {
-                expect(this.selectedPlotSpy.applyPersistentEffects).toHaveBeenCalled();
             });
 
             it('should move the plot to the active plot slot', function() {
@@ -58,6 +53,7 @@ describe('Player', function() {
             this.activePlotSpy = jasmine.createSpyObj('plot', ['leavesPlay', 'moveTo']);
             this.activePlotSpy.location = 'active plot';
             this.activePlotSpy.controller = this.player;
+            this.activePlotSpy.owner = this.player;
             this.player.activePlot = this.activePlotSpy;
 
             this.player.removeActivePlot();
@@ -73,11 +69,11 @@ describe('Player', function() {
         });
 
         it('should raise the onCardLeftPlay event', function() {
-            expect(this.gameSpy.raiseMergedEvent).toHaveBeenCalledWith('onCardLeftPlay', { player: this.player, card: this.activePlotSpy });
+            expect(this.gameSpy.raiseEvent).toHaveBeenCalledWith('onCardLeftPlay', { player: this.player, card: this.activePlotSpy });
         });
 
         it('should raise the onPlotDiscarded event', function() {
-            expect(this.gameSpy.raiseMergedEvent).toHaveBeenCalledWith('onPlotDiscarded', { player: this.player, card: this.activePlotSpy });
+            expect(this.gameSpy.raiseEvent).toHaveBeenCalledWith('onPlotDiscarded', { player: this.player, card: this.activePlotSpy });
         });
     });
 

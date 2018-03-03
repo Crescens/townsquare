@@ -87,6 +87,7 @@ This will get you up and running in development mode.
 For production:
 
 ```
+npm run build-vendor
 npm run build
 NODE_ENV=production PORT=4000 node .
 ```

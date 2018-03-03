@@ -1,21 +1,25 @@
-/*global describe, it, beforeEach, expect, jasmine*/
-/* eslint no-invalid-this: 0 */
-
 const AbilityResolver = require('../../../server/game/gamesteps/abilityresolver.js');
 
 describe('AbilityResolver', function() {
     beforeEach(function() {
-        this.game = jasmine.createSpyObj('game', ['markActionAsTaken', 'popAbilityContext', 'pushAbilityContext', 'raiseEvent', 'raiseMergedEvent']);
-        this.game.raiseMergedEvent.and.callFake((name, params, handler) => {
+        this.game = jasmine.createSpyObj('game', ['markActionAsTaken', 'popAbilityContext', 'pushAbilityContext', 'raiseEvent', 'reportError']);
+        this.game.raiseEvent.and.callFake((name, params, handler) => {
             if(handler) {
                 handler(params);
             }
         });
-        this.ability = jasmine.createSpyObj('ability', ['isAction', 'isCardAbility', 'isPlayableEventAbility', 'resolveCosts', 'payCosts', 'resolveTargets', 'executeHandler']);
+        this.game.reportError.and.callFake(error => {
+            throw error;
+        });
+        this.ability = jasmine.createSpyObj('ability', ['incrementLimit', 'isAction', 'isCardAbility', 'isForcedAbility', 'isPlayableEventAbility', 'needsChooseOpponent', 'resolveCosts', 'payCosts', 'resolveTargets', 'executeHandler']);
         this.ability.isCardAbility.and.returnValue(true);
-        this.source = { source: 1 };
-        this.player = { player: 1 };
-        this.context = { foo: 'bar', player: this.player, source: this.source };
+        this.player = jasmine.createSpyObj('player', ['moveCard']);
+        this.source = jasmine.createSpyObj('source', ['createSnapshot', 'getType']);
+        this.source.owner = this.player;
+        let targets = jasmine.createSpyObj('targets', ['getTargets', 'hasTargets', 'setSelections', 'updateTargets']);
+        targets.hasTargets.and.returnValue(true);
+        targets.getTargets.and.returnValue([]);
+        this.context = { foo: 'bar', player: this.player, source: this.source, targets: targets };
         this.resolver = new AbilityResolver(this.game, this.ability, this.context);
     });
 
@@ -46,7 +50,7 @@ describe('AbilityResolver', function() {
             });
 
             it('should not raise the onCardPlayed event', function() {
-                expect(this.game.raiseMergedEvent).not.toHaveBeenCalledWith('onCardPlayed', jasmine.any(Object));
+                expect(this.game.raiseEvent).not.toHaveBeenCalledWith('onCardPlayed', jasmine.any(Object));
             });
         });
 
@@ -59,7 +63,7 @@ describe('AbilityResolver', function() {
             });
 
             it('should raise the onCardAbilityInitiated event', function() {
-                expect(this.game.raiseMergedEvent).toHaveBeenCalledWith('onCardAbilityInitiated', { player: this.player, source: this.source }, jasmine.any(Function));
+                expect(this.game.raiseEvent).toHaveBeenCalledWith('onCardAbilityInitiated', { player: this.player, source: this.source, targets: [], cannotBeCanceled: false, isForced: false }, jasmine.any(Function));
             });
         });
 
@@ -72,19 +76,38 @@ describe('AbilityResolver', function() {
             });
 
             it('should not raise the onCardAbilityInitiated event', function() {
-                expect(this.game.raiseMergedEvent).not.toHaveBeenCalledWith('onCardAbilityInitiated', jasmine.any(Object), jasmine.any(Function));
+                expect(this.game.raiseEvent).not.toHaveBeenCalledWith('onCardAbilityInitiated', jasmine.any(Object), jasmine.any(Function));
             });
         });
 
         describe('when the ability is an event being played', function() {
             beforeEach(function() {
+                this.source.eventPlacementLocation = 'event placement location';
+                this.source.location = 'being played';
                 this.ability.resolveCosts.and.returnValue([{ resolved: true, value: true }, { resolved: true, value: true }]);
                 this.ability.isPlayableEventAbility.and.returnValue(true);
+            });
+
+            it('should move the card to the specified event location', function() {
                 this.resolver.continue();
+                expect(this.player.moveCard).toHaveBeenCalledWith(this.source, 'event placement location');
             });
 
             it('should raise the onCardPlayed event', function() {
-                expect(this.game.raiseMergedEvent).toHaveBeenCalledWith('onCardPlayed', jasmine.any(Object));
+                this.resolver.continue();
+                expect(this.game.raiseEvent).toHaveBeenCalledWith('onCardPlayed', jasmine.any(Object));
+            });
+
+            describe('and the event is no longer in the "being played" state', function() {
+                beforeEach(function() {
+                    // Example: Risen from the Sea attached to character after playing it
+                    this.source.location = 'play area';
+                    this.resolver.continue();
+                });
+
+                it('should not move the card', function() {
+                    expect(this.player.moveCard).not.toHaveBeenCalled();
+                });
             });
         });
 
@@ -157,7 +180,7 @@ describe('AbilityResolver', function() {
 
         describe('when there are targets that need to be resolved', function() {
             beforeEach(function() {
-                this.targetResult = { resolved: false, name: 'foo', value: null };
+                this.targetResult = { resolved: false, name: 'foo', value: null, targetingType: 'choose' };
                 this.ability.resolveTargets.and.returnValue([this.targetResult]);
                 this.resolver.continue();
             });
@@ -184,11 +207,12 @@ describe('AbilityResolver', function() {
                     describe('and the target name is arbitrary', function() {
                         beforeEach(function() {
                             this.targetResult.name = 'foo';
+                            this.context.targets.getTargets.and.returnValue([this.target]);
                             this.resolver.continue();
                         });
 
-                        it('should add the target to context.targets', function() {
-                            expect(this.context.targets.foo).toBe(this.target);
+                        it('should set target selections', function() {
+                            expect(this.context.targets.setSelections).toHaveBeenCalledWith([jasmine.objectContaining({ name: 'foo', value: this.target })]);
                         });
 
                         it('should not add the target directly to context', function() {
@@ -198,16 +222,21 @@ describe('AbilityResolver', function() {
                         it('should execute the handler', function() {
                             expect(this.ability.executeHandler).toHaveBeenCalledWith(this.context);
                         });
+
+                        it('should raise the onCardAbilityInitiated event with appropriate targets', function() {
+                            expect(this.game.raiseEvent).toHaveBeenCalledWith('onCardAbilityInitiated', { player: this.player, source: this.source, targets: [this.target], cannotBeCanceled: false, isForced: false }, jasmine.any(Function));
+                        });
                     });
 
                     describe('and the target name is "target"', function() {
                         beforeEach(function() {
                             this.targetResult.name = 'target';
+                            this.context.targets.defaultTarget = this.target;
                             this.resolver.continue();
                         });
 
-                        it('should add the target to context.targets', function() {
-                            expect(this.context.targets.target).toBe(this.target);
+                        it('should set target selections', function() {
+                            expect(this.context.targets.setSelections).toHaveBeenCalledWith([jasmine.objectContaining({ value: this.target })]);
                         });
 
                         it('should add the target directly to context', function() {
@@ -229,6 +258,40 @@ describe('AbilityResolver', function() {
                     it('should not execute the handler', function() {
                         expect(this.ability.executeHandler).not.toHaveBeenCalled();
                     });
+                });
+            });
+        });
+
+        describe('when an exception occurs', function() {
+            beforeEach(function() {
+                this.error = new Error('something bad');
+                this.game.reportError.and.callFake(() => {});
+                this.ability.resolveCosts.and.callFake(() => {
+                    throw this.error;
+                });
+            });
+
+            it('should not propogate the error', function() {
+                expect(() => this.resolver.continue()).not.toThrow();
+            });
+
+            it('should return true to complete the resolver pipeline', function() {
+                expect(this.resolver.continue()).toBe(true);
+            });
+
+            it('should report the error', function() {
+                this.resolver.continue();
+                expect(this.game.reportError).toHaveBeenCalledWith(jasmine.any(Error));
+            });
+
+            describe('when the current ability context is for this ability', function() {
+                beforeEach(function() {
+                    this.game.currentAbilityContext = { source: 'card', card: this.context.source };
+                });
+
+                it('should pop the current context', function() {
+                    this.resolver.continue();
+                    expect(this.game.popAbilityContext).toHaveBeenCalled();
                 });
             });
         });

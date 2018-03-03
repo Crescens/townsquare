@@ -1,9 +1,13 @@
 /*global user, authToken */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import configureStore from './configureStore';
+<<<<<<< HEAD
 import {navigate, login} from './actions';
+=======
+import { navigate, login } from './actions';
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 import 'bootstrap/dist/js/bootstrap';
 import ReduxToastr from 'react-redux-toastr';
 import { AppContainer } from 'react-hot-loader';
@@ -24,17 +28,20 @@ if(typeof user !== 'undefined') {
 const render = () => {
     const Application = require('./Application.jsx').default;
     ReactDOM.render(<AppContainer>
-        <Provider store={store}>
-            <div>
+        <Provider store={ store }>
+            <div className='body'>
                 <ReduxToastr
-                    timeOut={4000}
+                    timeOut={ 4000 }
                     newestOnTop
                     preventDuplicates
                     position='top-right'
                     transitionIn='fadeIn'
+<<<<<<< HEAD
                     transitionOut='fadeOut'/>
+=======
+                    transitionOut='fadeOut' />
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
                 <Application />
-                <DevTools />
             </div>
         </Provider>
     </AppContainer>, document.getElementById('component'));

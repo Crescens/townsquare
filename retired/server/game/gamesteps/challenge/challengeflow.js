@@ -5,7 +5,7 @@ const SimpleStep = require('../simplestep.js');
 const ChooseStealthTargets = require('./choosestealthtargets.js');
 const ApplyClaim = require('./applyclaim.js');
 const ActionWindow = require('../actionwindow.js');
-const GameKeywords = require('../../gamekeywords.js');
+const KeywordWindow = require('../keywordwindow.js');
 
 class ChallengeFlow extends BaseStep {
     constructor(game, challenge) {
@@ -14,6 +14,7 @@ class ChallengeFlow extends BaseStep {
         this.pipeline = new GamePipeline();
         this.pipeline.initialise([
             new SimpleStep(this.game, () => this.resetCards()),
+            new SimpleStep(this.game, () => this.recalculateEffects()),
             new SimpleStep(this.game, () => this.announceChallenge()),
             new SimpleStep(this.game, () => this.promptForAttackers()),
             new SimpleStep(this.game, () => this.chooseStealthTargets()),
@@ -26,8 +27,7 @@ class ChallengeFlow extends BaseStep {
             new SimpleStep(this.game, () => this.determineWinner()),
             new SimpleStep(this.game, () => this.unopposedPower()),
             new SimpleStep(this.game, () => this.beforeClaim()),
-            new SimpleStep(this.game, () => this.applyKeywords()),
-            new SimpleStep(this.game, () => this.completeChallenge())
+            () => new KeywordWindow(this.game, this.challenge)
         ]);
     }
 
@@ -35,18 +35,27 @@ class ChallengeFlow extends BaseStep {
         this.challenge.resetCards();
     }
 
+    recalculateEffects() {
+        // Explicit effect recalculation is needed here since conditions that
+        // watch the currentChallenge property need recalculation before
+        // attackers are chosen, but the challenge initiation event isn't fired
+        // until after attackers have been chosen.
+        this.game.effectEngine.reapplyStateDependentEffects();
+    }
+
     announceChallenge() {
         this.game.addMessage('{0} is initiating a {1} challenge', this.challenge.attackingPlayer, this.challenge.challengeType);
     }
 
     promptForAttackers() {
-        var title = 'Select challenge attackers';
-        if(this.challenge.attackingPlayer.challengerLimit !== 0) {
-            title += ' (limit ' + this.challenge.attackingPlayer.challengerLimit + ')';
+        let title = 'Select challenge attackers';
+        let attackerMax = this.challenge.attackingPlayer.attackerLimits.getMax();
+        if(attackerMax !== 0) {
+            title += ' (max ' + attackerMax + ')';
         }
 
         this.game.promptForSelect(this.challenge.attackingPlayer, {
-            numCards: this.challenge.attackingPlayer.challengerLimit,
+            numCards: attackerMax,
             multiSelect: true,
             activePromptTitle: title,
             waitingPromptTitle: 'Waiting for opponent to select attackers',
@@ -61,7 +70,17 @@ class ChallengeFlow extends BaseStep {
     }
 
     chooseAttackers(player, attackers) {
+        this.attackersToKneel = [];
         this.challenge.addAttackers(attackers);
+
+        _.each(attackers, card => {
+            if(!card.kneeled && !card.challengeOptions.doesNotKneelAs['attacker']) {
+                this.game.applyGameAction('kneel', card, card => {
+                    card.kneeled = true;
+                    this.attackersToKneel.push(card);
+                });
+            }
+        });
 
         return true;
     }
@@ -77,16 +96,29 @@ class ChallengeFlow extends BaseStep {
             { name: 'onChallengeInitiated', params: { challenge: this.challenge } },
             { name: 'onAttackersDeclared', params: { challenge: this.challenge } }
         ];
+
+        let attackerEvents = _.map(this.challenge.attackers, card => {
+            return { name: 'onDeclaredAsAttacker', params: { card: card } };
+        });
+
+        let kneelEvents = _.map(this.attackersToKneel, card => {
+            return { name: 'onCardKneeled', params: { player: this.challenge.attackingPlayer, card: card} };
+        });
+
         let stealthEvents = _.map(this.challenge.stealthData, stealth => {
             return { name: 'onBypassedByStealth', params: { challenge: this.challenge, source: stealth.source, target: stealth.target } };
         });
-        this.game.raiseAtomicEvent(events.concat(stealthEvents));
+
+        this.game.raiseAtomicEvent(events.concat(attackerEvents).concat(stealthEvents).concat(kneelEvents));
+
+        this.attackersToKneel = undefined;
     }
 
     announceAttackerStrength() {
         // Explicitly recalculate strength in case an effect has modified character strength.
         this.challenge.calculateStrength();
-        this.game.addMessage('{0} has initiated a {1} challenge with strength {2}', this.challenge.attackingPlayer, this.challenge.challengeType, this.challenge.attackerStrength);
+        this.game.addMessage('{0} has initiated a {1} challenge against {2} with strength {3}', this.challenge.attackingPlayer,
+            this.challenge.challengeType, this.challenge.defendingPlayer, this.challenge.attackerStrength);
     }
 
     promptForDefenders() {
@@ -96,35 +128,43 @@ class ChallengeFlow extends BaseStep {
 
         this.forcedDefenders = this.challenge.defendingPlayer.filterCardsInPlay(card => {
             return card.getType() === 'character' &&
-                   card.canDeclareAsDefender(this.challenge.challengeType) &&
-                   card.challengeOptions.mustBeDeclaredAsDefender;
+                card.canDeclareAsDefender(this.challenge.challengeType) &&
+                card.challengeOptions.mustBeDeclaredAsDefender;
         });
 
-        let defenderLimit = this.challenge.defendingPlayer.challengerLimit;
-        let selectableLimit = defenderLimit;
+        let defenderMaximum = this.challenge.defendingPlayer.defenderLimits.getMax();
+        let defenderMinimum = this.challenge.defendingPlayer.defenderLimits.getMin();
+        let selectableLimit = defenderMaximum;
 
         if(!_.isEmpty(this.forcedDefenders)) {
-            if(this.forcedDefenders.length === defenderLimit) {
-                this.game.addMessage('{0} {1} automatically declared as {2}', 
-                                      this.forcedDefenders, this.forcedDefenders.length > 1 ? 'are' : 'is', this.forcedDefenders.length > 1 ? 'defenders' : 'defender');
-                
+            if(this.forcedDefenders.length === defenderMaximum) {
+                this.game.addMessage('{0} {1} automatically declared as {2}',
+                    this.forcedDefenders, this.forcedDefenders.length > 1 ? 'are' : 'is', this.forcedDefenders.length > 1 ? 'defenders' : 'defender');
+
                 this.chooseDefenders([]);
                 return;
             }
 
-            if(this.forcedDefenders.length < defenderLimit || defenderLimit === 0) {
-                this.game.addMessage('{0} {1} automatically declared as {2}', 
-                                      this.forcedDefenders, this.forcedDefenders.length > 1 ? 'are' : 'is', this.forcedDefenders.length > 1 ? 'defenders' : 'defender');
+            if(this.forcedDefenders.length < defenderMaximum || defenderMaximum === 0) {
+                this.game.addMessage('{0} {1} automatically declared as {2}',
+                    this.forcedDefenders, this.forcedDefenders.length > 1 ? 'are' : 'is', this.forcedDefenders.length > 1 ? 'defenders' : 'defender');
 
-                if(defenderLimit !== 0) {
+                if(defenderMaximum !== 0) {
                     selectableLimit -= this.forcedDefenders.length;
                 }
             }
         }
 
         let title = 'Select defenders';
-        if(defenderLimit !== 0) {
-            title += ' (limit ' + defenderLimit + ')';
+        let restrictions = [];
+        if(defenderMinimum !== 0) {
+            restrictions.push(`min ${defenderMinimum}`);
+        }
+        if(defenderMaximum !== 0) {
+            restrictions.push(`max ${defenderMaximum}`);
+        }
+        if(restrictions.length !== 0) {
+            title += ` (${restrictions.join(', ')})`;
         }
 
         this.game.promptForSelect(this.challenge.defendingPlayer, {
@@ -139,9 +179,10 @@ class ChallengeFlow extends BaseStep {
     }
 
     allowAsDefender(card) {
-        return this.challenge.defendingPlayer === card.controller && 
-               card.canDeclareAsDefender(this.challenge.challengeType) &&
-               this.mustBeDeclaredAsDefender(card);
+        return this.challenge.defendingPlayer === card.controller &&
+            card.canDeclareAsDefender(this.challenge.challengeType) &&
+            this.mustBeDeclaredAsDefender(card) &&
+            !this.challenge.isDefending(card);
     }
 
     mustBeDeclaredAsDefender(card) {
@@ -149,8 +190,8 @@ class ChallengeFlow extends BaseStep {
             return true;
         }
 
-        let defenderLimit = this.challenge.defendingPlayer.challengerLimit;
-        if(this.forcedDefenders.length < defenderLimit || defenderLimit === 0) {
+        let defenderMax = this.challenge.defendingPlayer.defenderLimits.getMax();
+        if(this.forcedDefenders.length < defenderMax || defenderMax === 0) {
             return !this.forcedDefenders.includes(card);
         }
 
@@ -158,22 +199,66 @@ class ChallengeFlow extends BaseStep {
     }
 
     chooseDefenders(defenders) {
-        let defenderLimit = this.challenge.defendingPlayer.challengerLimit;
-        if(this.forcedDefenders.length <= defenderLimit || defenderLimit === 0) {
+        let defendingPlayer = this.challenge.defendingPlayer;
+        let defenderMaximum = defendingPlayer.defenderLimits.getMax();
+        let defenderMinimum = defendingPlayer.defenderLimits.getMin();
+        if(this.forcedDefenders.length <= defenderMaximum || defenderMaximum === 0) {
             defenders = defenders.concat(this.forcedDefenders);
         }
 
+        if(!this.hasMetDefenderMinimum(defenders)) {
+            this.game.addAlert('danger', '{0} did not declare at least {1} defender but had characters to do so', defendingPlayer, defenderMinimum);
+        }
+
+        let defendersToKneel = [];
         this.challenge.addDefenders(defenders);
 
-        this.game.raiseEvent('onDefendersDeclared', this.challenge);
+        _.each(defenders, card => {
+            if(!card.kneeled && !card.challengeOptions.doesNotKneelAs['defender']) {
+                this.game.applyGameAction('kneel', card, card => {
+                    card.kneeled = true;
+                    defendersToKneel.push(card);
+                });
+            }
+        });
+
+        let events = [
+            { name: 'onDefendersDeclared', params: { challenge: this.challenge } }
+        ];
+
+        let defenderEvents = _.map(defenders, card => {
+            return { name: 'onDeclaredAsDefender', params: { card: card } };
+        });
+
+        let kneelEvents = _.map(defendersToKneel, card => {
+            return { name: 'onCardKneeled', params: { player: this.challenge.defendingPlayer, card: card} };
+        });
+
+        this.game.raiseAtomicEvent(events.concat(defenderEvents).concat(kneelEvents));
+
+        defendersToKneel = undefined;
 
         return true;
+    }
+
+    hasMetDefenderMinimum(defenders) {
+        let defendingPlayer = this.challenge.defendingPlayer;
+        let defenderMinimum = defendingPlayer.defenderLimits.getMin();
+
+        if(defenderMinimum === 0) {
+            return true;
+        }
+
+        let potentialDefenders = defendingPlayer.getNumberOfCardsInPlay(card => this.allowAsDefender(card));
+        let actualMinimum = Math.min(defenderMinimum, potentialDefenders);
+
+        return defenders.length >= actualMinimum;
     }
 
     announceDefenderStrength() {
         // Explicitly recalculate strength in case an effect has modified character strength.
         this.challenge.calculateStrength();
-        if(this.challenge.defenderStrength > 0) {
+        if(this.challenge.defenderStrength > 0 || this.challenge.defenders.length > 0) {
             this.game.addMessage('{0} has defended with strength {1}', this.challenge.defendingPlayer, this.challenge.defenderStrength);
         } else {
             this.game.addMessage('{0} does not defend the challenge', this.challenge.defendingPlayer);
@@ -190,12 +275,7 @@ class ChallengeFlow extends BaseStep {
                 this.challenge.winner, this.challenge.challengeType, this.challenge.winnerStrength, this.challenge.loserStrength);
         }
 
-        this.game.raiseEvent('afterChallenge', this.challenge);
-
-        // Only open a winner action window if a winner / loser was determined.
-        if(this.challenge.winner) {
-            this.game.queueStep(new ActionWindow(this.game, 'After winner determined', 'winnerDetermined'));
-        }
+        this.game.raiseEvent('afterChallenge', { challenge: this.challenge });
     }
 
     unopposedPower() {
@@ -203,11 +283,11 @@ class ChallengeFlow extends BaseStep {
             if(this.challenge.winner.cannotGainChallengeBonus) {
                 this.game.addMessage('{0} won the challenge unopposed but cannot gain challenge bonuses', this.challenge.winner);
             } else {
-                this.game.addMessage('{0} has gained 1 power from an unopposed challenge', this.challenge.winner);
-                this.game.addPower(this.challenge.winner, 1);
+                this.game.raiseEvent('onUnopposedGain', { challenge: this.challenge }, () => {
+                    this.game.addMessage('{0} has gained 1 power from an unopposed challenge', this.challenge.winner);
+                    this.game.addPower(this.challenge.winner, 1);
+                });
             }
-
-            this.game.raiseEvent('onUnopposedWin', this.challenge);
         }
     }
 
@@ -238,7 +318,7 @@ class ChallengeFlow extends BaseStep {
             return false;
         }
 
-        this.game.raiseEvent('onClaimApplied', this.challenge, () => {
+        this.game.raiseEvent('onClaimApplied', { player: this.challenge.winner, challenge: this.challenge }, () => {
             this.game.queueStep(new ApplyClaim(this.game, this.challenge));
         });
 
@@ -249,43 +329,6 @@ class ChallengeFlow extends BaseStep {
         this.game.addMessage('{0} continues without applying claim', player, this);
 
         return true;
-    }
-
-    applyKeywords() {
-        const challengeKeywords = ['insight', 'intimidate', 'pillage', 'renown'];
-        let winnerCards = this.challenge.getWinnerCards();
-        let appliedIntimidate = false;
-
-        _.each(winnerCards, card => {
-            let context = { game: this.game, challenge: this.challenge, source: card };
-
-            _.each(challengeKeywords, keyword => {
-                // It is necessary to check whether intimidate has been applied
-                // here instead of in the ability class because the individual
-                // keywords are resolved asynchronously but are queued up
-                // synchronously here. So two intimidates could be queued when
-                // only one is allowed.
-                if(keyword === 'intimidate' && appliedIntimidate) {
-                    return;
-                }
-
-                let ability = GameKeywords[keyword];
-                if(card.hasKeyword(keyword) && ability.meetsRequirements(context)) {
-                    appliedIntimidate = appliedIntimidate || (keyword === 'intimidate');
-                    this.game.resolveAbility(ability, context);
-                }
-            });
-
-            this.game.checkWinCondition(this.challenge.winner);
-        });
-    }
-
-    completeChallenge() {
-        this.game.raiseEvent('onChallengeFinished', this.challenge);
-
-        this.resetCards();
-
-        this.challenge.finish();
     }
 
     isComplete() {

@@ -30,7 +30,8 @@ class Card extends React.Component {
             vengeance: 'N',
             ear: 'E',
             venom: 'M',
-            kiss: 'K'
+            kiss: 'K',
+            bell: 'L'
         };
     }
 
@@ -103,7 +104,7 @@ class Card extends React.Component {
             }
         }
 
-        target.css({left: this.state.touchStart.left + 'px', top: this.state.touchStart.top + 'px'});
+        target.css({ left: this.state.touchStart.left + 'px', top: this.state.touchStart.top + 'px' });
         event.currentTarget.style.position = 'initial';
     }
 
@@ -116,7 +117,7 @@ class Card extends React.Component {
         event.stopPropagation();
 
         if(this.isAllowedMenuSource() && !_.isEmpty(this.props.card.menu)) {
-            this.setState({showMenu: !this.state.showMenu});
+            this.setState({ showMenu: !this.state.showMenu });
 
             return;
         }
@@ -129,38 +130,42 @@ class Card extends React.Component {
     onMenuItemClick(menuItem) {
         if(this.props.onMenuItemClick) {
             this.props.onMenuItemClick(this.props.card, menuItem);
-            this.setState({showMenu: !this.state.showMenu});
+            this.setState({ showMenu: !this.state.showMenu });
         }
     }
 
     getCountersForCard(card) {
-        var counters = {};
+        let counters = [];
 
-        counters['card-power'] = card.power ? { count: card.power, fade: card.type === 'attachment', shortName: 'P' } : undefined;
-        counters['strength'] = card.baseStrength !== card.strength ? { count: card.strength, fade: card.type === 'attachment', shortName: 'S' } : undefined;
-        counters['dupe'] = card.dupes && card.dupes.length > 0 ? { count: card.dupes.length, fade: card.type === 'attachment', shortName: 'D' } : undefined;
+        if(card.power) {
+            counters.push({ name: 'card-power', count: card.power, fade: card.type === 'attachment', shortName: 'P' });
+        }
 
-        _.map(card.iconsAdded, icon => {
-            counters[icon] = { count: 0, cancel: false };
+        if(card.baseStrength !== card.strength) {
+            counters.push({ name: 'strength', count: card.strength, fade: card.type === 'attachment', shortName: 'S' });
+        }
+
+        if(card.dupes && card.dupes.length > 0) {
+            counters.push({ name: 'dupe', count: card.dupes.length, fade: card.type === 'attachment', shortName: 'D' });
+        }
+
+        _.each(card.iconsAdded, icon => {
+            counters.push({ name: icon, count: 0, cancel: false });
         });
 
-        _.map(card.iconsRemoved, icon => {
-            counters[icon] = { count: 0, cancel: true };
+        _.each(card.iconsRemoved, icon => {
+            counters.push({ name: icon, count: 0, cancel: true });
         });
 
         _.each(card.tokens, (token, key) => {
-            counters[key] = { count: token, fade: card.type === 'attachment', shortName: this.shortNames[key] };
+            counters.push({ name: key, count: token, fade: card.type === 'attachment', shortName: this.shortNames[key] });
         });
 
         _.each(card.attachments, attachment => {
-            _.extend(counters, this.getCountersForCard(attachment));
+            counters = counters.concat(this.getCountersForCard(attachment));
         });
 
-        var filteredCounters = _.omit(counters, counter => {
-            return _.isUndefined(counter) || _.isNull(counter) || counter < 0;
-        });
-
-        return filteredCounters;
+        return _.reject(counters, counter => counter.count < 0);
     }
 
     getAttachments() {
@@ -170,12 +175,14 @@ class Card extends React.Component {
 
         var index = 1;
         var attachments = _.map(this.props.card.attachments, attachment => {
-            var returnedAttachment = (<Card key={attachment.uuid} source={this.props.source} card={attachment} className={'attachment attachment-' + index} wrapped={false}
-                            onMouseOver={this.props.disableMouseOver ? null : this.onMouseOver.bind(this, attachment)}
-                            onMouseOut={this.props.disableMouseOver ? null : this.onMouseOut}
-                            onClick={this.props.onClick}
-                            onMenuItemClick={this.props.onMenuItemClick}
-                            onDragStart={ev => this.onCardDragStart(ev, attachment, this.props.source)} />);
+            var returnedAttachment = (<Card key={ attachment.uuid } source={ this.props.source } card={ attachment }
+                className={ 'attachment attachment-' + index } wrapped={ false }
+                onMouseOver={ this.props.disableMouseOver ? null : this.onMouseOver.bind(this, attachment) }
+                onMouseOut={ this.props.disableMouseOver ? null : this.onMouseOut }
+                onClick={ this.props.onClick }
+                onMenuItemClick={ this.props.onMenuItemClick }
+                onDragStart={ ev => this.onCardDragStart(ev, attachment, this.props.source) }
+                size={ this.props.size } />);
 
             index += 1;
 
@@ -201,9 +208,11 @@ class Card extends React.Component {
 
         var index = 1;
         var dupes = _.map(facedownDupes, dupe => {
-            var returnedDupe = (<Card key={dupe.uuid} className={'card-dupe card-dupe-' + index} source={this.props.source} card={dupe} wrapped={false}
-                            onMouseOver={this.props.disableMouseOver ? null : this.onMouseOver.bind(this, dupe)}
-                            onMouseOut={this.props.disableMouseOver ? null : this.onMouseOut} />);
+            var returnedDupe = (<Card key={ dupe.uuid } className={ 'card-dupe card-dupe-' + index }
+                source={ this.props.source } card={ dupe } wrapped={ false }
+                onMouseOver={ this.props.disableMouseOver ? null : this.onMouseOver.bind(this, dupe) }
+                onMouseOut={ this.props.disableMouseOver ? null : this.onMouseOut }
+                size={ this.props.size } />);
 
             index += 1;
 
@@ -218,7 +227,7 @@ class Card extends React.Component {
             return null;
         }
 
-        return (<div className='card-order'>{this.props.card.order}</div>);
+        return (<div className='card-order'>{ this.props.card.order }</div>);
     }
 
     showMenu() {
@@ -255,6 +264,15 @@ class Card extends React.Component {
 
         if(!this.props.card) {
             return <div />;
+        }
+
+        if(this.props.size !== 'normal') {
+            cardClass += ' ' + this.props.size;
+            imageClass += ' ' + this.props.size;
+        }
+
+        if(this.props.card.code && this.props.card.code.startsWith('custom')) {
+            cardClass += ' custom-card';
         }
 
         cardClass += ' card-type-' + this.props.card.type;
@@ -297,6 +315,7 @@ class Card extends React.Component {
         }
 
         return (
+<<<<<<< HEAD
                 <div className='card-frame' ref='cardFrame'
                     onTouchMove={ev => this.onTouchMove(ev)}
                     onTouchEnd={ev => this.onTouchEnd(ev)}
@@ -313,18 +332,44 @@ class Card extends React.Component {
                             <img className={imageClass} src={'/img/cards/' + (!this.isFacedown() ? (this.props.card.code + '.jpg') : 'cardback.jpg')} />
                         </div>
                         { this.showCounters() ? <CardCounters counters={ this.getCountersForCard(this.props.card) } /> : null }
+=======
+            <div className='card-frame' ref='cardFrame'
+                onTouchMove={ ev => this.onTouchMove(ev) }
+                onTouchEnd={ ev => this.onTouchEnd(ev) }
+                onTouchStart={ ev => this.onTouchStart(ev) }>
+                { this.getCardOrder() }
+                <div className={ cardClass }
+                    onMouseOver={ this.props.disableMouseOver ? null : this.onMouseOver.bind(this, this.props.card) }
+                    onMouseOut={ this.props.disableMouseOver ? null : this.onMouseOut }
+                    onClick={ ev => this.onClick(ev, this.props.card) }
+                    onDragStart={ ev => this.onCardDragStart(ev, this.props.card, this.props.source) }
+                    draggable>
+                    <div>
+                        <span className='card-name'>{ this.props.card.name }</span>
+                        <img className={ imageClass } src={ '/img/cards/' + (!this.isFacedown() ? (this.props.card.code + '.png') : 'cardback.jpg') } />
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
                     </div>
-                    { this.showMenu() ? <CardMenu menu={ this.props.card.menu } onMenuItemClick={ this.onMenuItemClick } /> : null }
-                </div>);
+                    { this.showCounters() ? <CardCounters counters={ this.getCountersForCard(this.props.card) } /> : null }
+                </div>
+                { this.showMenu() ? <CardMenu menu={ this.props.card.menu } onMenuItemClick={ this.onMenuItemClick } /> : null }
+            </div>);
     }
 
     render() {
         if(this.props.wrapped) {
             return (
+<<<<<<< HEAD
                     <div className='card-wrapper' style={this.props.style}>
                         {this.getCard()}
                         {this.getAttachments()}
                     </div>);
+=======
+                <div className='card-wrapper' style={ this.props.style }>
+                    { this.getCard() }
+                    { this.getDupes() }
+                    { this.getAttachments() }
+                </div>);
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         }
 
         return this.getCard();
@@ -337,16 +382,26 @@ Card.propTypes = {
         attached: PropTypes.bool,
         attachments: PropTypes.array,
         baseStrength: PropTypes.number,
+<<<<<<< HEAD
         booted: PropTypes.bool,
+=======
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         code: PropTypes.string,
         controlled: PropTypes.bool,
         dupes: PropTypes.array,
         facedown: PropTypes.bool,
+<<<<<<< HEAD
         gamelocation: PropTypes.string,
+=======
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         iconsAdded: PropTypes.array,
         iconsRemoved: PropTypes.array,
         inChallenge: PropTypes.bool,
         inDanger: PropTypes.bool,
+<<<<<<< HEAD
+=======
+        kneeled: PropTypes.bool,
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         menu: PropTypes.array,
         name: PropTypes.string,
         new: PropTypes.bool,
@@ -368,8 +423,15 @@ Card.propTypes = {
     onMenuItemClick: PropTypes.func,
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,
+<<<<<<< HEAD
     orientation: PropTypes.oneOf(['horizontal', 'booted', 'vertical']),
     source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'boothill pile', 'draw deck', 'draw hand', 'attachment', 'legend', 'outfit', 'additional']).isRequired,
+=======
+    orientation: PropTypes.oneOf(['horizontal', 'kneeled', 'vertical']),
+    size: PropTypes.string,
+    source: PropTypes.oneOf(['hand', 'discard pile', 'play area', 'dead pile', 'draw deck', 'plot deck', 'revealed plots', 'selected plot', 'attachment', 'agenda', 'faction',
+        'additional', 'scheme plots']).isRequired,
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     style: PropTypes.object,
     wrapped: PropTypes.bool
 };

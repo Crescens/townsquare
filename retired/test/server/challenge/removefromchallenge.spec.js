@@ -1,28 +1,23 @@
-/*global describe, it, beforeEach, expect, spyOn, jasmine*/
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const Challenge = require('../../../server/game/challenge.js');
 const Player = require('../../../server/game/player.js');
 const DrawCard = require('../../../server/game/drawcard.js');
 
 describe('Challenge', function() {
     beforeEach(function() {
-        this.gameSpy = jasmine.createSpyObj('game', ['applyGameAction', 'on', 'raiseEvent', 'raiseMergedEvent']);
+        this.gameSpy = jasmine.createSpyObj('game', ['applyGameAction', 'on', 'raiseEvent']);
         this.gameSpy.applyGameAction.and.callFake((type, card, handler) => {
             handler(card);
         });
 
-        this.attackingPlayer = new Player('1', 'Player 1', true, this.gameSpy);
-        spyOn(this.attackingPlayer, 'winChallenge');
-        this.defendingPlayer = new Player('2', 'Player 2', true, this.gameSpy);
-        spyOn(this.defendingPlayer, 'winChallenge');
+        this.attackingPlayer = new Player('1', { username: 'Player 1', settings: {} }, true, this.gameSpy);
+        this.defendingPlayer = new Player('2', { username: 'Player 2', settings: {} }, true, this.gameSpy);
 
         this.attackerCard = new DrawCard(this.attackingPlayer, {});
         spyOn(this.attackerCard, 'getStrength').and.returnValue(5);
         this.defenderCard = new DrawCard(this.defendingPlayer, {});
         spyOn(this.defenderCard, 'getStrength').and.returnValue(3);
 
-        this.challenge = new Challenge(this.gameSpy, this.attackingPlayer, this.defendingPlayer, 'military');
+        this.challenge = new Challenge(this.gameSpy, { attackingPlayer: this.attackingPlayer, defendingPlayer: this.defendingPlayer, challengeType: 'military' });
         this.challenge.addAttackers([this.attackerCard]);
         this.challenge.addDefenders([this.defenderCard]);
     });

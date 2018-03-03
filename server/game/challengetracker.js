@@ -1,77 +1,77 @@
 const _ = require('underscore');
 
 class ChallengeTracker {
-    constructor() {
-        this.complete = 0;
+    constructor(player) {
+        this.player = player;
         this.challengeTypes = {
             military: {
-                performed: 0,
-                max: 1,
-                won: 0,
-                lost: 0
+                max: 1
             },
             intrigue: {
-                performed: 0,
-                max: 1,
-                won: 0,
-                lost: 0
+                max: 1
             },
             power: {
-                performed: 0,
-                max: 1,
-                won: 0,
-                lost: 0
-            },
-            defender: {
-                performed: 0,
-                won: 0,
-                lost: 0
-            },
-            attacker: {
-                performed: 0,
-                won: 0,
-                lost: 0
+                max: 1
             }
         };
+        this.challenges = [];
+        this.restrictions = [];
+    }
+
+    track(challenge) {
+        this.challenges.push(challenge);
     }
 
     reset() {
-        this.complete = 0;
-        this.resetForType('military');
-        this.resetForType('intrigue');
-        this.resetForType('power');
-        this.resetForType('defender');
-        this.resetForType('attacker');
+        this.challenges = [];
     }
 
-    resetForType(challengeType) {
-        this.challengeTypes[challengeType].performed = 0;
-        this.challengeTypes[challengeType].won = 0;
-        this.challengeTypes[challengeType].lost = 0;
+    getChallenges() {
+        return this.challenges;
     }
 
-    isAtMax(challengeType) {
-        if(!_.isUndefined(this.maxTotal) && this.complete >= this.maxTotal) {
-            return true;
+    canInitiate(challengeType, opponent) {
+        if(!_.isUndefined(this.maxTotal) && this.getPerformed() >= this.maxTotal) {
+            return false;
         }
 
-        if(this.challengeTypes[challengeType].cannotInitiate) {
-            return true;
+        if(this.restrictions.some(restriction => restriction.isMatch(challengeType, opponent))) {
+            return false;
         }
 
-        return this.challengeTypes[challengeType].performed >= this.challengeTypes[challengeType].max;
+        return this.getPerformed(challengeType) < this.challengeTypes[challengeType].max;
     }
 
     getWon(challengeType) {
-        return this.challengeTypes[challengeType].won;
+        return this.countChallenges(this.challengeTypePredicate(challengeType, 'winner'));
     }
 
     getLost(challengeType) {
-        return this.challengeTypes[challengeType].lost;
+        return this.countChallenges(this.challengeTypePredicate(challengeType, 'loser'));
+    }
+
+    challengeTypePredicate(challengeType, property) {
+        return challenge => {
+            if(challengeType === 'attacker') {
+                return challenge.attackingPlayer === this.player && challenge[property] === this.player;
+            }
+
+            if(challengeType === 'defender') {
+                return challenge.defendingPlayer === this.player && challenge[property] === this.player;
+            }
+
+            return challenge.challengeType === challengeType && challenge[property] === this.player;
+        };
     }
 
     getPerformed(challengeType) {
-        return this.challengeTypes[challengeType].performed;
+        return this.countChallenges(challenge => {
+            if(!challengeType) {
+                return challenge.attackingPlayer === this.player;
+            }
+
+            return challenge.challengeType === challengeType && challenge.attackingPlayer === this.player;
+        });
     }
 
     setMax(max) {
@@ -82,27 +82,26 @@ class ChallengeTracker {
         delete this.maxTotal;
     }
 
-    setCannotInitiateForType(challengeType, value) {
-        this.challengeTypes[challengeType].cannotInitiate = value;
+    addRestriction(restriction) {
+        this.restrictions.push(restriction);
     }
 
-    perform(challengeType) {
-        this.challengeTypes[challengeType].performed++;
-        this.complete++;
-    }
-
-    won(challengeType, wasAttacker) {
-        this.challengeTypes[challengeType].won++;
-        this.challengeTypes[wasAttacker ? 'attacker' : 'defender'].won++;
-    }
-
-    lost(challengeType, wasAttacker) {
-        this.challengeTypes[challengeType].lost++;
-        this.challengeTypes[wasAttacker ? 'attacker' : 'defender'].lost++;
+    removeRestriction(restriction) {
+        this.restrictions = this.restrictions.filter(r => r !== restriction);
     }
 
     modifyMaxForType(challengeType, number) {
         this.challengeTypes[challengeType].max += number;
+    }
+
+    countChallenges(predicate) {
+        return this.challenges.reduce((sum, challenge) => {
+            if(!predicate(challenge)) {
+                return sum;
+            }
+
+            return sum + 1;
+        }, 0);
     }
 }
 

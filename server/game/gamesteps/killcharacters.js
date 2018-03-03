@@ -3,11 +3,11 @@ const _ = require('underscore');
 const BaseStep = require('./basestep.js');
 
 class KillCharacters extends BaseStep {
-    constructor(game, cards, allowSave) {
+    constructor(game, cards, options) {
         super(game);
 
         this.cards = cards;
-        this.allowSave = allowSave;
+        this.options = options;
     }
 
     continue() {
@@ -20,11 +20,14 @@ class KillCharacters extends BaseStep {
             this.game.raiseSimultaneousEvent(killable, {
                 eventName: 'onCharactersKilled',
                 params: {
-                    allowSave: this.allowSave
+                    allowSave: this.options.allowSave,
+                    automaticSaveWithDupe: true,
+                    isBurn: this.options.isBurn
                 },
                 handler: event => this.handleMultipleKills(event),
                 perCardEventName: 'onCharacterKilled',
-                perCardHandler: event => this.doKill(event)
+                perCardHandler: event => this.doKill(event),
+                postHandler: () => this.promptForDeadPileOrder()
             });
             this.game.queueSimpleStep(() => {
                 _.each(killable, card => {
@@ -40,10 +43,6 @@ class KillCharacters extends BaseStep {
         _.each(event.cards, card => {
             this.automaticSave(card);
         });
-
-        _.each(this.game.getPlayersInFirstPlayerOrder(), player => {
-            this.promptPlayerForDeadPileOrder(player);
-        });
     }
 
     automaticSave(card) {
@@ -51,39 +50,47 @@ class KillCharacters extends BaseStep {
             this.event.saveCard(card);
         } else if(!card.canBeKilled()) {
             this.game.addMessage('{0} controlled by {1} cannot be killed',
-                                    card, card.controller);
+                card, card.controller);
             this.event.saveCard(card);
-        } else if(!card.dupes.isEmpty() && this.event.allowSave) {
-            if(card.controller.removeDuplicate(card)) {
-                this.game.addMessage('{0} discards a duplicate to save {1}', card.controller, card);
-                this.event.saveCard(card);
-            }
         }
     }
 
+    promptForDeadPileOrder() {
+        _.each(this.game.getPlayersInFirstPlayerOrder(), player => {
+            this.promptPlayerForDeadPileOrder(player);
+        });
+    }
+
     promptPlayerForDeadPileOrder(player) {
-        let cardsOwnedByPlayer = _.filter(this.event.cards, card => card.owner === player);
+        let cardsOwnedByPlayer = this.event.cards.filter(card => card.owner === player && card.location === 'play area');
 
         if(_.size(cardsOwnedByPlayer) <= 1) {
+            this.moveCardsToDeadPile(cardsOwnedByPlayer);
             return;
         }
 
         this.game.promptForSelect(player, {
             ordered: true,
-            multiSelect: true,
+            mode: 'exactly',
             numCards: _.size(cardsOwnedByPlayer),
             activePromptTitle: 'Select order to place cards in boothill pile (top first)',
             cardCondition: card => cardsOwnedByPlayer.includes(card),
             onSelect: (player, selectedCards) => {
-                if(cardsOwnedByPlayer.length !== selectedCards.length) {
-                    return false;
-                }
+                this.moveCardsToDeadPile(selectedCards.reverse());
 
-                this.event.cards = _.reject(this.event.cards, card => card.owner === player).concat(selectedCards.reverse());
-
+                return true;
+            },
+            onCancel: () => {
+                this.moveCardsToDeadPile(cardsOwnedByPlayer);
                 return true;
             }
         });
+    }
+
+    moveCardsToDeadPile(cards) {
+        for(let card of cards) {
+            card.owner.moveCard(card, 'dead pile');
+        }
     }
 
     doKill(event) {
@@ -95,7 +102,11 @@ class KillCharacters extends BaseStep {
             return;
         }
 
+<<<<<<< HEAD
         player.moveCard(card, 'boothill pile');
+=======
+        event.cardStateWhenKilled = card.createSnapshot();
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         this.game.addMessage('{0} kills {1}', player, card);
     }
 }

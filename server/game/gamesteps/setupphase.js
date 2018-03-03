@@ -8,11 +8,21 @@ class SetupPhase extends Phase {
         super(game, 'setup');
         this.initialise([
             new SimpleStep(game, () => this.prepareDecks()),
+<<<<<<< HEAD
             new SimpleStep(game, () => this.drawStartingPosse()),
             new StartingPossePrompt(game),
             new SimpleStep(game, () => this.startGame()),
             //Grift Prompt
             new SimpleStep(game, () => this.setupDone())
+=======
+            new SimpleStep(game, () => this.drawSetupHand()),
+            new KeepOrMulliganPrompt(game),
+            new SimpleStep(game, () => this.startGame()),
+            new SetupCardsPrompt(game),
+            new SimpleStep(game, () => this.setupDone()),
+            new CheckAttachmentsPrompt(game),
+            new SimpleStep(game, () => game.activatePersistentEffects())
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         ]);
     }
 
@@ -28,9 +38,15 @@ class SetupPhase extends Phase {
         });
     }
 
+<<<<<<< HEAD
     drawStartingPosse() {
         _.each(this.game.getPlayers(), player => {
             player.drawCardsToHand('hand', player.startingPosse);
+=======
+    drawSetupHand() {
+        _.each(this.game.getPlayers(), player => {
+            player.drawSetupHand();
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         });
     }
 

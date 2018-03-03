@@ -1,6 +1,3 @@
-/*global describe, it, beforeEach, expect, jasmine, afterEach */
-/*eslint camelcase: 0, no-invalid-this: 0 */
-
 const EventEmitter = require('events');
 
 const AbilityLimit = require('../../server/game/abilitylimit.js');
@@ -53,6 +50,12 @@ describe('AbilityLimit', function () {
         it('should remove the event', function() {
             this.limit.unregisterEvents(this.eventEmitterSpy);
             expect(this.eventEmitterSpy.removeListener).toHaveBeenCalledWith('onEventForReset', jasmine.any(Function));
+        });
+
+        it('should reset the count to 0', function() {
+            this.limit.increment();
+            this.limit.unregisterEvents(this.eventEmitterSpy);
+            expect(this.limit.useCount).toBe(0);
         });
     });
 

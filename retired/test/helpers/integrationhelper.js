@@ -1,7 +1,9 @@
 /* global describe, beforeEach, jasmine */
-/* eslint camelcase: 0, no-invalid-this: 0 */
+/* eslint no-invalid-this: 0 */
 
 const _ = require('underscore');
+
+require('./objectformatters.js');
 
 const DeckBuilder = require('./deckbuilder.js');
 const GameFlowWrapper = require('./gameflowwrapper.js');
@@ -9,7 +11,7 @@ const GameFlowWrapper = require('./gameflowwrapper.js');
 const ProxiedGameFlowWrapperMethods = [
     'startGame', 'keepStartingHands', 'skipSetupPhase', 'selectFirstPlayer',
     'completeMarshalPhase', 'completeChallengesPhase', 'completeDominancePhase',
-    'completeTaxationPhase', 'selectPlotOrder', 'completeSetup',
+    'selectPlotOrder', 'completeSetup',
     'skipActionWindow', 'unopposedChallenge'
 ];
 
@@ -77,16 +79,21 @@ beforeEach(function() {
     jasmine.addMatchers(customMatchers);
 });
 
-global.integration = function(definitions) {
+global.integration = function(options, definitions) {
+    if(_.isFunction(options)) {
+        definitions = options;
+        options = {};
+    }
+
     describe('integration', function() {
         beforeEach(function() {
-            this.flow = new GameFlowWrapper();
+            this.flow = new GameFlowWrapper(options);
 
             this.game = this.flow.game;
-            this.player1Object = this.game.getPlayerByName('player1');
-            this.player2Object = this.game.getPlayerByName('player2');
-            this.player1 = this.flow.player1;
-            this.player2 = this.flow.player2;
+            for(let player of this.flow.allPlayers) {
+                this[player.name] = player;
+                this[player.name + 'Object'] = this.game.getPlayerByName(player.name);
+            }
 
             _.each(ProxiedGameFlowWrapperMethods, method => {
                 this[method] = (...args) => this.flow[method].apply(this.flow, args);

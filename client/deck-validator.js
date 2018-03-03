@@ -48,11 +48,16 @@ function isCardInReleasedPack(packs, card) {
     };
 }*/
 
+function rulesForDraft(properties) {
+    return _.extend({ requiredDraw: 40, requiredPlots: 5 }, properties);
+}
+
 /**
  * Validation rule structure is as follows. All fields are optional.
  *
  * requiredDraw  - the minimum amount of cards required for the draw deck.
  * requiredPlots - the exact number of cards required for the plot deck.
+ * maxDoubledPlots - the maximum amount of plot cards that can be contained twice in the plot deck.
  * mayInclude    - function that takes a card and returns true if it is allowed in the overall deck.
  * cannotInclude - function that takes a card and return true if it is not allowed in the overall deck.
  * rules         - an array of objects containing a `condition` function that takes a deck and return true if the deck is valid for that rule, and a `message` used for errors when invalid.
@@ -129,7 +134,53 @@ const legendRules = {
                 condition: deck => getDeckCount(_(deck.drawCards).filter(cardQuantity => cardQuantity.card.type_code === 'character' && hasTrait(cardQuantity.card, 'Maester'))) >= 12
             }
         ]
+<<<<<<< HEAD
     }*/
+=======
+    },
+    // The Wars To Come
+    '10045': {
+        requiredPlots: 10,
+        maxDoubledPlots: 2
+    },
+    // Draft Agendas
+    // The Power of Wealth
+    '00001': rulesForDraft({
+        mayInclude: () => true,
+        rules: [
+            {
+                message: 'Cannot include cards from more than 1 outside faction',
+                condition: deck => {
+                    let outOfFactionCards = _.filter(deck.drawCards.concat(deck.plotCards), cardQuantity => cardQuantity.card.faction_code !== deck.faction.value && cardQuantity.card.faction_code !== 'neutral');
+                    let factions = _.map(outOfFactionCards, cardQuantity => cardQuantity.card.faction_code);
+                    return _.size(factions) <= 1;
+                }
+            }
+        ]
+    }),
+    // Protectors of the Realm
+    '00002': rulesForDraft({
+        mayInclude: card => card.type_code === 'character' && (hasTrait(card, 'Knight') || hasTrait(card, 'Army'))
+    }),
+    // Treaty
+    '00003': rulesForDraft({
+        mayInclude: () => true,
+        rules: [
+            {
+                message: 'Cannot include cards from more than 2 outside factions',
+                condition: deck => {
+                    let outOfFactionCards = _.filter(deck.drawCards.concat(deck.plotCards), cardQuantity => cardQuantity.card.faction_code !== deck.faction.value && cardQuantity.card.faction_code !== 'neutral');
+                    let factions = _.map(outOfFactionCards, cardQuantity => cardQuantity.card.faction_code);
+                    return _.size(factions) <= 2;
+                }
+            }
+        ]
+    }),
+    // Uniting the Seven Kingdoms
+    '00004': rulesForDraft({
+        mayInclude: card => card.type_code !== 'plot'
+    })
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 };
 
 class DeckValidator {
@@ -165,7 +216,7 @@ class DeckValidator {
         let cardCountByName = {};
 
         _.each(allCards, cardQuantity => {
-            cardCountByName[cardQuantity.card.name] = cardCountByName[cardQuantity.card.name] || { name: cardQuantity.card.name, limit: cardQuantity.card.deck_limit, count: 0 };
+            cardCountByName[cardQuantity.card.name] = cardCountByName[cardQuantity.card.name] || { name: cardQuantity.card.name, type: cardQuantity.card.type_code, limit: cardQuantity.card.deck_limit, count: 0 };
             cardCountByName[cardQuantity.card.name].count += cardQuantity.count;
 
             /* -- No Outfit restrictions as of TCaR
@@ -180,6 +231,15 @@ class DeckValidator {
             }
         });
 
+        if(deck.agenda && !isCardInReleasedPack(this.packs, deck.agenda)) {
+            unreleasedCards.push(deck.agenda.label + ' is not yet released');
+        }
+
+        let doubledPlots = _.filter(cardCountByName, card => card.type === 'plot' && card.count === 2);
+        if(doubledPlots.length > rules.maxDoubledPlots) {
+            errors.push('Maximum allowed number of doubled plots: ' + rules.maxDoubledPlots);
+        }
+
         _.each(cardCountByName, card => {
             if(card.count > card.limit) {
                 errors.push(card.name + ' has limit ' + card.limit);
@@ -187,9 +247,24 @@ class DeckValidator {
         });
 
         let isValid = errors.length === 0;
+        let containsDraftCards = this.isDraftCard(deck.agenda) || _.any(allCards, cardQuantity => this.isDraftCard(cardQuantity.card));
+        let status = 'Valid';
+
+        if(!isValid) {
+            status = 'Invalid';
+        } else if(containsDraftCards) {
+            status = 'Draft Cards';
+        } else if(unreleasedCards.length !== 0) {
+            status = 'Unreleased Cards';
+        }
 
         return {
+<<<<<<< HEAD
             status: !isValid ? 'Invalid' : (unreleasedCards.length === 0 ? 'Valid' : 'Unreleased Cards'),
+=======
+            status: status,
+            plotCount: plotCount,
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
             drawCount: drawCount,
             extendedStatus: errors.concat(unreleasedCards),
             isValid: isValid
@@ -198,7 +273,13 @@ class DeckValidator {
 
     getRules(deck) {
         const standardRules = {
+<<<<<<< HEAD
             requiredDraw: 52
+=======
+            requiredDraw: 60,
+            requiredPlots: 7,
+            maxDoubledPlots: 1
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
         };
         let outfitRules = this.getOutfitRules(deck.outfit);
         let legendRules = this.getLegendRules(deck);
@@ -229,6 +310,10 @@ class DeckValidator {
             rules: combinedRules
         };
         return _.extend({}, ...validators, combined);
+    }
+
+    isDraftCard(card) {
+        return card && card.pack_code === 'VDS';
     }
 }
 

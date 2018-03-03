@@ -1,23 +1,20 @@
-/*global describe, it, beforeEach, expect*/
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const _ = require('underscore');
 
 const Effects = require('../../../server/game/effects.js');
 
 const PlayableLocation = require('../../../server/game/playablelocation.js');
 
-describe('Effects.canMarshalFrom', function() {
+describe('Effects.canMarshal', function() {
     beforeEach(function() {
         this.context = {};
 
         this.player = { playableLocations: [] };
-        this.playerHand = new PlayableLocation('marshal', this.player, 'hand');
+        this.playerHand = new PlayableLocation('marshal', card => card.controller === this.player && card.location === 'hand');
         this.player.playableLocations.push(this.playerHand);
 
         this.opponent = { opponent: 1 };
 
-        this.effect = Effects.canMarshalFrom(this.opponent, 'discard pile');
+        this.effect = Effects.canMarshal(card => card.controller === this.opponent && card.location === 'discard pile');
     });
 
     describe('apply()', function() {
@@ -27,8 +24,10 @@ describe('Effects.canMarshalFrom', function() {
 
         it('should add a marshal location', function() {
             let marshalLocation = _.last(this.player.playableLocations);
-            expect(marshalLocation.location).toBe('discard pile');
-            expect(marshalLocation.player).toBe(this.opponent);
+            expect(marshalLocation.playingType).toBe('marshal');
+            expect(marshalLocation.contains({ controller: this.player, location: 'discard pile'})).toBe(false);
+            expect(marshalLocation.contains({ controller: this.opponent, location: 'hand'})).toBe(false);
+            expect(marshalLocation.contains({ controller: this.opponent, location: 'discard pile'})).toBe(true);
         });
     });
 

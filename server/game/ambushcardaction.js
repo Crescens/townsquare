@@ -12,6 +12,10 @@ class AmbushCardAction extends BaseAbility {
         this.title = 'Ambush';
     }
 
+    isAction() {
+        return true;
+    }
+
     isCardAbility() {
         return false;
     }
@@ -21,7 +25,7 @@ class AmbushCardAction extends BaseAbility {
             context.game.currentPhase === 'challenge' &&
             context.source.isAmbush() &&
             context.player.isCardInPlayableLocation(context.source, 'ambush') &&
-            context.player.canPutIntoPlay(context.source) &&
+            context.player.canPutIntoPlay(context.source, 'ambush') &&
             context.source.getType() !== 'event'
         );
     }

@@ -1,6 +1,3 @@
-/* global describe, it, expect, beforeEach, integration */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 describe('take control', function() {
     integration(function() {
         describe('when using an attachment to take control', function() {
@@ -26,7 +23,7 @@ describe('take control', function() {
                 this.player2.clickCard(this.dupe);
 
                 this.completeSetup();
-                expect(this.paxter.dupes.size()).toBe(1);                
+                expect(this.paxter.dupes.size()).toBe(1);
 
                 this.player1.selectPlot('Sneak Attack');
                 this.player2.selectPlot('Sneak Attack');
@@ -44,7 +41,6 @@ describe('take control', function() {
                     // Complete round 1
                     this.completeMarshalPhase();
                     this.completeChallengesPhase();
-                    this.completeTaxationPhase();
 
                     // Select plots for round 2
                     this.player1.selectPlot('Valar Morghulis');
@@ -100,7 +96,6 @@ describe('take control', function() {
                     // Complete round 1
                     this.completeMarshalPhase();
                     this.completeChallengesPhase();
-                    this.completeTaxationPhase();
 
                     // Select plots for round 2
                     this.player1.selectPlot('A Noble Cause');
@@ -161,12 +156,11 @@ describe('take control', function() {
                 this.player1.clickPrompt('Power');
                 this.player1.clickCard(this.euron);
                 this.player1.clickPrompt('Done');
-                
-                this.skipActionWindow();
-                
-                this.player2.clickPrompt('Done');
 
                 this.skipActionWindow();
+
+                this.player2.clickPrompt('Done');
+
                 this.skipActionWindow();
 
                 this.player1.clickPrompt('Apply Claim');
@@ -181,9 +175,6 @@ describe('take control', function() {
                 // Complete challenges phase
                 this.player1.clickPrompt('Done');
                 this.player2.clickPrompt('Done');
-
-                // Complete round
-                this.completeTaxationPhase();
 
                 // Round 2
                 this.player1.selectPlot('Sneak Attack');
@@ -255,7 +246,6 @@ describe('take control', function() {
 
                     this.player2.clickPrompt('Done');
 
-                    this.skipActionWindow();
                     this.skipActionWindow();
 
                     this.player1.clickPrompt('Apply Claim');
@@ -373,7 +363,6 @@ describe('take control', function() {
                 this.player2.clickPrompt('Done');
 
                 this.skipActionWindow();
-                this.skipActionWindow();
 
                 this.player1.clickPrompt('Apply Claim');
 
@@ -396,14 +385,13 @@ describe('take control', function() {
                 this.player1.clickPrompt('Done');
 
                 this.skipActionWindow();
-                this.skipActionWindow();
 
                 this.player2.clickPrompt('Apply Claim');
 
                 this.player1.clickCard(knight);
 
                 this.player1.clickPrompt('Iron Mines');
-                expect(this.player1).toHavePrompt('Select character to save');
+                expect(this.player1).toHavePrompt('Select a character');
                 this.player1.clickCard(knight);
 
                 expect(this.player1).not.toHavePrompt('Select character to save');
@@ -420,7 +408,6 @@ describe('take control', function() {
                 this.player2.clickPrompt('Done');
 
                 this.skipActionWindow();
-                this.skipActionWindow();
 
                 this.player1.clickPrompt('Apply Claim');
 
@@ -434,7 +421,7 @@ describe('take control', function() {
         describe('put into play under control + abilities', function() {
             beforeEach(function() {
                 const deck = this.buildDeck('greyjoy', [
-                    'Snowed Under',
+                    'Snowed Under', 'A Storm of Swords',
                     'Night Gathers...', 'Lost Ranger', 'Old Forest Hunter'
                 ]);
                 this.player1.selectDeck(deck);
@@ -452,7 +439,7 @@ describe('take control', function() {
                 this.completeSetup();
 
                 this.player1.selectPlot('Snowed Under');
-                this.player2.selectPlot('Snowed Under');
+                this.player2.selectPlot('A Storm of Swords');
 
                 this.selectFirstPlayer(this.player1);
 
@@ -629,6 +616,119 @@ describe('take control', function() {
                     expect(this.theirDupe.location).toBe('discard pile');
                     expect(this.theirDupe).toBeControlledBy(this.player2);
                 });
+            });
+        });
+
+        describe('repeated take control', function() {
+            beforeEach(function() {
+                const deck1 = this.buildDeck('tyrell', [
+                    'Sneak Attack', 'The First Snow of Winter', 'A Game of Thrones',
+                    'Margaery Tyrell (Core)'
+                ]);
+                const deck2 = this.buildDeck('stark', [
+                    'Sneak Attack', 'A Game of Thrones', 'A Game of Thrones',
+                    'Ward', 'Ward'
+                ]);
+                this.player1.selectDeck(deck1);
+                this.player2.selectDeck(deck2);
+                this.startGame();
+                this.keepStartingHands();
+
+                this.character = this.player1.findCardByName('Margaery Tyrell', 'hand');
+                [this.ward1, this.ward2] = this.player2.filterCardsByName('Ward');
+
+                this.player1.clickCard(this.character);
+                this.completeSetup();
+
+                this.player1.selectPlot('Sneak Attack');
+                this.player2.selectPlot('Sneak Attack');
+                this.selectFirstPlayer(this.player1);
+
+                this.player1.clickPrompt('Done');
+
+                this.player2.clickCard(this.ward1);
+                this.player2.clickCard(this.character);
+
+                expect(this.character).toBeControlledBy(this.player2);
+
+                this.player2.clickPrompt('Done');
+                this.completeChallengesPhase();
+
+                this.player1.selectPlot('The First Snow of Winter');
+                this.player2.selectPlot('A Game of Thrones');
+                this.selectFirstPlayer(this.player1);
+                this.completeMarshalPhase();
+
+                // First Snow returns controlled character to hand
+                expect(this.character).toBeControlledBy(this.player1);
+                expect(this.character.location).toBe('hand');
+                expect(this.ward1.location).toBe('discard pile');
+
+                this.completeChallengesPhase();
+
+                this.player1.selectPlot('A Game of Thrones');
+                this.player2.selectPlot('A Game of Thrones');
+                this.selectFirstPlayer(this.player1);
+
+                // Remarshal the character
+                this.player1.clickCard(this.character);
+                this.player1.clickPrompt('Done');
+
+                expect(this.character.location).toBe('play area');
+                expect(this.character).toBeControlledBy(this.player1);
+
+                this.player2.clickCard(this.ward2);
+                this.player2.clickCard(this.character);
+            });
+
+            it('should take control again', function() {
+                expect(this.character.attachments).toContain(this.ward2);
+                expect(this.character).toBeControlledBy(this.player2);
+            });
+        });
+
+        describe('take control + leaving play', function() {
+            beforeEach(function() {
+                const deck1 = this.buildDeck('greyjoy', [
+                    'Snowed Under',
+                    'Night Gathers...', 'Varys'
+                ]);
+                const deck2 = this.buildDeck('greyjoy', [
+                    'A Storm of Swords',
+                    'Old Forest Hunter'
+                ]);
+                this.player1.selectDeck(deck1);
+                this.player2.selectDeck(deck2);
+                this.startGame();
+                this.keepStartingHands();
+
+                this.player1.clickCard('Varys', 'hand');
+
+                this.character = this.player2.findCardByName('Old Forest Hunter', 'hand');
+
+                this.completeSetup();
+
+                this.player1.selectPlot('Snowed Under');
+                this.player2.selectPlot('A Storm of Swords');
+                this.selectFirstPlayer(this.player1);
+
+                // Drag these to discard to be available for Night Gathers
+                this.player2.dragCard(this.character, 'discard pile');
+
+                this.player1.clickCard('Night Gathers...', 'hand');
+                this.player1.clickCard(this.character);
+
+                expect(this.character.location).toBe('play area');
+                expect(this.character).toBeControlledBy(this.player1);
+
+                this.completeMarshalPhase();
+                this.completeChallengesPhase();
+
+                this.player1.clickPrompt('Varys');
+            });
+
+            it('should place the character in the proper owner\'s pile', function() {
+                expect(this.player2Object.discardPile).toContain(this.character);
             });
         });
     });

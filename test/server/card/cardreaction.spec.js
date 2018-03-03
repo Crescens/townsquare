@@ -1,13 +1,10 @@
-/*global describe, it, beforeEach, expect, jasmine */
-/*eslint camelcase: 0, no-invalid-this: 0 */
-
 const CardReaction = require('../../../server/game/cardreaction.js');
 const Event = require('../../../server/game/event.js');
 
 describe('CardReaction', function () {
     beforeEach(function () {
         this.gameSpy = jasmine.createSpyObj('game', ['on', 'removeListener', 'registerAbility']);
-        this.cardSpy = jasmine.createSpyObj('card', ['getType', 'isBlank']);
+        this.cardSpy = jasmine.createSpyObj('card', ['getPrintedType', 'getType', 'isBlank']);
         this.cardSpy.location = 'play area';
         this.limitSpy = jasmine.createSpyObj('limit', ['increment', 'isAtMax', 'registerEvents', 'unregisterEvents']);
 
@@ -79,7 +76,7 @@ describe('CardReaction', function () {
 
     describe('eventHandler()', function() {
         beforeEach(function() {
-            this.executeEventHandler = (...args) => {
+            this.executeEventHandler = (args = {}) => {
                 this.event = new Event('onSomething', args);
                 this.reaction = new CardReaction(this.gameSpy, this.cardSpy, this.properties);
                 this.reaction.eventHandler(this.event);
@@ -87,14 +84,14 @@ describe('CardReaction', function () {
         });
 
         it('should call the when handler with the appropriate arguments', function() {
-            this.executeEventHandler(1, 2, 3);
-            expect(this.properties.when.onSomething).toHaveBeenCalledWith(this.event, 1, 2, 3);
+            this.executeEventHandler();
+            expect(this.properties.when.onSomething).toHaveBeenCalledWith(this.event);
         });
 
         describe('when the when condition returns false', function() {
             beforeEach(function() {
                 this.properties.when.onSomething.and.returnValue(false);
-                this.executeEventHandler(1, 2, 3);
+                this.executeEventHandler();
             });
 
             it('should not register the ability', function() {
@@ -105,7 +102,7 @@ describe('CardReaction', function () {
         describe('when the when condition returns true', function() {
             beforeEach(function() {
                 this.properties.when.onSomething.and.returnValue(true);
-                this.executeEventHandler(1, 2, 3);
+                this.executeEventHandler();
             });
 
             it('should register the ability', function() {
@@ -116,8 +113,8 @@ describe('CardReaction', function () {
 
     describe('meetsRequirements()', function() {
         beforeEach(function() {
+            this.event = new Event('onSomething', {});
             this.meetsRequirements = () => {
-                this.event = new Event('onSomething', [1, 2, 3]);
                 this.reaction = new CardReaction(this.gameSpy, this.cardSpy, this.properties);
                 this.context = this.reaction.createContext(this.event);
                 return this.reaction.meetsRequirements(this.context);
@@ -126,7 +123,7 @@ describe('CardReaction', function () {
 
         it('should call the when handler with the appropriate arguments', function() {
             this.meetsRequirements();
-            expect(this.properties.when.onSomething).toHaveBeenCalledWith(this.event, 1, 2, 3);
+            expect(this.properties.when.onSomething).toHaveBeenCalledWith(this.event);
         });
 
         describe('when in the setup phase', function() {
@@ -152,6 +149,16 @@ describe('CardReaction', function () {
         describe('when the when condition returns false', function() {
             beforeEach(function() {
                 this.properties.when.onSomething.and.returnValue(false);
+            });
+
+            it('should return false', function() {
+                expect(this.meetsRequirements()).toBe(false);
+            });
+        });
+
+        describe('when the event has already been cancelled', function() {
+            beforeEach(function() {
+                this.event.cancel();
             });
 
             it('should return false', function() {
@@ -262,35 +269,6 @@ describe('CardReaction', function () {
                     expect(this.properties.handler).not.toHaveBeenCalled();
                 });
             });
-
-            describe('when there is a limit', function() {
-                beforeEach(function() {
-                    this.properties.limit = this.limitSpy;
-                    this.reaction = this.createReaction();
-                });
-
-                describe('and the handler returns a non-false value', function() {
-                    beforeEach(function() {
-                        this.properties.handler.and.returnValue(undefined);
-                        this.reaction.executeHandler(this.context);
-                    });
-
-                    it('should increment the limit', function() {
-                        expect(this.limitSpy.increment).toHaveBeenCalled();
-                    });
-                });
-
-                describe('and the handler returns false', function() {
-                    beforeEach(function() {
-                        this.properties.handler.and.returnValue(false);
-                        this.reaction.executeHandler(this.context);
-                    });
-
-                    it('should not increment the limit', function() {
-                        expect(this.limitSpy.increment).not.toHaveBeenCalled();
-                    });
-                });
-            });
         });
 
         describe('with multiple choice reactions', function() {
@@ -333,35 +311,6 @@ describe('CardReaction', function () {
                     expect(this.properties.choices['Foo']).not.toHaveBeenCalled();
                     expect(this.properties.choices['Bar']).not.toHaveBeenCalled();
                     expect(this.properties.choices['Baz']).not.toHaveBeenCalled();
-                });
-            });
-
-            describe('when there is a limit', function() {
-                beforeEach(function() {
-                    this.properties.limit = this.limitSpy;
-                    this.reaction = this.createReaction();
-                });
-
-                describe('and the handler returns a non-false value', function() {
-                    beforeEach(function() {
-                        this.properties.choices['Baz'].and.returnValue(undefined);
-                        this.reaction.executeHandler(this.context);
-                    });
-
-                    it('should increment the limit', function() {
-                        expect(this.limitSpy.increment).toHaveBeenCalled();
-                    });
-                });
-
-                describe('and the handler returns false', function() {
-                    beforeEach(function() {
-                        this.properties.choices['Baz'].and.returnValue(false);
-                        this.reaction.executeHandler(this.context);
-                    });
-
-                    it('should not increment the limit', function() {
-                        expect(this.limitSpy.increment).not.toHaveBeenCalled();
-                    });
                 });
             });
         });

@@ -25,12 +25,21 @@ class AlertPanel extends React.Component {
                 break;
         }
 
+<<<<<<< HEAD
         return (<div className={ alertClass } ref='alertPanel' role='alert'>
                     <span className={ icon } aria-hidden='true' />
                     <span className='sr-only'>{ this.props.title }</span>
                     &nbsp;{ this.props.message }
                     &nbsp;{ this.props.children }
                 </div>);
+=======
+        return (<div ref='alertPanel' className={ alertClass } role='alert'>
+            { this.props.noIcon ? null : <span className={ icon } aria-hidden='true' /> }
+            { this.props.title ? <span className='sr-only'>{ this.props.title }</span> : null }
+            { this.props.message ? <span>&nbsp;{ this.props.message }</span> : null }
+            { this.props.children }
+        </div>);
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     }
 }
 
@@ -38,6 +47,10 @@ AlertPanel.displayName = 'AlertPanel';
 AlertPanel.propTypes = {
     children: PropTypes.any,
     message: PropTypes.string,
+<<<<<<< HEAD
+=======
+    noIcon: PropTypes.bool,
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     title: PropTypes.string,
     type: PropTypes.oneOf(['warning', 'info', 'success', 'error'])
 };

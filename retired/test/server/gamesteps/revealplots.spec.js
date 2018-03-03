@@ -1,11 +1,8 @@
-/*global describe, it, beforeEach, expect, jasmine*/
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const RevealPlots = require('../../../server/game/gamesteps/revealplots.js');
 
 describe('RevealPlots', function() {
     beforeEach(function() {
-        this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'getPlayers', 'raiseEvent']);
+        this.gameSpy = jasmine.createSpyObj('game', ['addMessage', 'getPlayers']);
         this.phase = new RevealPlots(this.gameSpy, []);
     });
 

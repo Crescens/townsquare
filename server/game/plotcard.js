@@ -33,14 +33,14 @@ class PlotCard extends BaseCard {
         return baseValue + this.initiativeModifier;
     }
 
-    getIncome(printed) {
-        if(printed) {
-            return this.cardData.income;
-        }
-
-        var baseValue = this.canProvidePlotModifier['gold'] ? (this.baseIncome || this.cardData.income) : 0;
+    getIncome() {
+        let baseValue = this.canProvidePlotModifier['gold'] ? (this.baseIncome || this.getPrintedIncome()) : 0;
 
         return baseValue + this.goldModifier;
+    }
+
+    getPrintedIncome() {
+        return this.cardData.income;
     }
 
     getReserve() {
@@ -48,19 +48,26 @@ class PlotCard extends BaseCard {
         return baseValue + this.reserveModifier;
     }
 
-    getClaim() {        
-        return _.isNumber(this.claimSet) ? this.claimSet : this.cardData.claim + this.claimModifier;
+    getPrintedClaim() {
+        return this.cardData.claim || 0;
     }
 
-    canChallenge() {
-        return true;
+    getClaim() {
+        let baseClaim = this.getPrintedClaim();
+
+        if(_.isNumber(this.claimSet)) {
+            return this.claimSet;
+        }
+
+        return Math.max(baseClaim + this.claimModifier, 0);
     }
 
     flipFaceup() {
+        // This probably isn't necessary now
         this.facedown = false;
-    }
 
-    onBeginChallengePhase() {
+        // But this is
+        this.selected = false;
     }
 }
 

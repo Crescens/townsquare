@@ -1,11 +1,8 @@
-/*global describe, it, beforeEach, expect, jasmine*/
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const DrawCard = require('../../../server/game/drawcard.js');
 
 describe('DrawCard', function() {
     beforeEach(function() {
-        this.game = jasmine.createSpyObj('game', ['raiseMergedEvent']);
+        this.game = jasmine.createSpyObj('game', ['raiseEvent']);
         this.player = jasmine.createSpyObj('player', ['discardCard']);
         this.player.game = this.game;
         this.card = new DrawCard(this.player, { strength: 3 });

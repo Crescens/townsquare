@@ -1,13 +1,10 @@
-/*global describe, it, beforeEach, expect, jasmine*/
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const Player = require('../../../server/game/player.js');
 const DrawCard = require('../../../server/game/drawcard.js');
 
 describe('the Player', function() {
     beforeEach(function() {
-        this.game = jasmine.createSpyObj('game', ['getOtherPlayer', 'playerDecked', 'raiseMergedEvent']);
-        this.player = new Player('1', 'Player 1', true, this.game);
+        this.game = jasmine.createSpyObj('game', ['playerDecked', 'raiseEvent']);
+        this.player = new Player('1', { username: 'Player 1', settings: {} }, true, this.game);
         this.attachment = new DrawCard(this.player, { code: '1', label: 'Attachment', type_code: 'attachment' });
         this.attachment.uuid = '1111';
         this.cardWithNoAttachments = new DrawCard(this.player, { code: '2', label: 'Character', type_code: 'character' });

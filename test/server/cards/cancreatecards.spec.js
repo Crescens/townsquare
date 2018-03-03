@@ -1,6 +1,3 @@
-/* global describe, it, beforeEach, jasmine */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const _ = require('underscore');
 
 const cards = require('../../../server/game/cards');
@@ -8,7 +5,7 @@ const cards = require('../../../server/game/cards');
 describe('All Cards', function() {
     beforeEach(function() {
         this.gameSpy = jasmine.createSpyObj('game', ['on', 'removeListener', 'addPower', 'addMessage', 'addEffect']);
-        this.playerSpy = jasmine.createSpyObj('player', ['createAdditionalPile', 'registerAbilityMax']);
+        this.playerSpy = jasmine.createSpyObj('player', ['registerAbilityMax']);
         this.playerSpy.game = this.gameSpy;
     });
 

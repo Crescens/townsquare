@@ -1,5 +1,11 @@
 const _ = require('underscore');
 const ChooseCost = require('./costs/choosecost.js');
+const CostBuilders = require('./costs/CostBuilders.js');
+const KneelCost = require('./costs/KneelCost.js');
+const XValuePrompt = require('./costs/XValuePrompt.js');
+const SelfCost = require('./costs/SelfCost.js');
+const StandCost = require('./costs/StandCost.js');
+const MoveTokenFromSelfCost = require('./costs/MoveTokenFromSelfCost.js');
 
 const Costs = {
     /**
@@ -27,6 +33,7 @@ const Costs = {
     /**
      * Cost that will boot the card that initiated the ability.
      */
+<<<<<<< HEAD
     bootSelf: function() {
         return {
             canPay: function(context) {
@@ -42,10 +49,17 @@ const Costs = {
                 context.source.controller.standCard(context.source);
             }
         };
+=======
+    kneelSelf: function() {
+        let action = new KneelCost();
+        let unpayAction = new StandCost();
+        return new SelfCost(action, unpayAction);
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     },
     /**
      * Cost that will boot the parent card the current card is attached to.
      */
+<<<<<<< HEAD
     bootParent: function() {
         return {
             canPay: function(context) {
@@ -56,9 +70,13 @@ const Costs = {
             }
         };
     },
+=======
+    kneelParent: () => CostBuilders.kneel.parent(),
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     /**
      * Cost that will boot the player's outfit card.
      */
+<<<<<<< HEAD
     bootOutfitCard: function() {
         return {
             canPay: function(context) {
@@ -69,10 +87,18 @@ const Costs = {
             }
         };
     },
+=======
+    kneelFactionCard: () => CostBuilders.kneel.faction(),
+    /**
+     * Cost that kneels a specific card passed into the function
+     */
+    kneelSpecific: cardFunc => CostBuilders.kneel.specific(cardFunc),
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     /**
      * Cost that requires booting a card that matches the passed condition
      * predicate function.
      */
+<<<<<<< HEAD
     boot: function(condition) {
         var fullCondition = (card, context) => (
             !card.booted &&
@@ -109,10 +135,14 @@ const Costs = {
             }
         };
     },
+=======
+    kneel: condition => CostBuilders.kneel.select(condition),
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     /**
      * Cost that requires booting a certain number of cards that match the
      * passed condition predicate function.
      */
+<<<<<<< HEAD
     bootMultiple: function(number, condition) {
         var fullCondition = (card, context) => (
             !card.booted &&
@@ -157,186 +187,58 @@ const Costs = {
             }
         };
     },
+=======
+    kneelMultiple: (amount, condition) => CostBuilders.kneel.selectMultiple(amount, condition),
+    /**
+     * Cost that requires kneeling any number of cards that match the
+     * passed condition predicate function.
+     */
+    kneelAny: (condition) => CostBuilders.kneel.selectAny(condition),
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     /**
      * Cost that will sacrifice the card that initiated the ability.
      */
-    sacrificeSelf: function() {
-        return {
-            canPay: function() {
-                return true;
-            },
-            pay: function(context) {
-                context.source.controller.sacrificeCard(context.source);
-            }
-        };
-    },
+    sacrificeSelf: () => CostBuilders.sacrifice.self(),
     /**
      * Cost that requires sacrificing a card that matches the passed condition
      * predicate function.
      */
-    sacrifice: function(condition) {
-        var fullCondition = (card, context) => (
-            card.location === 'play area' &&
-            card.controller === context.player &&
-            condition(card)
-        );
-        return {
-            canPay: function(context) {
-                return context.player.anyCardsInPlay(card => fullCondition(card, context));
-            },
-            resolve: function(context, result = { resolved: false }) {
-                context.game.promptForSelect(context.player, {
-                    cardCondition: card => fullCondition(card, context),
-                    activePromptTitle: 'Select card to sacrifice',
-                    source: context.source,
-                    onSelect: (player, card) => {
-                        context.sacrificeCostCard = card;
-                        result.value = true;
-                        result.resolved = true;
-
-                        return true;
-                    },
-                    onCancel: () => {
-                        result.value = false;
-                        result.resolved = true;
-                    }
-                });
-
-                return result;
-            },
-            pay: function(context) {
-                context.player.sacrificeCard(context.sacrificeCostCard);
-            }
-        };
-    },
+    sacrifice: condition => CostBuilders.sacrifice.select(condition),
+    /**
+     * Cost that will kill the card that initiated the ability.
+     */
+    killSelf: () => CostBuilders.kill.self(),
     /**
      * Cost that will put into play the card that initiated the ability.
      */
-    putSelfIntoPlay: function() {
-        return {
-            canPay: function(context) {
-                return context.source.controller.canPutIntoPlay(context.source);
-            },
-            pay: function(context) {
-                context.source.controller.putIntoPlay(context.source);
-            }
-        };
-    },
+    putSelfIntoPlay: () => CostBuilders.putIntoPlay.self(),
     /**
      * Cost that will remove from game the card that initiated the ability.
      */
-    removeSelfFromGame: function() {
-        return {
-            canPay: function() {
-                return true;
-            },
-            pay: function(context) {
-                context.source.controller.moveCard(context.source, 'out of game');
-            }
-        };
-    },
+    removeSelfFromGame: () => CostBuilders.removeFromGame.self(),
     /**
      * Cost that requires you return a card matching the condition to the
      * player's hand.
      */
-    returnToHand: function(condition) {
-        var fullCondition = (card, context) => (
-            card.location === 'play area' &&
-            card.controller === context.player &&
-            condition(card)
-        );
-        return {
-            canPay: function(context) {
-                return context.player.anyCardsInPlay(card => fullCondition(card, context));
-            },
-            resolve: function(context, result = { resolved: false }) {
-                context.game.promptForSelect(context.player, {
-                    cardCondition: card => fullCondition(card, context),
-                    activePromptTitle: 'Select card to return to hand',
-                    source: context.source,
-                    onSelect: (player, card) => {
-                        context.costs.returnedToHandCard = card;
-                        result.value = true;
-                        result.resolved = true;
-
-                        return true;
-                    },
-                    onCancel: () => {
-                        result.value = false;
-                        result.resolved = true;
-                    }
-                });
-
-                return result;
-            },
-            pay: function(context) {
-                context.player.returnCardToHand(context.costs.returnedToHandCard, false);
-            }
-        };
-    },
+    returnToHand: condition => CostBuilders.returnToHand.select(condition),
     /**
      * Cost that will return to hand the card that initiated the ability.
      */
-    returnSelfToHand: function() {
-        return {
-            canPay: function() {
-                return true;
-            },
-            pay: function(context) {
-                context.source.controller.returnCardToHand(context.source, false);
-            }
-        };
-    },
+    returnSelfToHand: () => CostBuilders.returnToHand.self(),
+    /**
+     * Cost that reveals a specific card passed into the function
+     */
+    revealSpecific: cardFunc => CostBuilders.reveal.specific(cardFunc),
     /**
      * Cost that requires revealing a certain number of cards in hand that match
      * the passed condition predicate function.
      */
-    revealCards: function(number, condition) {
-        var fullCondition = (card, context) => (
-            card.location === 'hand' &&
-            card.controller === context.player &&
-            condition(card)
-        );
-        return {
-            canPay: function(context) {
-                let potentialCards = context.player.findCards(context.player.hand, card => fullCondition(card, context));
-                return _.size(potentialCards) >= number;
-            },
-            resolve: function(context, result = { resolved: false }) {
-                context.game.promptForSelect(context.player, {
-                    cardCondition: card => fullCondition(card, context),
-                    activePromptTitle: 'Select ' + number + ' cards to reveal',
-                    numCards: number,
-                    multiSelect: true,
-                    source: context.source,
-                    onSelect: (player, cards) => {
-                        if(cards.length !== number) {
-                            return false;
-                        }
-
-                        context.revealingCostCards = cards;
-                        result.value = true;
-                        result.resolved = true;
-
-                        return true;
-                    },
-                    onCancel: () => {
-                        result.value = false;
-                        result.resolved = true;
-                    }
-                });
-
-                return result;
-            },
-            pay: function(context) {
-                context.game.addMessage('{0} reveals {1} from their hand', context.player, context.revealingCostCards);
-            }
-        };
-    },
+    revealCards: (number, condition) => CostBuilders.reveal.selectMultiple(number, condition),
     /**
      * Cost that will stand the card that initiated the ability (e.g.,
      * Barristan Selmy (TS)).
      */
+<<<<<<< HEAD
     standSelf: function() {
         return {
             canPay: function(context) {
@@ -347,16 +249,31 @@ const Costs = {
             }
         };
     },
+=======
+    standSelf: () => CostBuilders.stand.self(),
+    /**
+     * Cost that will stand the parent card the current card is attached to.
+     */
+    standParent: () => CostBuilders.stand.parent(),
+    /**
+     * Cost that will remove the parent card the current card is attached to from the challenge.
+     */
+    removeParentFromChallenge: () => CostBuilders.removeFromChallenge.parent(),
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     /**
      * Cost that will place the played event card in the player's discard pile.
      */
     expendEvent: function() {
         return {
             canPay: function(context) {
-                return context.player.isCardInPlayableLocation(context.source, 'play') && context.source.canBePlayed();
+                return context.player.isCardInPlayableLocation(context.source, 'play') && context.player.canPlay(context.source, 'play');
             },
             pay: function(context) {
-                context.source.controller.moveCard(context.source, 'discard pile');
+                // Events become in a "state of being played" while they resolve
+                // and are not placed in discard until after resolution / cancel
+                // of their effects.
+                // Ruling: http://www.cardgamedb.com/forums/index.php?/topic/35981-the-annals-of-castle-black/
+                context.source.controller.moveCard(context.source, 'being played');
             }
         };
     },
@@ -364,41 +281,12 @@ const Costs = {
      * Cost that requires discarding a card from hand matching the passed
      * condition predicate function.
      */
-    discardFromHand: function(condition = () => true) {
-        var fullCondition = (card, context) => (
-            card.location === 'hand' &&
-            card.controller === context.player &&
-            condition(card)
-        );
-        return {
-            canPay: function(context) {
-                return context.player.allCards.any(card => fullCondition(card, context));
-            },
-            resolve: function(context, result = { resolved: false }) {
-                context.game.promptForSelect(context.player, {
-                    cardCondition: card => fullCondition(card, context),
-                    activePromptTitle: 'Select card to discard',
-                    source: context.source,
-                    onSelect: (player, card) => {
-                        context.discardCostCard = card;
-                        result.value = true;
-                        result.resolved = true;
-
-                        return true;
-                    },
-                    onCancel: () => {
-                        result.value = false;
-                        result.resolved = true;
-                    }
-                });
-
-                return result;
-            },
-            pay: function(context) {
-                context.player.discardCard(context.discardCostCard);
-            }
-        };
-    },
+    discardFromHand: condition => CostBuilders.discardFromHand.select(condition),
+    /**
+     * Cost that requires discarding multiple cards from hand matching the passed
+     * condition predicate function.
+     */
+    discardMultipleFromHand: (number, condition) => CostBuilders.discardFromHand.selectMultiple(number, condition),
     /**
      * Cost that will pay the reduceable ghostrock cost associated with an event card
      * and place it in discard.
@@ -414,6 +302,7 @@ const Costs = {
      * Cost that will discard a ghostrock from the card. Used mainly by cards
      * having the bestow keyword.
      */
+<<<<<<< HEAD
     discardGhostRock: function() {
         return {
             canPay: function(context) {
@@ -424,9 +313,13 @@ const Costs = {
             }
         };
     },
+=======
+    discardGold: amount => CostBuilders.discardToken('gold', amount).self(),
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     /**
      * Cost that will discard a fixed amount of control from the current card.
      */
+<<<<<<< HEAD
     discardControlFromSelf: function(amount = 1) {
         return {
             canPay: function(context) {
@@ -437,22 +330,22 @@ const Costs = {
             }
         };
     },
+=======
+    discardPowerFromSelf: amount => CostBuilders.discardPower(amount).self(),
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     /**
      * Cost that will discard a fixed amount of a passed type token from the current card.
      */
-    discardTokenFromSelf: function(type, amount = 1) {
-        return {
-            canPay: function(context) {
-                return context.source.tokens[type] >= amount;
-            },
-            pay: function(context) {
-                context.source.removeToken(type, amount);
-            }
-        };
-    },
+    discardTokenFromSelf: (type, amount) => CostBuilders.discardToken(type, amount).self(),
+    /**
+     * Cost that will move a fixed amount of a passed type token from the current card to a
+     * destination card matching the passed condition predicate function.
+     */
+    moveTokenFromSelf: (type, amount, condition) => new MoveTokenFromSelfCost(type, amount, condition),
     /**
      * Cost that will discard outfit control matching the passed amount.
      */
+<<<<<<< HEAD
     /*
     discardOutfitControl: function(amount) {
         return {
@@ -465,10 +358,14 @@ const Costs = {
         };
     },
     */
+=======
+    discardFactionPower: amount => CostBuilders.discardPower(amount).faction(),
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     /**
      * Cost that requires discarding a control from a card that matches the passed condition
      * predicate function.
      */
+<<<<<<< HEAD
     discardControl: function(amount, condition) {
         var fullCondition = (card, context) => (
             card.getControl() >= amount &&
@@ -505,6 +402,9 @@ const Costs = {
             }
         };
     },
+=======
+    discardPower: (amount, condition) => CostBuilders.discardPower(amount).select(condition),
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     /**
      * Cost that ensures that the player can still play a Limited card this
      * round.
@@ -580,6 +480,69 @@ const Costs = {
             },
             pay: function(context) {
                 context.game.addGhostRock(context.player, -amount);
+            }
+        };
+    },
+    /**
+     * Reducable cost where the player gets prompted to pay from a passed minimum up to the lesser of two values:
+     * the passed maximum and either the player's or his opponent's gold.
+     * Used by Ritual of R'hllor, Loot, The Things I Do For Love and Melee at Bitterbridge.
+     */
+    payXGold: function(minFunc, maxFunc, opponentFunc) {
+        return {
+            canPay: function(context) {
+                let reduction = context.player.getCostReduction('play', context.source);
+                let opponentObj = opponentFunc && opponentFunc(context);
+
+                if(!opponentObj) {
+                    return context.player.gold >= minFunc(context) - reduction;
+                }
+                return opponentObj.gold >= minFunc(context) - reduction;
+            },
+            resolve: function(context, result = { resolved: false }) {
+                let reduction = context.player.getCostReduction('play', context.source);
+                let opponentObj = opponentFunc && opponentFunc(context);
+                let gold = opponentObj ? opponentObj.gold : context.player.gold;
+                let max = _.min([maxFunc(context), gold + reduction]);
+
+                context.game.queueStep(new XValuePrompt(minFunc(context), max, context, reduction));
+
+                result.value = true;
+                result.resolved = true;
+                return result;
+            },
+            pay: function(context) {
+                let opponentObj = opponentFunc && opponentFunc(context);
+                if(!opponentObj) {
+                    context.game.addGold(context.player, -context.goldCost);
+                } else {
+                    context.game.addGold(opponentObj, -context.goldCost);
+                }
+                context.player.markUsedReducers('play', context.source);
+            }
+        };
+    },
+    /**
+     * Cost where the player gets prompted to discard gold from the card from a passed minimum up to the lesser of two values:
+     * the passed maximum and the amount of gold on the source card.
+     * Used by The House of Black and White, Stormcrows and Devan Seaworth.
+     */
+    discardXGold: function(minFunc, maxFunc) {
+        return {
+            canPay: function(context) {
+                return context.source.tokens.gold >= minFunc(context);
+            },
+            resolve: function(context, result = { resolved: false }) {
+                let max = _.min([maxFunc(context), context.source.tokens.gold]);
+                
+                context.game.queueStep(new XValuePrompt(minFunc(context), max, context));
+                
+                result.value = true;
+                result.resolved = true;
+                return result;
+            },
+            pay: function(context) {
+                context.source.modifyToken('gold', -context.xValue);
             }
         };
     }

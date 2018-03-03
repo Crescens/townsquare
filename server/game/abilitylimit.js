@@ -47,6 +47,7 @@ class RepeatableAbilityLimit extends FixedAbilityLimit {
 
     unregisterEvents(eventEmitter) {
         eventEmitter.removeListener(this.eventName, this.resetHandler);
+        this.reset();
     }
 }
 
@@ -70,6 +71,10 @@ AbilityLimit.perPhase = function(max) {
 
 AbilityLimit.perRound = function(max) {
     return new RepeatableAbilityLimit(max, 'onRoundEnded');
+};
+
+AbilityLimit.perGame = function(max) {
+    return new RepeatableAbilityLimit(max, 'onGameEnded');
 };
 
 module.exports = AbilityLimit;

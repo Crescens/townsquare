@@ -1,6 +1,3 @@
-/*global describe, it, beforeEach, expect,spyOn, jasmine*/
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const _ = require('underscore');
 const SelectCardPrompt = require('../../../server/game/gamesteps/selectcardprompt.js');
 
@@ -47,27 +44,6 @@ describe('the SelectCardPrompt', function() {
         spyOn(this.properties, 'onCancel');
     });
 
-    describe('constructor', function() {
-        describe('cardType', function() {
-            it('should default to a list of draw card types', function() {
-                let prompt = new SelectCardPrompt(this.game, this.player, this.properties);
-                expect(prompt.properties.cardType).toEqual(['attachment', 'character', 'event', 'location']);
-            });
-
-            it('should let a custom array be set', function() {
-                this.properties.cardType = ['foo'];
-                let prompt = new SelectCardPrompt(this.game, this.player, this.properties);
-                expect(prompt.properties.cardType).toEqual(['foo']);
-            });
-
-            it('should let a non-array be set', function() {
-                this.properties.cardType = 'foo';
-                let prompt = new SelectCardPrompt(this.game, this.player, this.properties);
-                expect(prompt.properties.cardType).toEqual(['foo']);
-            });
-        });
-    });
-
     describe('for a single card prompt', function() {
         beforeEach(function() {
             this.properties.numCards = 1;
@@ -110,6 +86,7 @@ describe('the SelectCardPrompt', function() {
                     this.properties.cardCondition.and.returnValue(true);
                     this.card.getType.and.returnValue('character');
                     this.prompt.properties.cardType = ['event'];
+                    this.prompt = new SelectCardPrompt(this.game, this.player, this.properties);
                 });
 
                 it('should return false', function() {
@@ -313,6 +290,7 @@ describe('the SelectCardPrompt', function() {
                 beforeEach(function() {
                     this.properties.numCards = 0;
                     this.properties.cardCondition.and.returnValue(true);
+                    this.prompt = new SelectCardPrompt(this.game, this.player, this.properties);
                     this.prompt.onCardClicked(this.player, this.card);
                     this.prompt.onCardClicked(this.player, this.card2);
                     this.card3 = createCardSpy({ controller: this.player });

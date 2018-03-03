@@ -83,6 +83,11 @@ export function clearDeckStatus() {
 
 function formatCards(cards) {
     return _.map(cards, card => {
+<<<<<<< HEAD
         return { card: { code: card.card.code }, count: card.count, starting: card.starting };
+=======
+        let cardData = card.card.custom ? card.card : { code: card.card.code };
+        return { card: cardData, count: card.count };
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     });
 }

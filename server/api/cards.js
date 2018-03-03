@@ -1,7 +1,9 @@
+const monk = require('monk');
 const config = require('../config.js');
-const CardService = require('../repositories/cardService.js');
+const CardService = require('../services/CardService.js');
 
-var cardService = new CardService({ dbPath: config.dbPath });
+let db = monk(config.dbPath);
+let cardService = new CardService(db);
 
 module.exports.init = function(server) {
     server.get('/api/cards', function(req, res, next) {
@@ -24,6 +26,7 @@ module.exports.init = function(server) {
             });
     });
 
+<<<<<<< HEAD
     server.get('/api/outfit', function(req, res) {
         cardService.getAllCards({ shortForm: true, type_code: 'outfit'})
             .then(cards => {
@@ -42,5 +45,19 @@ module.exports.init = function(server) {
             .catch(err => {
                 return next(err);
             });
+=======
+    server.get('/api/factions', function(req, res) {
+        let factions = [
+            { name: 'House Baratheon', value: 'baratheon' },
+            { name: 'House Greyjoy', value: 'greyjoy' },
+            { name: 'House Lannister', value: 'lannister' },
+            { name: 'House Martell', value: 'martell' },
+            { name: 'The Night\'s Watch', value: 'thenightswatch' },
+            { name: 'House Stark', value: 'stark' },
+            { name: 'House Targaryen', value: 'targaryen' },
+            { name: 'House Tyrell', value: 'tyrell' }
+        ];
+        res.send({ success: true, factions: factions });
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     });
 };

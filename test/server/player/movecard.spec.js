@@ -1,6 +1,3 @@
-/* global describe, it, beforeEach, expect, spyOn, jasmine */
-/* eslint camelcase: 0, no-invalid-this: 0 */
-
 const _ = require('underscore');
 const Player = require('../../../server/game/player.js');
 const DrawCard = require('../../../server/game/drawcard.js');
@@ -8,12 +5,12 @@ const DrawCard = require('../../../server/game/drawcard.js');
 describe('Player', function() {
     describe('moveCard', function() {
         beforeEach(function() {
-            this.gameSpy = jasmine.createSpyObj('game', ['raiseEvent', 'raiseMergedEvent', 'getOtherPlayer', 'playerDecked']);
-            this.player = new Player('1', 'Player 1', true, this.gameSpy);
+            this.gameSpy = jasmine.createSpyObj('game', ['raiseEvent', 'playerDecked']);
+            this.player = new Player('1', {username: 'Player 1', settings: {}}, true, this.gameSpy);
             this.player.initialise();
             this.player.phase = 'marshal';
 
-            this.gameSpy.raiseMergedEvent.and.callFake((name, params, handler) => {
+            this.gameSpy.raiseEvent.and.callFake((name, params, handler) => {
                 if(handler) {
                     handler(params);
                 }
@@ -91,8 +88,13 @@ describe('Player', function() {
             });
 
             it('should raise the left play event', function() {
+<<<<<<< HEAD
                 this.player.moveCard(this.card, 'boothill pile');
                 expect(this.gameSpy.raiseMergedEvent).toHaveBeenCalled();
+=======
+                this.player.moveCard(this.card, 'dead pile');
+                expect(this.gameSpy.raiseEvent).toHaveBeenCalled();
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
             });
 
             describe('when the card has attachments', function() {
@@ -139,12 +141,13 @@ describe('Player', function() {
                     this.dupe = new DrawCard(this.player, {});
                     this.card.addDuplicate(this.dupe);
 
+                    spyOn(this.player, 'discardCards');
+
                     this.player.moveCard(this.card, 'hand');
                 });
 
                 it('should discard the dupes', function() {
-                    expect(this.player.discardPile).toContain(this.dupe);
-                    expect(this.dupe.location).toBe('discard pile');
+                    expect(this.player.discardCards).toHaveBeenCalledWith([this.dupe], false);
                 });
             });
             */
@@ -192,5 +195,60 @@ describe('Player', function() {
                 expect(this.player.cardsInPlay.toArray()).toEqual([this.card]);
             });
         });
+<<<<<<< HEAD
+=======
+
+        describe('when the target location is the active plot', function() {
+            it('should set the card as the active plot', function() {
+                this.player.moveCard(this.card, 'active plot');
+                expect(this.player.activePlot).toBe(this.card);
+            });
+        });
+
+        describe('when moving a controlled card', function() {
+            beforeEach(function() {
+                this.options = { options: 1 };
+                this.callback = jasmine.createSpy('callback');
+                this.opponent = new Player('2', {username: 'Player 2', settings: {}}, true, this.gameSpy);
+                spyOn(this.opponent, 'moveCard');
+                this.card.owner = this.opponent;
+            });
+
+            describe('from out-of-play to in-play', function() {
+                beforeEach(function() {
+                    this.card.location = 'discard pile';
+                    this.player.moveCard(this.card, 'play area');
+                });
+
+                it('should not use the owner\'s moveCard', function() {
+                    expect(this.opponent.moveCard).not.toHaveBeenCalled();
+                });
+            });
+
+            describe('from in-play to out-of-play', function() {
+                beforeEach(function() {
+                    this.card.location = 'play area';
+
+                    this.player.moveCard(this.card, 'discard pile', this.options, this.callback);
+                });
+
+                it('should use the owner\'s moveCard instead', function() {
+                    expect(this.opponent.moveCard).toHaveBeenCalledWith(this.card, 'discard pile', jasmine.objectContaining(this.options), this.callback);
+                });
+            });
+
+            describe('from out-of-play to out-of-play', function() {
+                beforeEach(function() {
+                    this.card.location = 'discard pile';
+
+                    this.player.moveCard(this.card, 'hand', this.options, this.callback);
+                });
+
+                it('should use the owner\'s moveCard instead', function() {
+                    expect(this.opponent.moveCard).toHaveBeenCalledWith(this.card, 'hand', jasmine.objectContaining(this.options), this.callback);
+                });
+            });
+        });
+>>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
     });
 });

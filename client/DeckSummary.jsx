@@ -16,9 +16,15 @@ class DeckSummary extends React.Component {
         };
     }
 
+    hasTrait(card, trait) {
+        return card.traits && card.traits.toLowerCase().indexOf(trait.toLowerCase() + '.') !== -1;
+    }
+
     onCardMouseOver(event) {
+
         var cardToDisplay = _.filter(this.props.cards, card => {
             return event.target.innerText === card.title;
+
         });
 
         this.setState({ cardToShow: cardToDisplay[0] });
@@ -29,9 +35,9 @@ class DeckSummary extends React.Component {
     }
 
     getCardsToRender() {
-        var cardsToRender = [];
-        var groupedCards = {};
-        var combinedCards = this.props.deck.drawCards;
+        let cardsToRender = [];
+        let groupedCards = {};
+        let combinedCards = this.props.deck.drawCards;
 
         _.each(combinedCards, (card) => {
             if(!groupedCards[card.card.type]) {
@@ -42,16 +48,21 @@ class DeckSummary extends React.Component {
         });
 
         _.each(groupedCards, (cardList, key) => {
-            var cards = [];
-            var count = 0;
-            var startingString = '*';
+
+            let cards = [];
+            let count = 0;
+            let startingString = '*';
 
             _.each(cardList, card => {
                 cards.push(<div key={ card.card.code }><span>{ startingString.repeat(card.starting) }{card.count + 'x '}</span><span className='card-link' onMouseOver={ this.onCardMouseOver } onMouseOut={ this.onCardMouseOut }>{ card.card.title }</span></div>);
                 count += parseInt(card.count);
             });
 
-            cardsToRender.push(<div key={ key } className='card-group'><h4>{ key + ' (' + count.toString() + ')' }</h4>{ cards }</div>);
+            cardsToRender.push(
+                <div className='cards-no-break' key={ key }>
+                    <div className='card-group-title'>{ key + ' (' + count.toString() + ')' }</div>
+                    <div key={ key } className='card-group'>{ cards }</div>
+                </div>);
         });
 
         return cardsToRender;
@@ -62,29 +73,32 @@ class DeckSummary extends React.Component {
             return <div>Waiting for selected deck...</div>;
         }
 
-        var cardsToRender = this.getCardsToRender();
+
+        let cardsToRender = this.getCardsToRender();
 
         return (
-            <div>
-                { this.state.cardToShow ? <img className='hover-image' src={ '/img/cards/' + this.state.cardToShow.code + '.jpg' } /> : null }
-                <h3>{ this.props.deck.name }</h3>
+            <div className='deck-summary col-xs-12'>
+                { this.state.cardToShow ? <img className='hover-image' src={ '/img/cards/' + this.state.cardToShow.code + '.png' } /> : null }
                 <div className='decklist'>
-                    { this.props.deck.outfit ? <img className='pull-left' src={ '/img/cards/' + this.props.deck.outfit.code + '.jpg' } /> : null }
-                    { this.props.deck.legend && this.props.deck.legend.code ? <img className='pull-right' src={ '/img/cards/' + this.props.deck.legend.code + '.jpg' } /> : null }
-                    <div>
-                        <h4>{ this.props.deck.outfit ? this.props.deck.outfit.title : null }</h4>
-                        <div ref='legend'>Legend: { this.props.deck.legend && this.props.deck.legend.title ? <span className='card-link' onMouseOver={ this.onCardMouseOver }
+                    <div className='col-xs-2 col-sm-3 no-x-padding'>{ this.props.deck.outfit ? <img className='img-responsive' src={ '/img/cards/' + this.props.deck.outfit.code + '.jpg' } /> : null }</div>
+                    <div className='col-xs-8 col-sm-6'>
+                        <div className='info-row row'><span>Faction:</span>{ this.props.deck.outfit ? <span className={ 'pull-right' }>{ this.props.deck.outfit.title }</span> : null }</div>
+                        <div className='info-row row' ref='legend'><span>Legend:</span> { this.props.deck.legend && this.props.deck.legend.title ? <span className='pull-right card-link' onMouseOver={ this.onCardMouseOver }
                             onMouseOut={ this.onCardMouseOut }>{ this.props.deck.legend.title }</span> : <span>None</span> }</div>
-
-                         <div ref='drawCount'>Draw deck: { this.props.deck.validation.drawCount } cards</div>
-                        <div className={ this.props.deck.validation.status === 'Valid' ? 'text-success' : 'text-danger' }>
-                            <StatusPopOver status={ this.props.deck.validation.status } list={ this.props.deck.validation.extendedStatus }
-                                            show={ this.props.deck.validation.status !== 'Valid' } />
+                        <div className='info-row row' ref='drawCount'><span>Draw deck:</span><span className='pull-right'>{ this.props.deck.validation.drawCount } cards</span></div>
+                        <div className='info-row row'><span>Validity:</span>
+                            <span className={ this.props.deck.validation.status === 'Valid' ? 'pull-right deck-status valid' : 'pull-right deck-status invalid' }>
+                                <StatusPopOver status={ this.props.deck.validation.status } list={ this.props.deck.validation.extendedStatus }
+                                    show={ this.props.deck.validation.status !== 'Valid' } />
+                            </span>
                         </div>
                     </div>
+                    <div className='col-xs-2 col-sm-3 no-x-padding'>{ this.props.deck.agenda && this.props.deck.agenda.code ? <img className='img-responsive' src={ '/img/cards/' + this.props.deck.agenda.code + '.png' } /> : null }</div>
                 </div>
-                <div className='cards'>
-                    { cardsToRender }
+                <div className='col-xs-12 no-x-padding'>
+                    <div className='cards'>
+                        { cardsToRender }
+                    </div>
                 </div>
             </div>);
     }
