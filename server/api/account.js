@@ -44,26 +44,10 @@ function sendEmail(address, subject, email) {
     });
 }
 
-<<<<<<< HEAD
-function sendEmail(address, email) {
-    return new Promise((resolve, reject) => {
-        var emailTransport = nodemailer.createTransport(config.emailPath);
-
-        emailTransport.sendMail({
-            from: 'Town Square <admin@dtdb.co>',
-            to: address,
-            subject: 'Your account at Town Square',
-            text: email
-        }, function(error) {
-            if(error) {
-                reject(error);
-            }
-=======
 function validateUserName(username) {
     if(!username) {
         return 'You must specify a username';
     }
->>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
     if(username.length < 3 || username.length > 15) {
         return 'Username must be at least 3 characters and no more than 15 characters long';
@@ -350,18 +334,7 @@ module.exports.init = function(server) {
             return res.send({ success: false, message: 'Please complete the captcha correctly' });
         }
 
-<<<<<<< HEAD
-                return userService.setResetToken(user, resetToken, formattedExpiration);
-            })
-            .then(() => {
-                let url = 'https://townsquare.dtdb.co/reset-password?id=' + emailUser._id + '&token=' + resetToken;
-                let emailText = 'Hi,\n\nSomeone, hopefully you, has requested their password on Town Square to be reset.  If this was you, click this link ' + url + ' to complete the process.\n\n' +
-                    'If you did not request this reset, do not worry, your account has not been affected and your password has not been changed, just ignore this email.\n' +
-                    'Kind regards,\n\n' +
-                    'Town Square';
-=======
         res.send({ success: true });
->>>>>>> 27157a1f57e87fc5b5fd66e3b83a355747e605f9
 
         let user = await userService.getUserByUsername(req.body.username);
         if(!user) {
