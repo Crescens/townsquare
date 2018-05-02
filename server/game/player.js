@@ -230,6 +230,12 @@ class Player extends Spectator {
         }
 
         var cards = this.drawDeck.first(numCards);
+
+        if(!cards)
+        {
+            return;
+        }
+
         _.each(cards, card => {
             this.moveCard(card, target);
         });
