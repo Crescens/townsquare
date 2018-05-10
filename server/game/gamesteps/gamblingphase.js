@@ -6,40 +6,28 @@ const CheatingResolutionPrompt = require('./gambling/cheatingresolutionprompt.js
 class GamblingPhase extends Phase {
     constructor(game) {
         super(game, 'gambling');
+
+        this.lowballPot = 0;
+
         this.initialise([
             //new SimpleStep(game, () => this.ante()),
-            //new SimpleStep(game, () => this.drawAndCompareHands()),
+            new SimpleStep(game, () => this.drawAndCompareHands()),
             new CheatingResolutionPrompt(game)
         ]);
     }
 
-    prepareDecks() {
-        this.game.raiseEvent('onDecksPrepared');
+    ante() {
         _.each(this.game.getPlayers(), player => {
-            if(player.agenda) {
-                player.agenda.applyPersistentEffects();
-            }
-        });
-        this.game.allCards.each(card => {
-            card.applyAnyLocationPersistentEffects();
+            player.ante();
+            lowballPot++;
         });
     }
 
-    drawStartingPosse() {
+    drawAndCompareHands() {
         _.each(this.game.getPlayers(), player => {
-            player.drawCardsToHand('hand', player.startingPosse);
-        });
-    }
-
-    startGame() {
-        _.each(this.game.getPlayers(), player => {
-            player.startGame();
-        });
-    }
-
-    setupDone() {
-        _.each(this.game.getPlayers(), p => {
-            p.setupDone();
+            player.drawCardsToHand('draw hand', 5);
+            player.revealDrawHand();
+            //player.discardDrawHand();
         });
     }
 }

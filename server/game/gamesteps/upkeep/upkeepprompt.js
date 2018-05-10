@@ -19,8 +19,8 @@ class UpkeepPrompt extends AllPlayerPrompt {
     }
 
     onMenuCommand(player) {
-        player.payUpkeep();
-        this.game.addMessage('{0} has paid their upkeep', player);
+        let upkeep = player.payUpkeep();
+        this.game.addMessage('{0} has paid upkeep of {1} GR', player, upkeep);
     }
 }
 

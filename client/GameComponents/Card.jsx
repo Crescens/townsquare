@@ -340,6 +340,7 @@ Card.propTypes = {
         booted: PropTypes.bool,
         bullets: PropTypes.number,
         code: PropTypes.string,
+        cost: PropTypes.number,
         controlled: PropTypes.bool,
         dupes: PropTypes.array,
         facedown: PropTypes.bool,

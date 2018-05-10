@@ -216,6 +216,20 @@ class Player extends Spectator {
         return claim;
     }*/
 
+    discardDrawHand() {
+        //this.discardCards(this.drawHand);
+        this.discardCards(this.drawHand, false, discarded => {
+            this.game.addMessage('{0} discards their draw hand', this);
+            callback(discarded);
+        });
+    }
+
+    revealDrawHand() {
+        _.each(this.drawHand, (card) => {
+            card.facedown = false;
+        });
+    }
+
     drawCardsToHand(target, numCards) {
 
         if(target !== 'hand' && target !== 'draw hand') {
@@ -775,8 +789,9 @@ class Player extends Spectator {
     startPosse() {
         _.each(this.hand.value(), (card) => {
             this.drop(card.uuid, 'hand', this.outfit.uuid);
+            this.ghostrock -= card.cost;
         });
-
+        
         this.posse = true;
         this.readyToStart = true;
     }
@@ -789,6 +804,7 @@ class Player extends Spectator {
         }, memo);
 
         this.ghostrock += production;
+        return production;
     }
 
 
@@ -802,6 +818,7 @@ class Player extends Spectator {
         }, memo);
 
         this.ghostrock -= upkeep;
+        return upkeep;
     }
 
     resetForRound() {

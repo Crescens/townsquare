@@ -14,7 +14,8 @@ class UpkeepPhase extends Phase {
 
     receiveProduction() {
         _.each(this.game.getPlayers(), player => {
-            player.receiveProduction();
+            let production = player.receiveProduction();
+            this.game.addMessage('{0} has received production of {1} GR', player, production);
         });
     }
 

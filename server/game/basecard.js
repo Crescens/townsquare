@@ -39,6 +39,7 @@ class BaseCard {
         this.blankCount = 0;
         this.gamelocation = '';
 
+        this.cost = cardData.cost;
         this.value = cardData.rank;
         this.suit = cardData.suit;
         this.type = cardData.type_code;
@@ -564,6 +565,7 @@ class BaseCard {
         let state = {
             bullets: this.bullets,
             code: this.cardData.code,
+            cost: this.cardData.cost,
             controlled: this.owner !== this.controller,
             facedown: this.facedown,
             gamelocation: this.gamelocation,
