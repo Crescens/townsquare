@@ -784,8 +784,8 @@ class Player extends Spectator {
     receiveProduction() {
         let memo = 0;
         let producers = this.findCards(this.cardsInPlay, (card) => (card.production > 0));
-        let production = _.reduce(producers, (card) => {
-            return memo += card.production;
+        let production = _.reduce(producers, (memo, card) => {
+            return(memo += card.production);
         }, memo);
 
         this.ghostrock += production;
