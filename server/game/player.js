@@ -791,8 +791,17 @@ class Player extends Spectator {
         this.ghostrock += production;
     }
 
+
     payUpkeep() {
         this.upkeepPaid = true;
+
+        let memo = 0;
+        let upkeepCards = this.findCards(this.cardsInPlay, (card) => (card.upkeep > 0));
+        let upkeep = _.reduce(upkeepCards, (memo, card) => {
+            return(memo += card.upkeep);
+        }, memo);
+
+        this.ghostrock -= upkeep;
     }
 
     resetForRound() {
