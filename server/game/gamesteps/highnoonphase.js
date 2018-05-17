@@ -7,18 +7,8 @@ class HighNoonPhase extends Phase {
     constructor(game) {
         super(game, 'high noon');
         this.initialise([
-            new SimpleStep(game, () => this.receiveProduction()),
-            new SimpleStep(game, () => this.payUpkeep()),
             new ReadyPrompt(game, 'high noon')
         ]);
-    }
-
-    receiveProduction() {
-
-    }
-
-    payUpkeep() {
-
     }
 
     /*

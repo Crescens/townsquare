@@ -7,7 +7,7 @@ class CheatingResolutionPrompt extends AllPlayerPrompt {
 
     activePrompt() {
         return {
-            menuTitle: 'Play Gamblin Phase',
+            menuTitle: 'Play Cheatin\' Resolution?',
             buttons: [
                 { arg: 'selected', text: 'Done' }
             ]
@@ -20,7 +20,6 @@ class CheatingResolutionPrompt extends AllPlayerPrompt {
 
     onMenuCommand(player) {
         this.done = true;
-        this.game.addMessage('{0} was born a gamblin\' Dude', player);
     }
 }
 

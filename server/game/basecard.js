@@ -45,6 +45,7 @@ class BaseCard {
         this.type = cardData.type_code;
         this.production = cardData.production;
         this.influence = cardData.influence;
+        this.control = cardData.control;
         this.bullets = cardData.bullets;
         this.shooter = cardData.shooter;
         this.wealth = cardData.wealth;

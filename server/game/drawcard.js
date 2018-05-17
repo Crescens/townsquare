@@ -17,12 +17,11 @@ class DrawCard extends BaseCard {
 
         this.attachments = _([]);
         this.icons = {
-            bullet: 0,
+            bullets: 0,
             influence: 0,
             control: 0
         };
 
-        this.control = 0;
         this.booted = false;
         this.minCost = 0;
 
@@ -30,18 +29,18 @@ class DrawCard extends BaseCard {
             this.starting = true;
         }
 
-        /*if(cardData.is_military) {
-            this.icons.military++;
+        if(cardData.bullets) {
+            this.icons.bullets = cardData.bullets;
         }
 
-        if(cardData.is_intrigue) {
-            this.icons.intrigue++;
+        if(cardData.influence) {
+            this.icons.influence = cardData.influence;
         }
 
-        if(cardData.is_power) {
-            this.icons.power++;
+        if(cardData.control) {
+            this.icons.control = cardData.control;
         }
-
+        /*
         this.strengthModifier = 0;
         this.strengthMultiplier = 1;
         this.strengthSet = undefined;
@@ -136,14 +135,15 @@ class DrawCard extends BaseCard {
         return this.minCost;
     }
 
-    /*
-    getAmbushCost() {
-        return this.ambushCost;
+    
+    getInfluence() {
+        return this.influence ? this.influence : 0;
     }
-    */
-    getControl() {
-        return this.control;
-    }
+    
+
+   getControl() {
+       return this.control ? this.control : 0;
+   }
 
     /*
     modifyStrength(amount, applying = true) {

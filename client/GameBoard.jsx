@@ -390,7 +390,7 @@ export class InnerGameBoard extends React.Component {
                             </div>
                         </div>
                         <div className='player-info our-side'>
-                            <PlayerStats ghostrock={thisPlayer.ghostrock || 0} influence={thisPlayer.influence || 0}
+                            <PlayerStats ghostrock={thisPlayer.ghostrock || 0} influence={thisPlayer.totalInfluence || 0}
                                         control={thisPlayer.totalControl} isMe={!this.state.spectating} user={thisPlayer.user} />
                             <div className='deck-info'>
                                 <div className={'first-player-indicator ' + (thisPlayer.firstPlayer ? '' : 'hidden')}>Winner</div>

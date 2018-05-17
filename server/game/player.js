@@ -222,12 +222,15 @@ class Player extends Spectator {
             this.game.addMessage('{0} discards their draw hand', this);
             callback(discarded);
         });
+
+        this.drawHandRevealed = false;
     }
 
     revealDrawHand() {
-        _.each(this.drawHand, (card) => {
+        this.drawHand.each((card) => {
             card.facedown = false;
         });
+        this.drawhandRevealed = true;
     }
 
     drawCardsToHand(target, numCards) {
@@ -979,9 +982,17 @@ class Player extends Spectator {
     getTotalControl() {
         var control = this.cardsInPlay.reduce((memo, card) => {
             return memo + card.getControl();
-        }, this.outfit.control);
+        }, 0);
 
         return control;
+    }
+
+    getTotalInfluence() {
+        var influence = this.cardsInPlay.reduce((memo, card) => {
+            return memo + card.getInfluence();
+        }, 0);
+
+        return influence;
     }
 
     removeAttachment(attachment) {
@@ -1111,34 +1122,6 @@ class Player extends Spectator {
         }
     }
 
-    /*
-    getTotalIncome() {
-        if(!this.activePlot) {
-            return 0;
-        }
-
-        return this.activePlot.getIncome();
-    }
-
-
-    getTotalReserve() {
-        if(!this.activePlot) {
-            return 0;
-        }
-
-        return Math.max(this.activePlot.getReserve(), this.minReserve);
-    }
-
-    getClaim() {
-        return this.activePlot ? this.activePlot.getClaim() : 0;
-    }
-    */
-
-    /*
-    isBelowReserve() {
-        return this.hand.size() <= this.getTotalReserve();
-    }*/
-
     setSelectedCards(cards) {
         this.promptState.setSelectedCards(cards);
     }
@@ -1208,6 +1191,7 @@ class Player extends Spectator {
             promptedActionWindows: this.promptedActionWindows,
             //reserve: this.getTotalReserve(),
             totalControl: this.getTotalControl(),
+            totalInfluence: this.getTotalInfluence(),
             user: _.omit(this.user, ['password', 'email'])
         };
 
