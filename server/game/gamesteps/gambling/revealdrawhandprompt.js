@@ -2,24 +2,29 @@ const AllPlayerPrompt = require('../allplayerprompt.js');
 
 class RevealDrawHandPrompt extends AllPlayerPrompt {
     completionCondition(player) {
-        return player.drawHandRevealed;
+        return player.drawHandSelected;
     }
 
     activePrompt() {
         return {
-            menuTitle: 'Reveal Draw Hand?',
+            menuTitle: 'Reveal draw hand?',
             buttons: [
-                { arg: 'selected', text: 'Done' }
+                { arg: 'revealdraw', text: 'Done' }
             ]
         };
     }
 
     waitingPrompt() {
-        return { menuTitle: 'Waiting for Opponent to Reveal Draw Hand' };
+        return { menuTitle: 'Waiting for opponent to reveal draw hand' };
     }
 
     onMenuCommand(player) {
-        this.game.addMessage('{0} is ready to reveal their draw hand', this);
+        
+        //If Draw Hand > 5, Return
+    
+        player.drawHandSelected = true;
+    
+        this.game.addMessage('{0} is ready to reveal their draw hand', player);
     }
 }
 

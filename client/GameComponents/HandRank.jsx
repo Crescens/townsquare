@@ -18,14 +18,6 @@ class HandRank extends React.Component {
         //this.props.zoomCard(card);
     }
 
-    getBestHand() {
-
-    }
-
-    getNextHand() {
-
-    }
-
     render() {
         return (
             <div className='hand-ranks' style={this.props.style} >

@@ -185,34 +185,6 @@ class Card extends React.Component {
         return attachments;
     }
 
-    /*
-    getDupes() {
-        if(this.props.source !== 'play area') {
-            return null;
-        }
-
-        var facedownDupes = _.filter(this.props.card.dupes, card => {
-            return card.facedown;
-        });
-
-        if(!facedownDupes || facedownDupes.length === 0) {
-            return;
-        }
-
-        var index = 1;
-        var dupes = _.map(facedownDupes, dupe => {
-            var returnedDupe = (<Card key={dupe.uuid} className={'card-dupe card-dupe-' + index} source={this.props.source} card={dupe} wrapped={false}
-                            onMouseOver={this.props.disableMouseOver ? null : this.onMouseOver.bind(this, dupe)}
-                            onMouseOut={this.props.disableMouseOver ? null : this.onMouseOut} />);
-
-            index += 1;
-
-            return returnedDupe;
-        });
-
-        return dupes;
-    }*/
-
     getCardOrder() {
         if(!this.props.card.order) {
             return null;

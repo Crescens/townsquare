@@ -13,9 +13,10 @@ class GamblingPhase extends Phase {
         this.initialise([
             //new SimpleStep(game, () => this.ante()),
             new SimpleStep(game, () => this.drawHands()),
-            //new RevealDrawHandPrompt(game), //Throwing exceptions?
+            new RevealDrawHandPrompt(game), //Throwing exceptions?
             new SimpleStep(game, () => this.revealHands()),
-            new CheatingResolutionPrompt(game)
+            new CheatingResolutionPrompt(game),
+            new SimpleStep(game, () => this.discardCards())
         ]);
     }
 
@@ -35,6 +36,12 @@ class GamblingPhase extends Phase {
     revealHands() {
         _.each(this.game.getPlayers(), player => {
             player.revealDrawHand();
+        });
+    }
+
+    discardCards() {
+        _.each(this.game.getPlayers(), player => {
+            player.discardDrawHand();
         });
     }
 }

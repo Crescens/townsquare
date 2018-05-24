@@ -363,7 +363,7 @@ export class InnerGameBoard extends React.Component {
                     <div className='left-side'>
                         <div className='player-info'>
                             <PlayerStats ghostrock={otherPlayer ? otherPlayer.ghostrock : 0}
-                                         influence={otherPlayer ? otherPlayer.influence : 0}
+                                         influence={otherPlayer ? otherPlayer.totalInfluence : 0}
                                          control={otherPlayer ? otherPlayer.totalControl : 0}
                                          user={otherPlayer ? otherPlayer.user : null} />
                             <div className='deck-info'>
@@ -391,7 +391,7 @@ export class InnerGameBoard extends React.Component {
                         </div>
                         <div className='player-info our-side'>
                             <PlayerStats ghostrock={thisPlayer.ghostrock || 0} influence={thisPlayer.totalInfluence || 0}
-                                        control={thisPlayer.totalControl} isMe={!this.state.spectating} user={thisPlayer.user} />
+                                        control={thisPlayer.totalControl || 0} isMe={!this.state.spectating} user={thisPlayer.user} />
                             <div className='deck-info'>
                                 <div className={'first-player-indicator ' + (thisPlayer.firstPlayer ? '' : 'hidden')}>Winner</div>
                                 <div className='deck-type'>

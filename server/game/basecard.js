@@ -543,8 +543,8 @@ class BaseCard {
     getShortSummary() {
         return {
             code: this.cardData.code,
-            label: this.cardData.label,
-            name: this.cardData.name,
+            title: this.cardData.title,
+            //name: this.cardData.name,
             type: this.getType()
         };
     }

@@ -41,6 +41,7 @@ class Player extends Spectator {
         //this.challenges = new ChallengeTracker();
         this.minReserve = 0;
         this.costReducers = [];
+        this.readyToRevealDrawHand = false;
         //this.playableLocations = _.map(['marshal', 'play', 'ambush'], playingType => new PlayableLocation(playingType, this, 'hand'));
         //this.usedPlotsModifier = 0;
         //this.cannotGainGold = false;
@@ -169,57 +170,8 @@ class Player extends Spectator {
         return _.any(this.playableLocations, location => location.playingType === playingType && location.contains(card));
     }
 
-    /*getDuplicateInPlay(card) {
-        if(!card.isUnique()) {
-            return undefined;
-        }
-
-        return this.allCards.find(playCard => (
-            playCard.location === 'play area' &&
-            playCard !== card &&
-            (playCard.code === card.code || playCard.name === card.name) &&
-            playCard.owner === this
-        ));
-    }*/
-
-    /*getNumberOfChallengesWon(challengeType) {
-        return this.challenges.getWon(challengeType);
-    }
-
-    getNumberOfChallengesLost(challengeType) {
-        return this.challenges.getLost(challengeType);
-    }
-
-    getNumberOfChallengesInitiatedByType(challengeType) {
-        return this.challenges.getPerformed(challengeType);
-    }
-
-    getNumberOfChallengesInitiated() {
-        return this.challenges.complete;
-    }
-
-    getNumberOfUsedPlots() {
-        return this.plotDiscard.size() + this.usedPlotsModifier;
-    }
-
-    modifyUsedPlots(value) {
-        this.usedPlotsModifier += value;
-        this.game.raiseEvent('onUsedPlotsModified', this);
-    }
-
-    modifyClaim(winner, challengeType, claim) {
-        claim = this.activePlot.modifyClaim(winner, challengeType, claim);
-        this.cardsInPlay.each(card => {
-            claim = card.modifyClaim(winner, challengeType, claim);
-        });
-
-        return claim;
-    }*/
-
     discardDrawHand() {
-        //this.discardCards(this.drawHand);
         this.discardCards(this.drawHand, false, discarded => {
-            this.game.addMessage('{0} discards their draw hand', this);
             callback(discarded);
         });
 
@@ -230,7 +182,8 @@ class Player extends Spectator {
         this.drawHand.each((card) => {
             card.facedown = false;
         });
-        this.drawhandRevealed = true;
+
+        this.drawHandRevealed = true;
     }
 
     drawCardsToHand(target, numCards) {
@@ -1176,7 +1129,7 @@ class Player extends Spectator {
             boothillPile: this.getSummaryForCardList(this.boothillPile, activePlayer),
             discardPile: this.getSummaryForCardList(this.discardPile, activePlayer),
             disconnected: this.disconnected,
-            drawHand: this.getSummaryForCardList(this.drawHand, activePlayer, true),
+            drawHand: (this.drawHandRevealed) ? this.getSummaryForCardList(this.drawHand, activePlayer) : this.getSummaryForCardList(this.drawHand, activePlayer, true),
             outfit: this.outfit.getSummary(activePlayer),
             firstPlayer: this.firstPlayer,
             ghostrock: this.ghostrock,

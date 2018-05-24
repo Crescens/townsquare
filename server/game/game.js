@@ -234,7 +234,7 @@ class Game extends EventEmitter {
                 player.bootCard(card);
             }
 
-            this.addMessage('{0} {1} {2}', player, card.booted ? 'boots' : 'unboots', card);
+            this.addMessage('{0} {1} {2}', player, card.booted ? 'boots' : 'unboots', card.title);
         }
     }
 
