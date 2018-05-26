@@ -2,6 +2,7 @@ const _ = require('underscore');
 const Phase = require('./phase.js');
 const SimpleStep = require('./simplestep.js');
 const StartingPossePrompt = require('./setup/startingposseprompt.js');
+const GrifterPrompt = require('./setup/grifterprompt.js');
 
 class SetupPhase extends Phase {
     constructor(game) {
@@ -11,8 +12,7 @@ class SetupPhase extends Phase {
             new SimpleStep(game, () => this.drawStartingPosse()),
             new StartingPossePrompt(game),
             new SimpleStep(game, () => this.startGame()),
-            //Grift Prompt
-            new SimpleStep(game, () => this.setupDone())
+            //new GrifterPrompt(game)
         ]);
     }
 

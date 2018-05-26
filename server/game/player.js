@@ -171,8 +171,8 @@ class Player extends Spectator {
     }
 
     discardDrawHand() {
-        this.discardCards(this.drawHand, false, discarded => {
-            callback(discarded);
+        this.discardCards(this.drawHand._wrapped, false, () => {
+            //callback(discarded);
         });
 
         this.drawHandRevealed = false;
@@ -568,32 +568,12 @@ class Player extends Spectator {
         this.game.raiseMergedEvent('onCardEntersPlay', { card: card, playingType: playingType, originalLocation: originalLocation });
     }
 
-    setupDone() {
-        if(this.hand.size() < StartingHandSize) {
+    putPosseInPlay() {
+        /*if(this.hand.size() < StartingHandSize) {
             this.drawCardsToHand(StartingHandSize - this.hand.size());
-        }
+        }*/
 
-        var processedCards = _([]);
 
-        this.cardsInPlay.each(card => {
-            card.facedown = false;
-
-            if(!card.isUnique()) {
-                processedCards.push(card);
-                return;
-            }
-
-            var duplicate = this.findCardByName(processedCards, card.name);
-
-            if(duplicate) {
-                duplicate.addDuplicate(card);
-            } else {
-                processedCards.push(card);
-            }
-
-        });
-
-        this.cardsInPlay = processedCards;
     }
 
     drawPhase() {
@@ -750,6 +730,16 @@ class Player extends Spectator {
         
         this.posse = true;
         this.readyToStart = true;
+
+        let processedCards = _([]);
+
+        this.cardsInPlay.each(card => {
+            card.facedown = false;
+
+            processedCards.push(card);
+        });
+
+        this.cardsInPlay = processedCards;
     }
 
     receiveProduction() {

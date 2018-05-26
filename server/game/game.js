@@ -366,6 +366,7 @@ class Game extends EventEmitter {
         //greater than
         //all opponents influence
         //this.recordWinner(player, 'control');
+        
     }
 
     // Decked i.e. Deck empty, reshuffle.

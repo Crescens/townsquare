@@ -141,9 +141,9 @@ class DrawCard extends BaseCard {
     }
     
 
-   getControl() {
-       return this.control ? this.control : 0;
-   }
+    getControl() {
+        return this.control ? this.control : 0;
+    }
 
     /*
     modifyStrength(amount, applying = true) {
@@ -392,6 +392,10 @@ class DrawCard extends BaseCard {
 
     canBePlayed() {
         return this.allowGameAction('play');
+    }
+
+    canBeDiscarded() {
+        return this.allowGameAction('discard');
     }
 
     /*

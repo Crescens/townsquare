@@ -146,6 +146,7 @@ describe('BaseCard', function () {
         describe('when there are no restrictions', function() {
             it('should return true', function() {
                 expect(this.card.allowGameAction('kill')).toBe(true);
+                expect(this.card.allowGameAction('discard')).toBe(true);
             });
         });
 
