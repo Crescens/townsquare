@@ -254,7 +254,7 @@ class Player extends Spectator {
     shuffleDiscardToDrawDeck() {
 
         if(this.discardPile.size() > 0) {
-            _.each(this.discardPile, card => {
+            this.discardPile.each(card => {
                 this.moveCard(card, 'draw deck');
             });
 
