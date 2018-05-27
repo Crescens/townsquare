@@ -452,7 +452,7 @@ export class InnerGameBoard extends React.Component {
                             drawDeck={thisPlayer.drawDeck}
                             onDragDrop={this.onDragDrop}
                             discardPile={thisPlayer.discardPile}
-                            deadPile={thisPlayer.deadPile}
+                            boothillPile={thisPlayer.boothillPile}
                             spectating={this.state.spectating}
                             onMenuItemClick={this.onMenuItemClick}/>
                     </div>

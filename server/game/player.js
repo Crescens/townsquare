@@ -22,8 +22,6 @@ class Player extends Spectator {
         super(id, user);
 
         this.drawDeck = _([]);
-        //this.plotDeck = _([]);
-        //this.plotDiscard = _([]);
         this.hand = _([]);
         this.drawHand = _([]);
         this.locations = [];
@@ -806,6 +804,11 @@ class Player extends Spectator {
             return true;
         }
 
+        if(target === 'boothill pile') {
+            this.aceCard(card, false);
+            return true;
+        }
+
         if(this.inPlayLocation(target)) {
             this.putIntoPlay(card, 'play', target);
         } else {
@@ -871,10 +874,10 @@ class Player extends Spectator {
         });
     }
 
-    sacrificeCard(card) {
-        this.game.applyGameAction('sacrifice', card, card => {
-            this.game.raiseEvent('onSacrificed', this, card, () => {
-                this.moveCard(card, 'discard pile');
+    aceCard(card) {
+        this.game.applyGameAction('ace', card, card => {
+            this.game.raiseEvent('onAced', this, card, () => {
+                this.moveCard(card, 'boothill pile');
             });
         });
     }
