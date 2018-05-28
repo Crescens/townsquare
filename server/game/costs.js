@@ -39,7 +39,7 @@ const Costs = {
                 return context.source.booted;
             },
             unpay: function(context) {
-                context.source.controller.standCard(context.source);
+                context.source.controller.unbootCard(context.source);
             }
         };
     },

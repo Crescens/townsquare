@@ -217,13 +217,18 @@ class Game extends EventEmitter {
             return;
         }
 
-        // Attempt to play cards that are not already in the play area.
-        if(['hand', 'discard pile', 'boothill pile'].includes(card.location) && player.playCard(card)) {
+        // TODO: What is this for?
+        if(card.onClick(player)) {
             return;
         }
 
-        // TODO: What is this for?
-        if(card.onClick(player)) {
+        this.defaultCardClick(player, card);
+
+    }
+
+    defaultCardClick(player, card) {
+        // Attempt to play cards that are not already in the play area.
+        if(['hand', 'discard pile', 'boothill pile'].includes(card.location) && player.playCard(card)) {
             return;
         }
 

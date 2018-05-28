@@ -308,11 +308,10 @@ class DrawCard extends BaseCard {
      * attach the passed attachment card.
      */
     allowAttachment(attachment) {
-        return (
-            this.isBlank() ||
-            this.allowedAttachmentTrait === 'any' ||
-            this.allowedAttachmentTrait !== 'none' && attachment.hasTrait(this.allowedAttachmentTrait)
-        );
+        return (this.getType() === 'dude');
+        //    this.isBlank() ||
+        //    this.allowedAttachmentTrait === 'any' ||
+        //    this.allowedAttachmentTrait !== 'none' && attachment.hasTrait(this.allowedAttachmentTrait)
     }
 
     /**
@@ -320,7 +319,7 @@ class DrawCard extends BaseCard {
      * Opponent cards only, specific factions, etc) for this card.
      */
     canAttach(player, card) {
-        return card && this.getType() === 'attachment';
+        return card && ((this.getType() === 'goods') || (this.getType === 'spell'));
     }
 
     removeAttachment(attachment) {

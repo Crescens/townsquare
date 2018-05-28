@@ -9,7 +9,7 @@ const GameLocation = require ('../../../server/game/gamelocation.js');
 describe('Player', () => {
     describe('drop()', function() {
         beforeEach(function() {
-            this.gameSpy = jasmine.createSpyObj('game', ['getOtherPlayer', 'raiseEvent', 'raiseMergedEvent', 'playerDecked', 'addGameLocation']);
+            this.gameSpy = jasmine.createSpyObj('game', ['getOtherPlayer', 'raiseEvent', 'raiseMergedEvent', 'playerDecked', 'addGameLocation', 'applyGameAction']);
 
             this.player = new Player('1', 'Player 1', true, this.gameSpy);
             this.player.initialise();

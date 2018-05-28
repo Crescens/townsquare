@@ -550,7 +550,7 @@ class BaseCard {
     }
 
     isAttachment() {
-        if(!_.isEmpty(_.intersection(['spell', 'goods'],[this.type_code]))) {
+        if(_.intersection(['spell', 'goods'],[this.type]).length > 0) {
             return true;
         }
     }
