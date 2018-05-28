@@ -744,7 +744,7 @@ class Player extends Spectator {
         let memo = 0;
         let producers = this.findCards(this.cardsInPlay, (card) => (card.production > 0));
         let production = _.reduce(producers, (memo, card) => {
-            return(memo += card.production);
+            return (memo += card.production);
         }, memo);
 
         this.ghostrock += production;
@@ -758,7 +758,7 @@ class Player extends Spectator {
         let memo = 0;
         let upkeepCards = this.findCards(this.cardsInPlay, (card) => (card.upkeep > 0));
         let upkeep = _.reduce(upkeepCards, (memo, card) => {
-            return(memo += card.upkeep);
+            return (memo += card.upkeep);
         }, memo);
 
         this.ghostrock -= upkeep;
