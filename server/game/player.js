@@ -174,6 +174,7 @@ class Player extends Spectator {
         });
 
         this.drawHandRevealed = false;
+        this.handRank = 0;
     }
 
     revealDrawHand() {
@@ -182,6 +183,8 @@ class Player extends Spectator {
         });
 
         this.drawHandRevealed = true;
+
+        this.game.addMessage('{0} reveals rank {1}', this.name, this.handRank);
     }
 
     drawCardsToHand(target, numCards) {
@@ -347,7 +350,6 @@ class Player extends Spectator {
     prepareDecks() {
         var deck = new Deck(this.deck);
         var preparedDeck = deck.prepare(this);
-        //this.plotDeck = _( /"dDeck.plotCards);
         this.legend = preparedDeck.legend;
         this.outfit = preparedDeck.outfit;
         this.drawDeck = _(preparedDeck.drawCards);
@@ -373,9 +375,6 @@ class Player extends Spectator {
         this.addOutfitToTown();
 
         this.ghostrock = this.outfit.wealth || 0;
-        //this.limitedPlayed = 0;
-        //this.maxLimited = 1;
-        //this.activePlot = undefined;
     }
 
     startGame() {
@@ -385,24 +384,6 @@ class Player extends Spectator {
 
         this.shuffleDrawDeck();
         this.drawCardsToHand('hand', StartingHandSize);
-    }
-
-    /*
-    mulligan() {
-        if(this.takenMulligan) {
-            return false;
-        }
-
-        this.initDrawDeck();
-        this.takenMulligan = true;
-        this.readyToStart = true;
-
-        return true;
-    }
-    */
-
-    keep() {
-        this.readyToStart = true;
     }
 
     addCostReducer(reducer) {
@@ -566,27 +547,6 @@ class Player extends Spectator {
         this.game.raiseMergedEvent('onCardEntersPlay', { card: card, playingType: playingType, originalLocation: originalLocation });
     }
 
-    putPosseInPlay() {
-        /*if(this.hand.size() < StartingHandSize) {
-            this.drawCardsToHand(StartingHandSize - this.hand.size());
-        }*/
-
-
-    }
-
-    drawPhase() {
-        this.game.addMessage('{0} draws {1} cards for the draw phase', this, this.drawPhaseCards);
-        this.drawCardsToHand(this.drawPhaseCards);
-    }
-
-    beginMarshal() {
-        this.game.addGold(this, this.getTotalIncome());
-
-        this.game.raiseMergedEvent('onIncomeCollected', { player: this });
-
-        this.limitedPlayed = 0;
-    }
-
     hasUnmappedAttachments() {
         return this.cardsInPlay.any(card => {
             return card.isAttachment();
@@ -641,22 +601,6 @@ class Player extends Spectator {
     }
 
     isValidDropCombination(source, target) {
-        /*
-        if(source === 'plot deck' && target !== 'revealed plots') {
-            return false;
-        }
-
-        if(source === 'revealed plots' && target !== 'plot deck') {
-            return false;
-        }
-
-        if(target === 'plot deck' && source !== 'revealed plots') {
-            return false;
-        }
-
-        if(target === 'revealed plots' && source !== 'plot deck') {
-            return false;
-        }*/
         return source !== target;
     }
 
@@ -674,7 +618,6 @@ class Player extends Spectator {
                 return this.boothillPile;
             case 'play area':
                 return this.cardsInPlay;
-                //return this.game.getLocations();
             default:
                 if(this.additionalPiles[source]) {
                     return this.additionalPiles[source].cards;
@@ -843,6 +786,10 @@ class Player extends Spectator {
         if(UUID.test(target) || TOWNSQUARE.test(target) || /street/.test(target)) {
             return true;
         }
+    }
+
+    getHandRank() {
+        return this.handRank;
     }
 
     promptForAttachment(card, playingType) {
@@ -1106,19 +1053,24 @@ class Player extends Spectator {
         this.promptState.cancelPrompt();
     }
 
+    ante() {
+        this.ghostrock--;
+    }
+
+    winLowball(gr) {
+        this.ghostrock += gr;
+    }
+
     getState(activePlayer) {
         let isActivePlayer = activePlayer === this;
         let promptState = isActivePlayer ? this.promptState.getState() : {};
         let state = {
-            activePlot: this.activePlot ? this.activePlot.getSummary(activePlayer) : undefined,
             additionalPiles: _.mapObject(this.additionalPiles, pile => ({
                 isPrivate: pile.isPrivate,
                 cards: this.getSummaryForCardList(pile.cards, activePlayer, pile.isPrivate)
             })),
             legend: this.legend ? this.legend.getSummary(activePlayer) : undefined,
-            //bannerCards: this.getSummaryForCardList(this.bannerCards, activePlayer),
             cardsInPlay: this.getSummaryForCardList(this.cardsInPlay, activePlayer),
-            //claim: this.getClaim(),
             boothillPile: this.getSummaryForCardList(this.boothillPile, activePlayer),
             discardPile: this.getSummaryForCardList(this.discardPile, activePlayer),
             disconnected: this.disconnected,
@@ -1127,7 +1079,7 @@ class Player extends Spectator {
             firstPlayer: this.firstPlayer,
             ghostrock: this.ghostrock,
             hand: this.getSummaryForCardList(this.hand, activePlayer, true),
-            handRank: this.handRank,
+            handRank: (this.drawHandRevealed) ? this.getHandRank() : 0,
             id: this.id,
             left: this.left,
             locations: this.locations,
@@ -1135,7 +1087,6 @@ class Player extends Spectator {
             name: this.name,
             phase: this.phase,
             promptedActionWindows: this.promptedActionWindows,
-            //reserve: this.getTotalReserve(),
             totalControl: this.getTotalControl(),
             totalInfluence: this.getTotalInfluence(),
             user: _.omit(this.user, ['password', 'email'])

@@ -11,11 +11,12 @@ class GamblingPhase extends Phase {
         this.lowballPot = 0;
 
         this.initialise([
-            //new SimpleStep(game, () => this.ante()),
+            new SimpleStep(game, () => this.ante()),
             new SimpleStep(game, () => this.drawHands()),
-            new RevealDrawHandPrompt(game), //Throwing exceptions?
+            new RevealDrawHandPrompt(game),
             new SimpleStep(game, () => this.revealHands()),
             new CheatingResolutionPrompt(game),
+            new SimpleStep(game, () => this.compareHands()),
             new SimpleStep(game, () => this.discardCards())
         ]);
     }
@@ -23,7 +24,7 @@ class GamblingPhase extends Phase {
     ante() {
         _.each(this.game.getPlayers(), player => {
             player.ante();
-            lowballPot++;
+            this.lowballPot++;
         });
     }
 
@@ -35,7 +36,7 @@ class GamblingPhase extends Phase {
 
     revealHands() {
         _.each(this.game.getPlayers(), player => {
-            player.revealDrawHand();
+            player.revealDrawHand();            
         });
     }
 
@@ -43,6 +44,29 @@ class GamblingPhase extends Phase {
         _.each(this.game.getPlayers(), player => {
             player.discardDrawHand();
         });
+    }
+
+    compareHands() {
+
+        let winner = _.reduce(this.game.getPlayers(), (player, memo) => {
+
+            if(player.getHandRank() < memo.getHandRank()) {
+                return player;
+            }
+            
+            return memo;
+            
+        });
+
+        let firstPlayer = winner;
+
+        this.game.addMessage('{0} is the winner and receives {1} GR', winner.name, this.lowballPot);
+
+        _.each(this.game.getPlayers(), player => {
+            player.firstPlayer = firstPlayer === player;
+        });
+        
+        winner.winLowball(this.lowballPot);
     }
 }
 

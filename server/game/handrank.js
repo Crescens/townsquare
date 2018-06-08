@@ -33,8 +33,6 @@ class HandRank {
         //console.log(this.pokerHands);
     }
 
-    //This method should return the "best" rank at the given context of the game
-    //i.e. lowest possible hand in Gamblin', highest in Noon
     Rank() {
         let bestRank = _.orderBy(this.pokerHands, 'rank', 'desc');
         //console.log(bestRank);

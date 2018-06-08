@@ -405,6 +405,7 @@ export class InnerGameBoard extends React.Component {
                         <PlayerRow
                             additionalPiles={otherPlayer ? otherPlayer.additionalPiles : {}}
                             hand={otherPlayer ? otherPlayer.hand : []} isMe={false}
+                            handRank={otherPlayer ? otherPlayer.handRank : 0}
                             drawHand={otherPlayer ? otherPlayer.drawHand : []} isMe={false}
                             numDrawCards={otherPlayer ? otherPlayer.numDrawCards : 0}
                             discardPile={otherPlayer ? otherPlayer.discardPile : []}
@@ -440,7 +441,7 @@ export class InnerGameBoard extends React.Component {
                         <PlayerRow isMe={!this.state.spectating}
                             additionalPiles={thisPlayer.additionalPiles}
                             hand={thisPlayer.hand}
-                            handrank={thisPlayer.handrank}
+                            handRank={thisPlayer.handRank}
                             drawHand={thisPlayer.drawHand}
                             onCardClick={this.onCardClick}
                             onMouseOver={this.onMouseOver}

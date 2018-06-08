@@ -170,15 +170,21 @@ class PlayerRow extends React.Component {
     }
 
     render() {
-        var className = 'panel hand';
-        var needsSquish = this.props.hand && this.props.hand.length * 64 > 342;
+        var handClass = 'panel hand';
+        var drawClass = 'panel draw hand';
+        var handSquish = this.props.hand && this.props.hand.length * 64 > 342;
+        var drawSquish = this.props.drawHand && this.props.drawHand.length * 64 > 342;
 
-        if(needsSquish) {
-            className += ' squish';
+        if(handSquish) {
+            handClass += ' squish';
         }
 
-        var hand = this.getHand(this.props.hand, needsSquish);
-        var drawHand = this.getHand(this.props.drawHand, needsSquish);
+        if(drawSquish) {
+            drawClass += ' squish';
+        }
+
+        var hand = this.getHand(this.props.hand, handSquish);
+        var drawHand = this.getHand(this.props.drawHand, drawSquish);
 
         var drawDeckMenu = [
             { text: 'Show', handler: this.onShowDeckClick, showPopup: true },
@@ -193,7 +199,7 @@ class PlayerRow extends React.Component {
         return (
             <div className='player-home-row'>
                 <div className='deck-cards'>
-                    <div className={className} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} onDrop={(event) => this.onDragDrop(event, 'hand')}>
+                    <div className={handClass} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} onDrop={(event) => this.onDragDrop(event, 'hand')}>
                         <div className='panel-header'>
                             {'Hand (' + hand.length + ')'}
                         </div>
@@ -212,9 +218,9 @@ class PlayerRow extends React.Component {
                                 popupLocation={this.props.isMe || this.props.spectating ? 'top' : 'bottom'} onDragDrop={this.props.onDragDrop} orientation='booted' />
                   {this.getOutOfGamePile()}
 
-                  <HandRank onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} handrank={this.props.handrank} />
+                  <HandRank onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} handRank={this.props.handRank} />
 
-                  <div className={className} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} onDrop={(event) => this.onDragDrop(event, 'draw hand')}>
+                  <div className={drawClass} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} onDrop={(event) => this.onDragDrop(event, 'draw hand')}>
                       <div className='panel-header'>
                           {'Draw Hand (' + drawHand.length + ')'}
                       </div>
@@ -235,7 +241,7 @@ PlayerRow.propTypes = {
     drawDeck: PropTypes.array,
     drawHand: PropTypes.array,
     hand: PropTypes.array,
-    handrank: PropTypes.number,
+    handRank: PropTypes.number,
     isMe: PropTypes.bool,
     numDrawCards: PropTypes.number,
     onCardClick: PropTypes.func,
