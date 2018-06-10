@@ -32,6 +32,7 @@ export class InnerGameBoard extends React.Component {
         this.onConcedeClick = this.onConcedeClick.bind(this);
         this.onLeaveClick = this.onLeaveClick.bind(this);
         this.onShuffleClick = this.onShuffleClick.bind(this);
+        this.onPullClick = this.onPullClick.bind(this);
         this.onKeyPress = this.onKeyPress.bind(this);
         this.onSendClick = this.onSendClick.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -233,6 +234,10 @@ export class InnerGameBoard extends React.Component {
         this.props.sendGameMessage('shuffleDeck');
     }
 
+    onPullClick() {
+        this.props.sendGameMessage('pullCard');
+    }
+
     onDragDrop(card, source, target) {
         this.props.sendGameMessage('drop', card.uuid, source, target);
     }
@@ -405,7 +410,7 @@ export class InnerGameBoard extends React.Component {
                         <PlayerRow
                             additionalPiles={otherPlayer ? otherPlayer.additionalPiles : {}}
                             hand={otherPlayer ? otherPlayer.hand : []} isMe={false}
-                            handRank={otherPlayer ? otherPlayer.handRank : 0}
+                            handRank={otherPlayer ? otherPlayer.handRank : {rank: 0}}
                             drawHand={otherPlayer ? otherPlayer.drawHand : []} isMe={false}
                             numDrawCards={otherPlayer ? otherPlayer.numDrawCards : 0}
                             discardPile={otherPlayer ? otherPlayer.discardPile : []}
@@ -448,6 +453,7 @@ export class InnerGameBoard extends React.Component {
                             onMouseOut={this.onMouseOut}
                             numDrawCards={thisPlayer.numDrawCards}
                             onDrawClick={this.onDrawClick}
+                            onPullClick={this.onPullClick}
                             onShuffleClick={this.onShuffleClick}
                             showDrawDeck={this.state.showDrawDeck}
                             drawDeck={thisPlayer.drawDeck}

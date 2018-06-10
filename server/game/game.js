@@ -458,6 +458,16 @@ class Game extends EventEmitter {
         player.selectDeck(deck);
     }
 
+    pullCard(playerName) {
+        var player = this.getPlayerByName(playerName);
+
+        if(!player) {
+            return;
+        }
+
+        player.pull();
+    }
+
     shuffleDeck(playerName) {
         var player = this.getPlayerByName(playerName);
         if(!player) {

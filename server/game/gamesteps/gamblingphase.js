@@ -16,14 +16,15 @@ class GamblingPhase extends Phase {
             new RevealDrawHandPrompt(game),
             new SimpleStep(game, () => this.revealHands()),
             new CheatingResolutionPrompt(game),
-            new SimpleStep(game, () => this.compareHands()),
+            new SimpleStep(game, () => this.determineWinner()),
+            new SimpleStep(game, () => this.gainLowballPot()),
             new SimpleStep(game, () => this.discardCards())
         ]);
     }
 
     ante() {
         _.each(this.game.getPlayers(), player => {
-            player.ante();
+            this.game.addGhostRock(player, -1);
             this.lowballPot++;
         });
     }
@@ -46,14 +47,23 @@ class GamblingPhase extends Phase {
         });
     }
 
-    compareHands() {
+    determineWinner() {
 
         let winner = _.reduce(this.game.getPlayers(), (player, memo) => {
 
-            if(player.getHandRank() < memo.getHandRank()) {
+            let pHand = player.getHandRank();
+            let mHand = memo.getHandRank();
+
+            if(pHand.rank < mHand.rank) {
                 return player;
+            } else if(pHand.rank === mHand.rank) {
+                for(let i = 0; i < pHand.tiebreaker.length; i++) {
+                    if(pHand.tiebreaker[i] < mHand.tiebreaker[i]) {
+                        return player;
+                    }
+                }
             }
-            
+
             return memo;
             
         });
@@ -66,7 +76,11 @@ class GamblingPhase extends Phase {
             player.firstPlayer = firstPlayer === player;
         });
         
-        winner.winLowball(this.lowballPot);
+        this.game.addGhostRock(winner, this.lowballPot);
+    }
+
+    gainLowballPot() {
+
     }
 }
 

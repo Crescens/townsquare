@@ -5,14 +5,14 @@ const HandRank = require('../../../server/game/handrank.js');
 describe('HandRank()', function() {
     describe('called with no argument', function() {
         it('returns an invalid hand rank.', function() {
-            expect(new HandRank().Rank()).toEqual(0);
+            expect(new HandRank().Rank().rank).toEqual(0);
         });
     });
 
     describe('called with an argument that is not an array', function() {
         it('returns an invalid hand rank.', function() {
-            expect(new HandRank(1).Rank()).toEqual(0);
-            expect(new HandRank('foo').Rank()).toEqual(0);
+            expect(new HandRank(1).Rank().rank).toEqual(0);
+            expect(new HandRank('foo').Rank().rank).toEqual(0);
         });
     });
 
@@ -23,59 +23,59 @@ describe('HandRank()', function() {
 
         it('should return a valid DeadMansHand with exactly the correct hand', function() {
             let handRank = new HandRank(this.hand);
-            expect(handRank.Rank()).toBe(11);
+            expect(handRank.Rank().rank).toBe(11);
         });
 
         it('should return a valid DeadMansHand if it contains extra cards', function() {
             this.hand.push(new Card('K', 'D'));
             let handRank = new HandRank(this.hand);
-            expect(handRank.Rank()).toBe(11);
+            expect(handRank.Rank().rank).toBe(11);
 
             this.hand.push(new Card('A', 'H'));
             handRank = new HandRank(this.hand);
-            expect(handRank.Rank()).toBe(11);
+            expect(handRank.Rank().rank).toBe(11);
 
             this.hand.push(new Card('7', 'D'));
             handRank = new HandRank(this.hand);
-            expect(handRank.Rank()).toBe(11);
+            expect(handRank.Rank().rank).toBe(11);
         });
 
         it('should no longer return a valid DeadMansHand with four cards', function() {
             this.hand.pop();
             let handRank = new HandRank(this.hand);
-            expect(handRank.Rank()).not.toBe(11);
+            expect(handRank.Rank().rank).not.toBe(11);
         });
 
         it('should return a DeadMansHand regardless of the order', function () {
             let card = this.hand.pop();
             this.hand.unshift(card);
             let handRank = new HandRank(this.hand);
-            expect(handRank.Rank()).toBe(11);
+            expect(handRank.Rank().rank).toBe(11);
 
             card = this.hand.pop();
             this.hand.unshift(card);
             handRank = new HandRank(this.hand);
-            expect(handRank.Rank()).toBe(11);
+            expect(handRank.Rank().rank).toBe(11);
 
             card = this.hand.pop();
             this.hand.unshift(card);
             handRank = new HandRank(this.hand);
-            expect(handRank.Rank()).toBe(11);
+            expect(handRank.Rank().rank).toBe(11);
 
             card = this.hand.pop();
             this.hand.unshift(card);
             handRank = new HandRank(this.hand);
-            expect(handRank.Rank()).toBe(11);
+            expect(handRank.Rank().rank).toBe(11);
         });
 
         it('should return a DeadMansHand with Jokers', function () {
             this.hand.pop();
             let handRank = new HandRank(this.hand);
-            expect(handRank.Rank()).not.toBe(11);
+            expect(handRank.Rank().rank).not.toBe(11);
 
             this.hand.push(new Card('joker'));
             handRank = new HandRank(this.hand);
-            expect(handRank.Rank()).toBe(11);
+            expect(handRank.Rank().rank).toBe(11);
 
             let joker1 = new HandRank(this.hand = [new Card('A', 'S'), new Card('A', 'C'), new Card('8', 'S'), new Card('8', 'C'), new Card('joker')]);
             let joker2 = new HandRank(this.hand = [new Card('A', 'S'), new Card('joker'), new Card('joker'), new Card('8', 'C'), new Card('J', 'D')]);
@@ -83,11 +83,11 @@ describe('HandRank()', function() {
             let joker4 = new HandRank(this.hand = [new Card('joker'), new Card('joker'), new Card('joker'), new Card('joker'), new Card('J', 'D')]);
             let joker5 = new HandRank(this.hand = [new Card('joker'), new Card('joker'), new Card('joker'), new Card('joker'), new Card('joker')]);
 
-            expect(joker1.Rank()).toBe(11);
-            expect(joker2.Rank()).toBe(11);
-            expect(joker3.Rank()).toBe(11);
-            expect(joker4.Rank()).toBe(11);
-            expect(joker5.Rank()).toBe(11);
+            expect(joker1.Rank().rank).toBe(11);
+            expect(joker2.Rank().rank).toBe(11);
+            expect(joker3.Rank().rank).toBe(11);
+            expect(joker4.Rank().rank).toBe(11);
+            expect(joker5.Rank().rank).toBe(11);
         });
     });
 
@@ -101,8 +101,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(10);
-            expect(cheatinHandRank.Rank()).toBe(10);
+            expect(legalHandRank.Rank().rank).toBe(10);
+            expect(cheatinHandRank.Rank().rank).toBe(10);
         });
 
         it('should return a valid FiveOfAKind with additional cards', function() {
@@ -112,8 +112,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(10);
-            expect(cheatinHandRank.Rank()).toBe(10);
+            expect(legalHandRank.Rank().rank).toBe(10);
+            expect(cheatinHandRank.Rank().rank).toBe(10);
         });
 
         it('should no longer return FiveOfAKind with 4 cards', function() {
@@ -123,8 +123,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).not.toBe(10);
-            expect(cheatinHandRank.Rank()).not.toBe(10);
+            expect(legalHandRank.Rank().rank).not.toBe(10);
+            expect(cheatinHandRank.Rank().rank).not.toBe(10);
         });
     });
 
@@ -135,7 +135,7 @@ describe('HandRank()', function() {
 
         it('should return a valid StraightFlush with exactly the correct hand', function() {
             let legalHandRank = new HandRank(this.legalHand);
-            expect(legalHandRank.Rank()).toBe(9);
+            expect(legalHandRank.Rank().rank).toBe(9);
         });
 
         it('should return a valid StraightFlush with additional cards', function() {
@@ -143,7 +143,7 @@ describe('HandRank()', function() {
             this.legalHand.push(new Card('Q', 'D'));
 
             let legalHandRank = new HandRank(this.legalHand);
-            expect(legalHandRank.Rank()).toBe(9);
+            expect(legalHandRank.Rank().rank).toBe(9);
         });
 
         it('should no longer return StraightFlush with 4 cards', function() {
@@ -151,7 +151,7 @@ describe('HandRank()', function() {
 
             let legalHandRank = new HandRank(this.legalHand);
 
-            expect(legalHandRank.Rank()).not.toBe(9);
+            expect(legalHandRank.Rank().rank).not.toBe(9);
         });
 
     });
@@ -166,8 +166,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(8);
-            expect(cheatinHandRank.Rank()).toBe(8);
+            expect(legalHandRank.Rank().rank).toBe(8);
+            expect(cheatinHandRank.Rank().rank).toBe(8);
         });
 
         it('should return a valid FourOfAKind with additional cards', function() {
@@ -177,8 +177,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(8);
-            expect(cheatinHandRank.Rank()).toBe(8);
+            expect(legalHandRank.Rank().rank).toBe(8);
+            expect(cheatinHandRank.Rank().rank).toBe(8);
         });
 
         it('should no longer return FourOfAKind with 3 cards', function() {
@@ -191,8 +191,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).not.toBe(8);
-            expect(cheatinHandRank.Rank()).not.toBe(8);
+            expect(legalHandRank.Rank().rank).not.toBe(8);
+            expect(cheatinHandRank.Rank().rank).not.toBe(8);
         });
     });
 
@@ -206,8 +206,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(7);
-            expect(cheatinHandRank.Rank()).toBe(7);
+            expect(legalHandRank.Rank().rank).toBe(7);
+            expect(cheatinHandRank.Rank().rank).toBe(7);
         });
 
         it('should return a valid FullHouse with additional cards', function() {
@@ -217,8 +217,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(7);
-            expect(cheatinHandRank.Rank()).toBe(7);
+            expect(legalHandRank.Rank().rank).toBe(7);
+            expect(cheatinHandRank.Rank().rank).toBe(7);
         });
 
         it('should no longer return FullHouse with 3 cards', function() {
@@ -231,8 +231,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).not.toBe(7);
-            expect(cheatinHandRank.Rank()).not.toBe(7);
+            expect(legalHandRank.Rank().rank).not.toBe(7);
+            expect(cheatinHandRank.Rank().rank).not.toBe(7);
         });
     });
 
@@ -246,8 +246,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(6);
-            expect(cheatinHandRank.Rank()).toBe(6);
+            expect(legalHandRank.Rank().rank).toBe(6);
+            expect(cheatinHandRank.Rank().rank).toBe(6);
         });
 
         it('should return a valid Flush with additional cards', function() {
@@ -257,8 +257,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(6);
-            expect(cheatinHandRank.Rank()).toBe(6);
+            expect(legalHandRank.Rank().rank).toBe(6);
+            expect(cheatinHandRank.Rank().rank).toBe(6);
         });
 
         it('should no longer return Flush with 4 cards', function() {
@@ -268,8 +268,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).not.toBe(6);
-            expect(cheatinHandRank.Rank()).not.toBe(6);
+            expect(legalHandRank.Rank().rank).not.toBe(6);
+            expect(cheatinHandRank.Rank().rank).not.toBe(6);
         });
     });
 
@@ -280,7 +280,7 @@ describe('HandRank()', function() {
 
         it('should return a valid Straight with exactly the correct hand', function() {
             let legalHandRank = new HandRank(this.legalHand);
-            expect(legalHandRank.Rank()).toBe(5);
+            expect(legalHandRank.Rank().rank).toBe(5);
         });
 
         it('should return a valid Straight with additional cards', function() {
@@ -288,7 +288,7 @@ describe('HandRank()', function() {
             this.legalHand.push(new Card('9', 'D'));
 
             let legalHandRank = new HandRank(this.legalHand);
-            expect(legalHandRank.Rank()).toBe(5);
+            expect(legalHandRank.Rank().rank).toBe(5);
         });
 
         it('should no longer return Straight with 4 cards', function() {
@@ -296,7 +296,7 @@ describe('HandRank()', function() {
 
             let legalHandRank = new HandRank(this.legalHand);
 
-            expect(legalHandRank.Rank()).not.toBe(5);
+            expect(legalHandRank.Rank().rank).not.toBe(5);
         });
 
     });
@@ -311,8 +311,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(4);
-            expect(cheatinHandRank.Rank()).toBe(4);
+            expect(legalHandRank.Rank().rank).toBe(4);
+            expect(cheatinHandRank.Rank().rank).toBe(4);
         });
 
         it('should return a valid ThreeOfAKind with additional cards', function() {
@@ -322,8 +322,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(4);
-            expect(cheatinHandRank.Rank()).toBe(4);
+            expect(legalHandRank.Rank().rank).toBe(4);
+            expect(cheatinHandRank.Rank().rank).toBe(4);
         });
 
         it('should no longer return ThreeOfAKind with 2 cards', function() {
@@ -338,8 +338,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).not.toBe(4);
-            expect(cheatinHandRank.Rank()).not.toBe(4);
+            expect(legalHandRank.Rank().rank).not.toBe(4);
+            expect(cheatinHandRank.Rank().rank).not.toBe(4);
         });
     });
 
@@ -353,8 +353,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(3);
-            expect(cheatinHandRank.Rank()).toBe(3);
+            expect(legalHandRank.Rank().rank).toBe(3);
+            expect(cheatinHandRank.Rank().rank).toBe(3);
         });
 
         it('should return a valid TwoPair with additional cards', function() {
@@ -364,8 +364,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(3);
-            expect(cheatinHandRank.Rank()).toBe(3);
+            expect(legalHandRank.Rank().rank).toBe(3);
+            expect(cheatinHandRank.Rank().rank).toBe(3);
         });
 
         it('should no longer return TwoPair with 3 cards', function() {
@@ -378,8 +378,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).not.toBe(3);
-            expect(cheatinHandRank.Rank()).not.toBe(3);
+            expect(legalHandRank.Rank().rank).not.toBe(3);
+            expect(cheatinHandRank.Rank().rank).not.toBe(3);
         });
     });
 
@@ -393,8 +393,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(2);
-            expect(cheatinHandRank.Rank()).toBe(2);
+            expect(legalHandRank.Rank().rank).toBe(2);
+            expect(cheatinHandRank.Rank().rank).toBe(2);
         });
 
         it('should return a valid OnePair with additional cards', function() {
@@ -404,8 +404,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).toBe(2);
-            expect(cheatinHandRank.Rank()).toBe(2);
+            expect(legalHandRank.Rank().rank).toBe(2);
+            expect(cheatinHandRank.Rank().rank).toBe(2);
         });
 
         it('should no longer return OnePair with 1 cards', function() {
@@ -422,8 +422,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).not.toBe(2);
-            expect(cheatinHandRank.Rank()).not.toBe(2);
+            expect(legalHandRank.Rank().rank).not.toBe(2);
+            expect(cheatinHandRank.Rank().rank).not.toBe(2);
         });
     });
 
@@ -435,7 +435,7 @@ describe('HandRank()', function() {
         it('should return a valid HighCard with exactly the correct hand', function() {
             let legalHandRank = new HandRank(this.legalHand);
 
-            expect(legalHandRank.Rank()).toBe(1);
+            expect(legalHandRank.Rank().rank).toBe(1);
         });
 
         it('should return a valid HighCard with additional cards', function() {
@@ -443,7 +443,7 @@ describe('HandRank()', function() {
 
             let legalHandRank = new HandRank(this.legalHand);
 
-            expect(legalHandRank.Rank()).toBe(1);
+            expect(legalHandRank.Rank().rank).toBe(1);
         });
 
         it('should no longer return HighCard with 0 cards', function() {
@@ -456,8 +456,8 @@ describe('HandRank()', function() {
             let legalHandRank = new HandRank(this.legalHand);
             let cheatinHandRank = new HandRank(this.cheatinHand);
 
-            expect(legalHandRank.Rank()).not.toBe(1);
-            expect(cheatinHandRank.Rank()).not.toBe(1);
+            expect(legalHandRank.Rank().rank).not.toBe(1);
+            expect(cheatinHandRank.Rank().rank).not.toBe(1);
         });
     });
 });

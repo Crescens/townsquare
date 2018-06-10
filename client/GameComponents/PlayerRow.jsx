@@ -14,6 +14,7 @@ class PlayerRow extends React.Component {
         super();
 
         this.onDrawClick = this.onDrawClick.bind(this);
+        this.onPullClick = this.onPullClick.bind(this);
         this.onShuffleClick = this.onShuffleClick.bind(this);
         this.onShowDeckClick = this.onShowDeckClick.bind(this);
         this.onCloseClick = this.onCloseClick.bind(this);
@@ -138,6 +139,12 @@ class PlayerRow extends React.Component {
         this.setState({ showDrawMenu: !this.state.showDrawMenu });
     }
 
+    onPullClick() {
+        if(this.props.onPullClick) {
+            this.props.onPullClick();
+        }
+    }
+
     onShuffleClick() {
         if(this.props.onShuffleClick) {
             this.props.onShuffleClick();
@@ -187,6 +194,7 @@ class PlayerRow extends React.Component {
         var drawHand = this.getHand(this.props.drawHand, drawSquish);
 
         var drawDeckMenu = [
+            { text: 'Pull', handler: this.onPullClick},
             { text: 'Show', handler: this.onShowDeckClick, showPopup: true },
             { text: 'Shuffle', handler: this.onShuffleClick}
         ];
@@ -218,14 +226,15 @@ class PlayerRow extends React.Component {
                                 popupLocation={this.props.isMe || this.props.spectating ? 'top' : 'bottom'} onDragDrop={this.props.onDragDrop} orientation='booted' />
                   {this.getOutOfGamePile()}
 
-                  <HandRank onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} handRank={this.props.handRank} />
-
                   <div className={drawClass} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} onDrop={(event) => this.onDragDrop(event, 'draw hand')}>
                       <div className='panel-header'>
                           {'Draw Hand (' + drawHand.length + ')'}
                       </div>
                       {drawHand}
                   </div>
+
+                  <HandRank onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} handRank={this.props.handRank} />
+                  
                 </div>
             </div>
         );
@@ -241,7 +250,7 @@ PlayerRow.propTypes = {
     drawDeck: PropTypes.array,
     drawHand: PropTypes.array,
     hand: PropTypes.array,
-    handRank: PropTypes.number,
+    handRank: PropTypes.object,
     isMe: PropTypes.bool,
     numDrawCards: PropTypes.number,
     onCardClick: PropTypes.func,
@@ -251,6 +260,7 @@ PlayerRow.propTypes = {
     onMenuItemClick: PropTypes.func,
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,
+    onPullClick: PropTypes.func,
     onShuffleClick: PropTypes.func,
     //plotDeck: PropTypes.array,
     showDrawDeck: PropTypes.bool,

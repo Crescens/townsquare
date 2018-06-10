@@ -2,6 +2,7 @@ const _ = require('underscore');
 
 const cards = require('./cards');
 const DrawCard = require('./drawcard.js');
+const DudeCard = require('./dudecard.js');
 //const PlotCard = require('./plotcard.js');
 //const LegendCard = require('./legendcard.js');
 
@@ -20,7 +21,18 @@ class Deck {
         this.eachRepeatedCard(this.data.drawCards, cardData => {
 
             if(['action', 'deed', 'dude', 'goods', 'spell'].includes(cardData.type_code)) {
-                var drawCard = this.createCard(DrawCard, player, cardData);
+
+                let drawCard;
+
+                switch(cardData.type_code) {
+                    case 'dude':
+                        drawCard = this.createCard(DudeCard, player, cardData);
+                        break;
+                    default:
+                        drawCard = this.createCard(DrawCard, player, cardData);
+                        break;
+                }
+
                 drawCard.location = 'draw deck';
 
                 if(!drawCard.starting) {

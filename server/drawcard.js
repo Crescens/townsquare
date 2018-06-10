@@ -19,8 +19,7 @@ class DrawCard extends BaseCard {
         this.icons = {
             bullets: 0,
             influence: 0,
-            control: 0,
-            bounty: 0
+            control: 0
         };
 
         this.booted = false;
@@ -138,12 +137,12 @@ class DrawCard extends BaseCard {
 
     
     getInfluence() {
-        return this.influence || 0;
+        return this.influence ? this.influence : 0;
     }
     
 
     getControl() {
-        return this.control || 0;
+        return this.control ? this.control : 0;
     }
 
     /*

@@ -25,7 +25,6 @@ class Player extends Spectator {
         this.hand = _([]);
         this.drawHand = _([]);
         this.locations = [];
-        this.handRank = 0;
         this.cardsInPlay = _([]);
         this.boothillPile = _([]);
         this.discardPile = _([]);
@@ -174,7 +173,8 @@ class Player extends Spectator {
         });
 
         this.drawHandRevealed = false;
-        this.handRank = 0;
+        this.drawHandSelected = false;
+        this.handRank = {rank: 0};
     }
 
     revealDrawHand() {
@@ -184,7 +184,7 @@ class Player extends Spectator {
 
         this.drawHandRevealed = true;
 
-        this.game.addMessage('{0} reveals rank {1}', this.name, this.handRank);
+        this.game.addMessage('{0} reveals {1} (Rank {2})', this, this.handRank.rankName, this.handRank.rank);
     }
 
     drawCardsToHand(target, numCards) {
@@ -202,8 +202,7 @@ class Player extends Spectator {
 
         var cards = this.drawDeck.first(numCards);
 
-        if(!cards)
-        {
+        if(!cards) {
             return;
         }
 
@@ -375,6 +374,7 @@ class Player extends Spectator {
         this.addOutfitToTown();
 
         this.ghostrock = this.outfit.wealth || 0;
+        this.handRank = {rank: 0};
     }
 
     startGame() {
@@ -829,8 +829,14 @@ class Player extends Spectator {
         });
     }
 
-    discardCard(card, allowSave = true) {
+    pull(number = 1) {
+        this.discardFromDraw(number, (discarded) => {
+            let pulled = discarded.pop();
+            this.game.addMessage('{0} pulls {1} ({2}) ', this, pulled.value, pulled.title);
+        });
+    }
 
+    discardCard(card, allowSave = true) {
         this.discardCards([card], allowSave);
     }
 
@@ -1053,14 +1059,6 @@ class Player extends Spectator {
         this.promptState.cancelPrompt();
     }
 
-    ante() {
-        this.ghostrock--;
-    }
-
-    winLowball(gr) {
-        this.ghostrock += gr;
-    }
-
     getState(activePlayer) {
         let isActivePlayer = activePlayer === this;
         let promptState = isActivePlayer ? this.promptState.getState() : {};
@@ -1079,7 +1077,7 @@ class Player extends Spectator {
             firstPlayer: this.firstPlayer,
             ghostrock: this.ghostrock,
             hand: this.getSummaryForCardList(this.hand, activePlayer, true),
-            handRank: (this.drawHandRevealed) ? this.getHandRank() : 0,
+            handRank: (this.drawHandRevealed) ? this.getHandRank() : {rank: 0},
             id: this.id,
             left: this.left,
             locations: this.locations,
