@@ -1,22 +1,20 @@
 const _ = require('underscore');
 
 const DrawCard = require('./drawcard.js');
-const SetupCardAction = require('./setupcardaction.js');
-//const MarshalCardAction = require('./marshalcardaction.js');
-//const AmbushCardAction = require('./ambushcardaction.js');
-
-const StandardPlayActions = [
-    new SetupCardAction()
-    //new MarshalCardAction(),
-    //new AmbushCardAction()
-];
 
 class DudeCard extends DrawCard {
     setupCardAbilities(ability) {
         this.action({
-            title: 'Boot/Unboot',
+            title: 'Call Out',
+            //condition: () => this.game.currentPhase === 'high noon',
+            target: {
+                activePromptTitle: 'Select dude to call out',
+                cardCondition: card => card.getType() === 'dude' && card.gamelocation === this.gamelocation
+            },
+            targetController: 'opponent',
             handler: context => {
-                this.game.addMessage('Test {0}', context.player);
+                //this.game.killCharacter(context.target);
+                this.game.addMessage('{0} uses {1} to call out {2}', context.player, this.title, context.target.title);
             }
         });
     }

@@ -11,6 +11,7 @@ import MenuPane from './GameComponents/MenuPane.jsx';
 import CardZoom from './GameComponents/CardZoom.jsx';
 import Messages from './GameComponents/Messages.jsx';
 import CardCollection from './GameComponents/CardCollection.jsx';
+import OutOfTown from './GameComponents/OutOfTown.jsx';
 import PlayerStreet from './GameComponents/PlayerStreet.jsx';
 import GameLocation from './GameComponents/GameLocation.jsx';
 import DropZone from './GameComponents/DropZone.jsx';
@@ -378,6 +379,16 @@ export class InnerGameBoard extends React.Component {
                                 { otherPlayer ? <div className={'first-player-indicator ' + (!thisPlayer.firstPlayer ? '' : 'hidden')}>Winner</div> : ''}
                             </div>
                         </div>
+                        <div className='out-of-town'>
+                                <OutOfTown onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
+                                    owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
+                            </div>
+
+                            <div className='out-of-town'>
+                                <OutOfTown onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
+                                    owner={thisPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
+                                <DropZone zone='out-of-town' onDragDrop={this.onDragDrop} onDragDropEvent={this.onDragDropEvent}/>
+                            </div>
                         <div className='middle'>
                             <div className='middle-right'>
                                 <div className='inset-pane'>
@@ -422,7 +433,7 @@ export class InnerGameBoard extends React.Component {
                         <div className='play-area' onDragOver={this.onDragOver} >
 
                             <div className='player-street'>
-                                <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick}
+                                <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
                                     owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
                             </div>
 
@@ -431,13 +442,14 @@ export class InnerGameBoard extends React.Component {
                                 onMouseOver={this.onMouseOver}
                                 onMouseOut={this.onMouseOut}
                                 onDragDrop={this.onDragDrop}
+                                onMenuItemClick={this.onMenuItemClick}
                                 onClick={this.onCardClick}
                                 otherPlayer={otherPlayer}
                                 thisPlayer={thisPlayer}/>
 
                             <div className='player-street'>
                                 <DropZone zone='street-left' onDragDrop={this.onDragDrop} onDragDropEvent={this.onDragDropEvent}/>
-                                <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick}
+                                <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
                                     owner={thisPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
                                 <DropZone zone='street-right' onDragDrop={this.onDragDrop} onDragDropEvent={this.onDragDropEvent}/>
                             </div>

@@ -88,7 +88,7 @@ export class InnerGameLocation extends React.Component {
 
         var cardRow = _.map(player.cardsInPlay, (card) => {
             if(card.gamelocation === this.props.location.uuid) {
-                return (<Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.onMenuItemClick}
+                return (<Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.props.onMenuItemClick}
                               onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onDragDrop={this.onDragDrop} />);
             }
         });
@@ -102,7 +102,7 @@ export class InnerGameLocation extends React.Component {
 
     getCardLocation(card) {
         return (
-            <div><Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.onMenuItemClick}
+            <div><Card key={card.uuid} source='play area' card={card} disableMouseOver={card.facedown && !card.code} onMenuItemClick={this.props.onMenuItemClick}
                                 onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onDragDrop={this.onDragDrop} /></div>
         );
     }
@@ -165,6 +165,7 @@ InnerGameLocation.propTypes = {
     location: PropTypes.object.isRequired,
     name: PropTypes.string,
     onClick: PropTypes.func,
+    onMenuItemClick: PropTypes.func,
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,
     order: PropTypes.number,

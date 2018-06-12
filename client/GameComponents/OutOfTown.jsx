@@ -2,15 +2,14 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import GameLocation from './GameLocation.jsx';
-import 'jquery-nearest';
 
-class PlayerStreet extends React.Component {
+class OutOfTown extends React.Component {
     buildStreet(player) {
         let onStreet = [];
 
         if(player) {
-            let sortedLocations = _.sortBy(player.locations, 'order');
-            _.each(sortedLocations, (location) => {
+            let filteredLocations = _.filter(player.locations, (location) => location.order === null);
+            _.each(filteredLocations, (location) => {
                 _.map(player.cardsInPlay, (card) => {
                     if(card.uuid === location.uuid) {
                         onStreet.push(<GameLocation key={location.uuid}
@@ -31,7 +30,7 @@ class PlayerStreet extends React.Component {
             onStreet.push(<GameLocation key='empty' location={{facedown:true}}/>);
         }
 
-        return <div className='in-town'>{onStreet}</div>;
+        return <div className='out-of-town'>{onStreet}</div>;
     }
 
     render() {
@@ -40,12 +39,11 @@ class PlayerStreet extends React.Component {
                 {this.buildStreet(this.props.owner)}
             </div>
         );
-
     }
 }
 
-PlayerStreet.displayName = 'PlayerStreet';
-PlayerStreet.propTypes = {
+OutOfTown.displayName = 'OutOfTown';
+OutOfTown.propTypes = {
     className: PropTypes.string,
     onClick: PropTypes.func,
     onDragDrop: PropTypes.func,
@@ -58,4 +56,4 @@ PlayerStreet.propTypes = {
     thisPlayer: PropTypes.object
 };
 
-export default PlayerStreet;
+export default OutOfTown;

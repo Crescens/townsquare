@@ -774,7 +774,10 @@ class Player extends Spectator {
     }
 
     addDeedToStreet(card, target) {
-        if(/left/.test(target)) {
+
+        if(card.hasKeyword('Out of Town')) {
+            this.locations.push(new GameLocation(card.uuid, null));
+        } else if(/left/.test(target)) {
             this.locations.push(new GameLocation(card.uuid, this.leftDeedOrder() - 1));
         } else if(/right/.test(target)) {
             this.locations.push(new GameLocation(card.uuid, this.rightDeedOrder() + 1));

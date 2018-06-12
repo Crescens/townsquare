@@ -3,6 +3,7 @@ const _ = require('underscore');
 const cards = require('./cards');
 const DrawCard = require('./drawcard.js');
 const DudeCard = require('./dudecard.js');
+const DeedCard = require('./deedcard.js');
 //const PlotCard = require('./plotcard.js');
 //const LegendCard = require('./legendcard.js');
 
@@ -27,6 +28,9 @@ class Deck {
                 switch(cardData.type_code) {
                     case 'dude':
                         drawCard = this.createCard(DudeCard, player, cardData);
+                        break;
+                    case 'deed':
+                        drawCard = this.createCard(DeedCard, player, cardData);
                         break;
                     default:
                         drawCard = this.createCard(DrawCard, player, cardData);

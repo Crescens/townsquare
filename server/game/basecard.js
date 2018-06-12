@@ -386,7 +386,7 @@ class BaseCard {
             return undefined;
         }
 
-        menu.push({ command: 'click', text: 'Select Card' });
+        menu.push({ command: 'click', text: 'Boot/Unboot' });
         menu = menu.concat(this.menu.value());
 
         return menu;
@@ -572,6 +572,7 @@ class BaseCard {
             gamelocation: this.gamelocation,
             influence: this.influence,
             keywords: this.keywords,
+            location: this.location,
             menu: this.getMenu(),
             new: this.new,
             production: this.production,
