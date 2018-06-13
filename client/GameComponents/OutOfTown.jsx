@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import GameLocation from './GameLocation.jsx';
 
 class OutOfTown extends React.Component {
-    buildStreet(player) {
+    buildOutOfTown(player) {
         let onStreet = [];
 
         if(player) {
@@ -26,9 +26,11 @@ class OutOfTown extends React.Component {
             });
         }
 
+        /*
         if(onStreet.length === 0) {
             onStreet.push(<GameLocation key='empty' location={{facedown:true}}/>);
         }
+        */
 
         return <div className='out-of-town'>{onStreet}</div>;
     }
@@ -36,7 +38,7 @@ class OutOfTown extends React.Component {
     render() {
         return (
             <div style={this.props.style} >
-                {this.buildStreet(this.props.owner)}
+                {this.buildOutOfTown(this.props.owner)}
             </div>
         );
     }

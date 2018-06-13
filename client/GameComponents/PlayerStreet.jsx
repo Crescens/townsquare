@@ -9,7 +9,8 @@ class PlayerStreet extends React.Component {
         let onStreet = [];
 
         if(player) {
-            let sortedLocations = _.sortBy(player.locations, 'order');
+            let filteredLocations = _.filter(player.locations, (location) => location.order !== null);
+            let sortedLocations = _.sortBy(filteredLocations, 'order');
             _.each(sortedLocations, (location) => {
                 _.map(player.cardsInPlay, (card) => {
                     if(card.uuid === location.uuid) {

@@ -379,17 +379,20 @@ export class InnerGameBoard extends React.Component {
                                 { otherPlayer ? <div className={'first-player-indicator ' + (!thisPlayer.firstPlayer ? '' : 'hidden')}>Winner</div> : ''}
                             </div>
                         </div>
-                        <div className='out-of-town'>
-                                <OutOfTown onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
-                                    owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
-                            </div>
 
-                            <div className='out-of-town'>
+                        <div className='middle'>
+                            <div className='out-of-town' onDragOver={this.onDragOver}>
+                            <OutOfTown onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
+                                owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
+                            </div>
+                        
+                            <div className='out-of-town-divide' />
+
+                            <div className='out-of-town' onDragOver={this.onDragOver}>
                                 <OutOfTown onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
                                     owner={thisPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
-                                <DropZone zone='out-of-town' onDragDrop={this.onDragDrop} onDragDropEvent={this.onDragDropEvent}/>
                             </div>
-                        <div className='middle'>
+
                             <div className='middle-right'>
                                 <div className='inset-pane'>
                                     { !this.state.spectating && this.state.showActionWindowsMenu ?

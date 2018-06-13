@@ -325,6 +325,10 @@ class Game extends EventEmitter {
                 }
             }
 
+            if(this.getLocationByID(target)) {
+                target = target.title;
+            } 
+
             this.addMessage('{0} has moved {1} from their {2} to their {3}',
                             player, movedCard, source, target);
         }

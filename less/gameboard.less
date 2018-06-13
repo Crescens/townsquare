@@ -142,8 +142,9 @@
 
 .middle {
   display: flex;
-  flex-direction: row;
-  flex: 1;
+  flex-direction: column;
+  flex: auto;
+  justify-content: flex-end;
 }
 
 .plots-pane {
@@ -300,11 +301,12 @@ span.down-arrow {
 .center {
   flex-direction: column;
   display: flex;
+  flex: auto;
 }
 
 .play-area, .player-board {
   display: flex;
-  flex: 1;
+  flex: auto;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -338,7 +340,7 @@ span.down-arrow {
   position: absolute;
 }
 
-.agenda .popup {
+.legend .popup {
   position: absolute;
   left: -100px;
   top: 85px;
@@ -416,7 +418,7 @@ span.down-arrow {
   }
 }
 
-.dead .popup {
+.boothill .popup {
   position: absolute;
   left: -90px;
   top: 65px;

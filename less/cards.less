@@ -2,24 +2,30 @@
 
 
 .card-wrapper {
+  //display: flex;
+  //flex: auto;
   margin: 0px 4px 0px 0px;
   vertical-align: middle;
   justify-content: center;
 }
 
 .card-frame {
-    display: flex;
+    //display: flex;
+    //flex: auto;
     align-self: center;
     position: relative;
 }
 
 .card {
+  //display: flex;
+  //flex: auto;
   position: relative;
   border-radius: 4px;
   box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
   overflow: hidden;
   z-index: @layer-cards;
 
+  
   &.vertical {
     height: @card-height;
     width: @card-width;
@@ -29,6 +35,7 @@
     height: @card-width;
     width: @card-height;
   }
+  
 
   &.selectable {
     box-shadow: 0 0 10px 1px fadeout(lighten(@brand-primary, 60%), 10%);
@@ -68,18 +75,20 @@
 }
 
 .card-image {
+  display: flex;
+  flex: auto;
   left: 0;
   position: absolute;
   top: 0;
-
+  
   &.vertical {
-    height: @card-height;
-    width: @card-width;
+    max-height: @card-height;
+    flex-basis: @card-width;
   }
 
   &.horizontal {
-    height: @card-width;
-    width: @card-height;
+    max-height: @card-width;
+    flex-basis: @card-height;
   }
 
   &.booted {
@@ -216,7 +225,7 @@
   border-radius: 4px;
   color: white;
 
-  &.intrigue {
+  &.bullets {
     span {
       display: none;
     }
@@ -225,13 +234,13 @@
 
     &:before {
       content: "\e602";
-      color: @intrigue-icon-color;
+      color: @bullets-icon-color;
     }
 
     background-color: rgba(0, 0, 0, 0.85);
   }
 
-  &.military {
+  &.influence {
     span {
       display: none;
     }
@@ -240,13 +249,13 @@
 
     &:before {
       content: "\e605";
-      color: @military-icon-color;
+      color: @influence-icon-color;
     }
 
     background-color: rgba(0, 0, 0, 0.85);
   }
 
-  &.power {
+  &.control {
     span {
       display: none;
     }
@@ -255,7 +264,22 @@
 
     &:before {
       content: "\e607";
-      color: @power-icon-color;
+      color: @control-icon-color;
+    }
+
+    background-color: rgba(0, 0, 0, 0.85);
+  }
+
+  &.bounty {
+    span {
+      display: none;
+    }
+
+    font-family: 'thronesdb';
+
+    &:before {
+      content: "\e607";
+      color: @bounty-icon-color;
     }
 
     background-color: rgba(0, 0, 0, 0.85);
@@ -280,24 +304,12 @@
   }
 }
 
-.dupe {
-  background-color: @dupe-color;
+.card-control {
+  background-color: @control-color;
 }
 
-.attachment-dupe {
-  background-color: fade(@dupe-color, 50%);
-}
-
-.card-power {
-  background-color: @power-color;
-}
-
-.attachment-power {
-  background-color: fade(@power-color, 50%);
-}
-
-.strength {
-  background-color: @strength-color;
+.attachment-control {
+  background-color: fade(@control-color, 50%);
 }
 
 .stand {

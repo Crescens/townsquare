@@ -81,7 +81,7 @@ class Card extends React.Component {
     onTouchEnd(event) {
         var target = $(event.currentTarget);
         var nearestLocation = target.nearest('.location');
-        var nearestPile = target.nearest('.card-pile, .hand, .player-board');
+        var nearestPile = target.nearest('.card-pile, .hand, .player-board, .left-side');
 
         var pilePosition = nearestPile.position();
         var cardPosition = target.position();
@@ -92,6 +92,8 @@ class Card extends React.Component {
             if(_.includes(nearestPile.attr('class'), 'hand')) {
                 dropTarget = 'hand';
             } else if(_.includes(nearestPile.attr('class'), 'player-board')) {
+                dropTarget = nearestLocation;
+            } else if(_.includes(nearestPile.attr('class'), 'left-side')) {
                 dropTarget = nearestLocation;
             } else {
                 var component = this.getReactComponentFromDOMNode(nearestPile[0]);
@@ -280,10 +282,8 @@ class Card extends React.Component {
                         onClick={ev => this.onClick(ev, this.props.card)}
                         onDragStart={ev => this.onCardDragStart(ev, this.props.card, this.props.source)}
                         draggable>
-                        <div>
                             <span className='card-name'>{this.props.card.name}</span>
                             <img className={imageClass} src={'/img/cards/' + (!this.isFacedown() ? (this.props.card.code + '.jpg') : 'cardback.jpg')} />
-                        </div>
                         { this.showCounters() ? <CardCounters counters={ this.getCountersForCard(this.props.card) } /> : null }
                     </div>
                     { this.showMenu() ? <CardMenu menu={ this.props.card.menu } onMenuItemClick={ this.onMenuItemClick } /> : null }
