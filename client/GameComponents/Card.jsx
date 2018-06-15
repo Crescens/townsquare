@@ -136,12 +136,19 @@ class Card extends React.Component {
     }
 
     getCountersForCard(card) {
-        var counters = {};
+        let counters = {};
 
-        counters['card-power'] = card.power ? { count: card.power, fade: card.type === 'attachment', shortName: 'P' } : undefined;
-        counters['strength'] = card.baseStrength !== card.strength ? { count: card.strength, fade: card.type === 'attachment', shortName: 'S' } : undefined;
-        counters['dupe'] = card.dupes && card.dupes.length > 0 ? { count: card.dupes.length, fade: card.type === 'attachment', shortName: 'D' } : undefined;
-
+        
+        if(card.shooter === 'Draw') {
+            counters['card-bullets-draw'] = card.bullets ? { count: card.bullets, fade: card.type === 'attachment', shortName: 'D' } : undefined;
+        } else if(card.shooter === 'Stud') {
+            counters['card-bullets-stud'] = card.bullets ? { count: card.bullets, fade: card.type === 'attachment', shortName: 'S' } : undefined;
+        }
+        
+        counters['card-control'] = card.control ? { count: card.control, fade: card.type === 'attachment', shortName: 'C' } : undefined;
+        counters['card-influence'] = card.influence ? { count: card.influence, fade: card.type === 'attachment', shortName: 'I' } : undefined;
+        counters['card-bounty'] = card.bounty ? { count: card.bounty, fade: card.type === 'attachment', shortName: 'B' } : undefined;
+        
         _.map(card.iconsAdded, icon => {
             counters[icon] = { count: 0, cancel: false };
         });

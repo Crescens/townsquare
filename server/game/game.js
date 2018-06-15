@@ -316,7 +316,7 @@ class Game extends EventEmitter {
 
         if(player.drop(cardId, source, target)) {
             var movedCard = 'a card';
-            if(!_.isEmpty(_.intersection(['boothill pile', 'discard pile', 'out of game', 'location'],
+            if(!_.isEmpty(_.intersection(['boothill pile', 'discard pile', 'out of game', 'play area', 'out of town'],
                                          [source, target]))) {
                 // log the moved card only if it moved from/to a public place
                 var card = this.findAnyCardInAnyList(cardId);

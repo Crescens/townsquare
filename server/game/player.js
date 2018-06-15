@@ -5,6 +5,7 @@ const Deck = require('./deck.js');
 const HandRank = require('./handrank.js');
 const GameLocation = require('./gamelocation.js');
 const AttachmentPrompt = require('./gamesteps/attachmentprompt.js');
+const DeedStreetSidePrompt = require('./gamesteps/deedstreetsideprompt.js');
 //const BestowPrompt = require('./gamesteps/bestowprompt.js');
 //const ChallengeTracker = require('./challengetracker.js');
 //const PlayableLocation = require('./playablelocation.js');
@@ -778,10 +779,20 @@ class Player extends Spectator {
         if(card.hasKeyword('Out of Town')) {
             this.locations.push(new GameLocation(card.uuid, null));
         } else if(/left/.test(target)) {
-            this.locations.push(new GameLocation(card.uuid, this.leftDeedOrder() - 1));
+            this.addDeedToLeft(card);
         } else if(/right/.test(target)) {
-            this.locations.push(new GameLocation(card.uuid, this.rightDeedOrder() + 1));
+            this.addDeedToRight(card);
+        } else {
+            this.promptForDeedStreetSide(card);
         }
+    }
+
+    addDeedToLeft(card) {
+        this.locations.push(new GameLocation(card.uuid, this.leftDeedOrder() - 1));
+    }
+
+    addDeedToRight(card) {
+        this.locations.push(new GameLocation(card.uuid, this.rightDeedOrder() + 1));
     }
 
     inPlayLocation(target) {
@@ -798,6 +809,10 @@ class Player extends Spectator {
     promptForAttachment(card, playingType) {
         // TODO: Really want to move this out of here.
         this.game.queueStep(new AttachmentPrompt(this.game, this, card, playingType));
+    }
+
+    promptForDeedStreetSide(card) {
+        this.game.queueStep(new DeedStreetSidePrompt(this.game, this, card, 'play'));
     }
 
     beginChallenge() {
