@@ -6,40 +6,34 @@ class ChatCommands {
         this.commands = {
             '/draw': this.draw,
             '/drawhand': this.drawhand,
-            '/power': this.power,
-            '/kill': this.kill,
-            '/blank': this.blank,
-            '/unblank': this.unblank,
-            '/add-trait': this.addTrait,
-            '/remove-trait': this.removeTrait,
+            '/control': this.control,
+
+            //'/kill': this.kill,
+            //'/blank': this.blank,
+            //'/unblank': this.unblank,
+            //'/add-trait': this.addTrait,
+            //'/remove-trait': this.removeTrait,
             '/add-keyword': this.addKeyword,
             '/remove-keyword': this.removeKeyword,
             '/discard': this.discard,
-            '/pillage': this.pillage,
-            '/strength': this.strength,
-            '/str': this.strength,
-            '/give-icon': this.addIcon,
-            '/add-icon': this.addIcon,
-            '/take-icon': this.removeIcon,
-            '/remove-icon': this.removeIcon,
-            '/give-control': this.giveControl,
-            '/reset-challenges-count': this.resetChallengeCount,
+            //'/pillage': this.pillage,
+            '/influence': this.strength,
+            //'/str': this.strength,
+            //'/give-icon': this.addIcon,
+            //'/add-icon': this.addIcon,
+            //'/take-icon': this.removeIcon,
+            //'/remove-icon': this.removeIcon,
+            //'/give-control': this.giveControl,
+            //'/reset-challenges-count': this.resetChallengeCount,
             '/cancel-prompt': this.cancelPrompt,
             '/token': this.setToken,
-            '/bestow': this.bestow,
             '/disconnectme': this.disconnectMe
         };
         this.tokens = [
-            'power',
-            'gold',
-            'valarmorghulis',
-            'stand',
-            'poison',
-            'betrayal',
-            'vengeance',
-            'ear',
-            'venom',
-            'kiss'
+            'control',
+            'influence',
+            'ghostrock',
+            'bounty'
         ];
     }
 
@@ -67,21 +61,41 @@ class ChatCommands {
         player.drawCardsToHand('draw hand', num);
     }
 
-    power(player, args) {
+    control(player, args) {
         var num = this.getNumberOrDefault(args[1], 1);
         this.game.promptForSelect(player, {
-            activePromptTitle: 'Select a card to set power for',
-            waitingPromptTitle: 'Waiting for opponent to set power',
+            activePromptTitle: 'Select a card to set control for',
+            waitingPromptTitle: 'Waiting for opponent to set control',
             cardCondition: card => card.location === 'play area' && card.controller === player,
-            onSelect: (p, card) => {
-                let power = num - card.power;
-                card.power += power;
+            onSelect: (i, card) => {
+                let control = num - card.control;
+                card.control += control;
 
-                if(card.power < 0) {
-                    card.power = 0;
+                if(card.control < 0) {
+                    card.control = 0;
                 }
 
-                this.game.addMessage('{0} uses the /power command to set the power of {1} to {2}', p, card, num);
+                this.game.addMessage('{0} uses the /control command to set the control of {1} to {2}', i, card, num);
+                return true;
+            }
+        });
+    }
+
+    influence(player, args) {
+        var num = this.getNumberOrDefault(args[1], 1);
+        this.game.promptForSelect(player, {
+            activePromptTitle: 'Select a card to set influence for',
+            waitingPromptTitle: 'Waiting for opponent to set influence',
+            cardCondition: card => card.location === 'play area' && card.controller === player,
+            onSelect: (i, card) => {
+                let influence = num - card.influence;
+                card.influence += influence;
+
+                if(card.influence < 0) {
+                    card.influence = 0;
+                }
+
+                this.game.addMessage('{0} uses the /influence command to set the influence of {1} to {2}', i, card, num);
                 return true;
             }
         });
@@ -220,25 +234,6 @@ class ChatCommands {
 
         player.discardFromDraw(1, discarded => {
             this.game.addMessage('{0} discards {1} due to Pillage', player, discarded);
-        });
-    }
-
-    strength(player, args) {
-        let num = this.getNumberOrDefault(args[1], 1);
-
-        this.game.promptForSelect(player, {
-            activePromptTitle: 'Select a card to set strength for',
-            waitingPromptTitle: 'Waiting for opponent to set strength',
-            cardCondition: card => card.location === 'play area' && card.controller === player && card.getType() === 'character',
-            onSelect: (p, card) => {
-                if(_.isNumber(card.strengthSet)) {
-                    card.strengthSet = num;
-                } else {
-                    card.strengthModifier = num - card.cardData.strength;
-                }
-                this.game.addMessage('{0} uses the /strength command to set the strength of {1} to {2}', p, card, num);
-                return true;
-            }
         });
     }
 

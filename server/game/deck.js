@@ -4,6 +4,8 @@ const cards = require('./cards');
 const DrawCard = require('./drawcard.js');
 const DudeCard = require('./dudecard.js');
 const DeedCard = require('./deedcard.js');
+const GoodsCard = require('./goodscard.js');
+const SpellCard = require('./spellcard.js');
 //const PlotCard = require('./plotcard.js');
 //const LegendCard = require('./legendcard.js');
 
@@ -31,6 +33,12 @@ class Deck {
                         break;
                     case 'deed':
                         drawCard = this.createCard(DeedCard, player, cardData);
+                        break;
+                    case 'goods':
+                        drawCard = this.createCard(GoodsCard, player, cardData);
+                        break;
+                    case 'spell':
+                        drawCard = this.createCard(SpellCard, player, cardData);
                         break;
                     default:
                         drawCard = this.createCard(DrawCard, player, cardData);

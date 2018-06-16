@@ -14,7 +14,7 @@ class DeedStreetSidePrompt extends MenuPrompt {
         
         this.game.promptWithMenu(this.player, this, {
             activePrompt: {
-                menuTitle: 'Place ' + this.context.title + 'on Left/Right?',
+                menuTitle: 'Place ' + this.context.title + ' on Left/Right?',
                 buttons: [leftButton, rightButton]
             },
             source: this.context

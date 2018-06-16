@@ -718,6 +718,16 @@ class Player extends Spectator {
             return false;
         }
 
+        if(source === 'draw deck') {
+
+            if(target === 'discard pile') {
+                this.discardFromDraw(1);
+            }
+
+            //Will return false if target is not a hand
+            this.drawCardsToHand(target, 1);
+        }
+
         var sourceList = this.getSourceList(source);
         var card = this.findCardByUuid(sourceList, cardId);
 

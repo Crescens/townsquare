@@ -10,3 +10,4 @@ nodeconfig.js
 server/events.txt
 .tags
 .tags_swap
+mongodb.config

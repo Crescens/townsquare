@@ -116,12 +116,37 @@ class BaseCard {
         }
     }
     */
+
     parseKeywords(keywords) {
         this.keywords = {};
 
         var firstLine = keywords.split('\n')[0];
 
-        _.each(firstLine.split('\u2022'), keyword => this.addKeyword(keyword.toLowerCase().trim()));
+        _.each(firstLine.split('\u2022'), keyword => {
+
+            let results = /(.*)(\d)$/.exec(keyword);    
+            
+            if(results) {
+
+                let value = results[2];
+                keyword = results[1].trim();
+
+                this.addSkill(keyword, value);
+            }
+
+            this.addKeyword(keyword.toLowerCase().trim());
+        });
+    }
+
+    //Unsure if we really need this...
+    addSkill(keyword,value) {
+        switch(keyword) {
+            case 'Shaman':
+                this.shamanSkill = value;
+                break;
+            default:
+                break;
+        }
     }
 
     registerEvents(events) {
@@ -386,7 +411,7 @@ class BaseCard {
             return undefined;
         }
 
-        menu.push({ command: 'click', text: 'Boot/Unboot' });
+        menu.push({ command: 'click', text: 'Target / Boot / Unboot' });
         menu = menu.concat(this.menu.value());
 
         return menu;
@@ -560,7 +585,7 @@ class BaseCard {
 
         if(!isActivePlayer && (this.facedown || hideWhenFaceup)) {
             return { facedown: true };
-        }
+        }            
 
         let selectionState = activePlayer.getCardSelectionState(this);
         let state = {
