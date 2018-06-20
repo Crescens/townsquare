@@ -724,8 +724,10 @@ class Player extends Spectator {
                 this.discardFromDraw(1);
             }
 
-            //Will return false if target is not a hand
-            this.drawCardsToHand(target, 1);
+            if(!this.showDeck) {
+                //Will return false if target is not a hand
+                this.drawCardsToHand(target, 1);
+            }
         }
 
         var sourceList = this.getSourceList(source);

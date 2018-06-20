@@ -215,25 +215,24 @@
 
 .counter {
   padding: 0;
-  font-size: 12px;
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
+  font-size: 14px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
   text-align: center;
   margin: 2px;
   text-shadow: 1px 1px 2px #000;
   border-radius: 4px;
   color: white;
+  font-family: 'akenaten';
 
+  /*
   &.bullets {
     span {
       display: none;
     }
 
-    font-family: 'thronesdb';
-
     &:before {
-      content: "\e602";
       color: @bullets-icon-color;
     }
 
@@ -245,10 +244,7 @@
       display: none;
     }
 
-    font-family: 'thronesdb';
-
     &:before {
-      content: "\e605";
       color: @influence-icon-color;
     }
 
@@ -260,10 +256,7 @@
       display: none;
     }
 
-    font-family: 'thronesdb';
-
     &:before {
-      content: "\e607";
       color: @control-icon-color;
     }
 
@@ -275,16 +268,14 @@
       display: none;
     }
 
-    font-family: 'thronesdb';
-
     &:before {
-      content: "\e607";
       color: @bounty-icon-color;
     }
 
     background-color: rgba(0, 0, 0, 0.85);
   }
-
+  */
+  
   &.fade-out {
     opacity: 0.4;
   }
@@ -304,62 +295,38 @@
   }
 }
 
-.card-control {
-  background-color: @control-color;
+.control {
+  background-color: @control-icon-color;
 }
 
-.card-influence {
-  background-color: @influence-color;
+.influence {
+  background-color: @influence-icon-color;
 }
 
-.card-bullets-draw {
-  background-color: @bullets-draw-color;
+.bullets-draw {
+  background-color: @bullets-draw-icon-color;
 }
 
-.card-bullets-stud {
-  background-color: @bullets-stud-color;
+.bullets-stud {
+  background-color: @bullets-stud-icon-color;
 }
 
-.card-bounty {
-  background-color: @bounty-color;
+.bounty {
+  background-color: @bounty-icon-color;
+}
+
+.ghostrock {
+  background-color: @ghostrock-icon-color;
 }
 
 .attachment-control {
   background-color: fade(@control-color, 50%);
 }
 
-.stand {
+.attachment-influence {
+  background-color: fade(@influence-color, 50%);
+}
+
+.unboot {
   background-color: rgba(128,128,128,0.85);
-}
-
-.poison {
-  background-color: rgba(43,43, 0, 0.85);
-}
-
-.gold {
-    background-color: rgba(255, 215, 0, 0.85);
-}
-
-.valarmorghulis {
-  background-color: rgba(192, 192, 192, 0.85);
-}
-
-.betrayal {
-  background-color: rgba(153, 77, 0, 0.85);
-}
-
-.vengeance {
-  background-color: rgba(87, 17, 124, 0.85);
-}
-
-.ear {
-  background-color: rgba(162, 255, 81, 0.85);
-}
-
-.kiss {
-  background-color: rgba(127, 0, 255, 0.85);
-}
-
-.plot-selected {
-  box-shadow: 0 0 1px 2px @brand-danger;
 }

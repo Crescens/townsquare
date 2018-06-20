@@ -2,7 +2,7 @@ const _ = require('underscore');
 const Phase = require('./phase.js');
 const SimpleStep = require('./simplestep.js');
 const CheatingResolutionPrompt = require('./gambling/cheatingresolutionprompt.js');
-const RevealDrawHandPrompt = require('./gambling/revealdrawhandprompt.js');
+const RevealDrawHandPrompt = require('./revealdrawhandprompt.js');
 
 class GamblingPhase extends Phase {
     constructor(game) {

@@ -20,7 +20,8 @@ class DrawCard extends BaseCard {
             bullets: 0,
             influence: 0,
             control: 0,
-            bounty: 0
+            bounty: 0,
+            ghostrock: 0
         };
 
         this.booted = false;
@@ -41,6 +42,9 @@ class DrawCard extends BaseCard {
         if(cardData.control) {
             this.icons.control = cardData.control;
         }
+
+        this.bounty = 0;
+        this.ghostrock = 0;
         /*
         this.strengthModifier = 0;
         this.strengthMultiplier = 1;
@@ -269,8 +273,48 @@ class DrawCard extends BaseCard {
             }
 
             this.game.raiseEvent('onCardControlChanged', this, card.control - oldControl);
+        });
+    }
 
-            this.game.checkWinCondition(this.controller);
+    modifyInfluence(influence) {
+        this.game.applyGameAction('gainInfluence', this, card => {
+            let oldInfluence = card.influence;
+
+            card.influence += influence;
+
+            if(card.influence < 0) {
+                card.influence = 0;
+            }
+
+            this.game.raiseEvent('onCardInfluenceChanged', this, card.influence - oldInfluence);
+        });
+    }
+
+    modifyBounty(bounty) {
+        this.game.applyGameAction('gainBounty', this, card => {
+            let oldBounty = card.bounty;
+
+            card.bounty += bounty;
+
+            if(card.bounty < 0) {
+                card.bounty = 0;
+            }
+
+            this.game.raiseEvent('onCardBountyChanged', this, card.bounty - oldBounty);
+        });
+    }
+
+    modifyGhostRock(ghostrock) {
+        this.game.applyGameAction('gainGhostRock', this, card => {
+            let oldGhostRock = card.ghostrock;
+
+            card.ghostrock += ghostrock;
+
+            if(card.ghostrock < 0) {
+                card.ghostrock = 0;
+            }
+
+            this.game.raiseEvent('onCardGhostRockChanged', this, card.ghostrock - oldGhostRock);
         });
     }
 
@@ -309,7 +353,7 @@ class DrawCard extends BaseCard {
      * attach the passed attachment card.
      */
     allowAttachment(attachment) {
-        return (this.getType() === 'dude' || this.getType() === 'deed');
+        return (this.getType() === 'dude' || this.getType() === 'deed' || this.getType() === 'outfit');
         //    this.isBlank() ||
         //    this.allowedAttachmentTrait === 'any' ||
         //    this.allowedAttachmentTrait !== 'none' && attachment.hasTrait(this.allowedAttachmentTrait)
@@ -438,7 +482,8 @@ class DrawCard extends BaseCard {
             //inChallenge: this.inChallenge,
             //inDanger: this.inDanger,
             booted: this.booted,
-            control: this.control
+            control: this.control,
+            influence: this.influence
             //saved: this.saved,
             //strength: this.getStrength(),
             //stealth: this.stealth

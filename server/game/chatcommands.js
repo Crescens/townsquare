@@ -6,18 +6,35 @@ class ChatCommands {
         this.commands = {
             '/draw': this.draw,
             '/drawhand': this.drawhand,
+            '/discard': this.discard,
+
+            '/discarddraw': this.discardDrawHand,
+            '/dd': this.discardDrawHand,
+
+            '/revealdraw': this.revealDrawHand,
+            '/rd': this.revealDrawHand,
+
             '/control': this.control,
+            '/influence': this.influence,
+            '/bounty': this.bounty,
+            '/ghostrock': this.ghostrock,
+
+            '/token': this.setToken,
+            '/add-keyword': this.addKeyword,
+            '/remove-keyword': this.removeKeyword,
+            
+
+            '/cancel-prompt': this.cancelPrompt,
+            '/disconnectme': this.disconnectMe
 
             //'/kill': this.kill,
             //'/blank': this.blank,
             //'/unblank': this.unblank,
             //'/add-trait': this.addTrait,
             //'/remove-trait': this.removeTrait,
-            '/add-keyword': this.addKeyword,
-            '/remove-keyword': this.removeKeyword,
-            '/discard': this.discard,
+
             //'/pillage': this.pillage,
-            '/influence': this.strength,
+
             //'/str': this.strength,
             //'/give-icon': this.addIcon,
             //'/add-icon': this.addIcon,
@@ -25,9 +42,7 @@ class ChatCommands {
             //'/remove-icon': this.removeIcon,
             //'/give-control': this.giveControl,
             //'/reset-challenges-count': this.resetChallengeCount,
-            '/cancel-prompt': this.cancelPrompt,
-            '/token': this.setToken,
-            '/disconnectme': this.disconnectMe
+
         };
         this.tokens = [
             'control',
@@ -45,6 +60,10 @@ class ChatCommands {
         return this.commands[command].call(this, player, args) !== false;
     }
 
+    revealDrawHand(player) {
+        player.revealDrawHand();
+    }
+
     draw(player, args) {
         var num = this.getNumberOrDefault(args[1], 1);
 
@@ -59,6 +78,10 @@ class ChatCommands {
         this.game.addMessage('{0} uses the /drawhand command to draw {1} cards to their draw hand', player, num);
 
         player.drawCardsToHand('draw hand', num);
+    }
+
+    discardDrawHand(player) {
+        player.discardDrawHand();
     }
 
     control(player, args) {
@@ -96,6 +119,31 @@ class ChatCommands {
                 }
 
                 this.game.addMessage('{0} uses the /influence command to set the influence of {1} to {2}', i, card, num);
+                return true;
+            }
+        });
+    }
+
+    bounty(player, args) {
+        var num = this.getNumberOrDefault(args[1], 1);
+        this.game.promptForSelect(player, {
+            activePromptTitle: 'Select a card to set bounty for',
+            waitingPromptTitle: 'Waiting for opponent to set bounty',
+            cardCondition: card => card.location === 'play area' && card.controller === player,
+            onSelect: (i, card) => {
+
+                if(card.bounty === null) {
+                    card.bounty = 0;
+                }
+
+                let bounty = num - card.bounty;
+                card.bounty += bounty;
+
+                if(card.bounty < 0) {
+                    card.bounty = 0;
+                }
+
+                this.game.addMessage('{0} uses the /bounty command to set the bounty of {1} to {2}', i, card, num);
                 return true;
             }
         });

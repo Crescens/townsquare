@@ -6,13 +6,15 @@ const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
 
-var apiUrl = 'http://dtdb.co/api/';
+var apiUrl = 'http://192.241.162.104/';
+var auth = 'Basic ' + Buffer.from('ptdb:AA88J').toString('base64');
 
 function fetchImage(urlPath, code, imagePath, timeout) {
     setTimeout(function() {
         console.log('Downloading image for ' + code);
-        var url = 'http://dtdb.co/en/' + urlPath;
-        request(url).pipe(fs.createWriteStream(imagePath));
+        var url = 'http://192.241.162.104/en/' + urlPath;
+        var header = {'Host': url, 'Authorization': auth};
+        request(header).pipe(fs.createWriteStream(imagePath));
     }, timeout);
 }
 

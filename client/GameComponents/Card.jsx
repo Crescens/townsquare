@@ -140,14 +140,15 @@ class Card extends React.Component {
 
         
         if(card.shooter === 'Draw') {
-            counters['card-bullets-draw'] = card.bullets ? { count: card.bullets, fade: card.type === 'attachment', shortName: 'D' } : undefined;
+            counters['bullets-draw'] = card.bullets ? { count: card.bullets, fade: card.type === 'attachment', shortName: 'D' } : undefined;
         } else if(card.shooter === 'Stud') {
-            counters['card-bullets-stud'] = card.bullets ? { count: card.bullets, fade: card.type === 'attachment', shortName: 'S' } : undefined;
+            counters['bullets-stud'] = card.bullets ? { count: card.bullets, fade: card.type === 'attachment', shortName: 'S' } : undefined;
         }
         
-        counters['card-control'] = card.control ? { count: card.control, fade: card.type === 'attachment', shortName: 'C' } : undefined;
-        counters['card-influence'] = card.influence ? { count: card.influence, fade: card.type === 'attachment', shortName: 'I' } : undefined;
-        counters['card-bounty'] = card.bounty ? { count: card.bounty, fade: card.type === 'attachment', shortName: 'B' } : undefined;
+        counters['control'] = card.control ? { count: card.control, fade: card.type === 'attachment', shortName: 'C' } : undefined;
+        counters['influence'] = card.influence ? { count: card.influence, fade: card.type === 'attachment', shortName: 'I' } : undefined;
+        counters['bounty'] = card.bounty ? { count: card.bounty, fade: card.type === 'attachment', shortName: 'B' } : undefined;
+        counters['ghostrock'] = card.ghostrock ? { count: card.ghostrock, fade: card.type === 'attachment', shortName: 'G' } : undefined;
         
         _.map(card.iconsAdded, icon => {
             counters[icon] = { count: 0, cancel: false };

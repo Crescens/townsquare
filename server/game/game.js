@@ -31,6 +31,7 @@ const SimpleStep = require('./gamesteps/simplestep.js');
 
 const DeckSearchPrompt = require('./gamesteps/decksearchprompt.js');
 const MenuPrompt = require('./gamesteps/menuprompt.js');
+const RevealDrawHandPrompt = require('./gamesteps/revealdrawhandprompt.js');
 //const IconPrompt = require('./gamesteps/iconprompt.js');
 const SelectCardPrompt = require('./gamesteps/selectcardprompt.js');
 const EventWindow = require('./gamesteps/eventwindow.js');
@@ -366,6 +367,10 @@ class Game extends EventEmitter {
         this.raiseEvent('onStatChanged', to, 'ghostrock');
 
         this.raiseMergedEvent('onGhostRockTransferred', { source: from, target: to, amount: ghostrock });
+    }
+
+    revealDrawHands() {
+        this.queueStep(new RevealDrawHandPrompt(this));
     }
 
     checkWinCondition(player) {

@@ -1,4 +1,5 @@
-const AllPlayerPrompt = require('../allplayerprompt.js');
+const _ = require('underscore');
+const AllPlayerPrompt = require('./allplayerprompt.js');
 
 class RevealDrawHandPrompt extends AllPlayerPrompt {
     completionCondition(player) {
@@ -25,6 +26,16 @@ class RevealDrawHandPrompt extends AllPlayerPrompt {
         player.drawHandSelected = true;
     
         this.game.addMessage('{0} is ready to reveal their draw hand', player);
+    }
+
+    //continue() {
+    //    this.revealHands();
+    //}
+
+    revealHands() {            
+        _.each(this.game.getPlayers(), player => {
+            player.revealDrawHand();            
+        });
     }
 }
 
