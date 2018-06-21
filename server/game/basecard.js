@@ -418,7 +418,13 @@ class BaseCard {
     }
 
     isUnique() {
-        return this.cardData.is_unique;
+        if(this.hasKeyword('Non-Unique')) {
+            return false;
+        } else if(this.getType() === 'dude' || this.getType() === 'deed' || this.hasKeyword('Unique')) {
+            return true;
+        }
+
+        return false;
     }
 
     isBlank() {
@@ -522,6 +528,10 @@ class BaseCard {
         if(before && !after) {
             this.game.raiseEvent('onCardBlankToggled', this, after);
         }
+    }
+
+    clearNew() {
+        this.new = false;
     }
 
     addToken(type, number) {

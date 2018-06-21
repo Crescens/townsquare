@@ -90,9 +90,9 @@
 }
 
 .location-image {
-  left: 0;
-  position: absolute;
-  top: 0;
+  //left: 0;
+  //position: absolute;
+  //top: 0;
 
   &.vertical {
     height: @card-height;
@@ -129,6 +129,7 @@
 }
 
 .location-name {
+  z-index: 1;
   font-size: 10px;
   line-height: 14px;
 }
@@ -151,26 +152,41 @@
   margin-top: 5px;
 }
 
-.townsquare-wrapper {    min-height: @townsquare-height;
+.townsquare-wrapper {    
+  
+    min-height: @townsquare-height;
     min-width: @townsquare-width;
     margin: 0px;
 
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    margin: 0px 4px 0px 0px;
-    vertical-align: middle;
+    //margin: 0px 4px 0px 0px;
+    //vertical-align: middle;
+    //align-self: center;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
     box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
+
+    & .card-row {
+      min-height: @card-height;
+    }
 }
 
 .townsquare {
-    width: 200px;
-    height: 100px;
+    align-items: center;
+    width: 10px;
+    height: 10px;
     margin: 0 auto;
     order: 0;
     display: flex;
     flex: auto;
+    position: relative;
+
+    & .location-image {
+      z-index: 0;
+    }
+
+
 }

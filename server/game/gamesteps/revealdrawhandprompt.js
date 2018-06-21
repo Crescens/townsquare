@@ -10,7 +10,7 @@ class RevealDrawHandPrompt extends AllPlayerPrompt {
         return {
             menuTitle: 'Reveal draw hand?',
             buttons: [
-                { arg: 'revealdraw', text: 'Done' }
+                { arg: 'revealdraw', text: 'Ready' }
             ]
         };
     }

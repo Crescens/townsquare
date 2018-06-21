@@ -1,15 +1,15 @@
 const AllPlayerPrompt = require('../allplayerprompt.js');
 
-class CheatingResolutionPrompt extends AllPlayerPrompt {
+class SundownPrompt extends AllPlayerPrompt {
     completionCondition(player) {
-        return player.done;
+        return player.passTurn;
     }
 
     activePrompt() {
         return {
-            menuTitle: 'Play Cheatin\' Resolution?',
+            menuTitle: 'Ready for Lowball?',
             buttons: [
-                { arg: 'selected', text: 'Pass' }
+                { arg: 'selected', text: 'Ready' }
             ]
         };
     }
@@ -19,8 +19,8 @@ class CheatingResolutionPrompt extends AllPlayerPrompt {
     }
 
     onMenuCommand(player) {
-        player.done = true;
+        player.passTurn = true;
     }
 }
 
-module.exports = CheatingResolutionPrompt;
+module.exports = SundownPrompt;

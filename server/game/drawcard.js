@@ -290,34 +290,6 @@ class DrawCard extends BaseCard {
         });
     }
 
-    modifyBounty(bounty) {
-        this.game.applyGameAction('gainBounty', this, card => {
-            let oldBounty = card.bounty;
-
-            card.bounty += bounty;
-
-            if(card.bounty < 0) {
-                card.bounty = 0;
-            }
-
-            this.game.raiseEvent('onCardBountyChanged', this, card.bounty - oldBounty);
-        });
-    }
-
-    modifyGhostRock(ghostrock) {
-        this.game.applyGameAction('gainGhostRock', this, card => {
-            let oldGhostRock = card.ghostrock;
-
-            card.ghostrock += ghostrock;
-
-            if(card.ghostrock < 0) {
-                card.ghostrock = 0;
-            }
-
-            this.game.raiseEvent('onCardGhostRockChanged', this, card.ghostrock - oldGhostRock);
-        });
-    }
-
     /*
     needsStealthTarget() {
         return this.isStealth() && !this.stealthTarget;

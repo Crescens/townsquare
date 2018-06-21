@@ -440,7 +440,7 @@ export class InnerGameBoard extends React.Component {
                                     owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
                             </div>
 
-                            <GameLocation location={{uuid:'townsquare', name:'Town Square'}}
+                            <GameLocation location={{uuid:'townsquare', name:''}}
                                 cardLocation='townsquare' className='townsquare'
                                 onMouseOver={this.onMouseOver}
                                 onMouseOut={this.onMouseOut}

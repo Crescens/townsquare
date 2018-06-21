@@ -478,10 +478,6 @@ class Player extends Spectator {
             return true;
         }
 
-        if(this.cannotMarshalOrPutIntoPlayByTitle.includes(card.name)) {
-            return false;
-        }
-
         if(this.isCharacterDead(card) && !this.canResurrect(card)) {
             return false;
         }
@@ -711,6 +707,9 @@ class Player extends Spectator {
 
     resetForRound() {
         this.upkeepPaid = false;
+        this.passTurn = false;
+     
+        this.cardsInPlay.each(card => card.clearNew());
     }
 
     drop(cardId, source, target) {
