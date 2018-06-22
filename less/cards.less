@@ -45,12 +45,12 @@
     filter: grayscale(100%) brightness(60%);
   }
 
-  &.in-danger {
+  &.attacking {
     box-shadow: 0 0 1px 2px red;
   }
 
-  &.saved {
-    box-shadow: 0 0 1px 2px green;
+  &.defending {
+    box-shadow: 0 0 1px 2px blue;
   }
 
   &.selected {
@@ -215,14 +215,15 @@
 
 .counter {
   padding: 0;
-  font-size: 14px;
-  width: 18px;
-  height: 18px;
-  line-height: 18px;
+  font-size: @counter-dia*0.6;
+  width: @counter-dia;
+  height: @counter-dia;
+  line-height: @counter-dia;
   text-align: center;
   margin: 2px;
   text-shadow: 1px 1px 2px #000;
-  border-radius: 4px;
+  border: @counter-dia*0.1 dashed @out-color;
+  border-radius: @counter-dia/2;
   color: white;
   font-family: 'akenaten';
 
@@ -277,7 +278,7 @@
   */
   
   &.fade-out {
-    opacity: 0.4;
+    opacity: 0.8;
   }
 
   &.cancel {

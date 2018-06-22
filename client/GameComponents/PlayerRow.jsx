@@ -206,7 +206,6 @@ class PlayerRow extends React.Component {
 
         return (
             <div className='player-home-row'>
-                <div className='deck-cards'>
                     <div className={handClass} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} onDrop={(event) => this.onDragDrop(event, 'hand')}>
                         <div className='panel-header'>
                             {'Hand (' + hand.length + ')'}
@@ -232,10 +231,7 @@ class PlayerRow extends React.Component {
                       </div>
                       {drawHand}
                   </div>
-
-                  <HandRank onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut} handRank={this.props.handRank} />
                   
-                </div>
             </div>
         );
     }

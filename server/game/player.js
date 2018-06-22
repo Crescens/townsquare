@@ -764,7 +764,7 @@ class Player extends Spectator {
             return true;
         }
 
-        if(this.inPlayLocation(target)) {
+        if(this.game.inPlayLocation(target)) {
             this.putIntoPlay(card, 'play', target);
         } else {
             this.moveCard(card, target);
@@ -807,7 +807,6 @@ class Player extends Spectator {
     }
 
     inPlayLocation(target) {
-
         if(UUID.test(target) || TOWNSQUARE.test(target) || /street/.test(target)) {
             return true;
         }

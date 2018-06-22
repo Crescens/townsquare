@@ -23,7 +23,7 @@ class Deck {
 
         this.eachRepeatedCard(this.data.drawCards, cardData => {
 
-            if(['action', 'deed', 'dude', 'goods', 'spell'].includes(cardData.type_code)) {
+            if(['action', 'deed', 'dude', 'goods', 'spell', 'joker'].includes(cardData.type_code)) {
 
                 let drawCard;
 

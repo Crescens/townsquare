@@ -42,6 +42,8 @@ const ForcedTriggeredAbilityWindow = require('./gamesteps/forcedtriggeredability
 const TriggeredAbilityWindow = require('./gamesteps/triggeredabilitywindow.js');
 //const KillCharacters = require('./gamesteps/killcharacters.js');
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 class Game extends EventEmitter {
     constructor(details, options = {}) {
         super();
@@ -173,7 +175,7 @@ class Game extends EventEmitter {
             return;
         }
 
-        return _.find(this.locations, (location) => (location.represents === id));
+        return _.find(this.locations, (location) => (location.uuid === id));
 
     }
 
@@ -317,17 +319,23 @@ class Game extends EventEmitter {
 
         if(player.drop(cardId, source, target)) {
             var movedCard = 'a card';
+            let location = target;
+
+            if(this.inPlayLocation(target)) {
+                target = 'play area';
+            }
+
             if(!_.isEmpty(_.intersection(['boothill pile', 'discard pile', 'out of game', 'play area', 'out of town'],
                                          [source, target]))) {
                 // log the moved card only if it moved from/to a public place
                 var card = this.findAnyCardInAnyList(cardId);
                 if(card && this.currentPhase !== 'setup') {
-                    movedCard = card;
+                    movedCard = card.title;
                 }
             }
 
-            if(this.getLocationByID(target)) {
-                target = target.title;
+            if(this.getLocationByID(location)) {
+                target = location.title;
             } 
 
             this.addMessage('{0} has moved {1} from their {2} to their {3}',
@@ -335,12 +343,11 @@ class Game extends EventEmitter {
         }
     }
 
-    /* I don't even think we need this, as control is not generically on
-       the outfit in DTR. - 20171015 JW
-
-    addControl(player, control) {
-        return;
-    }*/
+    inPlayLocation(target) {
+        if(UUID.test(target) || /townsquare/.test(target) || /street/.test(target)) {
+            return true;
+        }
+    }
 
     addGhostRock(player, ghostrock) {
         if(ghostrock > 0 && player.cannotGainGhostRock) {

@@ -9,6 +9,7 @@ const goods = require('./goods');
 const legends = require('./legends');
 const outfits = require('./outfits');
 const spells = require('./spells');
+const jokers = require('./jokers');
 
 var cards = {};
 
@@ -18,6 +19,6 @@ _.each(fs.readdirSync(path.join(__dirname, 'outfits')), file => {
     cards[card.code] = card;
 });
 
-cards = _.extend(cards, actions, deeds, dudes, goods, legends, outfits, spells);
+cards = _.extend(cards, actions, deeds, dudes, goods, legends, outfits, spells, jokers);
 
 module.exports = cards;
