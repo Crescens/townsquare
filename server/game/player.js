@@ -303,7 +303,13 @@ class Player extends Spectator {
                 return;
         }
 
-        this.hand.push(new DudeCard(this, cardData));
+        let card = new DudeCard(this, cardData);
+
+        card.location = 'hand';
+
+        this.hand.push(card);
+
+        this.game.addMessage('{0} adds a {1} token to hand', this, card.title);
     }
 
     searchDrawDeck(limit, predicate) {

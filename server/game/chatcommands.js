@@ -50,7 +50,8 @@ class ChatCommands {
             'control',
             'influence',
             'ghostrock',
-            'bounty'
+            'bounty',
+            'production'
         ];
     }
 

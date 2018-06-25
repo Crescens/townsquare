@@ -418,7 +418,7 @@ class BaseCard {
     }
 
     isUnique() {
-        if(this.hasKeyword('Non-Unique')) {
+        if(this.hasKeyword('Non-Unique') || this.hasKeyword('Token')) {
             return false;
         } else if(this.getType() === 'dude' || this.getType() === 'deed' || this.hasKeyword('Unique')) {
             return true;
