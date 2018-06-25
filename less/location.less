@@ -36,17 +36,27 @@
   flex-direction: column;
   flex-wrap: wrap;
   flex-shrink: 1;
-  margin: 0px 4px 0px 0px;
   vertical-align: middle;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   min-height: @location-height;
   min-width: @location-width;
-  box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
+  box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px @box-shadow-color;
+  margin: @location-margin;
+  border-radius: 4px;
+  //border-width: 2px;  
+
+  & .card-row {
+    min-height: @card-height;
+  }
 
   .card-wrapper {
     padding: 2px;
   }
+}
+
+.controlled {
+  box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px @control-color;
 }
 
 .location-frame {
@@ -58,7 +68,7 @@
 .location {
   display: flex;
   position: relative;
-  //border-radius: 4px;
+  //border-width: 4px;
 
 
   //overflow: hidden;
@@ -156,7 +166,8 @@
   
     min-height: @townsquare-height;
     min-width: @townsquare-width;
-    margin: 0px;
+    margin: @location-margin;
+    border-radius: @location-margin;
 
     display: flex;
     flex-direction: column;

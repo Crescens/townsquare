@@ -12,11 +12,61 @@ const DeedStreetSidePrompt = require('./gamesteps/deedstreetsideprompt.js');
 const PlayActionPrompt = require('./gamesteps/playactionprompt.js');
 const PlayerPromptState = require('./playerpromptstate.js');
 
+const DudeCard = require('./dudecard.js');
+
 const StartingHandSize = 5;
 //const DrawPhaseCards = 2;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const TOWNSQUARE = /townsquare/i;
+
+const GUNSLINGER = { 
+    code: '01146',
+    title:'Gunslinger',
+    type_code:'dude',
+    suit:'Spades',
+    keywords:'Token',
+    text:'Cannot be included in decks. Remove this token from the game after this shootout.',
+    cost:0,
+    gang_code:'neutral',
+    shooter:'Stud',
+    rank:1,
+    upkeep:0,
+    bullets:2,
+    influence:0,
+    control:null };
+    
+const NATURESPIRIT = { 
+    code: '09042',
+    title:'Nature Spirit',
+    type_code:'dude',
+    suit:'Spades',
+    keywords:'Token',
+    text:'Cannot be included in decks. Remove this token from the game after this shootout.',
+    cost:0,
+    gang_code:'neutral',
+    shooter:'Stud',
+    rank:1,
+    upkeep:0,
+    bullets:2,
+    influence:0,
+    control:null };
+
+const ANCESTORSPIRIT = { 
+    code: '09041',
+    title:'Ancestor Spirit',
+    type_code:'dude',
+    suit:'Spades',
+    keywords:'Token',
+    text:'Cannot be included in decks. Remove this token from the game if it leaves this location, or at the end of the turn.',
+    cost:0,
+    gang_code:'neutral',
+    shooter:'Stud',
+    rank:1,
+    upkeep:0,
+    bullets:0,
+    influence:0,
+    control:null };
 
 class Player extends Spectator {
     constructor(id, user, owner, game) {
@@ -169,7 +219,7 @@ class Player extends Spectator {
     }
 
     discardDrawHand() {
-        this.discardCards(this.drawHand._wrapped, false, () => {
+        this.discardCards(this.drawHand._wrapped, () => {
             //callback(discarded);
         });
 
@@ -230,6 +280,30 @@ class Player extends Spectator {
         }
 
         return (cards.length > 1) ? cards : cards[0];
+    }
+
+    generateToken(type) {
+
+        let cardData = {};
+
+        switch(type) {
+            case 'gunslinger':
+            case 'g':
+                cardData = GUNSLINGER;
+                break;
+            case 'naturespirit':
+            case 'n':
+                cardData = NATURESPIRIT;
+                break;
+            case 'ancestorspirit':
+            case 'a':
+                cardData = ANCESTORSPIRIT;
+                break;
+            default:
+                return;
+        }
+
+        this.hand.push(new DudeCard(this, cardData));
     }
 
     searchDrawDeck(limit, predicate) {
@@ -760,17 +834,23 @@ class Player extends Spectator {
         }
 
         if(target === 'boothill pile') {
-            this.aceCard(card, false);
+            this.aceCard(card);
             return true;
         }
 
-        if(this.game.inPlayLocation(target)) {
+        if(this.inPlayLocation(target)) {
             this.putIntoPlay(card, 'play', target);
         } else {
             this.moveCard(card, target);
         }
 
         return true;
+    }
+
+    inPlayLocation(target) {
+        if(UUID.test(target) || /townsquare/.test(target) || /street/.test(target)) {
+            return true;
+        }
     }
 
     leftDeedOrder() {
@@ -864,21 +944,20 @@ class Player extends Spectator {
         });
     }
 
-    discardCard(card, allowSave = true) {
-        this.discardCards([card], allowSave);
+    discardCard(card) {
+        this.discardCards([card]);
     }
 
-    discardCards(cards, allowSave = true, callback = () => true) {
+    discardCards(cards, callback = () => true) {
         this.game.applyGameAction('discard', cards, cards => {
             var params = {
                 player: this,
                 cards: cards,
-                allowSave: allowSave,
                 originalLocation: cards[0].location
             };
             this.game.raiseMergedEvent('onCardsDiscarded', params, event => {
                 _.each(event.cards, card => {
-                    this.doSingleCardDiscard(card, allowSave);
+                    this.doSingleCardDiscard(card);
                 });
                 this.game.queueSimpleStep(() => {
                     callback(event.cards);
@@ -887,11 +966,10 @@ class Player extends Spectator {
         });
     }
 
-    doSingleCardDiscard(card, allowSave = true) {
+    doSingleCardDiscard(card) {
         var params = {
             player: this,
             card: card,
-            allowSave: allowSave,
             originalLocation: card.location
         };
         this.game.raiseMergedEvent('onCardDiscarded', params, event => {

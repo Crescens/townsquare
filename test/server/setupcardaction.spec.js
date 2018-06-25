@@ -2,14 +2,17 @@
 /* eslint camelcase: 0, no-invalid-this: 0 */
 
 const _ = require('underscore');
+const uuid = require('uuid');
+
 
 const SetupCardAction = require('../../server/game/setupcardaction');
 
 describe('SetupCardAction', function () {
     beforeEach(function() {
         this.gameSpy = jasmine.createSpyObj('game', ['on', 'removeListener']);
-        this.playerSpy = jasmine.createSpyObj('player', ['putIntoPlay']);
+        this.playerSpy = jasmine.createSpyObj('player', ['putIntoPlay', 'inPlayLocation']);
         this.cardSpy = jasmine.createSpyObj('card', ['getType']);
+
         this.context = {
             game: this.gameSpy,
             player: this.playerSpy,
@@ -22,6 +25,7 @@ describe('SetupCardAction', function () {
         beforeEach(function() {
             this.gameSpy.currentPhase = 'setup';
             this.playerSpy.hand = _([this.cardSpy]);
+            this.playerSpy.inPlayLocation.and.returnValue(true);
             this.cardSpy.getType.and.returnValue('dude');
         });
 
@@ -64,6 +68,7 @@ describe('SetupCardAction', function () {
 
     describe('executeHandler()', function() {
         it('should put the card in play for the player', function() {
+            this.playerSpy.outfit.uuid = uuid.v1();
             this.action.executeHandler(this.context);
             expect(this.playerSpy.putIntoPlay).toHaveBeenCalledWith(this.cardSpy, 'setup');
         });

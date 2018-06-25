@@ -88,7 +88,7 @@ describe('the DrawCard', function() {
                     expect(this.card.hasKeyword('Experimental')).toBe(true);
                     expect(this.card.hasKeyword('Improvement')).toBe(true);
                     expect(this.card.hasKeyword('Gadget')).toBe(true);
-                    expect(this.card.hasKeyword('Difficulty 6')).toBe(true);
+                    expect(this.card.hasKeyword('Difficulty')).toBe(true);
                 });
 
                 /* -- Keywords work different in DTR

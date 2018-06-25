@@ -21,7 +21,9 @@ class SetupCardAction extends BaseAbility {
     }
 
     executeHandler(context) {
-        context.player.putIntoPlay(context.source, 'setup', context.player.outfit.uuid);
+        if(context.player.outfit) {
+            context.player.putIntoPlay(context.source, 'setup', context.player.outfit.uuid);
+        }
     }
 }
 

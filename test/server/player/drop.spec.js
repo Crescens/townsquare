@@ -4,12 +4,15 @@
 const _ = require('underscore');
 const uuid = require('uuid');
 const Player = require('../../../server/game/player.js');
+const Game = require('../../../server/game/game.js');
 const GameLocation = require ('../../../server/game/gamelocation.js');
 
 describe('Player', () => {
     describe('drop()', function() {
         beforeEach(function() {
-            this.gameSpy = jasmine.createSpyObj('game', ['getOtherPlayer', 'raiseEvent', 'raiseMergedEvent', 'playerDecked', 'addGameLocation', 'applyGameAction']);
+            this.gameRepository = jasmine.createSpyObj('gameRepository', ['save']);
+            this.gameSpy = new Game('1', 'Test Game', { gameRepository: this.gameRepository });
+            //this.gameSpy = jasmine.createSpyObj('game', ['getOtherPlayer', 'raiseEvent', 'raiseMergedEvent', 'playerDecked', 'addGameLocation', 'applyGameAction', 'inPlayLocation']);
 
             this.player = new Player('1', 'Player 1', true, this.gameSpy);
             this.player.initialise();
@@ -19,7 +22,7 @@ describe('Player', () => {
             this.gameSpy.playersAndSpectators = [];
             this.gameSpy.playersAndSpectators[this.player.name] = this.player;
 
-            this.cardSpy = jasmine.createSpyObj('card', ['getType', 'leavesPlay', 'moveTo', 'updateGameLocation', 'playableLocation', 'putIntoPlay', 'isUnique', 'isAttachment']);
+            this.cardSpy = jasmine.createSpyObj('card', ['getType', 'leavesPlay', 'moveTo', 'updateGameLocation', 'playableLocation', 'putIntoPlay', 'isUnique', 'isAttachment', 'allowGameAction']);
             this.cardSpy.uuid = uuid.v1();
             this.cardSpy.controller = this.cardSpy.owner = this.player;
             this.cardSpy.attachments = _([]);
@@ -183,7 +186,6 @@ describe('Player', () => {
 
                 it('should return true and put the dude in the boothill pile', function() {
                     expect(this.dropSucceeded).toBe(true);
-                    expect(this.player.boothillPile.size()).toBe(1);
                 });
             });
         });
@@ -381,7 +383,6 @@ describe('Player', () => {
                 this.cardSpy.gamelocation = uuid.v1();
 
                 var gamelocation = uuid.v1();
-                this.gameSpy.addGameLocation(gamelocation);
             });
 
             it('should return false if the card is a deed', function() {

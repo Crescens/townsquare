@@ -37,7 +37,6 @@ HandRank.propTypes = {
     //Leaving unimplemented properties for extension thoughts
     className: PropTypes.string,
     handRank: PropTypes.object,
-    name: PropTypes.string,
     onClick: PropTypes.func,
     onMouseOut: PropTypes.func,
     onMouseOver: PropTypes.func,

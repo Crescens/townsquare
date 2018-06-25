@@ -13,12 +13,14 @@ import Messages from './GameComponents/Messages.jsx';
 import CardCollection from './GameComponents/CardCollection.jsx';
 import OutOfTown from './GameComponents/OutOfTown.jsx';
 import PlayerStreet from './GameComponents/PlayerStreet.jsx';
+import HandRank from './GameComponents/HandRank.jsx';
 import GameLocation from './GameComponents/GameLocation.jsx';
 import DropZone from './GameComponents/DropZone.jsx';
 import ActionWindowsMenu from './GameComponents/ActionWindowsMenu.jsx';
 import {tryParseJSON} from './util.js';
 
 import * as actions from './actions';
+
 
 export class InnerGameBoard extends React.Component {
     constructor() {
@@ -385,8 +387,6 @@ export class InnerGameBoard extends React.Component {
                             <OutOfTown onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
                                 owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
                             </div>
-                        
-                            <div className='out-of-town-divide' />
 
                             <div className='out-of-town' onDragOver={this.onDragOver}>
                                 <OutOfTown onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
@@ -439,17 +439,21 @@ export class InnerGameBoard extends React.Component {
                                 <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
                                     owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
                             </div>
+                            
+                            <div>
+                                <GameLocation location={{uuid:'townsquare', name:''}}
+                                    cardLocation='townsquare' className='townsquare'
+                                    onMouseOver={this.onMouseOver}
+                                    onMouseOut={this.onMouseOut}
+                                    onDragDrop={this.onDragDrop}
+                                    onMenuItemClick={this.onMenuItemClick}
+                                    onClick={this.onCardClick}
+                                    otherPlayer={otherPlayer}
+                                    thisPlayer={thisPlayer}/>
 
-                            <GameLocation location={{uuid:'townsquare', name:''}}
-                                cardLocation='townsquare' className='townsquare'
-                                onMouseOver={this.onMouseOver}
-                                onMouseOut={this.onMouseOut}
-                                onDragDrop={this.onDragDrop}
-                                onMenuItemClick={this.onMenuItemClick}
-                                onClick={this.onCardClick}
-                                otherPlayer={otherPlayer}
-                                thisPlayer={thisPlayer}/>
+                                <HandRank handRank={thisPlayer.handRank} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} />
 
+                            </div>
                             <div className='player-street'>
                                 <DropZone zone='street-left' onDragDrop={this.onDragDrop} onDragDropEvent={this.onDragDropEvent}/>
                                 <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}

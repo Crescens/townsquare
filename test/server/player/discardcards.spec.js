@@ -36,7 +36,7 @@ describe('Player', function () {
     describe('discardCards()', function () {
         describe('when no cards are passed', function() {
             beforeEach(function() {
-                this.player.discardCards([], false, this.callbackSpy);
+                this.player.discardCards([], this.callbackSpy);
             });
 
             it('should not raise the event', function() {
@@ -46,8 +46,8 @@ describe('Player', function () {
 
         describe('when cards are passed', function() {
             beforeEach(function() {
-                this.eventOuterParams = { player: this.player, cards: [this.card1, this.card2], allowSave: false, originalLocation: 'loc' };
-                this.player.discardCards([this.card1, this.card2], false, this.callbackSpy);
+                this.eventOuterParams = { player: this.player, cards: [this.card1, this.card2], originalLocation: 'loc' };
+                this.player.discardCards([this.card1, this.card2], this.callbackSpy);
             });
 
             it('should raise the onCardsDiscarded event', function() {
@@ -59,8 +59,8 @@ describe('Player', function () {
                     this.gameSpy.queueSimpleStep.and.callFake(callback => {
                         this.simpleStepCallback = callback;
                     });
-                    this.eventInnerParams1 = { player: this.player, card: this.card1, allowSave: false, originalLocation: 'loc' };
-                    this.eventInnerParams2 = { player: this.player, card: this.card2, allowSave: false, originalLocation: 'loc' };
+                    this.eventInnerParams1 = { player: this.player, card: this.card1, originalLocation: 'loc' };
+                    this.eventInnerParams2 = { player: this.player, card: this.card2, originalLocation: 'loc' };
                     this.onCardsDiscardedHandler = this.gameSpy.raiseMergedEvent.calls.mostRecent().args[2];
                     this.onCardsDiscardedHandler(this.eventOuterParams);
                 });
@@ -98,8 +98,8 @@ describe('Player', function () {
     describe('discardCard()', function () {
         describe('when the card has no dupes', function() {
             beforeEach(function() {
-                this.eventOuterParams = { player: this.player, cards: [this.card1], allowSave: false, originalLocation: 'loc' };
-                this.player.discardCard(this.card1, false);
+                this.eventOuterParams = { player: this.player, cards: [this.card1], originalLocation: 'loc' };
+                this.player.discardCard(this.card1);
             });
 
             it('should raise the onCardsDiscarded event', function() {
@@ -111,7 +111,7 @@ describe('Player', function () {
                     this.gameSpy.queueSimpleStep.and.callFake(callback => {
                         this.simpleStepCallback = callback;
                     });
-                    this.eventInnerParams1 = { player: this.player, card: this.card1, allowSave: false, originalLocation: 'loc' };
+                    this.eventInnerParams1 = { player: this.player, card: this.card1, originalLocation: 'loc' };
                     this.onCardsDiscardedHandler = this.gameSpy.raiseMergedEvent.calls.mostRecent().args[2];
                     this.onCardsDiscardedHandler(this.eventOuterParams);
                 });

@@ -16,6 +16,8 @@ const UpkeepPhase = require('./gamesteps/upkeepphase.js');
 const HighNoonPhase = require('./gamesteps/highnoonphase.js');
 const SundownPhase = require('./gamesteps/sundownphase.js');
 
+const DudeCard = require('./dudecard.js');
+
 /*
 const PlotPhase = require('./gamesteps/plotphase.js');
 const DrawPhase = require('./gamesteps/drawphase.js');
@@ -235,7 +237,7 @@ class Game extends EventEmitter {
             return;
         }
 
-        if(!card.facedown && card.location === 'play area' && card.controller === player) {
+        if(!card.facedown && ['play area', 'legend'].includes(card.location) && card.controller === player) {
             if(card.booted) {
                 player.unbootCard(card);
             } else {

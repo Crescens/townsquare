@@ -16,16 +16,18 @@ class ChatCommands {
 
             '/control': this.control,
             '/influence': this.influence,
-            '/bounty': this.bounty,
-            '/ghostrock': this.ghostrock,
 
-            '/token': this.setToken,
+            '/token': this.generateToken,
+
+            '/counter': this.setCounter,
+
             '/add-keyword': this.addKeyword,
             '/remove-keyword': this.removeKeyword,
             
-
             '/cancel-prompt': this.cancelPrompt,
-            '/disconnectme': this.disconnectMe
+            '/disconnectme': this.disconnectMe,
+
+            '/give-control': this.giveControl
 
             //'/kill': this.kill,
             //'/blank': this.blank,
@@ -40,7 +42,7 @@ class ChatCommands {
             //'/add-icon': this.addIcon,
             //'/take-icon': this.removeIcon,
             //'/remove-icon': this.removeIcon,
-            //'/give-control': this.giveControl,
+
             //'/reset-challenges-count': this.resetChallengeCount,
 
         };
@@ -62,6 +64,10 @@ class ChatCommands {
 
     revealDrawHand(player) {
         player.revealDrawHand();
+    }
+
+    generateToken(player, args) {
+        player.generateToken(args[1]);
     }
 
     draw(player, args) {
@@ -149,14 +155,14 @@ class ChatCommands {
         });
     }
 
-    kill(player) {
+    ace(player) {
         this.game.promptForSelect(player, {
-            activePromptTitle: 'Select a character',
-            waitingPromptTitle: 'Waiting for opponent to kill character',
-            cardCondition: card => card.location === 'play area' && card.controller === player && card.getType() === 'character',
-            gameAction: 'kill',
+            activePromptTitle: 'Select a card',
+            waitingPromptTitle: 'Waiting for opponent to ace card',
+            cardCondition: card => card.location === 'play area' && card.controller === player,
+            gameAction: 'ace',
             onSelect: (p, card) => {
-                card.controller.killCharacter(card);
+                card.controller.ace(card);
 
                 this.game.addMessage('{0} uses the /kill command to kill {1}', p, card);
                 return true;
@@ -354,7 +360,7 @@ class ChatCommands {
         this.game.pipeline.cancelStep();
     }
 
-    setToken(player, args) {
+    setCounter(player, args) {
         var token = args[1];
         var num = this.getNumberOrDefault(args[2], 1);
 
