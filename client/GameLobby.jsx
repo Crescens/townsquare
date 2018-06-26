@@ -63,7 +63,7 @@ class InnerGameLobby extends React.Component {
                 { this.props.bannerNotice ? <AlertPanel type='error' message={ this.props.bannerNotice } /> : null }
                 { this.state.errorMessage ? <AlertPanel type='error' message={ this.state.errorMessage } /> : null }
 
-                <div className='col-sm-7'>
+                <div className='game-lobby col-sm-7'>
                     <button className='btn btn-primary' onClick={ this.onNewGameClick } disabled={ !!this.props.currentGame }>New Game</button>
                     { this.props.isAdmin ? <span className='pull-right'><input type='checkbox' checked={ this.state.showNodes } onChange={ this.onShowNodesChecked } />Show Nodes</span> : null }
                     { this.props.games.length === 0 ? <h4>No games are currently in progress</h4> : <GameList games={ this.props.games } showNodes={ this.state.showNodes } /> }

@@ -222,7 +222,7 @@ class InnerPendingGame extends React.Component {
             </div>);
 
         return (
-            <div>
+            <div className='pending-game'>
                 <audio ref='notification'>
                     <source src='/sound/charge.mp3' type='audio/mpeg' />
                     <source src='/sound/charge.ogg' type='audio/ogg' />

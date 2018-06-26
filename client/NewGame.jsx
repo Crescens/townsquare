@@ -65,7 +65,7 @@ class InnerNewGame extends React.Component {
     render() {
         let charsLeft = 140 - this.state.gameName.length;
         return this.props.socket ? (
-            <div>
+            <div className='new-game'>
                 <form className='form'>
                     <div className='row'>
                         <div className='col-sm-5'>
