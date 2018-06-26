@@ -20,6 +20,8 @@ class ChatCommands {
             '/token': this.generateToken,
 
             '/counter': this.setCounter,
+            '/chip': this.setCounter,
+            '/c': this.setCounter,
 
             '/add-keyword': this.addKeyword,
             '/remove-keyword': this.removeKeyword,
@@ -171,6 +173,7 @@ class ChatCommands {
         });
     }
 
+    /*
     blank(player) {
         this.game.promptForSelect(player, {
             activePromptTitle: 'Select a card',
@@ -198,6 +201,7 @@ class ChatCommands {
             }
         });
     }
+    */
 
     addTrait(player, args) {
         var trait = args[1];
@@ -292,6 +296,7 @@ class ChatCommands {
         });
     }
 
+    /*
     addIcon(player, args) {
         var icon = args[1];
 
@@ -330,7 +335,7 @@ class ChatCommands {
                 return true;
             }
         });
-    }
+    }*/
 
     giveControl(player) {
         this.game.promptForSelect(player, {
@@ -372,7 +377,7 @@ class ChatCommands {
         this.game.promptForSelect(player, {
             activePromptTitle: 'Select a card',
             waitingPromptTitle: 'Waiting for opponent to set token',
-            cardCondition: card => (card.location === 'play area' || card.location === 'plot') && card.controller === player,
+            cardCondition: card => card.location === 'play area' && card.controller === player,
             onSelect: (p, card) => {
                 var numTokens = card.tokens[token] || 0;
 

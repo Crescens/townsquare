@@ -22,15 +22,8 @@ class Card extends React.Component {
         };
 
         this.shortNames = {
-            stand: 'T',
-            poison: 'O',
-            gold: 'G',
-            valarmorghulis: 'V',
-            betrayal: 'B',
-            vengeance: 'N',
-            ear: 'E',
-            venom: 'M',
-            kiss: 'K'
+            ghostrock: 'G',
+            bounty: 'B'
         };
     }
 
@@ -140,13 +133,13 @@ class Card extends React.Component {
 
         
         if(card.shooter === 'Draw') {
-            counters['bullets-draw'] = card.bullets ? { count: card.bullets, fade: true, shortName: 'D' } : undefined;
+            counters['bullets-draw'] = card.bullets !== null ? { count: card.bullets, fade: true, shortName: 'D' } : undefined;
         } else if(card.shooter === 'Stud') {
-            counters['bullets-stud'] = card.bullets ? { count: card.bullets, fade: true, shortName: 'S' } : undefined;
+            counters['bullets-stud'] = card.bullets !== null ? { count: card.bullets, fade: true, shortName: 'S' } : undefined;
         }
-        
-        counters['control'] = card.control ? { count: card.control, fade: true, shortName: 'C' } : undefined;
-        counters['influence'] = card.influence ? { count: card.influence, fade: true, shortName: 'I' } : undefined;
+
+        counters['card-control'] = card.control ? { count: card.control, fade: true, shortName: 'C' } : undefined;
+        counters['card-influence'] = card.influence ? { count: card.influence, fade: true, shortName: 'I' } : undefined;
         
         _.map(card.iconsAdded, icon => {
             counters[icon] = { count: 0, cancel: false };
