@@ -1,8 +1,8 @@
 const AllPlayerPrompt = require('./allplayerprompt.js');
 
 class ReadyPrompt extends AllPlayerPrompt {
-    completionCondition(player) {
-        return player.done;
+    completionCondition() {
+        return this.done;
     }
 
     activePrompt() {
@@ -18,8 +18,8 @@ class ReadyPrompt extends AllPlayerPrompt {
         return { menuTitle: 'Waiting for opponent...' };
     }
 
-    onMenuCommand(player) {
-        player.done = true;
+    onMenuCommand() {
+        this.done = true;
         //this.game.addMessage('{0} is ready to move on', player);
     }
 }
