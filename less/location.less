@@ -41,9 +41,10 @@
   justify-content: space-between;
   min-height: @location-height;
   min-width: @location-width;
-  box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px @box-shadow-color;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.75), inset 0 0 0 1px @box-shadow-color;
   margin: @location-margin;
   border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
   //border-width: 2px;  
 
   & .card-row {
@@ -56,7 +57,7 @@
 }
 
 .controlled {
-  box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px @control-color;
+  box-shadow: 0 0 12px rgba(0,0,0,0.75), inset 0 0 0 1px @control-color;
 }
 
 .location-frame {
@@ -178,7 +179,8 @@
     align-items: center;
     justify-content: space-between;
 
-    box-shadow: 0 0 12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
+    box-shadow: 0 0 12px rgba(0,0,0,0.75), inset 0 0 0 1px rgba(255,255,255,0.1);
+    background-color: rgba(0, 0, 0, 0.5);
 
     & .card-row {
       min-height: @card-height;

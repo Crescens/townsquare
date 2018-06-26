@@ -154,7 +154,7 @@ class InnerProfile extends React.Component {
         });
 
         return (
-            <div>
+            <div className='profile-box'>
                 <h2>User profile for { this.props.user.username }</h2>
                 { this.state.errorMessage ? <AlertPanel type='error' message={ this.state.errorMessage } /> : null }
                 { this.state.successMessage ? <AlertPanel type='success' message={ this.state.successMessage } /> : null }

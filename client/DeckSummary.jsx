@@ -65,7 +65,7 @@ class DeckSummary extends React.Component {
         var cardsToRender = this.getCardsToRender();
 
         return (
-            <div>
+            <div className='deck-summary'>
                 { this.state.cardToShow ? <img className='hover-image' src={ '/img/cards/' + this.state.cardToShow.code + '.jpg' } /> : null }
                 <h3>{ this.props.deck.name }</h3>
                 <div className='decklist'>
