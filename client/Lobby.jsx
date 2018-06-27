@@ -101,14 +101,14 @@ class InnerLobby extends React.Component {
         });
 
         return (
-            <div>
+            <div className='lobby-box'>
                 { this.props.bannerNotice ? <AlertPanel message={ this.props.bannerNotice } type='error' /> : null }
-                <AlertPanel type='info' message='Latest Site News'>
+                <AlertPanel type='warning' message='Latest Site News'>
                     { this.props.loading ? <div>News loading...</div> : null }
                     <News news={ this.props.news } />
                 </AlertPanel>
-                <div className='row'>
-                    <span className='col-sm-9 text-center'><h1>Play Doomtown: Reloaded</h1></span>
+                <div className='title-heading row'>
+                    <span className='col-sm-9 text-center'><h1>Play Doomtown</h1></span>
                     <span className='col-sm-3 hidden-xs'><h3>{'Online Users (' + users.length + ')'}</h3></span>
                 </div>
                 <div className='row'>

@@ -6,6 +6,7 @@ import $ from 'jquery';
 import AdditionalCardPile from './AdditionalCardPile.jsx';
 import Card from './Card.jsx';
 import CardCollection from './CardCollection.jsx';
+import Hand from './Hand.jsx';
 import HandRank from './HandRank.jsx';
 import {tryParseJSON} from '../util.js';
 
@@ -204,6 +205,12 @@ class PlayerRow extends React.Component {
             { text: 'Close and Shuffle', handler: this.onCloseAndShuffleClick}
         ];
 
+        var handMenu = [
+            { text: 'Pull', handler: this.onPullClick},
+            { text: 'Show', handler: this.onShowDeckClick, showPopup: true },
+            { text: 'Shuffle', handler: this.onShuffleClick}
+        ];
+
         return (
             <div className='player-home-row'>
                     <div className={handClass} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} onDrop={(event) => this.onDragDrop(event, 'hand')}>
@@ -232,6 +239,7 @@ class PlayerRow extends React.Component {
                       {drawHand}
                   </div>
                   
+                <HandRank handRank={this.props.handRank} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} />
             </div>
         );
     }

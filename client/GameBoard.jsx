@@ -13,7 +13,6 @@ import Messages from './GameComponents/Messages.jsx';
 import CardCollection from './GameComponents/CardCollection.jsx';
 import OutOfTown from './GameComponents/OutOfTown.jsx';
 import PlayerStreet from './GameComponents/PlayerStreet.jsx';
-import HandRank from './GameComponents/HandRank.jsx';
 import GameLocation from './GameComponents/GameLocation.jsx';
 import DropZone from './GameComponents/DropZone.jsx';
 import ActionWindowsMenu from './GameComponents/ActionWindowsMenu.jsx';
@@ -450,8 +449,6 @@ export class InnerGameBoard extends React.Component {
                                     onClick={this.onCardClick}
                                     otherPlayer={otherPlayer}
                                     thisPlayer={thisPlayer}/>
-
-                                <HandRank handRank={thisPlayer.handRank} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} />
 
                             </div>
                             <div className='player-street'>

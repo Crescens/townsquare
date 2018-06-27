@@ -53,11 +53,15 @@
 
 .deck-list {
   margin-top: 20px;
-  background-color: rgba(0,0,0,0.5);
+  background-color: @box-background-color;
+  padding: 8px;
+  border-radius: @box-radius;
 }
 
 .deck-summary {
-  background-color: rgba(0,0,0,0.5);
+  background-color: @box-background-color;
+  padding: 8px;
+  border-radius: @box-radius;
 }
 
 .deck-row {
@@ -76,12 +80,12 @@
 }
 
 .deck-row:hover {
-  border-color: @brand-info;
+  border-color: @brand-warning;
 }
 
 .deck-row.active {
-  border-color: @brand-danger;
-  color: @brand-danger;
+  border-color: @brand-warning;
+  color: @brand-warning;
 }
 
 .select-button {

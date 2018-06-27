@@ -146,7 +146,7 @@ class InnerLogin extends React.Component {
         });
 
         return (
-            <div>
+            <div className='login-box'>
                 { errorBar }
                 <form className='form form-horizontal'>
                     { fieldsToRender }

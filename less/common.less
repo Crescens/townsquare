@@ -2,20 +2,36 @@
 
 .about-box {
   background-color: rgba(0,0,0,0.5);
+  padding: 8px;
+  border-radius: @box-radius;
 }
 
 .profile-box {
   background-color: rgba(0,0,0,0.5);
+  padding: 8px;
+  border-radius: @box-radius;
+}
+
+.registration-box {
+  background-color: rgba(0,0,0,0.5);
+  padding: 8px;
+  border-radius: @box-radius;
+}
+
+.login-box {
+  background-color: rgba(0,0,0,0.5);
+  padding: 8px;
+  border-radius: @box-radius;
 }
 
 .card-link {
   cursor: pointer;
   cursor: hand;
-  color: @brand-primary;
+  color: @brand-warning;
 }
 
 .card-link:hover {
-  color: @brand-info;
+  color: @brand-primary;
 }
 
 .username {
@@ -65,14 +81,14 @@
 }
 
 .highlight-panel {
-  border-color: @brand-info;
+  border-color: @brand-warning;
 }
 
 .menu {
   position: absolute;
   width: 200px;
   left: 58px;
-  top: -5px;
+  bottom: 0px;
   font-size: 12px;
   line-height: 16px;
   z-index: @layer-card-menu;
@@ -87,7 +103,7 @@
 }
 
 .menu > div:hover {
-  border-color: @brand-info;
+  border-color: @brand-warning;
 }
 
 .bootstrap-typeahead-input-main {

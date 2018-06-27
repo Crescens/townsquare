@@ -140,8 +140,8 @@ export class InnerRegister extends React.Component {
             },
             {
                 name: 'email',
-                label: 'email Address',
-                placeholder: 'email Address',
+                label: 'email',
+                placeholder: 'email',
                 inputType: 'email',
                 blurCallback: this.verifyEmail
             },
@@ -154,8 +154,8 @@ export class InnerRegister extends React.Component {
             },
             {
                 name: 'password1',
-                label: 'Password (again)',
-                placeholder: 'Password (again)',
+                label: 'Password (repeat)',
+                placeholder: 'Password (repeat)',
                 inputType: 'password',
                 blurCallback: this.verifyPassword
             }
@@ -190,7 +190,7 @@ export class InnerRegister extends React.Component {
         });
 
         return (
-            <div>
+            <div className='registration-box'>
                 { errorBar }
                 <form className='form form-horizontal'>
                     { fieldsToRender }
