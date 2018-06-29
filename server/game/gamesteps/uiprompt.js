@@ -43,7 +43,7 @@ class UiPrompt extends BaseStep {
     }
 
     waitingPrompt() {
-        return { menuTitle: 'Waiting for opponent' };
+        return { menuTitle: 'Waiting for opponent...' };
     }
 
     continue() {

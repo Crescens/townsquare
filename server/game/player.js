@@ -18,7 +18,6 @@ const StartingHandSize = 5;
 //const DrawPhaseCards = 2;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const TOWNSQUARE = /townsquare/i;
 
 const GUNSLINGER = { 
     code: '01146',
@@ -90,6 +89,7 @@ class Player extends Spectator {
         this.minReserve = 0;
         this.costReducers = [];
         this.readyToRevealDrawHand = false;
+        this.pass = false;
         //this.playableLocations = _.map(['marshal', 'play', 'ambush'], playingType => new PlayableLocation(playingType, this, 'hand'));
         //this.usedPlotsModifier = 0;
         //this.cannotGainGold = false;
@@ -226,6 +226,10 @@ class Player extends Spectator {
         this.drawHandRevealed = false;
         this.drawHandSelected = false;
         this.handRank = {rank: 0};
+    }
+
+    resetPass() {
+        this.pass = false;
     }
 
     revealDrawHand() {
@@ -890,12 +894,6 @@ class Player extends Spectator {
 
     addDeedToRight(card) {
         this.locations.push(new GameLocation(card.uuid, this.rightDeedOrder() + 1));
-    }
-
-    inPlayLocation(target) {
-        if(UUID.test(target) || TOWNSQUARE.test(target) || /street/.test(target)) {
-            return true;
-        }
     }
 
     getHandRank() {

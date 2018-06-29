@@ -1,10 +1,6 @@
-const AllPlayerPrompt = require('../allplayerprompt.js');
+const PlayerOrderPrompt = require('../playerorderprompt.js');
 
-class CheatingResolutionPrompt extends AllPlayerPrompt {
-    completionCondition(player) {
-        return player.done;
-    }
-
+class CheatingResolutionPrompt extends PlayerOrderPrompt {
     activePrompt() {
         return {
             menuTitle: 'Play Cheatin\' Resolution?',
@@ -14,12 +10,12 @@ class CheatingResolutionPrompt extends AllPlayerPrompt {
         };
     }
 
-    waitingPrompt() {
-        return { menuTitle: 'Waiting for opponent...' };
-    }
-
     onMenuCommand(player) {
-        player.done = true;
+        if(player !== this.currentPlayer) {
+            return false;
+        }
+
+        this.completePlayer();
     }
 }
 

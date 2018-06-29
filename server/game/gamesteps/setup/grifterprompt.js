@@ -9,17 +9,13 @@ class GrifterPrompt extends ReadyPrompt {
         return {
             menuTitle: 'Ready/Grifter?',
             buttons: [
-                { arg: 'selected', text: 'Done' }
+                { arg: 'selected', text: 'Play Lowball' }
             ]
         };
     }
 
-    waitingPrompt() {
-        return { menuTitle: 'Ready/Grifter?' };
-    }
-
     onMenuCommand(player) {
-        player.startPosse();
+        this.done = true;
         this.game.addMessage('{0} is ready to play', player);
     }
 }
