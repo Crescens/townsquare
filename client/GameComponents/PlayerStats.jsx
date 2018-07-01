@@ -27,19 +27,22 @@ export class InnerPlayerStats extends React.Component {
             <div className='panel player-stats'>
                 {playerAvatar}
                 <div className='state'>
-                    <span><img src='/img/GhostRock.png' title='Ghost Rock' alt='Ghost Rock' height='26' width='26'/> {this.props.ghostrock}</span>
+                    <img src='/img/GhostRock.png' title='Ghost Rock' alt='Ghost Rock' height='26' width='26'/> 
+                    <div className='value'>{this.props.ghostrock}</div>
                     {this.props.isMe ?
-                        <div className='pull-right'>
+                        <div className='pull-left'>
                             <button className='btn btn-stat' onClick={this.sendUpdate.bind(this, 'ghostrock', 'down')}><img src='/img/Minus.png' title='-' alt='-' /></button>
                             <button className='btn btn-stat' onClick={this.sendUpdate.bind(this, 'ghostrock', 'up')}><img src='/img/Plus.png' title='+' alt='+' /></button>
                         </div> :
                         null}
                 </div>
                 <div className='state'>
-                    <span><img src='/img/Control.png' title='Control' alt='Control' height='26' width='26' /> {this.props.control}</span>
+                    <img src='/img/Control.png' title='Control' alt='Control' height='26' width='26' />
+                    <div className='value'>{this.props.control}</div>
                 </div>
                 <div className='state'>
-                    <span><img src='/img/Influence.png' title='Influence' alt='Influence' height='26' width='26' /> {this.props.influence}</span>
+                    <img src='/img/Influence.png' title='Influence' alt='Influence' height='26' width='26' />
+                    <div className='value'>{this.props.influence}</div>
                 </div>
             </div>
         );

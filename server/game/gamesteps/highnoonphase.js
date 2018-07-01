@@ -1,13 +1,13 @@
 //const _ = require('underscore');
 const Phase = require('./phase.js');
 const SimpleStep = require('./simplestep.js');
-const ReadyPrompt = require('./readyprompt.js');
+const PlayerOrderContinuousPrompt = require('./playerordercontinuousprompt.js');
 
 class HighNoonPhase extends Phase {
     constructor(game) {
         super(game, 'high noon');
         this.initialise([
-            new ReadyPrompt(game, 'high noon')
+            new PlayerOrderContinuousPrompt(game)
         ]);
     }
 

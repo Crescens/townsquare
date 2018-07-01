@@ -368,7 +368,7 @@ export class InnerGameBoard extends React.Component {
             <div className='game-board'>
                 <div className='main-window'>
                     <div className='left-side'>
-                        <div className='player-info'>
+                        <div className='player-info other-side'>
                             <PlayerStats ghostrock={otherPlayer ? otherPlayer.ghostrock : 0}
                                          influence={otherPlayer ? otherPlayer.totalInfluence : 0}
                                          control={otherPlayer ? otherPlayer.totalControl : 0}
