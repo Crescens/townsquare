@@ -374,17 +374,17 @@ export class InnerGameBoard extends React.Component {
                                          control={otherPlayer ? otherPlayer.totalControl : 0}
                                          user={otherPlayer ? otherPlayer.user : null} />
                             <div className='deck-info'>
-                                <div className='deck-type'>
+                                <div className='legend'>
                                     { this.getLegend(otherPlayer, false, 'bottom') }
                                 </div>
-                                { otherPlayer ? <div className={'first-player-indicator ' + (!thisPlayer.firstPlayer ? '' : 'hidden')}>Winner</div> : ''}
+                                { otherPlayer ? <div className={'first-player-indicator ' + (!thisPlayer.firstPlayer ? '' : 'hidden')}>Lowball Winner</div> : ''}
                             </div>
                         </div>
 
                         <div className='middle'>
                             <div className='out-of-town' onDragOver={this.onDragOver}>
                             <OutOfTown onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
-                                owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
+                                className={'other-side'} owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
                             </div>
 
                             <div className='out-of-town' onDragOver={this.onDragOver}>
@@ -411,8 +411,8 @@ export class InnerGameBoard extends React.Component {
                             <PlayerStats ghostrock={thisPlayer.ghostrock || 0} influence={thisPlayer.totalInfluence || 0}
                                         control={thisPlayer.totalControl || 0} isMe={!this.state.spectating} user={thisPlayer.user} />
                             <div className='deck-info'>
-                                <div className={'first-player-indicator ' + (thisPlayer.firstPlayer ? '' : 'hidden')}>Winner</div>
-                                <div className='deck-type'>
+                                <div className={'first-player-indicator ' + (thisPlayer.firstPlayer ? '' : 'hidden')}>Lowball Winner</div>
+                                <div className='legend'>
                                     { this.getLegend(thisPlayer, !this.state.spectating, 'top') }
                                 </div>
                             </div>
@@ -436,7 +436,7 @@ export class InnerGameBoard extends React.Component {
 
                             <div className='player-street'>
                                 <PlayerStreet onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={this.onCardClick} onMenuItemClick={this.onMenuItemClick}
-                                    owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
+                                    className='other-side' owner={otherPlayer} otherPlayer={otherPlayer} thisPlayer={thisPlayer}/>
                             </div>
                             
                             <div>

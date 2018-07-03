@@ -7,6 +7,10 @@ class OutOfTown extends React.Component {
     buildOutOfTown(player) {
         let onStreet = [];
 
+        let className = this.props.className;
+
+        className = 'out-of-town ' + className;
+
         if(player) {
             let filteredLocations = _.filter(player.locations, (location) => location.order === null);
             _.each(filteredLocations, (location) => {
@@ -32,7 +36,7 @@ class OutOfTown extends React.Component {
         }
         */
 
-        return <div className='out-of-town'>{onStreet}</div>;
+        return <div className={className}>{onStreet}</div>;
     }
 
     render() {

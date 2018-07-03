@@ -3,12 +3,20 @@
 .in-town {
   display: flex;
   flex-direction: row;
+
+  &.other-side {
+    flex-direction: row-reverse;
+  }
 }
 
 .out-of-town {
   display: flex;
+  flex: 1;
   flex-direction: row;
-  justify-content: center;
+
+  &.other-side {
+    justify-content: flex-start;
+  }
 }
 
 .out-of-town-divide {

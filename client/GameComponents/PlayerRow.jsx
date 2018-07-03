@@ -205,12 +205,6 @@ class PlayerRow extends React.Component {
             { text: 'Close and Shuffle', handler: this.onCloseAndShuffleClick}
         ];
 
-        var handMenu = [
-            { text: 'Pull', handler: this.onPullClick},
-            { text: 'Show', handler: this.onShowDeckClick, showPopup: true },
-            { text: 'Shuffle', handler: this.onShuffleClick}
-        ];
-
         return (
             <div className='player-home-row'>
                     <div className={handClass} onDragLeave={this.onDragLeave} onDragOver={this.onDragOver} onDrop={(event) => this.onDragDrop(event, 'hand')}>

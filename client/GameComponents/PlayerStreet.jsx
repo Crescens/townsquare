@@ -8,6 +8,10 @@ class PlayerStreet extends React.Component {
     buildStreet(player) {
         let onStreet = [];
 
+        let className = this.props.className;
+
+        className = 'in-town ' + className;
+
         if(player) {
             let filteredLocations = _.filter(player.locations, (location) => location.order !== null);
             let sortedLocations = _.sortBy(filteredLocations, 'order');
@@ -32,7 +36,7 @@ class PlayerStreet extends React.Component {
             onStreet.push(<GameLocation key='empty' location={{facedown:true}}/>);
         }
 
-        return <div className='in-town'>{onStreet}</div>;
+        return <div className={className}>{onStreet}</div>;
     }
 
     render() {
