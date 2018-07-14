@@ -7,11 +7,18 @@ class SundownPhase extends Phase {
     constructor(game) {
         super(game, 'sundown');
         this.initialise([
-            new SimpleStep(game, () => this.unbootCards()),
             new SimpleStep(game, () => this.checkWinCondition()),
+            new SimpleStep(game, () => this.unbootCards()),
+            new SimpleStep(game, () => this.sundownRedraw()),            
             new SimpleStep(game, () => this.resetPlayerStatus()),
             new SundownPrompt(game)
         ]);
+    }
+
+    sundownRedraw() {
+        _.each(this.game.getPlayers(), player => {
+            player.sundownRedraw();
+        });
     }
 
     checkWinCondition() {

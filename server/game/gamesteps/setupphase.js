@@ -11,9 +11,9 @@ class SetupPhase extends Phase {
             new SimpleStep(game, () => this.prepareDecks()),
             new SimpleStep(game, () => this.drawStartingPosse()),
             new StartingPossePrompt(game),
-            new GrifterPrompt(game),
+            //new GrifterPrompt(game),            new GrifterPrompt(game),
             new SimpleStep(game, () => this.startGame()),
-            //new GrifterPrompt(game)
+            new GrifterPrompt(game)
         ]);
     }
 
