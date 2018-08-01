@@ -15,16 +15,25 @@ class SundownPhase extends Phase {
 
     checkWinCondition() {
         const potentialWinner = [];
+        let numberOfPlayers = [];
+        _.each(this.game.getPlayers(), player => {
+            numberOfPlayers.push(player.name);
+        }
+        );
+        
+        if( numberOfPlayers.length === 1 ){
+            return this.game.addMessage('Victory check is skipped in one player mode');
+        }
+
         _.each(this.game.getPlayers(), player => {
             let opponents = _.reject(this.game.getPlayers(), activePlayer => activePlayer === player);
             if (_.every(opponents, opponent => opponent.getTotalInfluence() < player.getTotalControl())){
-                console.log("player control points" + player.getTotalControl());
                 potentialWinner.push(player);
             }
 
 
         }
-        )
+        );
         if (potentialWinner.length === 1) {
             this.game.recordWinner(potentialWinner[0], 'Control points greater than influence');
         }
