@@ -6,7 +6,7 @@ class DudeCard extends DrawCard {
     setupCardAbilities(ability) {
         this.action({
             title: 'Call Out',
-            //condition: () => this.game.currentPhase === 'high noon',
+            condition: () => this.game.currentPhase === 'high noon',
             target: {
                 activePromptTitle: 'Select dude to call out',
                 cardCondition: card => card.getType() === 'dude' && card.gamelocation === this.gamelocation

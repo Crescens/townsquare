@@ -88,7 +88,7 @@ class CardAction extends BaseAbility {
     }
 
     allowMenu() {
-        return ['play area', 'agenda', 'active plot'].includes(this.location);
+        return ['hand', 'draw hand', 'play area', 'legend'].includes(this.location);
     }
 
     createContext(player, arg) {
@@ -165,8 +165,8 @@ class CardAction extends BaseAbility {
         return this.clickToActivate;
     }
 
-    isPlayableEventAbility() {
-        return this.card.getType() === 'event' && this.location === 'hand';
+    isPlayableActionAbility() {
+        return this.card.getType() === 'action' && this.location === 'hand';
     }
 
     hasMax() {

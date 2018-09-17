@@ -167,7 +167,7 @@ class BaseAbility {
         return true;
     }
 
-    isPlayableEventAbility() {
+    isPlayableActionAbility() {
         return false;
     }
 

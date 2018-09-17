@@ -86,7 +86,7 @@ class Player extends Spectator {
 
         this.deck = {};
         //this.challenges = new ChallengeTracker();
-        this.minReserve = 0;
+        this.handSize = StartingHandSize;
         this.costReducers = [];
         this.readyToRevealDrawHand = false;
         this.pass = false;
@@ -469,6 +469,13 @@ class Player extends Spectator {
 
         this.shuffleDrawDeck();
         this.drawCardsToHand('hand', StartingHandSize);
+    }
+
+    sundownRedraw() {
+
+        let hand = this.hand.value();
+
+        this.drawCardsToHand('hand', this.handSize - hand.length);
     }
 
     addCostReducer(reducer) {

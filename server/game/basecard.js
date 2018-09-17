@@ -131,7 +131,7 @@ class BaseCard {
                 let value = results[2];
                 keyword = results[1].trim();
 
-                this.addSkill(keyword, value);
+                this.addKeywordModifier(keyword, value);
             }
 
             this.addKeyword(keyword.toLowerCase().trim());
@@ -139,7 +139,7 @@ class BaseCard {
     }
 
     //Unsure if we really need this...
-    addSkill(keyword,value) {
+    addKeywordModifier(keyword,value) {
         switch(keyword) {
             case 'Shaman':
                 this.shamanSkill = value;

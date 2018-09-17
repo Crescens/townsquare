@@ -11,7 +11,7 @@ describe('AbilityResolver', function() {
                 handler(params);
             }
         });
-        this.ability = jasmine.createSpyObj('ability', ['isAction', 'isCardAbility', 'isPlayableEventAbility', 'resolveCosts', 'payCosts', 'resolveTargets', 'executeHandler']);
+        this.ability = jasmine.createSpyObj('ability', ['isAction', 'isCardAbility', 'isPlayableActionAbility', 'resolveCosts', 'payCosts', 'resolveTargets', 'executeHandler']);
         this.ability.isCardAbility.and.returnValue(true);
         this.source = { source: 1 };
         this.player = { player: 1 };
@@ -53,7 +53,7 @@ describe('AbilityResolver', function() {
         describe('when the ability is a card ability', function() {
             beforeEach(function() {
                 this.ability.resolveCosts.and.returnValue([{ resolved: true, value: true }, { resolved: true, value: true }]);
-                this.ability.isPlayableEventAbility.and.returnValue(true);
+                this.ability.isPlayableActionAbility.and.returnValue(true);
                 this.ability.isCardAbility.and.returnValue(true);
                 this.resolver.continue();
             });
@@ -66,7 +66,7 @@ describe('AbilityResolver', function() {
         describe('when the ability is not a card ability', function() {
             beforeEach(function() {
                 this.ability.resolveCosts.and.returnValue([{ resolved: true, value: true }, { resolved: true, value: true }]);
-                this.ability.isPlayableEventAbility.and.returnValue(true);
+                this.ability.isPlayableActionAbility.and.returnValue(true);
                 this.ability.isCardAbility.and.returnValue(false);
                 this.resolver.continue();
             });
@@ -79,7 +79,7 @@ describe('AbilityResolver', function() {
         describe('when the ability is an event being played', function() {
             beforeEach(function() {
                 this.ability.resolveCosts.and.returnValue([{ resolved: true, value: true }, { resolved: true, value: true }]);
-                this.ability.isPlayableEventAbility.and.returnValue(true);
+                this.ability.isPlayableActionAbility.and.returnValue(true);
                 this.resolver.continue();
             });
 

@@ -71,7 +71,7 @@ class TriggeredAbility extends BaseAbility {
     }
 
     meetsRequirements(context) {
-        let isPlayableEventAbility = this.isPlayableEventAbility();
+        let isPlayableActionAbility = this.isPlayableActionAbility();
 
         if(this.game.currentPhase === 'setup') {
             return false;
@@ -93,11 +93,11 @@ class TriggeredAbility extends BaseAbility {
             return false;
         }
 
-        if(isPlayableEventAbility && !context.player.isCardInPlayableLocation(this.card, 'play')) {
+        if(isPlayableActionAbility && !context.player.isCardInPlayableLocation(this.card, 'play')) {
             return false;
         }
 
-        if(!isPlayableEventAbility && this.card.location !== this.location) {
+        if(!isPlayableActionAbility && this.card.location !== this.location) {
             return false;
         }
 
@@ -113,7 +113,7 @@ class TriggeredAbility extends BaseAbility {
         // game events in all open information locations plus while in hand.
         // The location property of the ability will prevent it from firing in
         // inappropriate locations when requirements are checked for the ability.
-        if(this.isPlayableEventAbility()) {
+        if(this.isPlayableActionAbility()) {
             return ['discard pile', 'hand'].includes(location);
         }
 
@@ -124,7 +124,7 @@ class TriggeredAbility extends BaseAbility {
         return false;
     }
 
-    isPlayableEventAbility() {
+    isPlayableActionAbility() {
         return this.card.getType() === 'event' && this.location === 'hand';
     }
 

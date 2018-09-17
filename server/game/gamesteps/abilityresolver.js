@@ -130,7 +130,7 @@ class AbilityResolver extends BaseStep {
         // with an interrupt to a card being played. If any are ever released,
         // then this event will need to wrap the execution of the entire
         // ability instead.
-        if(this.ability.isPlayableEventAbility()) {
+        if(this.ability.isPlayableActionAbility()) {
             this.game.raiseMergedEvent('onCardPlayed', { player: this.context.player, card: this.context.source });
         }
     }
